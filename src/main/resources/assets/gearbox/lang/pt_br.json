@@ -1,0 +1,12 @@
+{
+  "itemGroup.gearbox:main": "Gearbox",
+
+
+  "block.gearbox.kiln": "Forno cinético",
+
+  "item.gearbox.geld_ingot": "Barra de geld",
+  "item.gearbox.diamond_tube": "Tubo de diamante",
+
+  "create.recipe.pyroprocessing": "Queima"
+
+}

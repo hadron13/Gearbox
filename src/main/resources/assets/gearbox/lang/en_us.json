@@ -1,0 +1,11 @@
+{
+  "itemGroup.gearbox:main": "Gearbox",
+
+  "block.gearbox.kiln": "Kinetic Oven",
+
+  "item.gearbox.geld_ingot": "Geld Ingot",
+  "item.gearbox.diamond_tube": "Diamond Tube",
+
+  "create.recipe.pyroprocessing": "Pyroprocessing"
+
+}
