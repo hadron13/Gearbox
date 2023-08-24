@@ -12,7 +12,10 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
@@ -48,6 +51,18 @@ public class ModBlocks {
                                 .lightLevel(s -> s.getValue(KilnBlock.POWERED) ? 15 : 0))
             .transform(pickaxeOnly())
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .transform(BlockStressDefaults.setImpact(4.0))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<SapperBlock> SAPPER = REGISTRATE.block("sapper", SapperBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+//            .properties(BlockBehaviour.Properties::noOcclusion)
+            .properties(p -> p.noOcclusion().color((MaterialColor.METAL)) )
+            .addLayer(() -> RenderType::cutoutMipped)
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)) )
             .transform(BlockStressDefaults.setImpact(4.0))
             .item()
             .transform(customItemModel())

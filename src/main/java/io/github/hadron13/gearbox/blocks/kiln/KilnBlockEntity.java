@@ -101,7 +101,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
 
 
             ItemStack stackInSlot = inputInv.getStackInSlot(0);
-            if (!stackInSlot.isEmpty()) {
+            if (!stackInSlot.isEmpty() && getSpeed() > 0) {
                 level.setBlock(worldPosition, getBlockState().setValue(KilnBlock.POWERED, true), 3);
                 if (level.isClientSide) {
                     spawnParticles();
@@ -166,7 +166,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
         ItemStack stackInSlot = inputInv.getStackInSlot(0);
         stackInSlot.shrink(1);
 
-        if(stackInSlot.getCount() == 0){
+        if(stackInSlot.getCount() == 0 || getSpeed() == 0){
             level.setBlock(worldPosition, getBlockState().setValue(KilnBlock.POWERED, false), 3);
         }
         lastRecipe.rollResults()

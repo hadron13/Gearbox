@@ -9,6 +9,10 @@ import io.github.hadron13.gearbox.blocks.exchanger.ExchangerRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlockEntity;
 import io.github.hadron13.gearbox.blocks.kiln.KilnRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnInstance;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
+import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
+import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
+
 
 public class ModBlockEntities {
     public static final BlockEntityEntry<ExchangerBlockEntity> EXCHANGER = Gearbox.registrate()
@@ -23,6 +27,13 @@ public class ModBlockEntities {
             .instance(() -> KilnInstance::new)
             .validBlocks(ModBlocks.KILN)
             .renderer(() -> KilnRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<SapperBlockEntity> SAPPER = Gearbox.registrate()
+            .blockEntity("sapper", SapperBlockEntity::new)
+            .instance(() -> SapperInstance::new)
+            .validBlocks(ModBlocks.SAPPER)
+            .renderer(() -> SapperRenderer::new)
             .register();
     public static void register() {}
 }

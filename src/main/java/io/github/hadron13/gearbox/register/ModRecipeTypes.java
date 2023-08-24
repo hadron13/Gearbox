@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.utility.RegisteredObjects;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
+import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -32,7 +33,8 @@ import java.util.stream.Stream;
 
 public enum ModRecipeTypes implements IRecipeTypeInfo {
     EXCHANGING(ExchangingRecipe::new),
-    PYROPROCESSING(PyroprocessingRecipe::new);
+    PYROPROCESSING(PyroprocessingRecipe::new),
+    SAPPING(SappingRecipe::new);
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
     @Nullable

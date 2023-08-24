@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "gearbox:block/sapper/base",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gearbox:block/sapper/base"
+    },
+    "facing=south": {
+      "model": "gearbox:block/sapper/base",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gearbox:block/sapper/base",
+      "y": 270
+    }
+  }
+}
