@@ -14,6 +14,7 @@ import com.simibubi.create.content.kinetics.base.flwdata.RotatingData;
 import com.simibubi.create.content.kinetics.simpleRelays.encased.EncasedCogInstance;
 import com.simibubi.create.foundation.render.AllMaterialSpecs;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -35,7 +36,7 @@ public class SapperInstance extends EncasedCogInstance implements DynamicInstanc
 
         drillHead = materialManager.defaultCutout()
                 .material(AllMaterialSpecs.ROTATING)
-                .getModel(AllPartialModels.DRILL_HEAD, blockState, facing.getOpposite())
+                .getModel(ModPartialModels.SAPPER_HEAD, blockState, facing.getOpposite())
                 .createInstance();
 
 
@@ -69,12 +70,10 @@ public class SapperInstance extends EncasedCogInstance implements DynamicInstanc
     @Override
     public void beginFrame() {
 
-        float renderedHeadOffset = sapper.getRenderedHeadOffset(AnimationTickHolder.getPartialTicks());
-
         float ticks = AnimationTickHolder.getPartialTicks();
 
-        float speed = sapper.getRenderedHeadRotationSpeed(ticks);
-
+        float renderedHeadOffset =  sapper.getRenderedHeadOffset(ticks);
+        float speed =        sapper.getRenderedHeadRotationSpeed(ticks);
 
 
         Direction direction = blockState.getValue(HORIZONTAL_FACING);

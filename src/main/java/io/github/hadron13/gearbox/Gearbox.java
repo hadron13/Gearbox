@@ -2,11 +2,8 @@ package io.github.hadron13.gearbox;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModBlocks;
+import io.github.hadron13.gearbox.register.*;
 import io.github.hadron13.gearbox.groups.ModGroup;
-import io.github.hadron13.gearbox.register.ModItems;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -38,6 +35,8 @@ public class Gearbox {
         ModBlocks.register();
         ModItems.register();
         ModBlockEntities.register();
+        ModFluids.register();
+        ModPartialModels.init();
         ModRecipeTypes.register(modEventBus);
 
 

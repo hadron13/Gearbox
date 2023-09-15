@@ -1,19 +1,20 @@
 package io.github.hadron13.gearbox.blocks.sapper;
 
-
+import com.simibubi.create.AllFluids;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
+import com.simibubi.create.content.fluids.hosePulley.HosePulleyBlock;
+import com.simibubi.create.content.fluids.hosePulley.HosePulleyFluidHandler;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.sound.SoundScapes;
-import com.simibubi.create.foundation.sound.SoundScapes.AmbienceGroup;
+import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+
+import io.github.hadron13.gearbox.Gearbox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,117 +22,201 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
+import static net.minecraft.world.level.block.LeavesBlock.DISTANCE;
 
 public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveringInformation {
 
-    
-    public int runningTicks;
-    public int processingTicks;
+    public static final int NUM_LEAVES = 5;
+    public static final int EXTENSION_TIME = 10;
 
-    // valid and not full
-    public boolean running;
-
-    // has a valid tree
-    public boolean valid;
+    //registers a few leaves to keep track of
+    public BlockPos[] leafPos = new BlockPos[NUM_LEAVES];
+    private Couple<Block> treeBlocks;
+    SmartFluidTankBehaviour tank;
+    private int extendedTicks;
+    private int sapTimer;
+    private boolean valid;
+    private boolean cached;
+    public enum SapperState{
+        RETRACTED,
+        EXTENDING,
+        EXTENDED,
+        RETRACTING
+    }
+    SapperState sapperState;
     private SappingRecipe lastRecipe;
 
     public SapperBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        extendedTicks = 0;
+        sapTimer = -1;
+        valid = true;
+        cached = false;
+        sapperState = SapperState.RETRACTED;
+
     }
-
-
 
     @Override
     public void tick() {
         super.tick();
 
-        if(level.random.nextInt(60) == 1 && !running){
+        if (level == null)
+            return;
+        float speed = Math.abs(getSpeed());
 
+        switch (sapperState) {
+            case RETRACTED -> {
+//                checkValidity();
+                if (valid && speed > 0 && !isTankFull()) {
+                    sapperState = SapperState.EXTENDING;
+                    sapTimer = 40*32;
+                }
+            }
+            case EXTENDING -> {
+                extendedTicks++;
+                if (extendedTicks == EXTENSION_TIME)
+                    sapperState = SapperState.EXTENDED;
+            }
+            case EXTENDED -> {
+                sapTimer -= speed;
+                if (sapTimer == 0) {
+//                    checkValidity();
 
-            running = true;
+                    if (valid && speed > 0 && !isTankFull()) {
+                        SmartFluidTank localTank = tank.getPrimaryHandler();
+                        localTank.fill(new FluidStack(AllFluids.CHOCOLATE.get(), 150), IFluidHandler.FluidAction.EXECUTE);
+                        sapTimer = 40*32;
 
-
-        }
-
-        if (running && level != null) {
-
-            if ((!level.isClientSide || isVirtual()) && runningTicks == 20) {
-                if (processingTicks < 0) {
-                    float recipeSpeed = 1;
-
-                    processingTicks = Mth.clamp((Mth.log2((int) (512 / speed))) * Mth.ceil(recipeSpeed * 15) + 1, 1, 512);
-                } else {
-                    processingTicks--;
-                    if (processingTicks == 0) {
-                        runningTicks++;
-                        processingTicks = -1;
+                        sendData();
+                    } else {
+                        sapperState = SapperState.RETRACTING;
                     }
                 }
             }
-            if (runningTicks != 20)
-                runningTicks++;
+            case RETRACTING -> {
+                extendedTicks--;
+                if (extendedTicks == 0)
+                    sapperState = SapperState.RETRACTED;
+            }
         }
 
-
-    }
-    public void sap(){
-
-
-
-
-
-
-
     }
 
-    public boolean hasValidTree(){
-        BlockPos treePos = getBlockPos().relative(getBlockState().getValue(HORIZONTAL_FACING), 2);
+    @Override
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        tank = SmartFluidTankBehaviour.single(this, 1000);
+        behaviours.add(tank);
+    }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+    }
+
+    public boolean isTankFull(){
+        return tank.getPrimaryHandler().getFluidAmount() == 1000;
+    }
+
+    public void checkValidity(){
+        if (level == null || !level.isLoaded(worldPosition) || level.isClientSide)
+            return;
+        BlockPos trunkPos = getBlockPos().relative(getBlockState().getValue(HORIZONTAL_FACING).getOpposite(), 2);
+
+        if(!level.getBlockState(trunkPos).is(BlockTags.LOGS)) {
+            cached = false;
+            valid = false;
+            return;
+        }
+        int vertical = Math.min(level.getMaxBuildHeight() - worldPosition.getY(), 40);
+
+        Iterable<BlockPos> leafArea = BlockPos.betweenClosed(   trunkPos.offset(-2,1,-2),
+                                                                trunkPos.offset( 2, vertical, 2));
+        if(!cached){
+            valid = false;
+            if(checkLeaves(leafArea)){
+                cached = true;
+                valid = true;
+            }
+            return;
+        }
+
+        for (BlockPos pos : leafPos) {
+            if (level.getBlockState(pos).getValue(DISTANCE) == 0 )
+                continue;
+            valid = checkLeaves(leafArea);
+            return;
+        }
+    }
+
+    public boolean checkLeaves(Iterable<BlockPos> leafArea){
+        int leafCount = 0;
+        for(BlockPos pos : leafArea){
+            BlockState state = level.getBlockState(pos);
+            if(state.getBlock() == Blocks.AIR)
+                continue;
+
+            if( state.getValue(DISTANCE) != 0 ){
+                leafPos[leafCount] = pos;
+                leafCount++;
+                if(leafCount == NUM_LEAVES)
+                    break;
+            }
+        }
+        return leafCount == NUM_LEAVES;
+    }
+
+    public boolean isValidTrunk(BlockPos pos){
         return true;
+    }
 
+    public boolean isValidLeaf(BlockPos pos){
+        return true;
     }
 
     public float getRenderedHeadOffset(float partialTicks) {
-        int localTick;
-        float offset = 0;
 
-        if (running) {
-            if (runningTicks == 20) {
-                offset = 1;
-            }else{
-                localTick = (runningTicks < 20)? runningTicks : 40 - runningTicks;
+        final float startPos = 12 / 16f;
+        final float finalPos = startPos + 6 / 16f;
 
-                float num = (localTick + partialTicks) / 20f;
-
-                num = ((2 - Mth.cos((float) (num * Math.PI))) / 2);
-
-                offset = num - .5f;
-            }
+        switch (sapperState){
+            case RETRACTED  -> {return startPos;}
+            case EXTENDED   -> {return finalPos;}
+            case RETRACTING -> {partialTicks *= -1;}
         }
-        return offset + 7 / 16f;
+
+        float offset = (extendedTicks + partialTicks)/10f;
+
+        float t =  1 - Mth.cos((float)( offset * Math.PI ));
+        t /= 2;
+
+        return Mth.lerp(t, startPos, finalPos) ;
     }
 
     public float getRenderedHeadRotationSpeed(float partialTicks) {
-        if (running) {
-            return getSpeed() * ((runningTicks < 15 || runningTicks > 20)? 1 : 2 );
+        if (sapperState == SapperState.EXTENDED) {
+            return getSpeed() * ((extendedTicks < 7 || extendedTicks > EXTENSION_TIME)? 1 : 2 );
         }
         return speed / 2;
     }
@@ -140,14 +225,12 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
     @OnlyIn(Dist.CLIENT)
     public void tickAudio() {
         super.tickAudio();
-
     }
-
 
     @Override
     public void invalidate() {
         super.invalidate();
-//        capability.invalidate();
+
     }
 
     @Override
@@ -155,7 +238,9 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
         super.destroy();
     }
 
-
+    public static FluidStack getFluid(Block leaf, Block trunk){
+        return new FluidStack(AllFluids.CHOCOLATE.get(), 150);
+    }
 
     public void spawnParticles() {
         if(level.random.nextInt(8) != 1)
@@ -167,6 +252,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
 
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {
+
 //        compound.putInt("Timer", timer);
         super.write(compound, clientPacket);
     }
@@ -176,29 +262,13 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
 //        timer = compound.getInt("Timer");
         super.read(compound, clientPacket);
     }
-
-    public int getProcessingSpeed() {
-        return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (isFluidHandlerCap(cap)
+                && (side == null || SapperBlock.hasPipeTowards(level, worldPosition, getBlockState(), side)))
+            return tank.getCapability().cast();
+        return super.getCapability(cap, side);
     }
-
-//    @Override
-//    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-//        if (isItemHandlerCap(cap))
-//            return capability.cast();
-//        return super.getCapability(cap, side);
-//    }
-
-//    private boolean canProcess(ItemStack stack) {
-//        ItemStackHandler tester = new ItemStackHandler(1);
-//        tester.setStackInSlot(0, stack);
-//        RecipeWrapper inventoryIn = new RecipeWrapper(tester);
-//
-//        if (lastRecipe != null && lastRecipe.matches(inventoryIn, level))
-//            return true;
-//        return ModRecipeTypes.SAPPING.find(inventoryIn, level)
-//                .isPresent();
-//    }
-
 
 
 }
