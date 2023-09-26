@@ -43,10 +43,10 @@ public class SapperInstance extends EncasedCogInstance implements DynamicInstanc
         drillHead.setRotationAxis(facing.getAxis());
 
         drillPole = getOrientedMaterial()
-                .getModel(AllPartialModels.MECHANICAL_MIXER_POLE, blockState, facing.getOpposite())
+                .getModel(ModPartialModels.SAPPER_POLE, blockState, facing.getOpposite())
                 .createInstance();
 
-        drillPole.setRotation(facing.getRotation());
+//        drillPole.setRotation(facing.getRotation());
 
     }
 
@@ -85,6 +85,7 @@ public class SapperInstance extends EncasedCogInstance implements DynamicInstanc
                 .nudge(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier)
                 .setRotationalSpeed(speed * 2);
 
+//        renderedHeadOffset -= 1/16f;
         drillPole.setPosition(getInstancePosition())
                 .nudge(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier);
 

@@ -111,6 +111,12 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
         return exchangingRecipesFiltered.findAny();
     }
 
+    public List<SappingRecipe> getAll(Level world){
+        if(world.isClientSide())
+            return null;
+        return world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.SAPPING.getType());
+    }
+
     public static final Set<ResourceLocation> RECIPE_DENY_SET =
             ImmutableSet.of(new ResourceLocation("occultism", "spirit_trade"), new ResourceLocation("occultism", "ritual"));
 

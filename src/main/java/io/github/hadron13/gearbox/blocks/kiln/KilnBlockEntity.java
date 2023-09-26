@@ -109,7 +109,6 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
                 }
             }
 
-
             if (timer <= 0) {
                 process();
             }
@@ -125,10 +124,8 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
             Optional<PyroprocessingRecipe> recipe = ModRecipeTypes.PYROPROCESSING.find(inventoryIn, level);
             if (!recipe.isPresent()) {
                 timer = 100;
-
                 sendData();
             } else {
-
                 lastRecipe = recipe.get();
                 timer = lastRecipe.getProcessingDuration();
                 sendData();

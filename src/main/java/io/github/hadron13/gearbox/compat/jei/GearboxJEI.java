@@ -2,6 +2,8 @@ package io.github.hadron13.gearbox.compat.jei;
 
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
+import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
+import io.github.hadron13.gearbox.compat.jei.category.SappingCategory;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import io.github.hadron13.gearbox.compat.jei.category.PyroprocessingCategory;
 import io.github.hadron13.gearbox.register.ModBlocks;
@@ -54,6 +56,14 @@ public class GearboxJEI implements IModPlugin {
                 .itemIcon(ModBlocks.KILN.get())
                 .emptyBackground(177, 75)
                 .build("pyroprocessing", PyroprocessingCategory::new);
+
+        CreateRecipeCategory<?>
+                sapping = builder(SappingRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.SAPPING)
+                .catalyst(ModBlocks.SAPPER::get)
+                .itemIcon(ModBlocks.SAPPER.get())
+                .emptyBackground(177, 103)
+                .build("sapping", SappingCategory::new);
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);
@@ -89,8 +99,6 @@ public class GearboxJEI implements IModPlugin {
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(new BlueprintTransferHandler(), RecipeTypes.CRAFTING);
     }
-
-
 
 
 

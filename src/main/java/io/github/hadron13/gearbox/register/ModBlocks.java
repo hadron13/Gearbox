@@ -59,7 +59,6 @@ public class ModBlocks {
     public static final BlockEntry<SapperBlock> SAPPER = REGISTRATE.block("sapper", SapperBlock::new)
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
-//            .properties(BlockBehaviour.Properties::noOcclusion)
             .properties(p -> p.noOcclusion().color((MaterialColor.METAL)) )
             .addLayer(() -> RenderType::cutoutMipped)
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)) )

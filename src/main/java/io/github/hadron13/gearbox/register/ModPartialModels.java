@@ -5,7 +5,8 @@ import com.simibubi.create.Create;
 import io.github.hadron13.gearbox.Gearbox;
 
 public class ModPartialModels {
-    public static final PartialModel SAPPER_HEAD = block("sapper/head");
+    public static final PartialModel    SAPPER_HEAD = block("sapper/head"),
+                                        SAPPER_POLE = block("sapper/pole");
 
     private static PartialModel block(String path) {
         return new PartialModel(Gearbox.asResource("block/" + path));

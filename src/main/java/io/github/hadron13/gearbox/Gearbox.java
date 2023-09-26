@@ -2,6 +2,10 @@ package io.github.hadron13.gearbox;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
+import io.github.hadron13.gearbox.ponder.ModPonderIndex;
+import io.github.hadron13.gearbox.ponder.ModPonderScenes;
+import io.github.hadron13.gearbox.ponder.ModPonderTags;
 import io.github.hadron13.gearbox.register.*;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +30,6 @@ public class Gearbox {
     public static IEventBus modEventBus;
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
     public Gearbox() {
-        // Register the setup method for modloading
         modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         REGISTRATE.registerEventListeners(modEventBus);
 
@@ -38,6 +41,8 @@ public class Gearbox {
         ModFluids.register();
         ModPartialModels.init();
         ModRecipeTypes.register(modEventBus);
+        ModPonderIndex.register();
+//        ModPonderTags.register();
 
 
         // Register ourselves for server and other game events we are interested in
@@ -48,17 +53,13 @@ public class Gearbox {
         return REGISTRATE;
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        // some preinit code
-
-    }
 
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MODID, path);
     }
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
+
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
+
     }
 }

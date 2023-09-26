@@ -24,7 +24,6 @@ public class PyroprocessingRecipe extends AbstractCrushingRecipe {
         return ingredients.get(0)
                 .test(inv.getItem(0));
     }
-
     @Override
     protected int getMaxOutputCount() {
         return 4;
