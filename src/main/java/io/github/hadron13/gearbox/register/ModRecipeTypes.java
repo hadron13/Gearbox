@@ -7,6 +7,8 @@ import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
+import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
@@ -34,7 +36,8 @@ import java.util.stream.Stream;
 public enum ModRecipeTypes implements IRecipeTypeInfo {
     EXCHANGING(ExchangingRecipe::new),
     PYROPROCESSING(PyroprocessingRecipe::new),
-    SAPPING(SappingRecipe::new);
+    SAPPING(SappingRecipe::new),
+    COMPRESSING(CompressingRecipe::new);
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
     @Nullable
@@ -110,6 +113,21 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
         Stream<ExchangingRecipe> exchangingRecipesFiltered = exchangingRecipes.stream().filter(exchangingRecipe -> exchangingRecipe.matches((RecipeWrapper) inv,world));
         return exchangingRecipesFiltered.findAny();
     }
+
+    public Optional<CompressingRecipe> find(CompressorBlockEntity blockEntity, Level world) {
+
+        if(world.isClientSide())
+            return Optional.empty();
+        List<CompressingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.COMPRESSING.getType());
+        if(!allRecipes.isEmpty())
+            Gearbox.LOGGER.debug("fffeeeed my cooooinns");
+
+        Stream<CompressingRecipe> matchingRecipes =
+                allRecipes.stream().filter(compressingRecipe -> CompressingRecipe.match(blockEntity, compressingRecipe) );
+
+        return matchingRecipes.findAny();
+    }
+
 
     public List<SappingRecipe> getAll(Level world){
         if(world.isClientSide())

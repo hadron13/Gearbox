@@ -17,7 +17,6 @@ public class KilnInstance extends SingleRotatingInstance<KilnBlockEntity> {
 
     @Override
     protected Instancer<RotatingData> getModel() {
-//        return getRotatingMaterial().getModel(AllPartialModels.SHAFT_HALF, blockEntity.getBlockState());
         BlockState state = blockEntity.getBlockState();
         return getRotatingMaterial().getModel(AllPartialModels.SHAFT_HALF, state, state.getValue(HORIZONTAL_FACING).getOpposite());
     }

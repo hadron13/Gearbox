@@ -3,6 +3,9 @@ package io.github.hadron13.gearbox.register;
 
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
+import io.github.hadron13.gearbox.blocks.compressor.CompressorInstance;
+import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerInstance;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerRenderer;
@@ -35,5 +38,13 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.SAPPER)
             .renderer(() -> SapperRenderer::new)
             .register();
+
+    public static final BlockEntityEntry<CompressorBlockEntity> COMPRESSOR = Gearbox.registrate()
+            .blockEntity("compressor", CompressorBlockEntity::new)
+            .instance(() -> CompressorInstance::new)
+            .validBlocks(ModBlocks.COMPRESSOR)
+            .renderer(() -> CompressorRenderer::new)
+            .register();
+
     public static void register() {}
 }

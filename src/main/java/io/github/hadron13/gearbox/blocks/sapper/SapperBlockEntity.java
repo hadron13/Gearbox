@@ -70,7 +70,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
     private boolean cached = false;
     //registers a few leaves to keep track of
     public BlockPos[] leafPos = new BlockPos[NUM_LEAVES];
-    SmartFluidTankBehaviour tank;
+    private SmartFluidTankBehaviour tank;
 
     private FluidStack outputFluid;
 
@@ -168,7 +168,6 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
 
         BlockState trunkType = level.getBlockState(baseTrunkPos);
         if(!TreeType.isValidLog(trunkType)) {
-            Gearbox.LOGGER.debug("invalid log");
             cached = false;
             valid = false;
             return;

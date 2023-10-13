@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
@@ -61,6 +62,16 @@ public class ModBlocks {
             .transform(pickaxeOnly())
             .properties(p -> p.noOcclusion().color((MaterialColor.METAL)) )
             .addLayer(() -> RenderType::cutoutMipped)
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)) )
+            .transform(BlockStressDefaults.setImpact(4.0))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<CompressorBlock> COMPRESSOR = REGISTRATE.block("compressor", CompressorBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.noOcclusion().color((MaterialColor.METAL)) )
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)) )
             .transform(BlockStressDefaults.setImpact(4.0))
             .item()
