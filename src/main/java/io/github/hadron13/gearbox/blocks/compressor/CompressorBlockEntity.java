@@ -5,16 +5,20 @@ import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
+import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipulationBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.IntAttached;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import io.github.hadron13.gearbox.Gearbox;
@@ -25,6 +29,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
@@ -37,15 +44,16 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,20 +70,23 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
 
     protected LazyOptional<IItemHandlerModifiable> itemCapability;
 
-    public static final int OUTPUT_ANIMATION_TIME = 10;
-    private int outputTimer;
     private int timer;
-    protected List<ItemStack> spoutputBuffer;
-    private CompressingRecipe recipe;
+    public List<Integer> spoutputIndex;
+    public CompressingRecipe recipe;
+
+    public static final int OUTPUT_ANIMATION_TIME = 10;
+    public List<IntAttached<ItemStack>>  visualizedOutputItems;
 
 
     public CompressorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        output = new SmartInventory(1, this)
+        output = new SmartInventory(3, this)
                 .forbidInsertion()
                 .withMaxStackSize(64);
 
         itemCapability = LazyOptional.of(() -> new InvWrapper(output));
+        spoutputIndex = new ArrayList<>();
+        visualizedOutputItems = Collections.synchronizedList(new ArrayList<>());
         timer = -1;
         recipe = null;
     }
@@ -93,22 +104,54 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
     }
 
 
+
+
     @Override
     public void tick() {
         super.tick();
+        if(level==null)
+            return;
 
-        if(outputTimer > 0){
-            outputTimer--;
-            if(outputTimer == 0){
-                BlockState state = getBlockState();
-                BlockPos targetPos = getBlockPos().relative(state.getValue(HORIZONTAL_FACING)).below();
-//
-//                BlockEntity entity = level.getBlockEntity()
-                for(int i = 0; i < output.getSlots(); i++) {
-                    Block.popResource(level, targetPos, output.getStackInSlot(i));
+        if(level.isClientSide){
+            visualizedOutputItems.forEach(IntAttached::decrement);
+            visualizedOutputItems.removeIf(IntAttached::isOrBelowZero);
+        }
+
+
+        Direction dir = getBlockState().getValue(HORIZONTAL_FACING);
+        if(!level.isClientSide && !spoutputIndex.isEmpty() && BasinBlock.canOutputTo(level, getBlockPos(), dir)) {
+            serverDebug("can insert");
+            for (int i = 0; i < spoutputIndex.size(); i++) {
+                ItemStack item = output.getItem(spoutputIndex.get(i));
+                if (item.isEmpty()) {
+                    spoutputIndex.remove(i);
+                    continue;
                 }
-                if(!output.isEmpty())
-                    outputTimer = OUTPUT_ANIMATION_TIME;
+
+                BlockEntity be = level.getBlockEntity(worldPosition.below()
+                        .relative(dir));
+
+                FilteringBehaviour filter = null;
+                InvManipulationBehaviour inserter = null;
+                if (be != null) {
+                    filter = BlockEntityBehaviour.get(level, be.getBlockPos(), FilteringBehaviour.TYPE);
+                    inserter = BlockEntityBehaviour.get(level, be.getBlockPos(), InvManipulationBehaviour.TYPE);
+                }
+
+                IItemHandler targetInv = be == null ? null
+                        : be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite())
+                        .orElse(inserter == null ? null : inserter.getInventory());
+
+                if (targetInv == null)
+                    continue;
+                if (!ItemHandlerHelper.insertItemStacked(targetInv, item, true)
+                        .isEmpty())
+                    continue;
+                if (filter != null && !filter.test(item))
+                    continue;
+                ItemHandlerHelper.insertItemStacked(targetInv,
+                        output.extractItem(spoutputIndex.get(i), 64, false), false);
+                visualizedOutputItems.add(IntAttached.withZero(item));
             }
         }
 
@@ -133,7 +176,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         if (tank.getPrimaryHandler().isEmpty())
             return;
 
-        if (recipe == null || !CompressingRecipe.match(this, recipe)) {
+        if (!CompressingRecipe.match(this, recipe)) {
             Optional<CompressingRecipe> newRecipe = ModRecipeTypes.COMPRESSING.find(this, level);
             if (!newRecipe.isPresent()) {
                 timer = 100;
@@ -161,7 +204,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
     }
     private void process() {
 
-        if (recipe == null || !CompressingRecipe.match(this, recipe)) {
+        if (!CompressingRecipe.match(this, recipe)) {
             Optional<CompressingRecipe> newRecipe = ModRecipeTypes.COMPRESSING.find(this, level);
             if (!newRecipe.isPresent())
                 return;
@@ -174,27 +217,43 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         recipe.rollResults()
                 .forEach(stack -> ItemHandlerHelper.insertItemStacked(output, stack, false));
         output.forbidInsertion();
-        if(outputTimer == 0)
-            outputTimer = OUTPUT_ANIMATION_TIME;
-
+        for(int i = 0; i < output.getSlots(); i++) {
+            if(!spoutputIndex.contains(i))
+                spoutputIndex.add(i);
+        }
         sendData();
         setChanged();
     }
 
     @Override
     public void write(CompoundTag compound, boolean clientPacket){
-//        compound.putFloat("t", recipeTimer);
-//        compound.putString("recipe", currentRecipe.getId().toString());
-
-
         super.write(compound, clientPacket);
+        compound.put("OutputItems", output.serializeNBT());
+
+//        compound.putIntArray("Overflow",spoutputIndex);
+
+        if (!clientPacket)
+            return;
+
+        compound.put("VisualizedItems", NBTHelper.writeCompoundList(visualizedOutputItems, ia -> ia.getValue()
+                .serializeNBT()));
+        visualizedOutputItems.clear();
+
     }
 
     @Override
     public void read(CompoundTag compound, boolean clientPacket){
-//        recipeTimer = compound.getFloat("t");
-//        currentRecipe =
         super.read(compound, clientPacket);
+
+        output.deserializeNBT(compound.getCompound("OutputItems"));
+
+//        NBTHelper.readCompoundList(compound.getList("Overflow", Tag.TAG_INT), );
+
+        if (!clientPacket)
+            return;
+
+        NBTHelper.iterateCompoundList(compound.getList("VisualizedItems", Tag.TAG_COMPOUND),
+                c -> visualizedOutputItems.add(IntAttached.with(OUTPUT_ANIMATION_TIME, ItemStack.of(c))));
     }
 
     @Override
@@ -209,15 +268,30 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
 
         return super.getCapability(cap, side);
     }
-//
+    //
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
-
-        if(speed > 0)
+        boolean isEmpty = true;
+        isEmpty = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+        if(speed > 0) {
             TooltipHelper.addHint(tooltip, "hint.compressor.reverse");
+            isEmpty = false;
+        }
 
-        return true;
+        for (int i = 0; i < output.getSlots(); i++) {
+            ItemStack stackInSlot = output.getStackInSlot(i);
+            if (stackInSlot.isEmpty())
+                continue;
+            Lang.text("")
+                    .add(Components.translatable(stackInSlot.getDescriptionId())
+                            .withStyle(ChatFormatting.GRAY))
+                    .add(Lang.text(" x" + stackInSlot.getCount())
+                            .style(ChatFormatting.GREEN))
+                    .forGoggles(tooltip, 1);
+            isEmpty = false;
+        }
+
+        return isEmpty;
     }
 
 
