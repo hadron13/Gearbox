@@ -3,6 +3,7 @@
 
   "block.gearbox.kiln": "Kinetic Oven",
   "block.gearbox.sapper": "Sapper",
+  "block.gearbox.compressor": "Compressor",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -12,6 +13,8 @@
 
   "create.hint.sapper.full.title": "Internal Tank Full",
   "create.hint.sapper.full": "",
+  "create.hint.compressor.reverse.title": "Rotation Direction",
+  "create.hint.compressor.reverse": "It appears that this compressor is rotating in the _wrong direction_.",
   "gearbox.ponder.sapper.header": "Extracting fluids with a sapper",
   "gearbox.ponder.sapper.text_1": "Sappers are machines made to extract fluids from trees",
   "gearbox.ponder.sapper.text_2": "You can power them with cogs",

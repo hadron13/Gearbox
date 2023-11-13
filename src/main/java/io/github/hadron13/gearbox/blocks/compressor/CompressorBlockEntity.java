@@ -71,6 +71,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
     protected LazyOptional<IItemHandlerModifiable> itemCapability;
 
     private int timer;
+    public static final int OUTPUT_SLOTS = 3;
     public List<Integer> spoutputIndex;
     public CompressingRecipe recipe;
 
@@ -80,7 +81,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
 
     public CompressorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        output = new SmartInventory(3, this)
+        output = new SmartInventory(OUTPUT_SLOTS, this)
                 .forbidInsertion()
                 .withMaxStackSize(64);
 
@@ -120,7 +121,6 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
 
         Direction dir = getBlockState().getValue(HORIZONTAL_FACING);
         if(!level.isClientSide && !spoutputIndex.isEmpty() && BasinBlock.canOutputTo(level, getBlockPos(), dir)) {
-            serverDebug("can insert");
             for (int i = 0; i < spoutputIndex.size(); i++) {
                 ItemStack item = output.getItem(spoutputIndex.get(i));
                 if (item.isEmpty()) {
@@ -155,7 +155,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
             }
         }
 
-        if (getSpeed() >= 0)
+        if (!validSpeed())
             return;
         for (int i = 0; i < output.getSlots(); i++)
             if (output.getStackInSlot(i)
@@ -192,9 +192,16 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         timer = recipe.getProcessingDuration();
         sendData();
     }
-    public void serverDebug(String msg){
-        if(level != null && !level.isClientSide)
-            Gearbox.LOGGER.debug(msg);
+    public boolean validSpeed(){
+        switch (getBlockState().getValue(HORIZONTAL_FACING)){
+            case EAST, NORTH -> {
+                return speed > 0;
+            }
+            case WEST, SOUTH -> {
+                return speed < 0;
+            }
+        }
+        return false;
     }
     public int getProcessingSpeed() {
         return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
@@ -230,7 +237,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         super.write(compound, clientPacket);
         compound.put("OutputItems", output.serializeNBT());
 
-//        compound.putIntArray("Overflow",spoutputIndex);
+        compound.putIntArray("Overflow",spoutputIndex);
 
         if (!clientPacket)
             return;
@@ -247,6 +254,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
 
         output.deserializeNBT(compound.getCompound("OutputItems"));
 
+//        spoutputIndex = new  List.fcompound.getIntArray("Overflow");
 //        NBTHelper.readCompoundList(compound.getList("Overflow", Tag.TAG_INT), );
 
         if (!clientPacket)
@@ -271,11 +279,9 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
     //
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        boolean isEmpty = true;
-        isEmpty = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
-        if(speed > 0) {
+        containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+        if(!validSpeed() && speed != 0) {
             TooltipHelper.addHint(tooltip, "hint.compressor.reverse");
-            isEmpty = false;
         }
 
         for (int i = 0; i < output.getSlots(); i++) {
@@ -288,10 +294,9 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
                     .add(Lang.text(" x" + stackInSlot.getCount())
                             .style(ChatFormatting.GREEN))
                     .forGoggles(tooltip, 1);
-            isEmpty = false;
         }
 
-        return isEmpty;
+        return true;
     }
 
 

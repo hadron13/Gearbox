@@ -3,10 +3,25 @@
 
 
   "block.gearbox.kiln": "Forno cinético",
+  "block.gearbox.sapper": "Extrator",
+  "block.gearbox.compressor": "Compressor",
 
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
 
-  "create.recipe.pyroprocessing": "Queima"
+  "create.recipe.pyroprocessing": "Queima",
+  "create.recipe.sapping": "Extração",
+
+  "create.hint.sapper.full.title": "Tanque Cheio",
+  "create.hint.sapper.full": "",
+  "create.hint.compressor.reverse.title": "Sentido Da Rotação",
+  "create.hint.compressor.reverse": "Parece que este compressor está girando no _sentido errado_",
+
+  "gearbox.ponder.sapper.header": "Extraindo flúidos com um extrator",
+  "gearbox.ponder.sapper.text_1": "Extratores são máquinas feitas para extrair flúidos de árvores",
+  "gearbox.ponder.sapper.text_2": "Você pode energizar eles com engrenagens",
+  "gearbox.ponder.sapper.text_3": "E depois puxar o flúido extraído por trás"
+
+
 
 }
