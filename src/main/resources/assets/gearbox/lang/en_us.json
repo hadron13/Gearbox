@@ -10,6 +10,9 @@
 
   "create.recipe.pyroprocessing": "Pyroprocessing",
   "create.recipe.sapping": "Sapping",
+  "create.recipe.compressing": "Compressing",
+
+  "create.recipe.compressing.campfire_heat": "Warm",
 
   "create.hint.sapper.full.title": "Internal Tank Full",
   "create.hint.sapper.full": "",

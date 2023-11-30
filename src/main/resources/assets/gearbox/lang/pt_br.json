@@ -11,6 +11,9 @@
 
   "create.recipe.pyroprocessing": "Queima",
   "create.recipe.sapping": "Extração",
+  "create.recipe.compressing": "Compressão",
+
+  "create.recipe.compressing.campfire_heat": "Morno",
 
   "create.hint.sapper.full.title": "Tanque Cheio",
   "create.hint.sapper.full": "",

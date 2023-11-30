@@ -51,6 +51,8 @@ public class AnimatedSapper extends AnimatedKinetics {
                 .atLocal(blockSize + pixelSize * 4, blockSize * 3, 0)
                 .scale(scale)
                 .render(matrixStack);
+
+        // render da arvrinha
         for(int y = 1; y <= 3; y++) {
             blockElement(log.defaultBlockState())
                     .atLocal(2 * blockSize, blockSize * y, 0)

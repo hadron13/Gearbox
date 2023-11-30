@@ -8,18 +8,14 @@ import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedKiln;
-import io.github.hadron13.gearbox.gui.ModGUITextures;
-import io.github.hadron13.gearbox.register.ModBlocks;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class PyroprocessingCategory extends CreateRecipeCategory<PyroprocessingRecipe> {
-//    private AnimatedSifter sifter = new AnimatedSifter();
     private AnimatedKiln kiln = new AnimatedKiln();
     public PyroprocessingCategory(CreateRecipeCategory.Info<PyroprocessingRecipe> info) {
         super(info);

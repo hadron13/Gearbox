@@ -1,4 +1,4 @@
-package io.github.hadron13.gearbox.gui;
+package io.github.hadron13.gearbox.compat.jei;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,8 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public enum ModGUITextures implements ScreenElement {
-    JEI_SHORT_ARROW("jei/widgets", 20, 9);
+public enum ModGuiTextures implements ScreenElement {
+    JEI_HEAT_BAR_CENTERED("jei/widgets", 0, 16, 169, 19),
+    JEI_SHORT_ARROW("jei/widgets", 0, 0, 20, 9);
+
     public static final int FONT_COLOR = 5726074;
     public final ResourceLocation location;
     public int width;
@@ -19,18 +21,18 @@ public enum ModGUITextures implements ScreenElement {
     public int startX;
     public int startY;
 
-    private ModGUITextures(String location, int width, int height) {
+    private ModGuiTextures(String location, int width, int height) {
         this(location, 0, 0, width, height);
     }
 
-    private ModGUITextures(int startX, int startY) {
+    private ModGuiTextures(int startX, int startY) {
         this("icons", startX * 16, startY * 16, 16, 16);
     }
-    private ModGUITextures(String location, int startX, int startY, int width, int height) {
+    private ModGuiTextures(String location, int startX, int startY, int width, int height) {
         this("gearbox", location, startX, startY, width, height);
     }
 
-    private ModGUITextures(String namespace, String location, int startX, int startY, int width, int height) {
+    private ModGuiTextures(String namespace, String location, int startX, int startY, int width, int height) {
         this.location = new ResourceLocation(namespace, "textures/gui/" + location + ".png");
         this.width = width;
         this.height = height;

@@ -1,8 +1,12 @@
 package io.github.hadron13.gearbox.compat.jei;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.Create;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
+import io.github.hadron13.gearbox.compat.jei.category.CompressingCategory;
 import io.github.hadron13.gearbox.compat.jei.category.SappingCategory;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import io.github.hadron13.gearbox.compat.jei.category.PyroprocessingCategory;
@@ -27,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -64,6 +69,15 @@ public class GearboxJEI implements IModPlugin {
                 .itemIcon(ModBlocks.SAPPER.get())
                 .emptyBackground(177, 103)
                 .build("sapping", SappingCategory::new);
+
+        CreateRecipeCategory<?>
+                compressing = builder(CompressingRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.COMPRESSING)
+                .catalyst(ModBlocks.COMPRESSOR::get)
+                .catalyst(AllBlocks.BLAZE_BURNER::get)
+                .itemIcon(ModBlocks.COMPRESSOR.get())
+                .emptyBackground(177,75)
+                .build("compressing", CompressingCategory::new);
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);
