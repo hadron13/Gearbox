@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "gearbox:kiln"
+    "gearbox:kiln",
+    "gearbox:sapper",
+    "gearbox:compressor",
+    "gearbox:brass_press"
   ]
 }

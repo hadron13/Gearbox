@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
@@ -37,7 +38,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     EXCHANGING(ExchangingRecipe::new),
     PYROPROCESSING(PyroprocessingRecipe::new),
     SAPPING(SappingRecipe::new),
-    COMPRESSING(CompressingRecipe::new);
+    COMPRESSING(CompressingRecipe::new),
+    MECHANIZING(MechanizingRecipe::new);
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
     @Nullable

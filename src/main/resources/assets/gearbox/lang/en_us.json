@@ -4,6 +4,7 @@
   "block.gearbox.kiln": "Kinetic Oven",
   "block.gearbox.sapper": "Sapper",
   "block.gearbox.compressor": "Compressor",
+  "block.gearbox.brass_press": "Mechanizing Press",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -11,6 +12,9 @@
   "create.recipe.pyroprocessing": "Pyroprocessing",
   "create.recipe.sapping": "Sapping",
   "create.recipe.compressing": "Compressing",
+  "create.recipe.mechanizing": "Mechanizing",
+
+  "create.recipe.assembly.mechanizing": "Mechanize",
 
   "create.recipe.compressing.campfire_heat": "Warm",
 

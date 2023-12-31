@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.blocks.compressor;
 
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlock;
@@ -12,6 +13,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipul
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.sound.SoundScapes;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.IntAttached;
 import com.simibubi.create.foundation.utility.Lang;
@@ -23,11 +25,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.*;
@@ -90,7 +96,6 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
             visualizedOutputItems.removeIf(IntAttached::isOrBelowZero);
         }
 
-
         Direction dir = getBlockState().getValue(HORIZONTAL_FACING);
         if(!level.isClientSide && !spoutputIndex.isEmpty() && BasinBlock.canOutputTo(level, getBlockPos(), dir)) {
             for (int i = 0; i < spoutputIndex.size(); i++) {
@@ -138,11 +143,13 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
             timer -= getProcessingSpeed();
 
             if (level.isClientSide) {
-//                spawnParticles();
+
+
                 return;
             }
-            if (timer <= 0)
+            if (timer <= 0) {
                 process();
+            }
             return;
         }
         if (tank.getPrimaryHandler().isEmpty())
@@ -177,6 +184,22 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
     }
     public int getProcessingSpeed() {
         return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
+    }
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void tickAudio() {
+        super.tickAudio();
+
+        if (getSpeed() == 0)
+            return;
+        if (tank.isEmpty())
+            return;
+
+        float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, 1f);
+        BlockPos pos = getBlockPos();
+
+        level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
+                AllSoundEvents.TRAIN.getMainEvent(), SoundSource.AMBIENT,0.5f, pitch, false);
     }
     public BlazeBurnerBlock.HeatLevel getHeat(){
         assert level != null;

@@ -16,6 +16,7 @@ import com.simibubi.create.foundation.render.AllMaterialSpecs;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -31,7 +32,6 @@ public class SapperInstance extends EncasedCogInstance implements DynamicInstanc
     public SapperInstance(MaterialManager materialManager, SapperBlockEntity blockEntity) {
         super(materialManager, blockEntity, false);
         this.sapper = blockEntity;
-
         Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
         drillHead = materialManager.defaultCutout()

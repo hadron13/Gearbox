@@ -51,7 +51,6 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
         inputInv = new ItemStackHandler(1);
         outputInv = new ItemStackHandler(9);
         capability = LazyOptional.of(KilnInventoryHandler::new);
-
     }
 
     public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -91,6 +90,9 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
 
         if (getSpeed() == 0)
             return;
+        if(inputInv.getStackInSlot(0).isEmpty()) {
+            level.setBlock(worldPosition, getBlockState().setValue(KilnBlock.POWERED, false), 3);
+        }
         for (int i = 0; i < outputInv.getSlots(); i++)
             if (outputInv.getStackInSlot(i)
                     .getCount() == outputInv.getSlotLimit(i))
@@ -102,6 +104,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
             ItemStack stackInSlot = inputInv.getStackInSlot(0);
             if (!stackInSlot.isEmpty()) {
                 level.setBlock(worldPosition, getBlockState().setValue(KilnBlock.POWERED, true), 3);
+                sendData();
                 if (level.isClientSide) {
                     spawnParticles();
                     return;

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "gearbox:block/brass_press/block"
+    },
+    "facing=south": {
+      "model": "gearbox:block/brass_press/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gearbox:block/brass_press/block",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "gearbox:block/brass_press/block",
+      "y": 90
+    }
+  }
+}

@@ -3,10 +3,12 @@ package io.github.hadron13.gearbox.compat.jei;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import io.github.hadron13.gearbox.compat.jei.category.CompressingCategory;
+import io.github.hadron13.gearbox.compat.jei.category.MechanizingCategory;
 import io.github.hadron13.gearbox.compat.jei.category.SappingCategory;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import io.github.hadron13.gearbox.compat.jei.category.PyroprocessingCategory;
@@ -78,6 +80,15 @@ public class GearboxJEI implements IModPlugin {
                 .itemIcon(ModBlocks.COMPRESSOR.get())
                 .emptyBackground(177,75)
                 .build("compressing", CompressingCategory::new);
+
+        CreateRecipeCategory<?>
+                mechanizing = builder(MechanizingRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.MECHANIZING)
+                .catalyst(ModBlocks.BRASS_PRESS::get)
+                .itemIcon(ModBlocks.BRASS_PRESS.get())
+                .emptyBackground(177, 75)
+                .build("mechanizing", MechanizingCategory::new);
+
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);

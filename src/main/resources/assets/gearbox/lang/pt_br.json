@@ -5,6 +5,7 @@
   "block.gearbox.kiln": "Forno cinético",
   "block.gearbox.sapper": "Extrator",
   "block.gearbox.compressor": "Compressor",
+  "block.gearbox.brass_press": "Prensa Mecanizante",
 
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
@@ -12,6 +13,9 @@
   "create.recipe.pyroprocessing": "Queima",
   "create.recipe.sapping": "Extração",
   "create.recipe.compressing": "Compressão",
+  "create.recipe.mechanizing": "Mecanização",
+
+  "create.recipe.assembly.mechanizing": "Mecanize",
 
   "create.recipe.compressing.campfire_heat": "Morno",
 

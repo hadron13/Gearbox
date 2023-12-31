@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.sapper;
 
 import com.mojang.datafixers.TypeRewriteRule;
 import com.simibubi.create.AllFluids;
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.fluids.hosePulley.HosePulleyBlock;
 import com.simibubi.create.content.fluids.hosePulley.HosePulleyFluidHandler;
@@ -44,6 +45,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -119,8 +121,13 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
                 }
 
                 if (sapTimer <= 0) {
-                    if(onClient)
+                    if(onClient){
+                        BlockPos pos = getBlockPos();
+                        level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
+                                SoundEvents.HONEY_DRINK, SoundSource.AMBIENT, 0.5f, 1.0f, false);
+
                         return;
+                    }
 
                     SmartFluidTank localTank = tank.getPrimaryHandler();
                     if(outputFluid != null)
@@ -298,6 +305,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
         if (isFluidHandlerCap(cap)
                 && (side == null || SapperBlock.hasPipeTowards(level, worldPosition, getBlockState(), side)))
             return tank.getCapability().cast();
+
         return super.getCapability(cap, side);
     }
     public static class TreeType{
