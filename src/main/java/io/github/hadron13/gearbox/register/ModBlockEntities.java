@@ -1,10 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
-import com.simibubi.create.content.kinetics.press.MechanicalPressRenderer;
-import com.simibubi.create.content.kinetics.press.PressInstance;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
@@ -19,11 +15,12 @@ import io.github.hadron13.gearbox.blocks.exchanger.ExchangerRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlockEntity;
 import io.github.hadron13.gearbox.blocks.kiln.KilnRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnInstance;
+import io.github.hadron13.gearbox.blocks.lasers.LaserBeamRenderer;
+import io.github.hadron13.gearbox.blocks.lasers.LaserBlockEntity;
+import io.github.hadron13.gearbox.blocks.lasers.LaserBeamInstance;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
 import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
-
-import static com.simibubi.create.Create.REGISTRATE;
 
 
 public class ModBlockEntities {
@@ -60,6 +57,12 @@ public class ModBlockEntities {
             .instance(() -> BrassPressInstance::new)
             .validBlocks(ModBlocks.BRASS_PRESS)
             .renderer(() -> BrassPressRenderer::new)
+            .register();
+    public static final BlockEntityEntry<LaserBlockEntity> LASER = Gearbox.registrate()
+            .blockEntity("laser", LaserBlockEntity::new)
+            .instance(() -> LaserBeamInstance::new)
+            .validBlocks(ModBlocks.LASER)
+            .renderer(() -> LaserBeamRenderer::new)
             .register();
     public static void register() {}
 }

@@ -17,6 +17,7 @@ import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
+import io.github.hadron13.gearbox.blocks.lasers.LaserBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
@@ -83,17 +84,24 @@ public class ModBlocks {
             .item()
             .transform(customItemModel())
             .register();
-    public static final BlockEntry<BrassPressBlock> BRASS_PRESS =
-            REGISTRATE.block("brass_press", BrassPressBlock::new)
-                    .initialProperties(SharedProperties::stone)
-                    .properties(p -> p.color(MaterialColor.METAL))
-                    .properties(BlockBehaviour.Properties::noOcclusion)
-                    .transform(axeOrPickaxe())
-                    .blockstate(BlockStateGen.horizontalBlockProvider(true))
-                    .transform(BlockStressDefaults.setImpact(16.0))
-                    .item(AssemblyOperatorBlockItem::new)
-                    .transform(customItemModel())
-                    .register();
+    public static final BlockEntry<BrassPressBlock> BRASS_PRESS = REGISTRATE.block("brass_press", BrassPressBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.color(MaterialColor.METAL))
+            .properties(BlockBehaviour.Properties::noOcclusion)
+            .transform(axeOrPickaxe())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .transform(BlockStressDefaults.setImpact(16.0))
+            .item(AssemblyOperatorBlockItem::new)
+            .transform(customItemModel())
+            .register();
+    public static final BlockEntry<LaserBlock> LASER = REGISTRATE.block("laser", LaserBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.color(MaterialColor.METAL).noOcclusion())
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .item()
+            .transform(customItemModel())
+            .register();
 
 
 }
