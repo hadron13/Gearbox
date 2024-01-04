@@ -5,6 +5,7 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
