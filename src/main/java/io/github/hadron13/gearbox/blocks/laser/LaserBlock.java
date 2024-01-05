@@ -1,4 +1,4 @@
-package io.github.hadron13.gearbox.blocks.lasers;
+package io.github.hadron13.gearbox.blocks.laser;
 
 import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,6 +32,19 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity> {
         return this.defaultBlockState()
                 .setValue(HORIZONTAL_FACING, context.getHorizontalDirection()
                         .getOpposite());
+    }
+
+
+
+    @Override
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos,
+                                boolean isMoving) {
+        if (worldIn.isClientSide)
+            return;
+
+        if (worldIn.hasNeighborSignal(pos)) {
+            withBlockEntityDo(worldIn, pos, LaserBlockEntity::neighbourChanged);
+        }
     }
 
     @Override

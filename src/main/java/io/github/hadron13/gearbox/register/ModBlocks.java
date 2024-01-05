@@ -1,7 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
-import com.simibubi.create.content.kinetics.press.MechanicalPressBlock;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -17,14 +16,13 @@ import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
-import io.github.hadron13.gearbox.blocks.lasers.LaserBlock;
+import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 
-import static com.simibubi.create.Create.REGISTRATE;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;

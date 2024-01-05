@@ -1,4 +1,4 @@
-package io.github.hadron13.gearbox.blocks.lasers;
+package io.github.hadron13.gearbox.blocks.laser;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;

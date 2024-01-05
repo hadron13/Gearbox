@@ -2,10 +2,10 @@
 	"credit": "Made with Blockbench",
 	"parent": "block",
 	"textures": {
-		"0": "symmetry_mirror",
-		"1": "bracket_plate_metal",
-		"2": "industrial_iron_block",
-		"particle": "symmetry_mirror"
+		"0": "create:block/symmetry_mirror",
+		"1": "create:block/bracket_plate_metal",
+		"2": "create:block/industrial_iron_block",
+		"particle": "create:block/symmetry_mirror"
 	},
 	"elements": [
 		{
