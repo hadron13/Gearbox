@@ -3,10 +3,12 @@ package io.github.hadron13.gearbox.blocks.mirror;
 import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.laser.LaserReceiver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -22,11 +24,18 @@ public class MirrorBlockEntity extends SmartBlockEntity implements LaserReceiver
     public MirrorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
-    public void wrenched(){
-        LaserBeamBehavior.LaserBeam []beams = (LaserBeamBehavior.LaserBeam[])beamBehavior.beams.values().toArray();
-        for(int i = 0; i < 2; i++){
-            beams[i].facing = (i==1)?getLeft():getRight();
-        }
+    public void wrenched(BlockState newState){
+        Direction newLeft = newState.getValue(HORIZONTAL_FACING);
+        Direction newRight = newLeft.getCounterClockWise();
+        beamBehavior.beams.clear();
+        beamBehavior.addLaser(newLeft, getBlockPos(), Color.BLACK, 0.0f);
+        beamBehavior.addLaser(newRight, getBlockPos(), Color.BLACK, 0.0f);
+        beamBehavior.disableLaser(newLeft);
+        beamBehavior.disableLaser(newRight);
+        timeoutLeft = 0;
+        timeoutRight = 0;
+        if(level.isClientSide)
+            beamBehavior.wrenched = true;
     }
     public Direction getLeft(){
         return getBlockState().getValue(HORIZONTAL_FACING);
@@ -48,51 +57,73 @@ public class MirrorBlockEntity extends SmartBlockEntity implements LaserReceiver
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
-        Direction facing = getBlockState().getValue(HORIZONTAL_FACING);
-        beamBehavior.addLaser(facing, getBlockPos(), Color.BLACK, 0.0f);
-        beamBehavior.addLaser(facing.getCounterClockWise(), getBlockPos(), Color.BLACK, 1.0f);
-
+        beamBehavior.addLaser(getLeft(), getBlockPos(), Color.BLACK, 0.0f);
+        beamBehavior.addLaser(getRight(), getBlockPos(), Color.BLACK, 0.0f);
         beamBehavior.disableLaser(getLeft());
         beamBehavior.disableLaser(getRight());
-//        beamBehavior.getLaser(facing).enabled = false;
-//        beamBehavior.getLaser(facing.getCounterClockWise()).enabled = false;
     }
 
     @Override
     public void tick(){
-       super.tick();
+        super.tick();
+        if(level == null)
+            return;
+        if(level.isClientSide)
+            return;
 
-       if(timeoutLeft != 0) {
-           timeoutLeft--;
-       }else{
-           beamBehavior.disableLaser(getRight());
-       }
-
-       if(timeoutRight != 0){
-           timeoutRight--;
-       }else {
-           beamBehavior.disableLaser(getLeft());
-       }
+        if(timeoutLeft != 0) {
+            timeoutLeft--;
+        }else{
+            beamBehavior.disableLaser(getRight());
+            sendData();
+        }
+        if(timeoutRight != 0){
+            timeoutRight--;
+        }else {
+            beamBehavior.disableLaser(getLeft());
+            sendData();
+        }
 
     }
 
+    public void propagate(Direction face, Color color, float power, int index){
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getMirroredFace(face));
+        if(beam == null)
+            return;
+        if(face == getLeft()) {
+            timeoutLeft = 2;
+        }
+        else if(face == getRight()) {
+            timeoutRight = 2;
+        }
+        beam.enabled = power > 0;
+        beam.power = power;
+        beam.color = color;
+        beamBehavior.propagate(getMirroredFace(face), index);
+    }
     @Override
     public boolean receiveLaser(Direction face, Color color, float power) {
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getMirroredFace(face));
+        if(beam == null)
+            return false;
+        if(face == getLeft()) {
+            timeoutLeft = 2;
+        }
+        else if(face == getRight()) {
+            timeoutRight = 2;
+        }
 
-        if(face == getLeft() || face == getRight()) {
-            LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getMirroredFace(face));
-            if(face == getLeft())
-                timeoutLeft = 3;
-            else if(face == getRight())
-                timeoutRight = 3;
-
-            assert beam != null;
+        if(Mth.equal(beam.power, power)|| beam.color != color) {
             beam.enabled = power > 0;
             beam.power = power;
             beam.color = color;
-            return true;
+            beamBehavior.propagate(getMirroredFace(face), 50);
         }
+        return true;
+    }
 
-        return false;
+    @Override
+    public float getLoss() {
+        return 0.1f;
     }
 }

@@ -25,7 +25,6 @@ import java.util.*;
 
 
 public class LaserBeamBehavior extends BlockEntityBehaviour {
-
     public static class LaserBeam{
         public boolean enabled = true;
         public Color color = Color.BLACK;
@@ -38,7 +37,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         public List<Entity> caughtEntities = new ArrayList<>();
     }
     public Map<Direction, LaserBeam> beams;
-    public boolean wrenched;
+    public boolean wrenched = false;
 
     public static final BehaviourType<LaserBeamBehavior> TYPE = new BehaviourType<>();
     public static final int MAX_LENGTH = 100;
@@ -63,10 +62,12 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         return beams.get(face);
     }
     public void enableLaser(Direction face){
-        Objects.requireNonNull(getLaser(face)).enabled = true;
+        LaserBeam beam = getLaser(face);
+        if(beam != null)beam.enabled = true;
     }
     public void disableLaser(Direction face){
-        Objects.requireNonNull(getLaser(face)).enabled = false;
+        LaserBeam beam = getLaser(face);
+        if(beam != null)beam.enabled = false;
     }
     public List<Entity> getAllCaughtEntities(){
         List<Entity> allCaughtEntities = new ArrayList<>();
@@ -75,10 +76,22 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         return allCaughtEntities;
     }
 
+    public void propagate(Direction face, int index){
+        if(index == 0)
+            return;
+        LaserBeam beam = getLaser(face);
+        if(beam != null && beam.targetReceiver != null){
+            beam.targetReceiver.propagate(beam.facing.getOpposite(),
+                                          beam.color,
+                                    beam.power - beam.targetReceiver.getLoss(),
+                                    index-1);
+        }
+    }
+
     @Override
     public void tick(){
         super.tick();
-        if(getWorld()==null)
+        if(getWorld()==null )
             return;
         for(LaserBeam beam: beams.values())
             updateBeam(beam);
@@ -97,6 +110,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         }
     }
     public void destroy() {
+
         for(LaserBeam beam: beams.values()) {
             if (beam.targetReceiver != null) {
                 beam.targetReceiver.receiveLaser(beam.facing.getOpposite(), Color.BLACK, 0);
@@ -124,7 +138,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
                 continue;
             }
             if(level.getBlockEntity(currentPosition) instanceof LaserReceiver receiver){
-                if(receiver.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power)){
+                if(receiver.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power - receiver.getLoss())){
                     beam.targetReceiver = receiver;
                 }
                 beam.breakTimer = 0;
@@ -162,7 +176,6 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             entity.hurt(DamageSource.IN_FIRE, 3f);
             entity.setSecondsOnFire(3);
         }
-
     }
     public void updateCaughtEntities(LaserBeam beam){
         if(!beam.enabled)

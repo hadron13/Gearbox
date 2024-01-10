@@ -13,6 +13,7 @@ import io.github.hadron13.gearbox.register.ModPartialModels;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.ArrayList;
@@ -24,13 +25,18 @@ import static net.minecraft.core.Direction.Axis.X;
 import static net.minecraft.core.Direction.Axis.Z;
 
 public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityInstance<T> implements DynamicInstance {
-    Map<Direction, ModelData> beamsData;
+    Map<Direction, ModelData> beamsData = null;
     public LaserBeamInstance(MaterialManager materialManager, T blockEntity) {
         super(materialManager, blockEntity);
     }
 
     public void init(){
-        beamsData = new HashMap<>();
+        if(beamsData == null) {
+            beamsData = new HashMap<>();
+        }else {
+            remove();
+            beamsData.clear();
+        }
         LaserBeamBehavior behavior = blockEntity.getBehaviour(LaserBeamBehavior.TYPE);
         if(behavior == null) {
             return;
@@ -50,9 +56,8 @@ public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityIn
         if(behavior == null)
             return;
         if(behavior.wrenched){
-//            for(ModelData data : ){
-//
-//            }
+            init();
+            behavior.wrenched = false;
         }
         for(LaserBeamBehavior.LaserBeam beam : behavior.beams.values()) {
             if(!beam.enabled) {
@@ -90,7 +95,7 @@ public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityIn
                 beamData.rotateCentered(Direction.UP, (float) Math.toRadians(facing.toYRot()));
                 break;
         }
-        beamData.setColor(beam.color.setAlpha(200));
+        beamData.setColor(beam.color.setAlpha((int)Mth.clamp(Math.pow(beam.power*20, 2), 100, 200)));
     }
 
     @Override

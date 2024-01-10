@@ -29,7 +29,11 @@ public class LaserBlockEntity extends SmartBlockEntity {
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
         beamBehavior.addLaser(getBlockState().getValue(HORIZONTAL_FACING), getBlockPos(), Color.RED, 1.0f);
-        Gearbox.LOGGER.debug("comportamentado");
+        if(level != null) {
+            redstoneSignal = level.getBestNeighborSignal(worldPosition);
+            beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color = Color.rainbowColor(redstoneSignal * (1536 / 15));
+            sendData();
+        }
     }
 
     public void neighbourChanged(){

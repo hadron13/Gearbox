@@ -1,7 +1,9 @@
 package io.github.hadron13.gearbox.blocks.mirror;
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.content.kinetics.base.*;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.utility.VoxelShaper;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -12,6 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
+
+import java.util.Objects;
 
 public class MirrorBlock extends Block implements IBE<MirrorBlockEntity>, IWrenchable {
 
@@ -29,14 +33,27 @@ public class MirrorBlock extends Block implements IBE<MirrorBlockEntity>, IWrenc
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
+
         return this.defaultBlockState()
                 .setValue(HORIZONTAL_FACING, context.getHorizontalDirection()
                         .getOpposite());
     }
 
     public BlockState updateAfterWrenched(BlockState newState, UseOnContext context) {
-        withBlockEntityDo(context.getLevel(), context.getClickedPos(),  MirrorBlockEntity::wrenched);
+        if(context.getClickedFace() == Direction.UP || context.getClickedFace() == Direction.DOWN){
+            Objects.requireNonNull(getBlockEntity(context.getLevel(), context.getClickedPos())).wrenched(newState);
+        }
         return Block.updateFromNeighbourShapes(newState, context.getLevel(), context.getClickedPos());
+    }
+
+    public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
+
+        if (targetedFace.getAxis() == Direction.Axis.Y) {
+            return originalState.setValue(HorizontalKineticBlock.HORIZONTAL_FACING, originalState
+                    .getValue(HorizontalKineticBlock.HORIZONTAL_FACING).getClockWise(targetedFace.getAxis()));
+        }else{
+            return originalState.setValue(HORIZONTAL_FACING, targetedFace);
+        }
     }
     @Override
     public Class<MirrorBlockEntity> getBlockEntityClass() {
