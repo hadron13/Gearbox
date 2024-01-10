@@ -20,51 +20,98 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.*;
 
 
 public class LaserBeamBehavior extends BlockEntityBehaviour {
+
+    public static class LaserBeam{
+        public boolean enabled = true;
+        public Color color = Color.BLACK;
+        public float length = 0;
+        public float power = 0;
+        public Direction facing = Direction.NORTH;
+        public BlockPos origin = BlockPos.ZERO;
+        public int breakTimer = 0;
+        public LaserReceiver targetReceiver = null;
+        public List<Entity> caughtEntities = new ArrayList<>();
+    }
+    public Map<Direction, LaserBeam> beams;
+    public boolean wrenched;
+
     public static final BehaviourType<LaserBeamBehavior> TYPE = new BehaviourType<>();
     public static final int MAX_LENGTH = 100;
 
-    public Color color = Color.BLACK;
-    public float length = 0;
-    public float power = 0;
-    public Direction facing = Direction.NORTH;
-    public BlockPos origin = BlockPos.ZERO;
-
-    public List<Entity> caughtEntities;
-    public int breakTimer = 0;
     public LaserBeamBehavior(SmartBlockEntity be) {
         super(be);
-        setLazyTickRate(4);
-        caughtEntities = new ArrayList<>();
+        beams = new HashMap<>();
+        setLazyTickRate(2);
     }
+
+    public void addLaser(Direction face, BlockPos origin, Color color, float power){
+        LaserBeam beam = new LaserBeam();
+        beam.facing = face;
+        beam.origin = origin;
+        beam.color = color;
+        beam.power = power;
+
+        beams.put(face, beam);
+    }
+    @Nullable
+    public LaserBeam getLaser(Direction face){
+        return beams.get(face);
+    }
+    public void enableLaser(Direction face){
+        Objects.requireNonNull(getLaser(face)).enabled = true;
+    }
+    public void disableLaser(Direction face){
+        Objects.requireNonNull(getLaser(face)).enabled = false;
+    }
+    public List<Entity> getAllCaughtEntities(){
+        List<Entity> allCaughtEntities = new ArrayList<>();
+        for(LaserBeam beam : beams.values())
+            allCaughtEntities.addAll(beam.caughtEntities);
+        return allCaughtEntities;
+    }
+
     @Override
     public void tick(){
         super.tick();
-        if(blockEntity.getLevel()==null)
+        if(getWorld()==null)
             return;
-        updateBeam();
+        for(LaserBeam beam: beams.values())
+            updateBeam(beam);
     }
     @Override
     public void lazyTick(){
-        if(blockEntity.getLevel() == null)
+        if(getWorld() == null)
             return;
 
-        if(blockEntity.getLevel().isClientSide){
-            generateParticles();
+        if(getWorld().isClientSide){
+            for(LaserBeam beam: beams.values())
+                generateParticles(beam);
         }else{
-            updateCaughtEntities();
+            for(LaserBeam beam: beams.values())
+                updateCaughtEntities(beam);
         }
     }
-    public void updateBeam(){
+    public void destroy() {
+        for(LaserBeam beam: beams.values()) {
+            if (beam.targetReceiver != null) {
+                beam.targetReceiver.receiveLaser(beam.facing.getOpposite(), Color.BLACK, 0);
+            }
+        }
+    }
+    public void updateBeam(LaserBeam beam){
+        if(!beam.enabled)
+            return;
         BlockState blockState = null;
-        Level level = blockEntity.getLevel();
+        Level level = getWorld();
 
-        for(length = 1; length <= MAX_LENGTH; length++){
-            BlockPos currentPosition = origin.relative(facing, (int)length);
+        beam.targetReceiver = null;
+        for(beam.length = 1; beam.length <= MAX_LENGTH; beam.length++){
+            BlockPos currentPosition = beam.origin.relative(beam.facing, (int)beam.length);
 
             blockState = level.getBlockState(currentPosition);
 
@@ -77,78 +124,92 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
                 continue;
             }
             if(level.getBlockEntity(currentPosition) instanceof LaserReceiver receiver){
-                receiver.receiveLaser(facing.getOpposite(), color, power);
+                if(receiver.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power)){
+                    beam.targetReceiver = receiver;
+                }
+                beam.breakTimer = 0;
                 break;
             }
 
-            boolean catchesFire = blockState.isFlammable(level, currentPosition, facing.getOpposite());
+            boolean catchesFire = blockState.isFlammable(level, currentPosition, beam.facing.getOpposite());
 
             float hardness = blockState.getDestroySpeed(level, currentPosition);
-            boolean canBurn = hardness < power;
+            boolean canBurn = hardness < beam.power;
 
             if(!canBurn && !catchesFire) {
-                breakTimer = 0;
+                beam.breakTimer = 0;
                 break;
             }
-            breakTimer++;
+            if(beam.power <= 0)
+                break;
+            beam.breakTimer++;
 
-            if((canBurn && breakTimer >= (hardness * 10)/power) || (catchesFire && breakTimer >= 15)){
+            if((canBurn && beam.breakTimer >= (hardness * 10)/beam.power) || (catchesFire && beam.breakTimer >= 20/beam.power)){
                 level.destroyBlock(currentPosition, true);
-                breakTimer = 0;
+                beam.breakTimer = 0;
             }
             break;
         }
-
-        for(Entity entity : caughtEntities){
+        for(Entity entity : beam.caughtEntities){
             if(entity instanceof ItemEntity){
-                ItemEntity item = (ItemEntity) entity;
+//                ItemEntity item = (ItemEntity) entity;
                 continue;
             }
 
             if(!entity.isAlive())
                 continue;
-            blockEntity.getLevel().explode(null, entity.getX(), entity.getY(), entity.getZ(), 10f, Explosion.BlockInteraction.NONE);
+            //getWorld().explode(null, entity.getX(), entity.getY(), entity.getZ(), 10f, Explosion.BlockInteraction.NONE);
             entity.hurt(DamageSource.IN_FIRE, 3f);
             entity.setSecondsOnFire(3);
         }
 
     }
-    public void updateCaughtEntities(){
-        Vec3 min = Vec3.atCenterOf( origin );
-        Vec3 max = Vec3.atCenterOf( origin.relative(facing, (int)length) );
+    public void updateCaughtEntities(LaserBeam beam){
+        if(!beam.enabled)
+            return;
+        Vec3 min = Vec3.atCenterOf( beam.origin );
+        Vec3 max = Vec3.atCenterOf( beam.origin.relative(beam.facing, (int)beam.length) );
 
         AABB laser_collision = new AABB(min, max);
 
-        caughtEntities = blockEntity.getLevel().getEntities(null, laser_collision);
+        beam.caughtEntities = getWorld().getEntities(null, laser_collision);
     }
-    public void generateParticles(){
-        if(breakTimer == 0)
+    public void generateParticles(LaserBeam beam){
+        if(beam.breakTimer == 0 || !beam.enabled)
             return;
 
-        Direction oppositeFace = facing.getOpposite();
-        Vec3 particlePos = Vec3.atCenterOf(origin.relative(facing, (int)length));
+        Direction oppositeFace = beam.facing.getOpposite();
+        Vec3 particlePos = Vec3.atCenterOf(beam.origin.relative(beam.facing, (int)beam.length));
 
-        Vec3 velocity = VecHelper.offsetRandomly(new Vec3(oppositeFace.getStepX(), 0, oppositeFace.getStepZ()), blockEntity.getLevel().random, 1.0f);
+        Vec3 velocity = VecHelper.offsetRandomly(new Vec3(oppositeFace.getStepX(), 0, oppositeFace.getStepZ()), getWorld().random, 1.0f);
 
-        blockEntity.getLevel().addParticle(ParticleTypes.LAVA,
-                particlePos.x - facing.getStepX()/2f, particlePos.y + 0.1f, particlePos.z - facing.getStepZ()/2f,
+        getWorld().addParticle(ParticleTypes.LAVA,
+                particlePos.x - beam.facing.getStepX()/2f, particlePos.y + 0.1f, particlePos.z - beam.facing.getStepZ()/2f,
                 velocity.x, velocity.y, velocity.z);
     }
 
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
-        compound.putFloat("length", length);
-        compound.putInt("color", color.getRGB());
-        compound.putInt("break", breakTimer);
+        for(LaserBeam beam: beams.values()) {
+            String id = beam.facing.toString();
+            compound.putBoolean("enable"+id, beam.enabled);
+            compound.putFloat("length"+id, beam.length);
+            compound.putInt("color"+id, beam.color.getRGB());
+            compound.putInt("break"+id, beam.breakTimer);
+        }
     }
 
     @Override
     public void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        length = compound.getFloat("length");
-        color = new Color(compound.getInt("color"));
-        breakTimer = compound.getInt("break");
+        for(LaserBeam beam: beams.values()) {
+            String id = beam.facing.toString();
+            beam.enabled = compound.getBoolean("enable"+id);
+            beam.length = compound.getFloat("length"+id);
+            beam.color = new Color(compound.getInt("color"+id));
+            beam.breakTimer = compound.getInt("break"+id);
+        }
     }
     @Override
     public BehaviourType<?> getType() {

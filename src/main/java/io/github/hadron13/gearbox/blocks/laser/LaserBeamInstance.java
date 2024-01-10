@@ -5,39 +5,78 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
-import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
+
 import io.github.hadron13.gearbox.register.ModPartialModels;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static net.minecraft.core.Direction.Axis.X;
 import static net.minecraft.core.Direction.Axis.Z;
 
-public class LaserBeamInstance<T extends BlockEntity & LaserEmitter> extends BlockEntityInstance<T> implements DynamicInstance {
-    ModelData beam;
+public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityInstance<T> implements DynamicInstance {
+    Map<Direction, ModelData> beamsData;
     public LaserBeamInstance(MaterialManager materialManager, T blockEntity) {
         super(materialManager, blockEntity);
-        beam = materialManager.defaultTransparent()
-                .material(Materials.TRANSFORMED)
-                .getModel(ModPartialModels.LASER_BEAM, blockState)
-                .createInstance();
+    }
+
+    public void init(){
+        beamsData = new HashMap<>();
+        LaserBeamBehavior behavior = blockEntity.getBehaviour(LaserBeamBehavior.TYPE);
+        if(behavior == null) {
+            return;
+        }
+        for(Direction direction : behavior.beams.keySet()){
+            ModelData beam = materialManager.defaultTransparent()
+                    .material(Materials.TRANSFORMED)
+                    .getModel(ModPartialModels.LASER_BEAM, blockState)
+                    .createInstance();
+
+            beamsData.put(direction, beam);
+        }
     }
     @Override
     public void beginFrame() {
-        updateBeam(beam, getInstancePosition(), blockEntity.getDirection());
+        LaserBeamBehavior behavior = blockEntity.getBehaviour(LaserBeamBehavior.TYPE);
+        if(behavior == null)
+            return;
+        if(behavior.wrenched){
+//            for(ModelData data : ){
+//
+//            }
+        }
+        for(LaserBeamBehavior.LaserBeam beam : behavior.beams.values()) {
+            if(!beam.enabled) {
+                beamsData.get(beam.facing).setEmptyTransform();
+                continue;
+            }
+            updateBeam(beam);
+        }
     }
 
-    public void updateBeam(ModelData beam, BlockPos origin, Direction facing){
-        float scale = blockEntity.getLength();
+    public void updateBeam(LaserBeamBehavior.LaserBeam beam){
+        Direction facing = beam.facing;
+        float scale = beam.length;
+        BlockPos origin = beam.origin;
+
+        ModelData beamData = beamsData.get(facing);
+
+        if(scale == 0)
+            return;
 
         float xScale = (facing.getAxis() == X)? scale : 1;
         float zScale = (facing.getAxis() == Z)? scale : 1;
 
-        beam.loadIdentity()
+        beamData.loadIdentity()
                 .scale(xScale, 1, zScale)
                 .translate( (origin.getX() + (facing.getAxis() == X? 0.5f:0) )/xScale,
                                 origin.getY(),
@@ -46,24 +85,26 @@ public class LaserBeamInstance<T extends BlockEntity & LaserEmitter> extends Blo
 
         switch(facing){
             case NORTH, WEST:
-                beam.translate(facing.getStepX(), 0, facing.getStepZ());
+                beamData.translate(facing.getStepX(), 0, facing.getStepZ());
             case SOUTH, EAST:
-                beam.rotateCentered(Direction.UP, (float) Math.toRadians(facing.toYRot()));
+                beamData.rotateCentered(Direction.UP, (float) Math.toRadians(facing.toYRot()));
                 break;
         }
-
-        beam.setColor(blockEntity.getColor().setAlpha(200));
+        beamData.setColor(beam.color.setAlpha(200));
     }
 
     @Override
     public void updateLight() {
         super.updateLight();
-        relight(15, 15, beam);
+        for(ModelData beam : beamsData.values()) {
+            relight(15, 15, beam);
+        }
     }
     @Override
     protected void remove() {
-        beam.delete();
+        for (ModelData beam : beamsData.values()) {
+            beam.delete();
+        }
     }
-
 
 }

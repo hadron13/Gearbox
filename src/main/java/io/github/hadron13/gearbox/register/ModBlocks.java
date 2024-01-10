@@ -17,6 +17,7 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
+import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
@@ -92,6 +93,7 @@ public class ModBlocks {
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();
+
     public static final BlockEntry<LaserBlock> LASER = REGISTRATE.block("laser", LaserBlock::new)
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
@@ -101,5 +103,13 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
 
+    public static final BlockEntry<MirrorBlock> MIRROR = REGISTRATE.block("mirror", MirrorBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.color(MaterialColor.METAL).noOcclusion())
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .item()
+            .transform(customItemModel())
+            .register();
 
 }

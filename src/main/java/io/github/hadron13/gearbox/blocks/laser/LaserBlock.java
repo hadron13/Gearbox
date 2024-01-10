@@ -34,17 +34,13 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity> {
                         .getOpposite());
     }
 
-
-
     @Override
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos,
                                 boolean isMoving) {
         if (worldIn.isClientSide)
             return;
 
-        if (worldIn.hasNeighborSignal(pos)) {
-            withBlockEntityDo(worldIn, pos, LaserBlockEntity::neighbourChanged);
-        }
+        withBlockEntityDo(worldIn, pos, LaserBlockEntity::neighbourChanged);
     }
 
     @Override

@@ -18,6 +18,7 @@ import io.github.hadron13.gearbox.blocks.kiln.KilnInstance;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamInstance;
+import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
 import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
@@ -62,6 +63,13 @@ public class ModBlockEntities {
             .blockEntity("laser", LaserBlockEntity::new)
             .instance(() -> LaserBeamInstance::new)
             .validBlocks(ModBlocks.LASER)
+            .renderer(() -> LaserBeamRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<MirrorBlockEntity> MIRROR = Gearbox.registrate()
+            .blockEntity("mirror", MirrorBlockEntity::new)
+            .instance(() -> LaserBeamInstance::new)
+            .validBlocks(ModBlocks.MIRROR)
             .renderer(() -> LaserBeamRenderer::new)
             .register();
     public static void register() {}

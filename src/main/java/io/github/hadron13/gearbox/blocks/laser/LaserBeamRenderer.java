@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class LaserBeamRenderer<T extends BlockEntity & LaserEmitter> extends SafeBlockEntityRenderer<T> {
+public class LaserBeamRenderer<T extends BlockEntity> extends SafeBlockEntityRenderer<T> {
 
 
     public LaserBeamRenderer(BlockEntityRendererProvider.Context context) {
