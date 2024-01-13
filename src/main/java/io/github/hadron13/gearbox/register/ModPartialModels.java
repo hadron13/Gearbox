@@ -11,7 +11,8 @@ public class ModPartialModels {
             COMPRESSOR_ROLL = block("compressor/roll"),
             BRASS_PRESS_HEAD = block("brass_press/head"),
             BRASS_PRESS_POLE = block("brass_press/pole"),
-            LASER_BEAM = block("lasers/laser_beam");
+            LASER_BEAM = block("lasers/laser_beam"),
+            SPECTROGAUGE = block("lasers/spectrogauge");
 
     private static PartialModel block(String path) {
         return new PartialModel(Gearbox.asResource("block/" + path));

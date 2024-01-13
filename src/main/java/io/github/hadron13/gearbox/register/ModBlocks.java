@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.register;
 
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
+import com.simibubi.create.content.kinetics.gauge.GaugeGenerator;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -19,6 +20,7 @@ import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
+import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -111,5 +113,12 @@ public class ModBlocks {
             .item()
             .transform(customItemModel())
             .register();
-
+    public static final BlockEntry<SpectrometerBlock> SPECTROMETER = REGISTRATE.block("spectrometer", SpectrometerBlock::new)
+            .initialProperties(SharedProperties::wooden)
+            .transform(axeOrPickaxe())
+            .properties(p -> p.color(MaterialColor.PODZOL))
+            .blockstate(new GaugeGenerator()::generate)
+            .item()
+            .transform(customItemModel())
+            .register();
 }

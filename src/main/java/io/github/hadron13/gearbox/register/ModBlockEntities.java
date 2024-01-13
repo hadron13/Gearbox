@@ -22,6 +22,9 @@ import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
 import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
+import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
+import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerRenderer;
+import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerInstance;
 
 
 public class ModBlockEntities {
@@ -72,5 +75,13 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.MIRROR)
             .renderer(() -> LaserBeamRenderer::new)
             .register();
+
+    public static final BlockEntityEntry<SpectrometerBlockEntity> SPECTROMETER = Gearbox.registrate()
+            .blockEntity("spectrometer", SpectrometerBlockEntity::new)
+            .instance(() -> SpectrometerInstance::new)
+            .validBlocks(ModBlocks.SPECTROMETER)
+            .renderer(() -> SpectrometerRenderer::new)
+            .register();
+
     public static void register() {}
 }
