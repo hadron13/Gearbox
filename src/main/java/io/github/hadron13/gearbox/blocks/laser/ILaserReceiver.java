@@ -1,10 +1,9 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
 import com.jozufozu.flywheel.util.Color;
-import com.jozufozu.flywheel.util.Pair;
 import net.minecraft.core.Direction;
 
-public interface LaserReceiver {
+public interface ILaserReceiver {
     /**
      * @param face  face in which the laser comes from
      * @param color color of the laser

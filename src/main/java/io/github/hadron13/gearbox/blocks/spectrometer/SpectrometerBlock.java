@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -42,6 +43,14 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
         super(pProperties);
     }
 
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(AXIS_ALONG_FIRST_COORDINATE);
+        builder.add(FACING);
+        super.createBlockStateDefinition(builder);
+    }
+
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction facing = context.getClickedFace();
@@ -50,6 +59,9 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
 
         if (faceAxis.isVertical()) {
             alongFirst = context.getHorizontalDirection().getAxis() == Direction.Axis.X;
+        }
+        if(faceAxis == Direction.Axis.Z){
+            alongFirst = true;
         }
 
         return this.defaultBlockState()
@@ -64,13 +76,27 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
         if (face == state.getValue(FACING)
                 .getOpposite())
             return false;
-        if (face.getAxis() == state.getValue(FACING).getClockWise().getAxis())
+        if (face.getAxis() == getRotationAxis(state))
             return false;
-        if (state.getValue(FACING).getClockWise().getAxis() == Direction.Axis.Y && face != state.getValue(FACING))
+        if (getRotationAxis(state) == Direction.Axis.Y && face != state.getValue(FACING))
             return false;
         if (!Block.shouldRenderFace(state, world, pos, face, pos.relative(face)) && !(world instanceof WrappedWorld))
             return false;
         return true;
+    }
+    public Direction.Axis getRotationAxis(BlockState state) {
+        Direction.Axis pistonAxis = state.getValue(FACING)
+                .getAxis();
+        boolean alongFirst = state.getValue(AXIS_ALONG_FIRST_COORDINATE);
+
+        if (pistonAxis == Direction.Axis.X)
+            return alongFirst ? Direction.Axis.Y : Direction.Axis.Z;
+        if (pistonAxis == Direction.Axis.Y)
+            return alongFirst ? Direction.Axis.X : Direction.Axis.Z;
+        if (pistonAxis == Direction.Axis.Z)
+            return alongFirst ? Direction.Axis.X : Direction.Axis.Y;
+
+        throw new IllegalStateException("Unknown axis??");
     }
     @Override
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {

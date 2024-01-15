@@ -12,7 +12,7 @@ public class ModPartialModels {
             BRASS_PRESS_HEAD = block("brass_press/head"),
             BRASS_PRESS_POLE = block("brass_press/pole"),
             LASER_BEAM = block("lasers/laser_beam"),
-            SPECTROGAUGE = block("lasers/spectrogauge");
+            SPECTROGAUGE = block("spectrometer/head");
 
     private static PartialModel block(String path) {
         return new PartialModel(Gearbox.asResource("block/" + path));

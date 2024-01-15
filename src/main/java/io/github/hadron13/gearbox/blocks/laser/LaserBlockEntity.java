@@ -9,6 +9,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 
 
 import java.util.ArrayList;
@@ -19,9 +21,13 @@ import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACI
 public class LaserBlockEntity extends SmartBlockEntity {
 
     LaserBeamBehavior beamBehavior;
+
+    public LazyOptional<IEnergyStorage> lazyEnergy;
     public int redstoneSignal = 0;
+    boolean firstTick = true;
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+
     }
 
     @Override
@@ -29,11 +35,6 @@ public class LaserBlockEntity extends SmartBlockEntity {
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
         beamBehavior.addLaser(getBlockState().getValue(HORIZONTAL_FACING), getBlockPos(), Color.RED, 1.0f);
-        if(level != null) {
-            redstoneSignal = level.getBestNeighborSignal(worldPosition);
-            beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color = Color.rainbowColor(redstoneSignal * (1536 / 15));
-            sendData();
-        }
     }
 
     public void neighbourChanged(){
@@ -47,6 +48,10 @@ public class LaserBlockEntity extends SmartBlockEntity {
     @Override
     public void tick(){
         super.tick();
+        if(firstTick) {
+            neighbourChanged();
+            firstTick = false;
+        }
     }
 
     @Override

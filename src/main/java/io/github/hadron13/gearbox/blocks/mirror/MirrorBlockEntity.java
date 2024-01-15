@@ -3,9 +3,8 @@ package io.github.hadron13.gearbox.blocks.mirror;
 import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
-import io.github.hadron13.gearbox.blocks.laser.LaserReceiver;
+import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -16,7 +15,7 @@ import java.util.List;
 
 import static io.github.hadron13.gearbox.blocks.mirror.MirrorBlock.HORIZONTAL_FACING;
 
-public class MirrorBlockEntity extends SmartBlockEntity implements LaserReceiver {
+public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceiver {
 
     LaserBeamBehavior beamBehavior;
     public int timeoutLeft = 0;

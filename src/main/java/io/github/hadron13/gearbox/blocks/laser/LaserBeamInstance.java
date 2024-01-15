@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
 
+import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 
 import net.minecraft.core.BlockPos;
@@ -72,11 +73,11 @@ public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityIn
         Direction facing = beam.facing;
         float scale = beam.length;
         BlockPos origin = beam.origin;
-
         ModelData beamData = beamsData.get(facing);
 
-        if(scale == 0)
+        if(scale == 0) {
             return;
+        }
 
         float xScale = (facing.getAxis() == X)? scale : 1;
         float zScale = (facing.getAxis() == Z)? scale : 1;

@@ -22,6 +22,18 @@
   "create.hint.sapper.full": "",
   "create.hint.compressor.reverse.title": "Rotation Direction",
   "create.hint.compressor.reverse": "It appears that this compressor is rotating in the _wrong direction_.",
+
+  "create.gui.spectrometer.title": "Spectrometry",
+  "create.gui.spectrometer.power": "Laser Power",
+  "create.gui.spectrometer.red": "Red",
+  "create.gui.spectrometer.green": "Green",
+  "create.gui.spectrometer.blue": "Blue",
+
+  "block.gearbox.mirror.tooltip": "MIRROR",
+  "block.gearbox.mirror.tooltip.summary": "Reflects incoming lasers",
+  "block.gearbox.spectrometer.tooltip": "SPECTROMETER",
+  "block.gearbox.spectrometer.tooltip.summary": "Measures passing laser's _power level_ and _color_",
+
   "gearbox.ponder.sapper.header": "Extracting fluids with a sapper",
   "gearbox.ponder.sapper.text_1": "Sappers are machines made to extract fluids from trees",
   "gearbox.ponder.sapper.text_2": "You can power them with cogs",

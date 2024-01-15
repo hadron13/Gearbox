@@ -12,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,7 +32,8 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         public Direction facing = Direction.NORTH;
         public BlockPos origin = BlockPos.ZERO;
         public int breakTimer = 0;
-        public LaserReceiver targetReceiver = null;
+        public ILaserReceiver targetReceiver = null;
+        public List<ILaserReader> readers = new ArrayList<>();
         public List<Entity> caughtEntities = new ArrayList<>();
     }
     public Map<Direction, LaserBeam> beams;
@@ -76,6 +76,11 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         return allCaughtEntities;
     }
 
+    /**
+     * for redirecting lasers at sub-tick speeds, made for ILaserReceiver blocks
+     * @param face face of the laser
+     * @param index recursion index
+     */
     public void propagate(Direction face, int index){
         if(index == 0)
             return;
@@ -110,10 +115,13 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         }
     }
     public void destroy() {
-
         for(LaserBeam beam: beams.values()) {
             if (beam.targetReceiver != null) {
                 beam.targetReceiver.receiveLaser(beam.facing.getOpposite(), Color.BLACK, 0);
+            }
+            for(ILaserReader reader : beam.readers){
+                if(reader != null)
+                    reader.receiveLaser(beam.facing.getOpposite(), Color.BLACK, 0);
             }
         }
     }
@@ -137,12 +145,21 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             if(translucent){
                 continue;
             }
-            if(level.getBlockEntity(currentPosition) instanceof LaserReceiver receiver){
+            BlockEntity blockEntityAtPos = level.getBlockEntity(currentPosition);
+            if(blockEntityAtPos instanceof ILaserReceiver receiver){
                 if(receiver.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power - receiver.getLoss())){
                     beam.targetReceiver = receiver;
                 }
                 beam.breakTimer = 0;
                 break;
+            }
+
+            if(blockEntityAtPos instanceof ILaserReader reader){
+                if(reader.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power)){
+                    if(!beam.readers.contains(reader))
+                        beam.readers.add(reader);
+                    continue;
+                }
             }
 
             boolean catchesFire = blockState.isFlammable(level, currentPosition, beam.facing.getOpposite());
@@ -164,6 +181,8 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             }
             break;
         }
+
+
         for(Entity entity : beam.caughtEntities){
             if(entity instanceof ItemEntity){
 //                ItemEntity item = (ItemEntity) entity;
