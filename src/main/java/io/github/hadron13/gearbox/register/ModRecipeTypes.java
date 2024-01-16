@@ -11,6 +11,7 @@ import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
+import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipeSerializer;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.minecraft.core.Registry;
@@ -39,7 +40,9 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     PYROPROCESSING(PyroprocessingRecipe::new),
     SAPPING(SappingRecipe::new),
     COMPRESSING(CompressingRecipe::new),
-    MECHANIZING(MechanizingRecipe::new);
+    MECHANIZING(MechanizingRecipe::new),
+    IRRADIATING(IrradiatingRecipeSerializer::new);
+
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
     @Nullable
@@ -121,8 +124,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
         if(world.isClientSide())
             return Optional.empty();
         List<CompressingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.COMPRESSING.getType());
-        if(!allRecipes.isEmpty())
-            Gearbox.LOGGER.debug("fffeeeed my cooooinns");
+
 
         Stream<CompressingRecipe> matchingRecipes =
                 allRecipes.stream().filter(compressingRecipe -> CompressingRecipe.match(blockEntity, compressingRecipe) );

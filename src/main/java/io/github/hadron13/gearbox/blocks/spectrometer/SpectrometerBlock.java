@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.spectrometer;
 
 
 import com.mojang.math.Vector3f;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
 
 import com.simibubi.create.foundation.block.IBE;
@@ -35,7 +36,7 @@ import java.util.Random;
 import static com.simibubi.create.content.kinetics.gauge.GaugeBlock.GAUGE;
 
 
-public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEntity> {
+public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEntity>, IWrenchable {
     public static final Property<Direction> FACING = BlockStateProperties.FACING;
     public static final BooleanProperty AXIS_ALONG_FIRST_COORDINATE = BooleanProperty.create("axis_along_first");
 
@@ -58,7 +59,7 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
         Direction.Axis faceAxis = facing.getAxis();
 
         if (faceAxis.isVertical()) {
-            alongFirst = context.getHorizontalDirection().getAxis() == Direction.Axis.X;
+            alongFirst = context.getHorizontalDirection().getAxis() == Direction.Axis.Z;
         }
         if(faceAxis == Direction.Axis.Z){
             alongFirst = true;
