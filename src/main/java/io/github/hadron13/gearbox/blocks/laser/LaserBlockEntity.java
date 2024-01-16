@@ -6,10 +6,13 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 
 import io.github.hadron13.gearbox.Gearbox;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 
@@ -21,12 +24,14 @@ import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACI
 public class LaserBlockEntity extends SmartBlockEntity {
 
     LaserBeamBehavior beamBehavior;
-
+    public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
     public int redstoneSignal = 0;
     boolean firstTick = true;
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        energyStorage = new InternalEnergyStorage(100, 10, 10);
+        lazyEnergy = LazyOptional.of(() -> energyStorage);
 
     }
 
@@ -52,6 +57,29 @@ public class LaserBlockEntity extends SmartBlockEntity {
             neighbourChanged();
             firstTick = false;
         }
+        if(level.isClientSide)
+            return;
+
+        Direction facing = getBlockState().getValue(HORIZONTAL_FACING);
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(facing);
+
+        //uncomment on release!!
+
+//        if(beam.enabled) {
+//            int ext = energyStorage.internalConsumeEnergy(10);
+//            if (ext < 10) {
+//                beam.enabled = false;
+//                sendData();
+//            }
+//        }else{
+//            if(energyStorage.getEnergyStored() > 10){
+//                beam.enabled = true;
+//                sendData();
+//            }
+//        }
+//
+
+
     }
 
     @Override
@@ -64,6 +92,13 @@ public class LaserBlockEntity extends SmartBlockEntity {
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         redstoneSignal = compound.getInt("signal");
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (cap == CapabilityEnergy.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING).getOpposite())// && !level.isClientSide
+            return lazyEnergy.cast();
+        return LazyOptional.empty();
     }
 
 }

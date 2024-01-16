@@ -5,6 +5,8 @@
   "block.gearbox.sapper": "Sapper",
   "block.gearbox.compressor": "Compressor",
   "block.gearbox.brass_press": "Mechanizing Press",
+  "block.gearbox.spectrometer": "Spectrometer",
+  "block.gearbox.mirror": "Mirror",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -15,7 +17,6 @@
   "create.recipe.mechanizing": "Mechanizing",
 
   "create.recipe.assembly.mechanizing": "Mechanize",
-
   "create.recipe.compressing.campfire_heat": "Warm",
 
   "create.hint.sapper.full.title": "Internal Tank Full",
@@ -25,6 +26,7 @@
 
   "create.gui.spectrometer.title": "Spectrometry",
   "create.gui.spectrometer.power": "Laser Power",
+  "create.gui.spectrometer.nolaser": "No Laser",
   "create.gui.spectrometer.red": "Red",
   "create.gui.spectrometer.green": "Green",
   "create.gui.spectrometer.blue": "Blue",

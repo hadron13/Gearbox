@@ -72,7 +72,7 @@ public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityIn
     public void updateBeam(LaserBeamBehavior.LaserBeam beam){
         Direction facing = beam.facing;
         float scale = beam.length;
-        BlockPos origin = beam.origin;
+        BlockPos origin = beam.origin.subtract(materialManager.getOriginCoordinate());
         ModelData beamData = beamsData.get(facing);
 
         if(scale == 0) {

@@ -25,6 +25,18 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
     }
     public Color currentColor = Color.BLACK;
     public float currentPower = 0;
+    public int timeout = 0;
+
+    @Override
+    public void tick(){
+        super.tick();
+        if(timeout != 0) {
+            timeout--;
+        }else{
+            currentColor = Color.BLACK;
+            currentPower = 0;
+        }
+    }
 
     @Override
     public boolean receiveLaser(Direction face, Color color, float power) {
@@ -37,6 +49,7 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
             float b = color.getBlue()/255f;
 
             dialTarget = Mth.clamp( Mth.lerp( Mth.clamp(g - (b+r)/2, 0 , 1),b - r, 0.5f) , 0, 1 );
+            timeout = 3;
             return  true;
         }
         return false;
@@ -50,7 +63,12 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
 
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
-
+        if(currentPower == 0 || currentColor == Color.BLACK){
+            Lang.translate("gui.spectrometer.nolaser")
+                    .style(ChatFormatting.DARK_GRAY)
+                    .forGoggles(tooltip);
+            return true;
+        }
         Lang.translate("gui.spectrometer.title")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
