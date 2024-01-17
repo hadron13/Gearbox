@@ -1,0 +1,20 @@
+{
+  "type": "gearbox:irradiating",
+  "ingredients": [
+    {
+      "fluid": "minecraft:lava",
+      "amount": 50
+    }
+  ],
+  "results": [
+    {
+      "item" : "minecraft:andesite"
+    },{
+      "item" : "minecraft:granite"
+    }
+  ],
+  "processingTime": 150,
+  "heatRequirement": "heated",
+  "color": 4294967295,
+  "power": 1.5
+}

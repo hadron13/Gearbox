@@ -17,7 +17,7 @@ public class IrradiatorInstance extends SingleRotatingInstance<IrradiatorBlockEn
     @Override
     public Instancer<RotatingData> getModel(){
         BlockState referenceState = blockEntity.getBlockState();
-        Direction facing = referenceState.getValue(BlockStateProperties.FACING);
-        return getRotatingMaterial().getModel(AllPartialModels., referenceState, facing);
+        Direction facing = Direction.UP;
+        return getRotatingMaterial().getModel(AllPartialModels.SHAFT_HALF, referenceState, facing);
     }
 }

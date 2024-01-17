@@ -1,66 +1,67 @@
 package io.github.hadron13.gearbox.blocks.irradiator;
 
+import com.google.gson.JsonObject;
 import com.jozufozu.flywheel.util.Color;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
+import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public class IrradiatingRecipe implements Recipe<RecipeWrapper> {
 
-    public ResourceLocation id;
-    public IrradiatingRecipeSerializer serializer;
-    public RecipeType<?> type;
+public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper>{
+    public Color requiredColor;
+    public float requiredPower;
 
-    public boolean requiresColor;
-    public Color color;
-    public float power;
-    public ItemStack ingredient, result;
-
-    @Override
-    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
-
-        return false;
+    public IrradiatingRecipe(ProcessingRecipeParams params) {
+        super(ModRecipeTypes.IRRADIATING, params);
     }
 
     @Override
-    public ItemStack assemble(RecipeWrapper pContainer) {
-        return null;
+    protected int getMaxInputCount() {
+        return 3;
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
-        return false;
+    protected int getMaxOutputCount() {
+        return 3;
     }
 
-    @Override
-    public boolean isSpecial() {
+
+    protected boolean canRequireHeat() {
         return true;
     }
-        @Override
-    public String getGroup() {
-        return "processing";
+
+    protected boolean canSpecifyDuration() {
+        return true;
     }
-    @Override
-    public ItemStack getResultItem() {
-        return result;
+    public void readAdditional(JsonObject json) {
+        requiredColor = new Color(GsonHelper.getAsInt(json, "color", 0));
+        requiredPower = GsonHelper.getAsFloat(json, "power", 1f);
     }
 
-    @Override
-    public ResourceLocation getId() {
-        return id;
+    public void readAdditional(FriendlyByteBuf buffer) {
+        requiredColor = new Color(buffer.readInt());
+        requiredPower = buffer.readFloat();
     }
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return serializer;
+    public void writeAdditional(JsonObject json) {
+        json.addProperty("color", requiredColor.getRGB());
+        json.addProperty("power", requiredPower);
     }
 
+    public void writeAdditional(FriendlyByteBuf buffer) {
+        buffer.writeInt(requiredColor.getRGB());
+        buffer.writeFloat(requiredPower);
+    }
     @Override
-    public RecipeType<?> getType() {
-        return null;
+    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
+        return false;
     }
 }
