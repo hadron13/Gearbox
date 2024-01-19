@@ -12,6 +12,9 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerInstance;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerRenderer;
+import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
+import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorInstance;
+import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlockEntity;
 import io.github.hadron13.gearbox.blocks.kiln.KilnRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnInstance;
@@ -25,6 +28,7 @@ import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerInstance;
+import net.minecraftforge.client.IBlockRenderProperties;
 
 
 public class ModBlockEntities {
@@ -81,6 +85,12 @@ public class ModBlockEntities {
             .instance(() -> SpectrometerInstance::new)
             .validBlocks(ModBlocks.SPECTROMETER)
             .renderer(() -> SpectrometerRenderer::new)
+            .register();
+    public static final BlockEntityEntry<IrradiatorBlockEntity> IRRADIATOR = Gearbox.registrate()
+            .blockEntity("irradiator", IrradiatorBlockEntity::new)
+            .instance(() -> IrradiatorInstance::new)
+            .validBlocks(ModBlocks.IRRADIATOR)
+            .renderer(()-> IrradiatorRenderer::new)
             .register();
 
     public static void register() {}

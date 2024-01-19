@@ -10,5 +10,6 @@ public class KubeJSGearboxPlugin extends KubeJSPlugin {
         event.register("gearbox:sapping", ProcessingRecipeJS::new);
         event.register("gearbox:compressing", ProcessingRecipeJS::new);
         event.register("gearbox:mechanizing", ProcessingRecipeJS::new);
+        event.register("gearbox:irradiating", IrradiatingRecipeJS::new);
     }
 }

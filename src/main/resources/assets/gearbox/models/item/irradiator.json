@@ -1,10 +1,11 @@
 {
 	"credit": "Made with Blockbench",
+	"parent": "block/block",
 	"textures": {
-		"0": "irradiator",
-		"1": "axis",
-		"2": "axis_top",
-		"particle": "irradiator"
+		"0": "gearbox:block/laser/irradiator",
+		"1": "create:block/axis",
+		"2": "create:block/axis_top",
+		"particle": "gearbox/laser/irradiator"
 	},
 	"elements": [
 		{

@@ -3,11 +3,9 @@ package io.github.hadron13.gearbox.blocks.irradiator;
 import com.google.gson.JsonObject;
 import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
-import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import io.github.hadron13.gearbox.Gearbox;
+
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
