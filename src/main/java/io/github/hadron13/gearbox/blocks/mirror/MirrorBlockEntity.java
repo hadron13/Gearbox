@@ -123,6 +123,6 @@ public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceive
 
     @Override
     public float getLoss() {
-        return 0.1f;
+        return 0.03f;
     }
 }

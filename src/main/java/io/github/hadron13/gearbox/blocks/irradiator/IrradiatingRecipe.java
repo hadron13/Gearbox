@@ -21,6 +21,12 @@ public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper>{
         super(ModRecipeTypes.IRRADIATING, params);
     }
 
+    public static boolean match(IrradiatorBlockEntity be, IrradiatingRecipe recipe){
+
+
+        return true;
+    }
+
     @Override
     protected int getMaxInputCount() {
         return 3;

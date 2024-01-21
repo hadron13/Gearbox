@@ -128,6 +128,7 @@ public class ModBlocks {
             .transform(pickaxeOnly())
             .properties(p -> p.color(MaterialColor.METAL).noOcclusion())
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .transform(BlockStressDefaults.setImpact(4.0f))
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();

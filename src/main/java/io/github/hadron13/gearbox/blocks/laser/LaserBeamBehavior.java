@@ -165,7 +165,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             boolean catchesFire = blockState.isFlammable(level, currentPosition, beam.facing.getOpposite());
 
             float hardness = blockState.getDestroySpeed(level, currentPosition);
-            boolean canBurn = hardness < beam.power;
+            boolean canBurn = hardness > -1 && hardness < beam.power;
 
             if(!canBurn && !catchesFire) {
                 beam.breakTimer = 0;
@@ -181,7 +181,6 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             }
             break;
         }
-
 
         for(Entity entity : beam.caughtEntities){
             if(entity instanceof ItemEntity){
