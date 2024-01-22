@@ -191,7 +191,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             if(!entity.isAlive())
                 continue;
             //getWorld().explode(null, entity.getX(), entity.getY(), entity.getZ(), 10f, Explosion.BlockInteraction.NONE);
-            entity.hurt(DamageSource.IN_FIRE, 3f);
+            entity.hurt(DamageSource.IN_FIRE, beam.power * 5);
             entity.setSecondsOnFire(3);
         }
     }

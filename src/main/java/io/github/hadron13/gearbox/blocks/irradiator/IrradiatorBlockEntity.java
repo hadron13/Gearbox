@@ -2,16 +2,24 @@ package io.github.hadron13.gearbox.blocks.irradiator;
 
 import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.content.fluids.spout.FillingBySpout;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour;
+import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
+import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
+import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.recipe.RecipeApplier;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
+import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,15 +27,20 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.ItemHandlerHelper;
+import org.lwjgl.system.CallbackI;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.HOLD;
+import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.PASS;
 import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 
 public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements ILaserReceiver {
@@ -48,7 +61,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     public IrradiatingRecipe currentRecipe;
     public BeltProcessingBehaviour beltBehavior;
-    public PressingBehaviour.Mode mode;
+    public PressingBehaviour.Mode mode = PressingBehaviour.Mode.WORLD;
 
     public IrradiatorBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -60,8 +73,75 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
-        beltBehavior = new BeltProcessingBehaviour(this);
+        beltBehavior = new BeltProcessingBehaviour(this)
+                            .whenItemEnters(this::onItemReceived)
+                            .whileItemHeld(this::whenItemHeld);
         behaviours.add(beltBehavior);
+    }
+
+
+    protected BeltProcessingBehaviour.ProcessingResult onItemReceived(TransportedItemStack transported,
+                                                                      TransportedItemStackHandlerBehaviour handler) {
+        if (handler.blockEntity.isVirtual())
+            return PASS;
+
+        Optional<IrradiatingRecipe> recipe = ModRecipeTypes.IRRADIATING.find(this, level, transported.stack);
+        if(recipe.isEmpty())
+            return PASS;
+        currentRecipe = recipe.get();
+        recipeTimer = currentRecipe.getProcessingDuration();
+        targetLensPosition = 4f/16f;
+        sendData();
+        return HOLD;
+    }
+
+    protected BeltProcessingBehaviour.ProcessingResult whenItemHeld(TransportedItemStack transported,
+                                                                    TransportedItemStackHandlerBehaviour handler) {
+        if(!IrradiatingRecipe.match(this, currentRecipe, transported.stack)) {
+            recipeTimer = 0;
+            currentRecipe = null;
+            return PASS;
+        }
+
+        if(recipeTimer > 0)
+            return HOLD;
+
+        Optional<IrradiatingRecipe> recipe = ModRecipeTypes.IRRADIATING.find(this, level, transported.stack);
+        if(recipe.isEmpty())
+            return PASS;
+
+        List<ItemStack> results = RecipeApplier.applyRecipeOn(
+                 ItemHandlerHelper.copyStackWithSize(transported.stack, 1), recipe.get());
+
+        List<TransportedItemStack> collect = results.stream()
+                .map(stack -> {
+                    TransportedItemStack copy = transported.copy();
+                    boolean centered = BeltHelper.isItemUpright(stack);
+                    copy.stack = stack;
+                    copy.locked = true;
+                    copy.angle = centered ? 180 : level.random.nextInt(360);
+                    return copy;
+                })
+                .collect(Collectors.toList());
+
+        if (transported.stack.getCount() == 1) {
+            if (collect.isEmpty())
+                handler.handleProcessingOnItem(transported, TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
+            else
+                handler.handleProcessingOnItem(transported, TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(collect));
+
+        } else {
+            TransportedItemStack left = transported.copy();
+            left.stack.shrink(1);
+
+            if (collect.isEmpty())
+                handler.handleProcessingOnItem(transported, TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(left));
+            else
+                handler.handleProcessingOnItem(transported, TransportedItemStackHandlerBehaviour.TransportedResult.convertToAndLeaveHeld(collect, left));
+        }
+
+
+        return HOLD;
     }
 
 
@@ -88,12 +168,23 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         }else{
             mode = PressingBehaviour.Mode.WORLD;
         }
-
-        targetLensPosition = 4f/16f;
         if(colorChanged) {
             updateColors();
         }
+        if(level.isClientSide ) {
+            return;
+        }
+        if(recipeTimer > 0){
+            recipeTimer -= (int) (totalPower/currentRecipe.requiredPower);
+        }else if (currentRecipe != null){
+            targetLensPosition = 0f;
+            sendData();
+        }
+
     }
+
+
+
 
     public void updateColors(){
         totalPower = 0f;

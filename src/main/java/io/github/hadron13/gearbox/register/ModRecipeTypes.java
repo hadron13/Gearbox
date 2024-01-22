@@ -12,11 +12,13 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
+import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -130,6 +132,17 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
 
         Stream<CompressingRecipe> matchingRecipes =
                 allRecipes.stream().filter(compressingRecipe -> CompressingRecipe.match(blockEntity, compressingRecipe) );
+
+        return matchingRecipes.findAny();
+    }
+
+    public Optional<IrradiatingRecipe> find(IrradiatorBlockEntity blockEntity, Level world, ItemStack ingredient){
+        if(world.isClientSide())
+            return Optional.empty();
+        List<IrradiatingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.IRRADIATING.getType());
+
+        Stream<IrradiatingRecipe> matchingRecipes =
+                allRecipes.stream().filter(recipe -> IrradiatingRecipe.match(blockEntity, recipe, ingredient) );
 
         return matchingRecipes.findAny();
     }

@@ -41,13 +41,13 @@ public class IrradiatorInstance extends SingleRotatingInstance<IrradiatorBlockEn
 
         lens.setPosition(getInstancePosition()).nudge(0, lerpedLensPos, 0);
 
-        beam.loadIdentity().translate(getInstancePosition()).translate(0.5f, -1,0.5f);
+        beam.loadIdentity().translate(getInstancePosition()).translate(0.5f, -blockEntity.mode.headOffset,0.5f);
 
         float thickness = 0.5f + (lerpedLensPos/0.4f)*1.3f;
         if(blockEntity.totalPower < 0.1f){
             beam.scale(0);
         }else{
-            beam.scale(thickness, 1.5f, thickness).translate(-0.5f, 0f, -0.5f);
+            beam.scale(thickness, 0.5f + blockEntity.mode.headOffset, thickness).translate(-0.5f, 0f, -0.5f);
         }
         int alpha = (int) Mth.clamp(Math.pow(blockEntity.totalPower*7, 2), 170, 240);
 

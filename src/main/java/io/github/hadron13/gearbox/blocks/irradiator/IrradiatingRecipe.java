@@ -9,8 +9,12 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+
+import static com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode.BASIN;
 
 
 public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper>{
@@ -21,15 +25,23 @@ public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper>{
         super(ModRecipeTypes.IRRADIATING, params);
     }
 
-    public static boolean match(IrradiatorBlockEntity be, IrradiatingRecipe recipe){
+    public static boolean match(IrradiatorBlockEntity be, IrradiatingRecipe recipe, ItemStack ingredient){
+        if(be.totalPower < recipe.requiredPower)
+            return false;
 
+        if(Mth.abs(be.mixedColor.getRed() - recipe.requiredColor.getRed()) > 5)
+            return false;
+        if(Mth.abs(be.mixedColor.getGreen() - recipe.requiredColor.getGreen()) > 5)
+            return false;
+        if(Mth.abs(be.mixedColor.getBlue() - recipe.requiredColor.getBlue()) > 5)
+            return false;
 
-        return true;
+        return recipe.getIngredients().get(0).getItems()[0].sameItem(ingredient);
     }
 
     @Override
     protected int getMaxInputCount() {
-        return 3;
+        return 1;
     }
 
     @Override
@@ -38,13 +50,6 @@ public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper>{
     }
 
 
-    protected boolean canRequireHeat() {
-        return true;
-    }
-
-    protected boolean canSpecifyDuration() {
-        return true;
-    }
     public void readAdditional(JsonObject json) {
         requiredColor = new Color(GsonHelper.getAsInt(json, "color", 0));
         requiredPower = GsonHelper.getAsFloat(json, "power", 1f);

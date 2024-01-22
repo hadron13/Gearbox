@@ -39,7 +39,7 @@ public class LaserBlockEntity extends SmartBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
-        beamBehavior.addLaser(getBlockState().getValue(HORIZONTAL_FACING), getBlockPos(), Color.RED, 1.0f);
+        beamBehavior.addLaser(getBlockState().getValue(HORIZONTAL_FACING), getBlockPos(), Color.RED, 2.0f);
     }
 
     public void neighbourChanged(){
