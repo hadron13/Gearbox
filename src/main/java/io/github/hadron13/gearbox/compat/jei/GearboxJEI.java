@@ -5,13 +5,11 @@ import com.simibubi.create.Create;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
+import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
-import io.github.hadron13.gearbox.compat.jei.category.CompressingCategory;
-import io.github.hadron13.gearbox.compat.jei.category.MechanizingCategory;
-import io.github.hadron13.gearbox.compat.jei.category.SappingCategory;
+import io.github.hadron13.gearbox.compat.jei.category.*;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
-import io.github.hadron13.gearbox.compat.jei.category.PyroprocessingCategory;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import com.simibubi.create.compat.jei.*;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -89,6 +87,14 @@ public class GearboxJEI implements IModPlugin {
                 .emptyBackground(177, 75)
                 .build("mechanizing", MechanizingCategory::new);
 
+        CreateRecipeCategory<?>
+                irradiating = builder(IrradiatingRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.IRRADIATING)
+                .catalyst(ModBlocks.IRRADIATOR::get)
+                .itemIcon(ModBlocks.IRRADIATOR.get())
+                .emptyBackground(177, 75)
+                .build("irradiating", IrradiatingCategory::new);
+
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);
@@ -112,7 +118,6 @@ public class GearboxJEI implements IModPlugin {
 
         modCategories.forEach(c -> c.registerRecipes(registration));
 
-        //registration.addRecipes(RecipeTypes.CRAFTING, ToolboxColoringRecipeMaker.createRecipes().toList());
     }
 
     @Override

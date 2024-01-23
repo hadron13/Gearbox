@@ -47,6 +47,11 @@ public class LaserBlockEntity extends SmartBlockEntity {
             return;
         redstoneSignal = level.getBestNeighborSignal(worldPosition);
         beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color = Color.rainbowColor(redstoneSignal*(1536/15));
+        if(redstoneSignal == 10){
+            beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color.setValue(0x0000FF);
+        }else if (redstoneSignal == 5){
+            beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color.setValue(0x00FF00);
+        }
         sendData();
     }
 

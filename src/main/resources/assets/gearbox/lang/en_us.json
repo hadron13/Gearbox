@@ -39,5 +39,8 @@
   "gearbox.ponder.sapper.header": "Extracting fluids with a sapper",
   "gearbox.ponder.sapper.text_1": "Sappers are machines made to extract fluids from trees",
   "gearbox.ponder.sapper.text_2": "You can power them with cogs",
-  "gearbox.ponder.sapper.text_3": "And then pull the output fluids from the back"
+  "gearbox.ponder.sapper.text_3": "And then pull the output fluids from the back",
+
+  "gearbox.jei.red": "Red",
+  "gearbox.jei.green": "Green"
 }

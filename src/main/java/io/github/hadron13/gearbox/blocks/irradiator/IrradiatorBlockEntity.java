@@ -183,9 +183,6 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     }
 
-
-
-
     public void updateColors(){
         totalPower = 0f;
         for(float power : powers.values())
@@ -206,9 +203,16 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             b += color.getBlue();
         }
         int ammount = colors.values().size();
-        r /= ammount;
-        g /= ammount;
-        b /= ammount;
+
+        if(r == ammount * 255) r = 255;
+        if(g == ammount * 255) g = 255;
+        if(b == ammount * 255) b = 255;
+
+
+        r = (int) Math.ceil((float)r/ammount);
+        g = (int) Math.ceil((float)g/ammount);
+        b = (int) Math.ceil((float)b/ammount);
+
         if(!level.isClientSide)
             recipeColor = new Color(r, g, b);
         float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);

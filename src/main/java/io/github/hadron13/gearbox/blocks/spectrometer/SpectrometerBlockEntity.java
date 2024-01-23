@@ -3,6 +3,7 @@ package io.github.hadron13.gearbox.blocks.spectrometer;
 import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
+import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReader;
 import net.minecraft.ChatFormatting;
@@ -69,22 +70,23 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
                     .forGoggles(tooltip);
             return true;
         }
+
         Lang.translate("gui.spectrometer.title")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
-        Lang.text("")
+        Lang.text("\u2592 ").color(0xffffff)
                 .add(Lang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
                 .add(Lang.text(" " + truncatePrecision(currentPower, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("")
+        Lang.text("\u2588 ").color(0xbd5252)
                 .add(Lang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
                 .add(Lang.text(" " + truncatePrecision(currentColor.getRed()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("")
+        Lang.text("\u2588 ").color(0x2d9636)
                 .add(Lang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
                 .add(Lang.text(" " + truncatePrecision(currentColor.getGreen()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("")
+        Lang.text("\u2588 ").color(0x2e2d96)
                 .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.DARK_BLUE))
                 .add(Lang.text(" " + truncatePrecision(currentColor.getBlue()/255f, 2) ))
                 .forGoggles(tooltip);
