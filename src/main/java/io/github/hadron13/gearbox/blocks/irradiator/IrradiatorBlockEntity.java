@@ -96,7 +96,10 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     protected BeltProcessingBehaviour.ProcessingResult onItemReceived(TransportedItemStack transported,
                                                                       TransportedItemStackHandlerBehaviour handler) {
-        if (handler.blockEntity.isVirtual())
+        if(handler.blockEntity.isVirtual())
+            return PASS;
+
+        if(getSpeed() == 0)
             return PASS;
 
         Optional<TransmutingRecipe> recipe = ModRecipeTypes.TRANSMUTING.find(this, level, transported.stack);
@@ -111,9 +114,14 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     protected BeltProcessingBehaviour.ProcessingResult whenItemHeld(TransportedItemStack transported,
                                                                     TransportedItemStackHandlerBehaviour handler) {
+        if(getSpeed() == 0)
+            return PASS;
+
         if(!TransmutingRecipe.match(this, getBeltRecipe(), transported.stack)) {
             recipeTimer = 0;
             currentRecipe = null;
+            targetLensPosition = 0f;
+            sendData();
             return PASS;
         }
 
@@ -152,8 +160,14 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                 handler.handleProcessingOnItem(transported, TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(left));
             else
                 handler.handleProcessingOnItem(transported, TransportedItemStackHandlerBehaviour.TransportedResult.convertToAndLeaveHeld(collect, left));
+            if( AllBlocks.DEPOT.has(level.getBlockState(getBlockPos().below(2))) ) {
+                if (TransmutingRecipe.match(this, recipe.get(), left.stack)) {
+                    recipeTimer = recipe.get().getProcessingDuration();
+                    targetLensPosition = 4 / 16f;
+                    sendData();
+                }
+            }
         }
-
 
         return HOLD;
     }
@@ -180,6 +194,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             targetLensPosition = 0;
             recipeTimer = 0;
             currentRecipe = null;
+            sendData();
         }
 
         if(getBasin().isPresent()){
@@ -205,6 +220,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                 if(mode == BASIN) {
                     applyBasinRecipe();
                 }
+                recipeTimer = 0;
                 targetLensPosition = 0f;
                 sendData();
             }
@@ -313,25 +329,28 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                     .forGoggles(tooltip);
             return true;
         }
+
+
         Lang.translate("gui.spectrometer.title")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
-        Lang.text("")
+        Lang.text("\u2592 ").color(0xffffff)
                 .add(Lang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
                 .add(Lang.text(" " + truncatePrecision(totalPower, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("")
+        Lang.text("\u2588 ").color(0xbd5252)
                 .add(Lang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
                 .add(Lang.text(" " + truncatePrecision(recipeColor.getRed()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("")
+        Lang.text("\u2588 ").color(0x2d9636)
                 .add(Lang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
                 .add(Lang.text(" " + truncatePrecision(recipeColor.getGreen()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("")
-                .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.DARK_BLUE))
+        Lang.text("\u2588 ").color(0x3e3dbf)
+                .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
                 .add(Lang.text(" " + truncatePrecision(recipeColor.getBlue()/255f, 2) ))
                 .forGoggles(tooltip);
+
 
 
         return true;

@@ -19,6 +19,8 @@ public class IrradiatingRecipe extends BasinRecipe implements LaserRecipe{
     }
 
     public static boolean match(IrradiatorBlockEntity be, IrradiatingRecipe recipe){
+        if(recipe == null)
+            return false;
         if(be.totalPower < recipe.requiredPower)
             return false;
         return TransmutingRecipe.matchColor(recipe.requiredColor, be.recipeColor);

@@ -37,6 +37,9 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
     }
 
     public static boolean match(IrradiatorBlockEntity be, TransmutingRecipe recipe, ItemStack ingredient){
+        if(recipe == null)
+            return false;
+
         if(be.totalPower < recipe.requiredPower)
             return false;
 
@@ -45,8 +48,8 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
 
         if(!matchColor(recipe.requiredColor, be.recipeColor))
             return false;
-
-        return recipe.getIngredients().get(0).getItems()[0].sameItem(ingredient);
+        ItemStack recipeStack = recipe.getIngredients().get(0).getItems()[0];
+        return recipeStack.sameItem(ingredient) && ingredient.getCount() >= recipeStack.getCount();
     }
 
     @Override

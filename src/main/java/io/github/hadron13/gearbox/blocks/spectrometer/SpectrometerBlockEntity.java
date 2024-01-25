@@ -86,8 +86,8 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
                 .add(Lang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
                 .add(Lang.text(" " + truncatePrecision(currentColor.getGreen()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("\u2588 ").color(0x2e2d96)
-                .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.DARK_BLUE))
+        Lang.text("\u2588 ").color(0x3e3dbf)
+                .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
                 .add(Lang.text(" " + truncatePrecision(currentColor.getBlue()/255f, 2) ))
                 .forGoggles(tooltip);
 
