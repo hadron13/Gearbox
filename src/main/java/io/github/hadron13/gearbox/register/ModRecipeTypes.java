@@ -13,6 +13,7 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
+import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.minecraft.core.Registry;
@@ -43,7 +44,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     SAPPING(SappingRecipe::new),
     COMPRESSING(CompressingRecipe::new),
     MECHANIZING(MechanizingRecipe::new),
-    IRRADIATING(IrradiatingRecipe::new);
+    IRRADIATING(IrradiatingRecipe::new),
+    TRANSMUTING(TransmutingRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
@@ -74,6 +76,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     ModRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
         this(() -> new ProcessingRecipeSerializer<>(processingFactory));
     }
+
 
 
 

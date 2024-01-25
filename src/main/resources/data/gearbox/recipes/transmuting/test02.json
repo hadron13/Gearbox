@@ -1,0 +1,18 @@
+{
+  "type": "gearbox:transmuting",
+  "ingredients": [
+    {
+      "fluid": "minecraft:lava",
+      "amount": 50
+    }
+  ],
+  "results": [
+    {
+      "fluid" : "minecraft:water",
+      "amount": 50
+    }
+  ],
+  "processingTime": 150,
+  "color": 4294967295,
+  "power": 1.5
+}

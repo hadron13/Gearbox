@@ -1,15 +1,19 @@
 package io.github.hadron13.gearbox.blocks.irradiator;
 
 import com.jozufozu.flywheel.util.Color;
+import com.mojang.math.Vector3f;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.content.fluids.potion.PotionMixingRecipes;
 import com.simibubi.create.content.fluids.spout.FillingBySpout;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
+import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -17,6 +21,7 @@ import com.simibubi.create.foundation.recipe.RecipeApplier;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import com.simibubi.create.infrastructure.config.AllConfigs;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
@@ -33,6 +38,8 @@ import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.lwjgl.system.CallbackI;
 
@@ -41,10 +48,12 @@ import java.util.stream.Collectors;
 
 import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.HOLD;
 import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.PASS;
+import static com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode.BASIN;
 import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 
 public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements ILaserReceiver {
 
+    public static final Object transmutingRecipesKey = new Object();
     public Map<Direction, Float> powers;
     public Map<Direction, Color> colors;
     public Map<Direction, Integer> timeouts;
@@ -58,8 +67,6 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     public float previousLensPos = 0;
     public float lensPosition = 0;
 
-
-    public IrradiatingRecipe currentRecipe;
     public BeltProcessingBehaviour beltBehavior;
     public PressingBehaviour.Mode mode = PressingBehaviour.Mode.WORLD;
 
@@ -68,8 +75,29 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         powers = new HashMap<>();
         colors = new HashMap<>();
         timeouts = new HashMap<>();
-        currentRecipe = null;
     }
+
+    public IrradiatingRecipe getBeltRecipe(){
+        if(currentRecipe instanceof IrradiatingRecipe)
+            return (IrradiatingRecipe) currentRecipe;
+        return null;
+    }
+    public TransmutingRecipe getBasinRecipe(){
+        if(currentRecipe instanceof  TransmutingRecipe)
+            return (TransmutingRecipe) currentRecipe;
+        return null;
+    }
+    public Color getRecipeColor(){
+        if(currentRecipe instanceof LaserRecipe laserRecipe)
+            return laserRecipe.getColor();
+        return Color.BLACK;
+    }
+    public float getRecipePower(){
+        if(currentRecipe instanceof LaserRecipe laserRecipe)
+            return laserRecipe.getPower();
+        return 0f;
+    }
+
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
@@ -77,6 +105,8 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                             .whenItemEnters(this::onItemReceived)
                             .whileItemHeld(this::whenItemHeld);
         behaviours.add(beltBehavior);
+
+
     }
 
 
@@ -89,7 +119,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(recipe.isEmpty())
             return PASS;
         currentRecipe = recipe.get();
-        recipeTimer = currentRecipe.getProcessingDuration();
+        recipeTimer = getBeltRecipe().getProcessingDuration();
         targetLensPosition = 4f/16f;
         sendData();
         return HOLD;
@@ -97,7 +127,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     protected BeltProcessingBehaviour.ProcessingResult whenItemHeld(TransportedItemStack transported,
                                                                     TransportedItemStackHandlerBehaviour handler) {
-        if(!IrradiatingRecipe.match(this, currentRecipe, transported.stack)) {
+        if(!IrradiatingRecipe.match(this, getBeltRecipe(), transported.stack)) {
             recipeTimer = 0;
             currentRecipe = null;
             return PASS;
@@ -147,6 +177,9 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     @Override
     public void tick(){
+        super.tick();
+
+//        updateBasin();
         timeouts.forEach((dir, timer) -> {
             if(timer != 0)
                 timeouts.replace(dir, --timer);
@@ -156,29 +189,40 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                 colorChanged = true;
             }
         });
-        if(level.isClientSide){
-            previousLensPos = lensPosition;
-            lensPosition += (targetLensPosition - lensPosition) * .1f * Math.abs(getSpeed()/64f);
+        if(colorChanged)
+            updateColors();
+
+        if(mode == BASIN && getBasin().isEmpty()){
+            targetLensPosition = 0;
+            recipeTimer = 0;
+            currentRecipe = null;
         }
 
         if(getBasin().isPresent()){
-            mode = PressingBehaviour.Mode.BASIN;
+            mode = BASIN;
         }else if(AllBlocks.BELT.has(level.getBlockState(getBlockPos().below(2))) ){
             mode = PressingBehaviour.Mode.BELT;
         }else{
             mode = PressingBehaviour.Mode.WORLD;
         }
-        if(colorChanged) {
-            updateColors();
-        }
-        if(level.isClientSide ) {
+
+        if(level.isClientSide){
+            previousLensPos = lensPosition;
+            lensPosition += (targetLensPosition - lensPosition) * .1f * Math.abs(getSpeed()/64f);
             return;
         }
+        if(currentRecipe == null)
+            return;
+
         if(recipeTimer > 0){
-            recipeTimer -= (int) (totalPower/currentRecipe.requiredPower);
-        }else if (currentRecipe != null){
-            targetLensPosition = 0f;
-            sendData();
+            recipeTimer -= (int)(totalPower/getRecipePower());
+            if(recipeTimer <= 0){
+                if(mode == BASIN) {
+                    applyBasinRecipe();
+                }
+                targetLensPosition = 0f;
+                sendData();
+            }
         }
 
     }
@@ -190,75 +234,91 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
         if(totalPower <= 0.1f){
             mixedColor = Color.BLACK;
-            targetLensPosition = 0f;
             sendData();
             return;
         }
 
-
         int r = 0, g = 0, b = 0;
+
+
         for (Color color : colors.values()) {
             r += color.getRed();
             g += color.getGreen();
             b += color.getBlue();
         }
-        int ammount = colors.values().size();
+        float ammount = (float)colors.values().size()/3f;
 
-        if(r == ammount * 255) r = 255;
-        if(g == ammount * 255) g = 255;
-        if(b == ammount * 255) b = 255;
+        Vector3f colorVector = new Vector3f(r/255f, g/255f, b/255f);
+        colorVector.normalize();
+//        r = (int)((colorVector.x()*255f)/0.7);
+//        g = (int)((colorVector.y()*255f)/0.7);
+//        b = (int)((colorVector.z()*255f)/0.7);
+//        recipeColor = new Color(r, g, b);
 
-
-        r = (int) Math.ceil((float)r/ammount);
-        g = (int) Math.ceil((float)g/ammount);
-        b = (int) Math.ceil((float)b/ammount);
-
-        if(!level.isClientSide)
-            recipeColor = new Color(r, g, b);
         float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);
         hsb[2] = Mth.clamp(hsb[2] * 3f, 0.5f, 1f);
 
         int rgb =  java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
         mixedColor = new Color(rgb);
         colorChanged = false;
+        recipeColor = mixedColor;
+
+        if(currentRecipe != null && mode == BASIN){
+            if(!TransmutingRecipe.match(this, getBasinRecipe()) ) {
+                recipeTimer = 0;
+                currentRecipe = null;
+            }
+        }
         sendData();
     }
 
     @Override
     protected boolean isRunning() {
-        return false;
+        return recipeTimer > 0;
+    }
+    public void startProcessingBasin() {
+        recipeTimer = getBasinRecipe().getProcessingDuration();
+        targetLensPosition = 4/16f;
+        super.startProcessingBasin();
+    }
+    @Override
+    protected void onBasinRemoved() {
+        currentRecipe = null;
+        recipeTimer = 0;
+        basinChecker.scheduleUpdate();
+        sendData();
+    }
+
+    protected <C extends Container> boolean matchBasinRecipe(Recipe<C> recipe) {
+        if(!(recipe instanceof TransmutingRecipe))
+            return false;
+        return super.matchBasinRecipe(recipe) && TransmutingRecipe.match(this, (TransmutingRecipe)recipe);
     }
 
     @Override
-    protected void onBasinRemoved() {
-
+    protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
+        return recipe.getType() == ModRecipeTypes.TRANSMUTING.getType();
     }
 
+    @Override
+    protected Object getRecipeCacheKey() {
+        return transmutingRecipesKey;
+    }
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {
         compound.putFloat("lens", targetLensPosition);
-//        compound.putFloat("power", totalPower);
-//        compound.putInt("color", mixedColor.getRGB());
+//        compound.putInt("recipeColor", recipeColor.getRGB());
         super.write(compound, clientPacket);
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         targetLensPosition = compound.getFloat("lens");
-//        totalPower = compound.getFloat("power");
-//        mixedColor.setValue(compound.getInt("color"));
+//        recipeColor.setValue(compound.getInt("recipeColor"));
         super.read(compound, clientPacket);
     }
 
-    @Override
-    protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
-        return false;
-    }
 
-    @Override
-    protected Object getRecipeCacheKey() {
-        return null;
-    }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -278,15 +338,15 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                 .forGoggles(tooltip);
         Lang.text("")
                 .add(Lang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
-                .add(Lang.text(" " + truncatePrecision(mixedColor.getRed()/255f, 2) ))
+                .add(Lang.text(" " + truncatePrecision(recipeColor.getRed()/255f, 2) ))
                 .forGoggles(tooltip);
         Lang.text("")
                 .add(Lang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
-                .add(Lang.text(" " + truncatePrecision(mixedColor.getGreen()/255f, 2) ))
+                .add(Lang.text(" " + truncatePrecision(recipeColor.getGreen()/255f, 2) ))
                 .forGoggles(tooltip);
         Lang.text("")
                 .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.DARK_BLUE))
-                .add(Lang.text(" " + truncatePrecision(mixedColor.getBlue()/255f, 2) ))
+                .add(Lang.text(" " + truncatePrecision(recipeColor.getBlue()/255f, 2) ))
                 .forGoggles(tooltip);
 
 

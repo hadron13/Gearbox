@@ -6,6 +6,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
@@ -17,23 +18,33 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import static com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode.BASIN;
 
 
-public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper>{
+public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper> implements LaserRecipe{
     public Color requiredColor;
     public float requiredPower;
 
-    public IrradiatingRecipe(ProcessingRecipeParams params) {
+    public IrradiatingRecipe(ProcessingRecipeParams params){
         super(ModRecipeTypes.IRRADIATING, params);
+    }
+
+
+    public static boolean matchColor(Color required, Color provided){
+        if(required == Color.BLACK)
+            return true;
+
+        if(Mth.abs(required.getRed() - provided.getRed()) > 5)
+            return false;
+        if(Mth.abs(required.getGreen() - provided.getGreen()) > 5)
+            return false;
+        if(Mth.abs(required.getBlue() - provided.getBlue()) > 5)
+            return false;
+        return true;
     }
 
     public static boolean match(IrradiatorBlockEntity be, IrradiatingRecipe recipe, ItemStack ingredient){
         if(be.totalPower < recipe.requiredPower)
             return false;
 
-        if(Mth.abs(be.mixedColor.getRed() - recipe.requiredColor.getRed()) > 5)
-            return false;
-        if(Mth.abs(be.mixedColor.getGreen() - recipe.requiredColor.getGreen()) > 5)
-            return false;
-        if(Mth.abs(be.mixedColor.getBlue() - recipe.requiredColor.getBlue()) > 5)
+        if(!matchColor(recipe.requiredColor, be.recipeColor))
             return false;
 
         return recipe.getIngredients().get(0).getItems()[0].sameItem(ingredient);
@@ -72,5 +83,15 @@ public class IrradiatingRecipe extends ProcessingRecipe<RecipeWrapper>{
     @Override
     public boolean matches(RecipeWrapper pContainer, Level pLevel) {
         return false;
+    }
+
+    @Override
+    public Color getColor() {
+        return requiredColor;
+    }
+
+    @Override
+    public float getPower() {
+        return requiredPower;
     }
 }

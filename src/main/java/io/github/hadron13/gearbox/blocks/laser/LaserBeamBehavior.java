@@ -40,7 +40,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
     public boolean wrenched = false;
 
     public static final BehaviourType<LaserBeamBehavior> TYPE = new BehaviourType<>();
-    public static final int MAX_LENGTH = 100;
+    public static final int MAX_LENGTH = 200;
 
     public LaserBeamBehavior(SmartBlockEntity be) {
         super(be);

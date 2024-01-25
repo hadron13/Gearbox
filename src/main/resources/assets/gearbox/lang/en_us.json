@@ -7,6 +7,7 @@
   "block.gearbox.brass_press": "Mechanizing Press",
   "block.gearbox.spectrometer": "Spectrometer",
   "block.gearbox.mirror": "Mirror",
+  "block.gearbox.irradiator": "Irradiator",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -15,6 +16,7 @@
   "create.recipe.sapping": "Sapping",
   "create.recipe.compressing": "Compressing",
   "create.recipe.mechanizing": "Mechanizing",
+  "create.recipe.irradiating": "Irradiating",
 
   "create.recipe.assembly.mechanizing": "Mechanize",
   "create.recipe.compressing.campfire_heat": "Warm",
