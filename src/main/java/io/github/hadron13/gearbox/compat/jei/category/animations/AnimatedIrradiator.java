@@ -56,7 +56,7 @@ public class AnimatedIrradiator extends AnimatedKinetics {
 
         if (basin) {
             blockElement(AllBlocks.BASIN.getDefaultState())
-                    .atLocal(0, 1.65, 0)
+                    .atLocal(0, 2, 0)
                     .scale(scale)
                     .render(matrixStack);
         }else {

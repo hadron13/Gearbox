@@ -1,11 +1,11 @@
 package io.github.hadron13.gearbox.compat.jei;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.Create;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
+import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import io.github.hadron13.gearbox.compat.jei.category.*;
@@ -31,7 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -88,10 +87,21 @@ public class GearboxJEI implements IModPlugin {
                 .build("mechanizing", MechanizingCategory::new);
 
         CreateRecipeCategory<?>
+                transmuting = builder(TransmutingRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.TRANSMUTING)
+                .catalyst(ModBlocks.IRRADIATOR::get)
+                .catalyst(AllBlocks.DEPOT::get)
+                .catalyst(AllBlocks.BELT::get)
+                .doubleItemIcon(ModBlocks.IRRADIATOR.get(), AllBlocks.DEPOT.get())
+                .emptyBackground(177, 75)
+                .build("transmuting", TransmutingCategory::new);
+
+        CreateRecipeCategory<?>
                 irradiating = builder(IrradiatingRecipe.class)
                 .addTypedRecipes(ModRecipeTypes.IRRADIATING)
                 .catalyst(ModBlocks.IRRADIATOR::get)
-                .itemIcon(ModBlocks.IRRADIATOR.get())
+                .catalyst(AllBlocks.BASIN::get)
+                .doubleItemIcon(ModBlocks.IRRADIATOR.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 75)
                 .build("irradiating", IrradiatingCategory::new);
 

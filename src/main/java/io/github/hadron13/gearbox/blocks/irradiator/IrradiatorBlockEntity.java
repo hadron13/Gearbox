@@ -3,26 +3,15 @@ package io.github.hadron13.gearbox.blocks.irradiator;
 import com.jozufozu.flywheel.util.Color;
 import com.mojang.math.Vector3f;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllItems;
-import com.simibubi.create.content.fluids.potion.PotionMixingRecipes;
-import com.simibubi.create.content.fluids.spout.FillingBySpout;
-import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
-import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.infrastructure.config.AllConfigs;
-import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.ChatFormatting;
@@ -34,14 +23,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-import org.lwjgl.system.CallbackI;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,7 +37,7 @@ import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEn
 
 public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements ILaserReceiver {
 
-    public static final Object transmutingRecipesKey = new Object();
+    public static final Object irradiatingRecipesKey = new Object();
     public Map<Direction, Float> powers;
     public Map<Direction, Color> colors;
     public Map<Direction, Integer> timeouts;
@@ -77,14 +61,14 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         timeouts = new HashMap<>();
     }
 
-    public IrradiatingRecipe getBeltRecipe(){
-        if(currentRecipe instanceof IrradiatingRecipe)
-            return (IrradiatingRecipe) currentRecipe;
+    public TransmutingRecipe getBeltRecipe(){
+        if(currentRecipe instanceof TransmutingRecipe)
+            return (TransmutingRecipe) currentRecipe;
         return null;
     }
-    public TransmutingRecipe getBasinRecipe(){
-        if(currentRecipe instanceof  TransmutingRecipe)
-            return (TransmutingRecipe) currentRecipe;
+    public IrradiatingRecipe getBasinRecipe(){
+        if(currentRecipe instanceof IrradiatingRecipe)
+            return (IrradiatingRecipe) currentRecipe;
         return null;
     }
     public Color getRecipeColor(){
@@ -115,7 +99,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if (handler.blockEntity.isVirtual())
             return PASS;
 
-        Optional<IrradiatingRecipe> recipe = ModRecipeTypes.IRRADIATING.find(this, level, transported.stack);
+        Optional<TransmutingRecipe> recipe = ModRecipeTypes.TRANSMUTING.find(this, level, transported.stack);
         if(recipe.isEmpty())
             return PASS;
         currentRecipe = recipe.get();
@@ -127,7 +111,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     protected BeltProcessingBehaviour.ProcessingResult whenItemHeld(TransportedItemStack transported,
                                                                     TransportedItemStackHandlerBehaviour handler) {
-        if(!IrradiatingRecipe.match(this, getBeltRecipe(), transported.stack)) {
+        if(!TransmutingRecipe.match(this, getBeltRecipe(), transported.stack)) {
             recipeTimer = 0;
             currentRecipe = null;
             return PASS;
@@ -136,7 +120,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(recipeTimer > 0)
             return HOLD;
 
-        Optional<IrradiatingRecipe> recipe = ModRecipeTypes.IRRADIATING.find(this, level, transported.stack);
+        Optional<TransmutingRecipe> recipe = ModRecipeTypes.TRANSMUTING.find(this, level, transported.stack);
         if(recipe.isEmpty())
             return PASS;
 
@@ -200,7 +184,8 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
         if(getBasin().isPresent()){
             mode = BASIN;
-        }else if(AllBlocks.BELT.has(level.getBlockState(getBlockPos().below(2))) ){
+        }else if(AllBlocks.BELT.has(level.getBlockState(getBlockPos().below(2))) ||
+                 AllBlocks.DEPOT.has(level.getBlockState(getBlockPos().below(2))) ){
             mode = PressingBehaviour.Mode.BELT;
         }else{
             mode = PressingBehaviour.Mode.WORLD;
@@ -246,15 +231,14 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             g += color.getGreen();
             b += color.getBlue();
         }
-        float ammount = (float)colors.values().size()/3f;
+//        float ammount = (float)colors.values().size()/3f;
 
-        Vector3f colorVector = new Vector3f(r/255f, g/255f, b/255f);
-        colorVector.normalize();
+//        Vector3f colorVector = new Vector3f(r/255f, g/255f, b/255f);
+//        colorVector.normalize();
 //        r = (int)((colorVector.x()*255f)/0.7);
 //        g = (int)((colorVector.y()*255f)/0.7);
 //        b = (int)((colorVector.z()*255f)/0.7);
 //        recipeColor = new Color(r, g, b);
-
         float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);
         hsb[2] = Mth.clamp(hsb[2] * 3f, 0.5f, 1f);
 
@@ -264,7 +248,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         recipeColor = mixedColor;
 
         if(currentRecipe != null && mode == BASIN){
-            if(!TransmutingRecipe.match(this, getBasinRecipe()) ) {
+            if(!IrradiatingRecipe.match(this, getBasinRecipe()) ) {
                 recipeTimer = 0;
                 currentRecipe = null;
             }
@@ -290,19 +274,19 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     }
 
     protected <C extends Container> boolean matchBasinRecipe(Recipe<C> recipe) {
-        if(!(recipe instanceof TransmutingRecipe))
+        if(!(recipe instanceof IrradiatingRecipe))
             return false;
-        return super.matchBasinRecipe(recipe) && TransmutingRecipe.match(this, (TransmutingRecipe)recipe);
+        return super.matchBasinRecipe(recipe) && IrradiatingRecipe.match(this, (IrradiatingRecipe)recipe);
     }
 
     @Override
     protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
-        return recipe.getType() == ModRecipeTypes.TRANSMUTING.getType();
+        return recipe.getType() == ModRecipeTypes.IRRADIATING.getType();
     }
 
     @Override
     protected Object getRecipeCacheKey() {
-        return transmutingRecipesKey;
+        return irradiatingRecipesKey;
     }
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {

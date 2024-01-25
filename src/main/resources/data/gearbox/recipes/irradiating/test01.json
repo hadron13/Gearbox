@@ -2,12 +2,17 @@
   "type": "gearbox:irradiating",
   "ingredients": [
     {
-      "item": "minecraft:granite"
+      "fluid": "minecraft:lava",
+      "amount": 50
     }
   ],
   "results": [
     {
-      "item" : "minecraft:andesite"
+      "fluid" : "minecraft:water",
+      "amount": 50
+    },
+    {
+      "item": "minecraft:andesite"
     }
   ],
   "processingTime": 150,
