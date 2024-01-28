@@ -18,6 +18,7 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
+import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
@@ -130,6 +131,15 @@ public class ModBlocks {
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
             .transform(BlockStressDefaults.setImpact(4.0f))
             .item(AssemblyOperatorBlockItem::new)
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<LargeLaserBlock> LARGE_LASER = REGISTRATE.block("large_laser", LargeLaserBlock::new)
+            .initialProperties(SharedProperties::netheriteMetal)
+            .transform(pickaxeOnly())
+            .properties(p -> p.color(MaterialColor.METAL))
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .item()
             .transform(customItemModel())
             .register();
 

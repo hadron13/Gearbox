@@ -45,8 +45,6 @@ public class PyroprocessingCategory extends CreateRecipeCategory<PyroprocessingR
         }
 
     }
-
-
     public void draw(PyroprocessingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
         AllGuiTextures.JEI_ARROW.render(matrixStack, 85, 32);
         AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 43, 4);

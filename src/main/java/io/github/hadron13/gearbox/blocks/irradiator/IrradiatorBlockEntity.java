@@ -240,26 +240,17 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         }
 
         int r = 0, g = 0, b = 0;
-
-
         for (Color color : colors.values()) {
             r += color.getRed();
             g += color.getGreen();
             b += color.getBlue();
         }
-//        float ammount = (float)colors.values().size()/3f;
 
-//        Vector3f colorVector = new Vector3f(r/255f, g/255f, b/255f);
-//        colorVector.normalize();
-//        r = (int)((colorVector.x()*255f)/0.7);
-//        g = (int)((colorVector.y()*255f)/0.7);
-//        b = (int)((colorVector.z()*255f)/0.7);
-//        recipeColor = new Color(r, g, b);
-        float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);
-        hsb[2] = Mth.clamp(hsb[2] * 3f, 0.5f, 1f);
+//        float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);
+//        hsb[2] = Mth.clamp(hsb[2] * 3f, 0.5f, 1f);
 
-        int rgb =  java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
-        mixedColor = new Color(rgb);
+//        int rgb =  java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
+        mixedColor = new Color(r,g,b);
         colorChanged = false;
         recipeColor = mixedColor;
 

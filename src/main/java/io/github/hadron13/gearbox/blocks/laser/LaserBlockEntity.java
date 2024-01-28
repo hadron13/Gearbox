@@ -69,19 +69,19 @@ public class LaserBlockEntity extends SmartBlockEntity {
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(facing);
 
         //uncomment on release!!
-
-        if(beam.enabled) {
-            int ext = energyStorage.internalConsumeEnergy(10);
-            if (ext < 10) {
-                beam.enabled = false;
-                sendData();
-            }
-        }else{
-            if(energyStorage.getEnergyStored() > 10){
-                beam.enabled = true;
-                sendData();
-            }
-        }
+//
+//        if(beam.enabled) {
+//            int ext = energyStorage.internalConsumeEnergy(10);
+//            if (ext < 10) {
+//                beam.enabled = false;
+//                sendData();
+//            }
+//        }else{
+//            if(energyStorage.getEnergyStored() > 10){
+//                beam.enabled = true;
+//                sendData();
+//            }
+//        }
 
 
 

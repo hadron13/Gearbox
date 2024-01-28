@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,part=single": {
+      "model": "gearbox:block/large_laser/single",
+      "y": 90
+    },
+    "facing=north,part=single": {
+      "model": "gearbox:block/large_laser/single"
+    },
+    "facing=south,part=single": {
+      "model": "gearbox:block/large_laser/single",
+      "y": 180
+    },
+    "facing=west,part=single": {
+      "model": "gearbox:block/large_laser/single",
+      "y": 270
+    },
+    "facing=east,part=front": {
+      "model": "gearbox:block/large_laser/front",
+      "y": 90
+    },
+    "facing=north,part=front": {
+      "model": "gearbox:block/large_laser/front"
+    },
+    "facing=south,part=front": {
+      "model": "gearbox:block/large_laser/front",
+      "y": 180
+    },
+    "facing=west,part=front": {
+      "model": "gearbox:block/large_laser/front",
+      "y": 270
+    },
+    "facing=east,part=middle": {
+      "model": "gearbox:block/large_laser/middle",
+      "y": 90
+    },
+    "facing=north,part=middle": {
+      "model": "gearbox:block/large_laser/middle"
+    },
+    "facing=south,part=middle": {
+      "model": "gearbox:block/large_laser/middle",
+      "y": 180
+    },
+    "facing=west,part=middle": {
+      "model": "gearbox:block/large_laser/middle",
+      "y": 270
+    },
+    "facing=east,part=back": {
+      "model": "gearbox:block/large_laser/back",
+      "y": 90
+    },
+    "facing=north,part=back": {
+      "model": "gearbox:block/large_laser/back"
+    },
+    "facing=south,part=back": {
+      "model": "gearbox:block/large_laser/back",
+      "y": 180
+    },
+    "facing=west,part=back": {
+      "model": "gearbox:block/large_laser/back",
+      "y": 270
+    }
+  }
+}

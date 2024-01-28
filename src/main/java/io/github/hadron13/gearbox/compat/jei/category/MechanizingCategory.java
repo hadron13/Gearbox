@@ -40,7 +40,6 @@ public class MechanizingCategory extends CreateRecipeCategory<MechanizingRecipe>
     @Override
     public void draw(MechanizingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
         AllGuiTextures.JEI_SHADOW.render(matrixStack, 61, 41 + 23);
-//        AllGuiTextures.JEI_LONG_ARROW.render(matrixStack, 52, 54 - 23);
         AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 126, 29);
 
         press.draw(matrixStack, getBackground().getWidth() / 2 - 17, 22);
