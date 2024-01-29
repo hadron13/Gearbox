@@ -3,6 +3,8 @@ package io.github.hadron13.gearbox.register;
 
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlockEntity;
+import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleRenderer;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressInstance;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressRenderer;
@@ -28,7 +30,6 @@ import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerInstance;
-import net.minecraftforge.client.IBlockRenderProperties;
 
 
 public class ModBlockEntities {
@@ -91,6 +92,13 @@ public class ModBlockEntities {
             .instance(() -> IrradiatorInstance::new)
             .validBlocks(ModBlocks.IRRADIATOR)
             .renderer(()-> IrradiatorRenderer::new)
+            .register();
+
+
+    public static final BlockEntityEntry<BlackHoleBlockEntity> BLACK_HOLE = Gearbox.registrate()
+            .blockEntity("black_hole", BlackHoleBlockEntity::new)
+            .validBlocks(ModBlocks.IRRADIATOR)
+            .renderer(()-> BlackHoleRenderer::new)
             .register();
 
     public static void register() {}

@@ -13,6 +13,7 @@ import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
@@ -138,6 +139,15 @@ public class ModBlocks {
             .initialProperties(SharedProperties::netheriteMetal)
             .transform(pickaxeOnly())
             .properties(p -> p.color(MaterialColor.METAL))
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<BlackHoleBlock> BLACK_HOLE  = REGISTRATE.block("black_hole", BlackHoleBlock::new)
+            .initialProperties(SharedProperties::netheriteMetal)
+            .transform(pickaxeOnly())
+            .properties(p -> p.color(MaterialColor.COLOR_BLACK))
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
             .item()
             .transform(customItemModel())
