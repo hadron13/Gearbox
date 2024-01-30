@@ -9,7 +9,10 @@ import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.ponder.ModPonderScenes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ModPonderIndex {
     static final PonderRegistrationHelper HELPER = new PonderRegistrationHelper(Gearbox.MODID);
 

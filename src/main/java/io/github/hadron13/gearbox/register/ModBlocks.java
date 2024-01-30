@@ -140,8 +140,8 @@ public class ModBlocks {
             .transform(pickaxeOnly())
             .properties(p -> p.color(MaterialColor.METAL))
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
-            .item()
-            .transform(customItemModel())
+//            .item()
+//            .transform(customItemModel())
             .register();
 
     public static final BlockEntry<BlackHoleBlock> BLACK_HOLE  = REGISTRATE.block("black_hole", BlackHoleBlock::new)
