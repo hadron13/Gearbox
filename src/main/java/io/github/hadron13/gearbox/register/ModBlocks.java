@@ -147,7 +147,7 @@ public class ModBlocks {
     public static final BlockEntry<BlackHoleBlock> BLACK_HOLE  = REGISTRATE.block("black_hole", BlackHoleBlock::new)
             .initialProperties(SharedProperties::netheriteMetal)
             .transform(pickaxeOnly())
-            .properties(p -> p.color(MaterialColor.COLOR_BLACK))
+            .properties(p -> p.color(MaterialColor.COLOR_BLACK).noCollission())
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
             .item()
             .transform(customItemModel())

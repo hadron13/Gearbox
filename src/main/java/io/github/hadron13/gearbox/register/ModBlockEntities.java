@@ -97,7 +97,7 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<BlackHoleBlockEntity> BLACK_HOLE = Gearbox.registrate()
             .blockEntity("black_hole", BlackHoleBlockEntity::new)
-            .validBlocks(ModBlocks.IRRADIATOR)
+            .validBlocks(ModBlocks.BLACK_HOLE)
             .renderer(()-> BlackHoleRenderer::new)
             .register();
 
