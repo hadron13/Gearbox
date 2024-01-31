@@ -20,6 +20,9 @@ import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlockEntity;
 import io.github.hadron13.gearbox.blocks.kiln.KilnRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnInstance;
+import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlockEntity;
+import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserInstance;
+import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamInstance;
@@ -99,6 +102,14 @@ public class ModBlockEntities {
             .blockEntity("black_hole", BlackHoleBlockEntity::new)
             .validBlocks(ModBlocks.BLACK_HOLE)
             .renderer(()-> BlackHoleRenderer::new)
+            .register();
+
+
+    public static final BlockEntityEntry<LargeLaserBlockEntity> LARGE_LASER = Gearbox.registrate()
+            .blockEntity("laser", LargeLaserBlockEntity::new)
+            .instance(() -> LargeLaserInstance::new)
+            .validBlocks(ModBlocks.LARGE_LASER)
+            .renderer(() -> LargeLaserRenderer::new)
             .register();
 
     public static void register() {}
