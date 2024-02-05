@@ -3,8 +3,6 @@ package io.github.hadron13.gearbox.blocks.large_laser;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
-import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,13 +10,11 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.lwjgl.system.CallbackI;
 
@@ -133,9 +129,6 @@ public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity>
     public enum LargeLaserPart implements StringRepresentable {
         SINGLE, FRONT, MIDDLE, BACK;
 
-//        public boolean isEnd(){
-//            return this == FRONT || this == BACK;
-//        }
         @Override
         public String getSerializedName() {
             return Lang.asId(name());

@@ -225,6 +225,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         for(LaserBeam beam: beams.values()) {
             String id = beam.facing.toString();
             compound.putBoolean("enable"+id, beam.enabled);
+            compound.putFloat("power"+id, beam.power);
             compound.putFloat("length"+id, beam.length);
             compound.putInt("color"+id, beam.color.getRGB());
             compound.putInt("break"+id, beam.breakTimer);
@@ -237,6 +238,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         for(LaserBeam beam: beams.values()) {
             String id = beam.facing.toString();
             beam.enabled = compound.getBoolean("enable"+id);
+            beam.power = compound.getFloat("power"+id);
             beam.length = compound.getFloat("length"+id);
             beam.color = new Color(compound.getInt("color"+id));
             beam.breakTimer = compound.getInt("break"+id);

@@ -37,6 +37,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
 
     public LargeLaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        setLazyTickRate(5);
     }
 
     public boolean isFront(){
@@ -61,9 +62,9 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
         super.tick();
         if(level == null || level.isClientSide)
             return;
-        if(!isFront()) {
+        if(!isFront())
             return;
-        }
+
         if(firstTick){
             neighbourChanged(getBlockState());
             firstTick = false;
@@ -75,6 +76,36 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
 
     @Override
     public void lazyTick(){
+        super.lazyTick();
+        if(level == null || level.isClientSide)
+            return;
+        if(!isFront())
+            return;
+
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
+        beam.power = 20f;
+        Direction back = getFacing().getOpposite();
+
+//        BlockState backBlock = level.getBlockState(getBlockPos().relative(back));
+        for(int offset = 0; offset <= 200; offset++){
+            BlockState backBlock = level.getBlockState(getBlockPos().relative(back, offset + 1));
+
+            if(!(backBlock.getBlock() instanceof LargeLaserBlock)) {
+                break;
+            }
+            if(backBlock.getValue(HORIZONTAL_FACING) != getFacing()) {
+                break;
+            }
+            if(beam.power <= 180f)
+                beam.power += 20f;
+
+
+            if(backBlock.getValue(PART) == BACK){
+                this.back = getBlockPos().relative(back, offset);
+                break;
+            }
+        }
+        sendData();
 
     }
 
@@ -82,22 +113,18 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
         if(level == null)
             return;
 
+        beamBehavior.beams.clear();
+        beamBehavior.addLaser(newState.getValue(HORIZONTAL_FACING), getBlockPos(), Color.BLACK, 20f);
+        beamBehavior.wrenched = true;
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(newState.getValue(HORIZONTAL_FACING));
 
-        if(newState.getValue(PART) != FRONT && newState.getValue(PART) != SINGLE){
-            beamBehavior.getLaser(getFacing()).enabled = false;
+        beam.enabled = newState.getValue(PART) == FRONT || newState.getValue(PART) == SINGLE;
+        if(!beam.enabled){
             sendData();
             return;
         }
-        if(newState.getValue(HORIZONTAL_FACING) != getFacing()){
-            beamBehavior.beams.clear();
-            beamBehavior.addLaser(newState.getValue(HORIZONTAL_FACING), getBlockPos(), Color.BLACK, 20f);
-            beamBehavior.wrenched = true;
-        }
-
         redstoneSignal = level.getBestNeighborSignal(worldPosition);
-        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(newState.getValue(HORIZONTAL_FACING));
 
-        beam.enabled = true;
         beam.color = Color.rainbowColor(redstoneSignal*(1536/15));
         if(redstoneSignal == 10){
             beam.color.setValue(0x0000FF);
