@@ -106,7 +106,7 @@ public class ModBlockEntities {
 
 
     public static final BlockEntityEntry<LargeLaserBlockEntity> LARGE_LASER = Gearbox.registrate()
-            .blockEntity("laser", LargeLaserBlockEntity::new)
+            .blockEntity("large_laser", LargeLaserBlockEntity::new)
             .instance(() -> LargeLaserInstance::new)
             .validBlocks(ModBlocks.LARGE_LASER)
             .renderer(() -> LargeLaserRenderer::new)
