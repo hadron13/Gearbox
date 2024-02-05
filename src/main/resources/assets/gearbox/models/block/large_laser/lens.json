@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "large_laser",
-		"particle": "large_laser"
+		"0": "gearbox:block/laser/large_laser",
+		"particle": "gearbox:block/laser/large_laser"
 	},
 	"elements": [
 		{

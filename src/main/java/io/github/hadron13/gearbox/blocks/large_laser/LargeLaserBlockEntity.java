@@ -3,6 +3,8 @@ package io.github.hadron13.gearbox.blocks.large_laser;
 import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
@@ -31,8 +33,10 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     public InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
     public int redstoneSignal = 0;
-    public BlockPos back;
+    public BlockPos back = null;
     boolean firstTick = true;
+    LerpedFloat visualSpeed = LerpedFloat.linear();
+    float angle;
     public LaserBeamBehavior.LaserBeam mainLaser;
 
     public LargeLaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -60,8 +64,23 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     @Override
     public void tick(){
         super.tick();
-        if(level == null || level.isClientSide)
+        if(level == null)
             return;
+
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
+        if(level.isClientSide) {
+
+
+            float targetSpeed = beam.power;
+
+            visualSpeed.updateChaseTarget(targetSpeed);
+            visualSpeed.tickChaser();
+            angle += visualSpeed.getValue() * 3 / 10f;
+            angle %= 360;
+            return;
+        }
+
+
         if(!isFront())
             return;
 
@@ -70,7 +89,32 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             firstTick = false;
         }
 
-        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
+
+        if(back != null){
+            BlockEntity backEntity = level.getBlockEntity(back);
+            if(!(backEntity instanceof LargeLaserBlockEntity))
+                return;
+            LargeLaserBlockEntity backLaser = (LargeLaserBlockEntity) backEntity;
+            InternalEnergyStorage backEnergy = backLaser.energyStorage;
+
+            //uncomment on release!!
+//
+//            if(beam.enabled) {
+//                int ext = backEnergy.internalConsumeEnergy(10);
+//                if (ext < 10) {
+//                    beam.enabled = false;
+//                    sendData();
+//                }
+//            }else{
+//                if(backEnergy.getEnergyStored() > 10){
+//                    beam.enabled = true;
+//                    sendData();
+//                }
+//            }
+        }else{
+            beam.enabled = false;
+        }
+
 
     }
 
@@ -91,6 +135,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             BlockState backBlock = level.getBlockState(getBlockPos().relative(back, offset + 1));
 
             if(!(backBlock.getBlock() instanceof LargeLaserBlock)) {
+
                 break;
             }
             if(backBlock.getValue(HORIZONTAL_FACING) != getFacing()) {
@@ -99,9 +144,8 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             if(beam.power <= 180f)
                 beam.power += 20f;
 
-
             if(backBlock.getValue(PART) == BACK){
-                this.back = getBlockPos().relative(back, offset);
+                this.back = getBlockPos().relative(back, offset + 1);
                 break;
             }
         }
@@ -143,6 +187,9 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         redstoneSignal = compound.getInt("signal");
+        if (clientPacket)
+//            visualSpeed.chase(10f, 1 / 32f, LerpedFloat.Chaser.EXP);
+            visualSpeed.chase(beamBehavior.getLaser(getFacing()).power / 10, 1 / 64f, LerpedFloat.Chaser.EXP);
     }
 
     @Override

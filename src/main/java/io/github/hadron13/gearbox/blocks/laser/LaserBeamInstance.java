@@ -26,7 +26,7 @@ import static net.minecraft.core.Direction.Axis.X;
 import static net.minecraft.core.Direction.Axis.Z;
 
 public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityInstance<T> implements DynamicInstance {
-    Map<Direction, ModelData> beamsData = null;
+    public Map<Direction, ModelData> beamsData = null;
     public LaserBeamInstance(MaterialManager materialManager, T blockEntity) {
         super(materialManager, blockEntity);
     }
