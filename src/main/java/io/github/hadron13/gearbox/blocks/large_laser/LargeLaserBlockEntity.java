@@ -71,7 +71,6 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
 
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
 
-
     }
 
     @Override

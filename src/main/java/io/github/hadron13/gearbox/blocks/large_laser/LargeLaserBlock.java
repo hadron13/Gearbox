@@ -54,18 +54,18 @@ public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity>
             facing = front.getValue(HORIZONTAL_FACING);
             break;
         }
-//        BlockState front = level.getBlockState(pos.relative(facing));
-//        BlockState back = level.getBlockState(pos.relative(facing.getOpposite()));
+        BlockState frontBlock = level.getBlockState(pos.relative(facing));
+        BlockState backBlock = level.getBlockState(pos.relative(facing.getOpposite()));
 
-        int frontNumber = laserLength(level, pos.relative(facing), facing);
-        int backNumber = laserLength(level, pos.relative(facing.getOpposite()), facing.getOpposite());
+        boolean front = frontBlock.getBlock() instanceof LargeLaserBlock;
+        boolean back = backBlock.getBlock() instanceof LargeLaserBlock;
 
         LargeLaserPart part = SINGLE;
-        if(frontNumber > 0 && backNumber > 0 && frontNumber < 15 && backNumber < 15){
+        if(front && back){
             part = MIDDLE;
-        }else if(backNumber == 0 && frontNumber > 0 && frontNumber <= 15){
+        }else if(front){
             part = BACK;
-        }else if(frontNumber == 0 && backNumber > 0 && backNumber <= 15){
+        }else if(back){
             part = FRONT;
         }
 
