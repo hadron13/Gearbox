@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.blocks.large_laser;
 
 import com.jozufozu.flywheel.backend.Backend;
+import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.render.CachedBufferer;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock.HORIZONTAL_FACING;
+import static net.minecraft.core.Direction.Axis.Z;
 
 public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity> {
     public LargeLaserRenderer(BlockEntityRendererProvider.Context context) {
@@ -23,10 +25,12 @@ public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity>
     @Override
 
     protected void renderSafe(LargeLaserBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        super.renderSafe(be, partialTicks, ms, bufferSource, light, overlay);
 
         if (Backend.canUseInstancing(be.getLevel()))
             return;
+        ms.pushPose();
+        super.renderSafe(be, partialTicks, ms, bufferSource, light, overlay);
+        ms.popPose();
 
         BlockState blockState = be.getBlockState();
 
@@ -35,8 +39,14 @@ public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity>
 
         VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
 
-        SuperByteBuffer lens = CachedBufferer.partialFacing(ModPartialModels.LARGE_LASER_LENS, blockState, blockState.getValue(HORIZONTAL_FACING));
-        lens.rotateCentered(be.getFacing(), AngleHelper.rad(angle));
+        SuperByteBuffer lens = CachedBufferer.partial(ModPartialModels.LARGE_LASER_LENS, blockState);
+
+        TransformStack.cast(ms)
+                .translate(0.5f, 0.5f, 0.5f)
+                .rotateToFace(be.getFacing())
+                .rotate(angle, Z)
+                .translate(-0.5f, -0.5f, -0.5f);
+
         lens.renderInto(ms, vb);
 
     }
