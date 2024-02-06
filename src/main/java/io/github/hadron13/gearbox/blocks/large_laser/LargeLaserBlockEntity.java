@@ -68,9 +68,11 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             return;
 
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
+
+        if(beam == null)
+            return;
+
         if(level.isClientSide) {
-
-
             float targetSpeed = beam.power;
 
             visualSpeed.updateChaseTarget(targetSpeed);
@@ -111,8 +113,6 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
 //                    sendData();
 //                }
 //            }
-        }else{
-            beam.enabled = false;
         }
 
 

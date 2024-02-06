@@ -34,27 +34,13 @@ public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity>
         builder.add(PART);
         super.createBlockStateDefinition(builder);
     }
-    public BlockState laserStateIn(Level level, BlockPos pos, Direction defaultFacing){
-        Direction facing = defaultFacing;
+    public BlockState laserStateIn(Level level, BlockPos pos, Direction facing){
 
-
-        for(Direction direction : Iterate.horizontalDirections) {
-            BlockState front = level.getBlockState(pos.relative(direction));
-            if( !(front.getBlock() instanceof LargeLaserBlock) )
-                continue;
-            if( front.getValue(HORIZONTAL_FACING).getAxis() != direction.getAxis() )
-                continue;
-            if(laserLength(level, pos.relative(direction), direction) >= 10)
-                continue;
-
-            facing = front.getValue(HORIZONTAL_FACING);
-            break;
-        }
         BlockState frontBlock = level.getBlockState(pos.relative(facing));
         BlockState backBlock = level.getBlockState(pos.relative(facing.getOpposite()));
 
-        boolean front = frontBlock.getBlock() instanceof LargeLaserBlock;
-        boolean back = backBlock.getBlock() instanceof LargeLaserBlock;
+        boolean front = frontBlock.getBlock() instanceof LargeLaserBlock && frontBlock.getValue(HORIZONTAL_FACING) == facing;
+        boolean back = backBlock.getBlock() instanceof LargeLaserBlock && backBlock.getValue(HORIZONTAL_FACING) == facing;
 
         LargeLaserPart part = SINGLE;
         if(front && back){
@@ -102,7 +88,22 @@ public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity>
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return laserStateIn(context.getLevel(), context.getClickedPos(), context.getHorizontalDirection().getOpposite());
+
+        Direction facing = context.getHorizontalDirection().getOpposite();
+
+        for(Direction direction : Iterate.horizontalDirections) {
+            BlockState front = context.getLevel().getBlockState(context.getClickedPos().relative(direction));
+            if( !(front.getBlock() instanceof LargeLaserBlock) )
+                continue;
+            if( front.getValue(HORIZONTAL_FACING).getAxis() != direction.getAxis() )
+                continue;
+            if(laserLength(context.getLevel(), context.getClickedPos().relative(direction), direction) >= 10)
+                continue;
+
+            facing = front.getValue(HORIZONTAL_FACING);
+            break;
+        }
+        return laserStateIn(context.getLevel(), context.getClickedPos(), facing);
 
     }
     @Override
