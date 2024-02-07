@@ -30,16 +30,17 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
     public LaserBeamRenderer(BlockEntityRendererProvider.Context context) {
 
     }
-//    @Override
+    @Override
     public boolean shouldRenderOffScreen(T pBlockEntity) {
         return true;
     }
 
+    @Override
     public int getViewDistance(){
         return LaserBeamBehavior.MAX_LENGTH;
     }
 
-
+    @Override
     public boolean shouldRender(T pBlockEntity, Vec3 pCameraPos) {
         return true;
     }
@@ -52,7 +53,6 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
         LaserBeamBehavior beamBehavior = be.getBehaviour(LaserBeamBehavior.TYPE);
         if(beamBehavior == null)
             return;
-
         for(LaserBeamBehavior.LaserBeam beam : beamBehavior.beams.values()) {
             if(!beam.enabled) {
                 continue;

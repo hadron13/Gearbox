@@ -1,9 +1,13 @@
 package io.github.hadron13.gearbox.compat.jei;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.compat.jei.category.MixingCategory;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
@@ -52,6 +56,7 @@ public class GearboxJEI implements IModPlugin {
 
 
     private void loadCategories() {
+
         this.modCategories.clear();
         CreateRecipeCategory<?>
                 pyroprocessing = builder(PyroprocessingRecipe.class)
@@ -104,6 +109,15 @@ public class GearboxJEI implements IModPlugin {
                 .doubleItemIcon(ModBlocks.IRRADIATOR.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 75)
                 .build("irradiating", IrradiatingCategory::new);
+
+        CreateRecipeCategory<?>
+                electrolyzing = builder(BasinRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.ELECTROLYZING)
+                .catalyst(ModBlocks.ELECTROLYZER::get)
+                .catalyst(AllBlocks.BASIN::get)
+                .doubleItemIcon(ModBlocks.ELECTROLYZER.get(), AllBlocks.BASIN.get())
+                .emptyBackground(177, 103)
+                .build("electrolyzing", ElectrolyzingCategory::new);
 
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {

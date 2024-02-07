@@ -15,7 +15,8 @@ public class ModPartialModels {
             SPECTROGAUGE = block("spectrometer/head"),
             IRRADIATOR_LENS = block("irradiator/lens"),
             THICK_BEAM = block("irradiator/thick_beam"),
-            LARGE_LASER_LENS = block("large_laser/lens");
+            LARGE_LASER_LENS = block("large_laser/lens"),
+            ELECTROLYZER_HEAD = block("electrolyzer/head");
 
     private static PartialModel block(String path) {
         return new PartialModel(Gearbox.asResource("block/" + path));

@@ -16,6 +16,7 @@ import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
@@ -150,6 +151,16 @@ public class ModBlocks {
             .properties(p -> p.color(MaterialColor.COLOR_BLACK).noCollission())
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
             .item()
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<ElectrolyzerBlock> ELECTROLYZER = REGISTRATE.block("electrolyzer", ElectrolyzerBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.color(MaterialColor.COLOR_GRAY).noOcclusion())
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();
 

@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.register;
 
 
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlockEntity;
@@ -11,6 +12,9 @@ import io.github.hadron13.gearbox.blocks.brass_press.BrassPressRenderer;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorInstance;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlockEntity;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerInstance;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerRenderer;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlockEntity;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerInstance;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerRenderer;
@@ -70,6 +74,7 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.BRASS_PRESS)
             .renderer(() -> BrassPressRenderer::new)
             .register();
+
     public static final BlockEntityEntry<LaserBlockEntity> LASER = Gearbox.registrate()
             .blockEntity("laser", LaserBlockEntity::new)
             .instance(() -> LaserBeamInstance::new)
@@ -90,6 +95,7 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.SPECTROMETER)
             .renderer(() -> SpectrometerRenderer::new)
             .register();
+
     public static final BlockEntityEntry<IrradiatorBlockEntity> IRRADIATOR = Gearbox.registrate()
             .blockEntity("irradiator", IrradiatorBlockEntity::new)
             .instance(() -> IrradiatorInstance::new)
@@ -97,19 +103,24 @@ public class ModBlockEntities {
             .renderer(()-> IrradiatorRenderer::new)
             .register();
 
-
     public static final BlockEntityEntry<BlackHoleBlockEntity> BLACK_HOLE = Gearbox.registrate()
             .blockEntity("black_hole", BlackHoleBlockEntity::new)
             .validBlocks(ModBlocks.BLACK_HOLE)
             .renderer(()-> BlackHoleRenderer::new)
             .register();
 
-
     public static final BlockEntityEntry<LargeLaserBlockEntity> LARGE_LASER = Gearbox.registrate()
             .blockEntity("large_laser", LargeLaserBlockEntity::new)
             .instance(() -> LargeLaserInstance::new)
             .validBlocks(ModBlocks.LARGE_LASER)
             .renderer(() -> LargeLaserRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<ElectrolyzerBlockEntity> ELECTROLYZER = Gearbox.registrate()
+            .blockEntity("electrolyzer", ElectrolyzerBlockEntity::new)
+            .instance(() -> ElectrolyzerInstance::new)
+            .validBlocks(ModBlocks.ELECTROLYZER)
+            .renderer(() -> ElectrolyzerRenderer::new)
             .register();
 
     public static void register() {}

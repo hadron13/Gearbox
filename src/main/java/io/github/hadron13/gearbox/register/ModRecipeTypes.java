@@ -10,6 +10,7 @@ import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
@@ -45,7 +46,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     COMPRESSING(CompressingRecipe::new),
     MECHANIZING(MechanizingRecipe::new),
     IRRADIATING(IrradiatingRecipe::new),
-    TRANSMUTING(TransmutingRecipe::new);
+    TRANSMUTING(TransmutingRecipe::new),
+    ELECTROLYZING(ElectrolyzingRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
