@@ -42,6 +42,8 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     public LargeLaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         setLazyTickRate(5);
+        energyStorage = new InternalEnergyStorage(100, 10, 10);
+        lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
     public boolean isFront(){

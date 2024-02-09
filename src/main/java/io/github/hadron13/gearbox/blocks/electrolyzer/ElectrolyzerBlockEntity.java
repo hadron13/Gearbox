@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.Container;
@@ -17,6 +18,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -31,17 +34,27 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
+
+
+
     public ElectrolyzerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        energyStorage = new InternalEnergyStorage(100, 10, 10);
+        energyStorage = new InternalEnergyStorage(2048, 128, 128);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
+    public void tick(){
+        super.tick();
+
+    }
+
+
+    @Override
     public float getSpeed(){
 
-//        if(energyStorage.getEnergyStored() < 1)
-//            return 0;
+        if(energyStorage.getEnergyStored() < 1)
+            return 0;
         return 32f;
     }
 

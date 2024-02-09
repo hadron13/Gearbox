@@ -16,7 +16,10 @@ public class ModPartialModels {
             IRRADIATOR_LENS = block("irradiator/lens"),
             THICK_BEAM = block("irradiator/thick_beam"),
             LARGE_LASER_LENS = block("large_laser/lens"),
-            ELECTROLYZER_HEAD = block("electrolyzer/head");
+            ELECTROLYZER_HEAD = block("electrolyzer/head"),
+            PG_RING_GEAR = block("planetary/ring_gear"),
+            PG_SUN_GEAR = block("planetary/sun_gear"),
+            PG_PLANET_GEAR = block("planetary/planet_gear");
 
     private static PartialModel block(String path) {
         return new PartialModel(Gearbox.asResource("block/" + path));

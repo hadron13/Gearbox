@@ -31,6 +31,9 @@ import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamInstance;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
+import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlockEntity;
+import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetInstance;
+import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetRenderer;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
 import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
@@ -121,6 +124,13 @@ public class ModBlockEntities {
             .instance(() -> ElectrolyzerInstance::new)
             .validBlocks(ModBlocks.ELECTROLYZER)
             .renderer(() -> ElectrolyzerRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<PlanetaryGearsetBlockEntity> PLANETARY_GEARSET = Gearbox.registrate()
+            .blockEntity("planetary_gearset", PlanetaryGearsetBlockEntity::new)
+            .instance(() -> PlanetaryGearsetInstance::new, false)
+            .validBlocks(ModBlocks.PLANETARY_GEARSET)
+            .renderer(() -> PlanetaryGearsetRenderer::new)
             .register();
 
     public static void register() {}

@@ -1,7 +1,9 @@
 package io.github.hadron13.gearbox.register;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.gauge.GaugeGenerator;
+import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -23,10 +25,12 @@ import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
+import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 
@@ -161,6 +165,17 @@ public class ModBlocks {
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
             .addLayer(() -> RenderType::cutoutMipped)
             .item(AssemblyOperatorBlockItem::new)
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
+            .initialProperties(AllBlocks.LARGE_COGWHEEL)
+            .properties(p -> p
+                    .noOcclusion()
+                    .sound(SoundType.WOOD)
+                    .color(MaterialColor.DIRT)
+            ).transform(axeOrPickaxe())
+            .item(CogwheelBlockItem::new)
             .transform(customItemModel())
             .register();
 
