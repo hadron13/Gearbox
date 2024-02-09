@@ -16,6 +16,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.EnumMap;
 
+//  Stolen carefully  from
+//
+//  -* Petrolpark *-
+//
+//  link: https://github.com/petrolpark/Destroy/blob/1.20.1/src/main/java/com/petrolpark/destroy/block/instance/PlanetaryGearsetInstance.java:
+
 public class PlanetaryGearsetInstance extends KineticBlockEntityInstance<PlanetaryGearsetBlockEntity> {
 
     protected final RotatingData ringGear;

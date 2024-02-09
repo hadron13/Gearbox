@@ -19,6 +19,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
+
+//  Stolen carefully  from
+//
+//  -* Petrolpark *-
+//
+//  link: https://github.com/petrolpark/Destroy/blob/1.20.1/src/main/java/com/petrolpark/destroy/block/renderer/PlanetaryGearsetRenderer.java
+
+
 public class PlanetaryGearsetRenderer extends KineticBlockEntityRenderer<PlanetaryGearsetBlockEntity> {
 
 

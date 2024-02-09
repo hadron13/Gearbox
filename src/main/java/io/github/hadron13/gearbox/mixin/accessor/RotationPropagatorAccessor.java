@@ -12,7 +12,7 @@ import net.minecraft.core.Direction;
 //
 //  -* Petrolpark *-
 //
-//  link:
+//  link: https://github.com/petrolpark/Destroy/blob/1.20.1/src/main/java/com/petrolpark/destroy/mixin/accessor/RotationPropagatorAccessor.java
 @Mixin(RotationPropagator.class)
 public interface RotationPropagatorAccessor {
 
