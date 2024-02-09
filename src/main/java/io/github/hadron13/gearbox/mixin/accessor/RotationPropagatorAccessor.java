@@ -28,6 +28,7 @@ public interface RotationPropagatorAccessor {
             value = "getConveyedSpeed",
             remap = false
     )
+
     public static float invokeGetConveyedSpeed(KineticBlockEntity from, KineticBlockEntity to) {
         return 0f; // This return value is ignored
     };

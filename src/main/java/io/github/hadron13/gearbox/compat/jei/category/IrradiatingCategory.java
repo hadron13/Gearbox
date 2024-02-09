@@ -58,14 +58,14 @@ public class IrradiatingCategory extends CreateRecipeCategory<IrradiatingRecipe>
             }
 
             builder
-                    .addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
+                    .addSlot(RecipeIngredientRole.INPUT, 7 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
                     .setBackground(getRenderedSlot(), -1, -1)
                     .addItemStacks(stacks);
             i++;
         }
         for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
             builder
-                    .addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
+                    .addSlot(RecipeIngredientRole.INPUT, 7 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
                     .setBackground(getRenderedSlot(), -1, -1)
                     .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
                     .addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));

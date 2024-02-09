@@ -1,11 +1,15 @@
 {
   "itemGroup.gearbox:main": "Gearbox",
 
-
   "block.gearbox.kiln": "Forno cinético",
   "block.gearbox.sapper": "Extrator",
   "block.gearbox.compressor": "Compressor",
   "block.gearbox.brass_press": "Prensa Mecanizante",
+  "block.gearbox.spectrometer": "Espectrômetro",
+  "block.gearbox.mirror": "Espelho",
+  "block.gearbox.irradiator": "Irradiador",
+  "block.gearbox.electrolyzer": "Eletrolizador",
+  "block.gearbox.planetary_gearset": "Engrenagens planetárias",
 
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
@@ -14,9 +18,11 @@
   "create.recipe.sapping": "Extração",
   "create.recipe.compressing": "Compressão",
   "create.recipe.mechanizing": "Mecanização",
+  "create.recipe.irradiating": "Irradiação",
+  "create.recipe.transmuting": "Transmutação",
+  "create.recipe.electrolyzing": "Eletrólise",
 
   "create.recipe.assembly.mechanizing": "Mecanize",
-
   "create.recipe.compressing.campfire_heat": "Morno",
 
   "create.hint.sapper.full.title": "Tanque Cheio",
@@ -24,11 +30,23 @@
   "create.hint.compressor.reverse.title": "Sentido Da Rotação",
   "create.hint.compressor.reverse": "Parece que este compressor está girando no _sentido errado_",
 
+  "create.gui.spectrometer.title": "Espectrometria",
+  "create.gui.spectrometer.power": "Potência do laser",
+  "create.gui.spectrometer.nolaser": "Sem laser",
+  "create.gui.spectrometer.red": "Vermelho",
+  "create.gui.spectrometer.green": "Verde",
+  "create.gui.spectrometer.blue": "Azul",
+
+  "block.gearbox.mirror.tooltip": "MIRROR",
+  "block.gearbox.mirror.tooltip.summary": "Reflete lasers",
+  "block.gearbox.spectrometer.tooltip": "SPECTROMETER",
+  "block.gearbox.spectrometer.tooltip.summary": "Mede a _potência_ e _cor_ do laser passando",
+
   "gearbox.ponder.sapper.header": "Extraindo flúidos com um extrator",
   "gearbox.ponder.sapper.text_1": "Extratores são máquinas feitas para extrair flúidos de árvores",
   "gearbox.ponder.sapper.text_2": "Você pode energizar eles com engrenagens",
-  "gearbox.ponder.sapper.text_3": "E depois puxar o flúido extraído por trás"
+  "gearbox.ponder.sapper.text_3": "E depois puxar o flúido extraído por trás",
 
-
-
+  "gearbox.jei.red": "Red",
+  "gearbox.jei.green": "Green"
 }

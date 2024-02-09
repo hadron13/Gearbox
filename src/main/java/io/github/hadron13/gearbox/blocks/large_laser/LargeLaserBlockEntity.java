@@ -42,7 +42,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     public LargeLaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         setLazyTickRate(5);
-        energyStorage = new InternalEnergyStorage(100, 10, 10);
+        energyStorage = new InternalEnergyStorage(32768, 4096, 4096);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
@@ -102,19 +102,19 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             InternalEnergyStorage backEnergy = backLaser.energyStorage;
 
             //uncomment on release!!
-//
-//            if(beam.enabled) {
-//                int ext = backEnergy.internalConsumeEnergy(10);
-//                if (ext < 10) {
-//                    beam.enabled = false;
-//                    sendData();
-//                }
-//            }else{
-//                if(backEnergy.getEnergyStored() > 10){
-//                    beam.enabled = true;
-//                    sendData();
-//                }
-//            }
+
+            if(beam.enabled) {
+                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 20f));
+                if (ext < 400) {
+                    beam.enabled = false;
+                    sendData();
+                }
+            }else{
+                if(backEnergy.getEnergyStored() > 400){
+                    beam.enabled = true;
+                    sendData();
+                }
+            }
         }
 
 

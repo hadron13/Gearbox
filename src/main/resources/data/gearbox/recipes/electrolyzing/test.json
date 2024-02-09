@@ -11,5 +11,6 @@
       "amount": 50
     }
   ],
-  "processingTime": 150
+  "processingTime": 150,
+  "energy": 1000
 }

@@ -4,6 +4,11 @@
     "gearbox:kiln",
     "gearbox:sapper",
     "gearbox:compressor",
-    "gearbox:brass_press"
+    "gearbox:brass_press",
+    "gearbox:laser",
+    "gearbox:mirror",
+    "gearbox:irradiator",
+    "gearbox:large_laser",
+    "gearbox:planetary_gearset"
   ]
 }

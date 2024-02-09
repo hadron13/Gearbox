@@ -20,7 +20,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.ArrayList;
@@ -28,12 +30,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACING;
+
 public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     public static final Object electrolyzingRecipeKey = new Object();
 
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
+    public int energy_consumption = 0;
 
 
 
@@ -47,12 +52,24 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public void tick(){
         super.tick();
 
+        if(running){
+            if(energy_consumption == 0){
+                ElectrolyzingRecipe electrolyzingRecipe = (ElectrolyzingRecipe) currentRecipe;
+                energy_consumption = electrolyzingRecipe.requiredEnergy / processingTicks;
+            }
+            energyStorage.internalConsumeEnergy(energy_consumption);
+
+            if(processingTicks == -1){
+                energy_consumption = 0;
+            }
+        }else{
+            energy_consumption = 0;
+        }
     }
 
 
     @Override
     public float getSpeed(){
-
         if(energyStorage.getEnergyStored() < 1)
             return 0;
         return 32f;
@@ -126,6 +143,13 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     @Override
     public Object getRecipeCacheKey(){
         return electrolyzingRecipeKey;
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (cap == CapabilityEnergy.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING))// && !level.isClientSide
+            return lazyEnergy.cast();
+        return LazyOptional.empty();
     }
 
 }

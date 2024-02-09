@@ -19,8 +19,6 @@ public class AnimatedElectrolyzer extends AnimatedKinetics {
         poseStack.mulPose(Vector3f.YP.rotationDegrees(22.5f));
         int scale = 23;
 
-
-
         blockElement(ModBlocks.ELECTROLYZER.getDefaultState())
                 .atLocal(0, 0, 0)
                 .scale(scale)
@@ -34,7 +32,7 @@ public class AnimatedElectrolyzer extends AnimatedKinetics {
                 .render(poseStack);
 
         blockElement(ModPartialModels.ELECTROLYZER_HEAD)
-                .rotateBlock(0, getCurrentAngle(), 0)
+                .rotateBlock(0, getCurrentAngle() * 2, 0)
                 .atLocal(0, animation, 0)
                 .scale(scale)
                 .render(poseStack);

@@ -8,10 +8,10 @@ public class EnergyRecipeJS extends ProcessingRecipeJS{
     @Override
     public void create(ListJS args) {
         super.create(args);
-        json.addProperty("energy", 1.0f);
+        json.addProperty("energy", 1.0);
     }
 
-    public EnergyRecipeJS energy(float power){
+    public EnergyRecipeJS energy(int power){
         json.addProperty("energy", power);
         save();
         return this;

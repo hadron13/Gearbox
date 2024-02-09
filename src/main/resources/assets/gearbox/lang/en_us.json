@@ -8,6 +8,8 @@
   "block.gearbox.spectrometer": "Spectrometer",
   "block.gearbox.mirror": "Mirror",
   "block.gearbox.irradiator": "Irradiator",
+  "block.gearbox.electrolyzer": "Electrolyzer",
+  "block.gearbox.planetary_gearset": "Planetary Gearset",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -18,6 +20,7 @@
   "create.recipe.mechanizing": "Mechanizing",
   "create.recipe.irradiating": "Irradiating",
   "create.recipe.transmuting": "Transmuting",
+  "create.recipe.electrolyzing": "Electrolyzing",
 
   "create.recipe.assembly.mechanizing": "Mechanize",
   "create.recipe.compressing.campfire_heat": "Warm",

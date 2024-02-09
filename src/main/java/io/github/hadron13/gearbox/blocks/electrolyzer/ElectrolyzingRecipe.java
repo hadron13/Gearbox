@@ -10,17 +10,17 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 
 public class ElectrolyzingRecipe extends BasinRecipe {
-    public float requiredEnergy = 0;
+    public int requiredEnergy = 0;
     public ElectrolyzingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
         super(ModRecipeTypes.ELECTROLYZING, params);
     }
 
     public void readAdditional(JsonObject json) {
-        requiredEnergy = GsonHelper.getAsFloat(json, "energy", 1.0f);
+        requiredEnergy = GsonHelper.getAsInt(json, "energy", 1000);
     }
 
     public void readAdditional(FriendlyByteBuf buffer) {
-        requiredEnergy = buffer.readFloat();
+        requiredEnergy = buffer.readInt();
     }
 
     public void writeAdditional(JsonObject json) {
@@ -28,6 +28,6 @@ public class ElectrolyzingRecipe extends BasinRecipe {
     }
 
     public void writeAdditional(FriendlyByteBuf buffer) {
-        buffer.writeFloat(requiredEnergy);
+        buffer.writeInt(requiredEnergy);
     }
 }
