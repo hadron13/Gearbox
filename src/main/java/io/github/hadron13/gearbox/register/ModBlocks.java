@@ -28,6 +28,7 @@ import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
+import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.SoundType;
@@ -169,13 +170,25 @@ public class ModBlocks {
             .register();
 
     public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
-            .initialProperties(AllBlocks.LARGE_COGWHEEL)
+            .initialProperties(SharedProperties::stone)
             .properties(p -> p
                     .noOcclusion()
                     .sound(SoundType.WOOD)
                     .color(MaterialColor.DIRT)
             ).transform(axeOrPickaxe())
+            .transform(BlockStressDefaults.setNoImpact())
             .item(CogwheelBlockItem::new)
+            .transform(customItemModel())
+            .register();
+
+
+    public static final BlockEntry<UselessMachineBlock> USELESS_MACHINE = REGISTRATE.block("kinetic_machine", UselessMachineBlock::new)
+            .initialProperties(SharedProperties::wooden)
+            .properties(p -> p.color(MaterialColor.METAL).noOcclusion())
+            .transform(axeOrPickaxe())
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .transform(BlockStressDefaults.setImpact(0))
+            .item()
             .transform(customItemModel())
             .register();
 

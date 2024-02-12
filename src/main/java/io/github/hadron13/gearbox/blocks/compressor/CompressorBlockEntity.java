@@ -194,6 +194,8 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
             return;
         if (tank.isEmpty())
             return;
+        if(level.random.nextInt(3) != 1)
+            return;
 
         float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, 1f);
         BlockPos pos = getBlockPos();

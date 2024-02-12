@@ -5,14 +5,18 @@
   "block.gearbox.sapper": "Sapper",
   "block.gearbox.compressor": "Compressor",
   "block.gearbox.brass_press": "Mechanizing Press",
+  "block.gearbox.laser": "Laser",
   "block.gearbox.spectrometer": "Spectrometer",
   "block.gearbox.mirror": "Mirror",
   "block.gearbox.irradiator": "Irradiator",
   "block.gearbox.electrolyzer": "Electrolyzer",
+  "block.gearbox.large_laser": "Large Laser",
   "block.gearbox.planetary_gearset": "Planetary Gearset",
+  "block.gearbox.kinetic_machine": "Kinetic Machine",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
+  "item.gearbox.tau_cannon": "Tau Cannon",
 
   "create.recipe.pyroprocessing": "Pyroprocessing",
   "create.recipe.sapping": "Sapping",
@@ -41,6 +45,11 @@
   "block.gearbox.mirror.tooltip.summary": "Reflects incoming lasers",
   "block.gearbox.spectrometer.tooltip": "SPECTROMETER",
   "block.gearbox.spectrometer.tooltip.summary": "Measures passing laser's _power level_ and _color_",
+  "item.gearbox.tau_cannon.tooltip": "TAU CANNON",
+  "item.gearbox.tau_cannon.tooltip.summary": "Consumes _Geld Ingots_ to shoot tau particle beams",
+
+  "block.gearbox.kinetic_machine.tooltip": "KINETIC MACHINE",
+  "block.gearbox.kinetic_machine.tooltip.summary": "It spins",
 
   "gearbox.ponder.sapper.header": "Extracting fluids with a sapper",
   "gearbox.ponder.sapper.text_1": "Sappers are machines made to extract fluids from trees",

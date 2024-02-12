@@ -40,6 +40,9 @@ import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerInstance;
+import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlockEntity;
+import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineInstance;
+import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineRenderer;
 
 
 public class ModBlockEntities {
@@ -131,6 +134,13 @@ public class ModBlockEntities {
             .instance(() -> PlanetaryGearsetInstance::new, false)
             .validBlocks(ModBlocks.PLANETARY_GEARSET)
             .renderer(() -> PlanetaryGearsetRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<UselessMachineBlockEntity> USELESS_MACHINE = Gearbox.registrate()
+            .blockEntity("kinetic_machine", UselessMachineBlockEntity::new)
+            .instance(() -> UselessMachineInstance::new)
+            .validBlocks(ModBlocks.USELESS_MACHINE)
+            .renderer(() -> UselessMachineRenderer::new)
             .register();
 
     public static void register() {}

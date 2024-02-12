@@ -62,8 +62,8 @@ public class LargeLaserInstance extends LaserBeamInstance<LargeLaserBlockEntity>
     @Override
     public void updateLight() {
         super.updateLight();
-//        relight(pos, lens);
-        relight(15, 15, lens);
+        relight(pos.relative(blockEntity.getFacing()), lens);
+//        relight(15, 15, lens);
     }
     @Override
     protected void remove() {

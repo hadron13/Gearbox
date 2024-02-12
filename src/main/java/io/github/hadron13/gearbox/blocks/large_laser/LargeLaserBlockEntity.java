@@ -75,7 +75,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             return;
 
         if(level.isClientSide) {
-            float targetSpeed = beam.power;
+            float targetSpeed = beam.enabled? beam.power : 0;
 
             visualSpeed.updateChaseTarget(targetSpeed);
             visualSpeed.tickChaser();

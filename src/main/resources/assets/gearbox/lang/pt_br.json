@@ -5,14 +5,18 @@
   "block.gearbox.sapper": "Extrator",
   "block.gearbox.compressor": "Compressor",
   "block.gearbox.brass_press": "Prensa Mecanizante",
+  "block.gearbox.laser": "Laser",
   "block.gearbox.spectrometer": "Espectrômetro",
   "block.gearbox.mirror": "Espelho",
   "block.gearbox.irradiator": "Irradiador",
   "block.gearbox.electrolyzer": "Eletrolizador",
+  "block.gearbox.large_laser": "Laser Grande",
   "block.gearbox.planetary_gearset": "Engrenagens planetárias",
+  "block.gearbox.kinetic_machine": "Máquina Cinética",
 
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
+  "item.gearbox.tau_cannon": "Arma de Gauss",
 
   "create.recipe.pyroprocessing": "Queima",
   "create.recipe.sapping": "Extração",
@@ -37,10 +41,15 @@
   "create.gui.spectrometer.green": "Verde",
   "create.gui.spectrometer.blue": "Azul",
 
-  "block.gearbox.mirror.tooltip": "MIRROR",
+  "block.gearbox.mirror.tooltip": "ESPELHO",
   "block.gearbox.mirror.tooltip.summary": "Reflete lasers",
-  "block.gearbox.spectrometer.tooltip": "SPECTROMETER",
+  "block.gearbox.spectrometer.tooltip": "ESPECTROMETRO",
   "block.gearbox.spectrometer.tooltip.summary": "Mede a _potência_ e _cor_ do laser passando",
+  "item.gearbox.tau_cannon.tooltip": "ARMA DE GAUSS",
+  "item.gearbox.tau_cannon.tooltip.summary": "Consome _Barras de geld_ para atirar rajadas de partículas tau",
+
+  "block.gearbox.kinetic_machine.tooltip": "KINETIC MACHINE",
+  "block.gearbox.kinetic_machine.tooltip.summary": "It spins",
 
   "gearbox.ponder.sapper.header": "Extraindo flúidos com um extrator",
   "gearbox.ponder.sapper.text_1": "Extratores são máquinas feitas para extrair flúidos de árvores",
