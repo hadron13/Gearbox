@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "create:block/large_wheels",
+	"parent": "block/block",
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
@@ -13,29 +13,6 @@
 		"mechanical_press_pole": "create:block/mechanical_press_pole"
 	},
 	"elements": [
-		{
-			"name": "Mixer wire 1",
-			"from": [2.5, -4, 8],
-			"to": [13.5, 6, 8],
-			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 1.25, 8]},
-			"faces": {
-				"north": {"uv": [0, 0, 11, 10], "texture": "#6"},
-				"south": {"uv": [0, 0, 11, 10], "texture": "#6"}
-			}
-		},
-		{
-			"name": "MixerCenter",
-			"from": [7, 3, 7],
-			"to": [9, 8, 9],
-			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 1.25, 8]},
-			"faces": {
-				"north": {"uv": [12, 0, 14, 5], "texture": "#6"},
-				"east": {"uv": [12, 0, 14, 5], "texture": "#6"},
-				"south": {"uv": [12, 0, 14, 5], "texture": "#6"},
-				"west": {"uv": [12, 0, 14, 5], "texture": "#6"},
-				"down": {"uv": [12, 12, 14, 14], "rotation": 270, "texture": "#6"}
-			}
-		},
 		{
 			"name": "polebase",
 			"from": [5, 7, 5],
@@ -138,6 +115,61 @@
 				"up": {"uv": [0, 0, 16, 16], "texture": "#11"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#11"}
 			}
+		},
+		{
+			"name": "MixerCenter",
+			"from": [7, 3, 7],
+			"to": [9, 8, 9],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 3.25, 8]},
+			"faces": {
+				"north": {"uv": [12, 0, 14, 5], "texture": "#6"},
+				"east": {"uv": [12, 0, 14, 5], "texture": "#6"},
+				"south": {"uv": [12, 0, 14, 5], "texture": "#6"},
+				"west": {"uv": [12, 0, 14, 5], "texture": "#6"},
+				"down": {"uv": [12, 12, 14, 14], "texture": "#6"}
+			}
+		},
+		{
+			"name": "holder",
+			"from": [6.975, 4, 4],
+			"to": [9.025, 6, 12],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 3.25, 8]},
+			"faces": {
+				"north": {"uv": [12, 10, 14, 12], "texture": "#6"},
+				"east": {"uv": [12, 3, 14, 11], "rotation": 90, "texture": "#6"},
+				"south": {"uv": [12, 4, 14, 2], "texture": "#6"},
+				"west": {"uv": [12, 3, 14, 11], "rotation": 90, "texture": "#6"},
+				"up": {"uv": [12, 3, 14, 11], "texture": "#6"},
+				"down": {"uv": [12, 3, 14, 11], "texture": "#6"}
+			}
+		},
+		{
+			"name": "copper",
+			"from": [9.26777, -2, 8.76777],
+			"to": [10.26777, 4, 10.76777],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 3.25, 8]},
+			"faces": {
+				"north": {"uv": [1, 2, 2, 8], "texture": "#6"},
+				"east": {"uv": [0, 2, 2, 8], "texture": "#6"},
+				"south": {"uv": [0, 2, 1, 8], "texture": "#6"},
+				"west": {"uv": [2, 2, 0, 8], "texture": "#6"},
+				"up": {"uv": [0, 0, 1, 2], "texture": "#missing"},
+				"down": {"uv": [0, 7, 2, 8], "rotation": 90, "texture": "#6"}
+			}
+		},
+		{
+			"name": "zinc",
+			"from": [5.73223, -2, 5.23223],
+			"to": [6.73223, 4, 7.23223],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 3.25, 8]},
+			"faces": {
+				"north": {"uv": [10, 2, 11, 8], "texture": "#6"},
+				"east": {"uv": [9, 2, 11, 8], "texture": "#6"},
+				"south": {"uv": [9, 2, 10, 8], "texture": "#6"},
+				"west": {"uv": [11, 2, 9, 8], "texture": "#6"},
+				"up": {"uv": [0, 0, 1, 2], "texture": "#missing"},
+				"down": {"uv": [9, 7, 11, 8], "rotation": 90, "texture": "#6"}
+			}
 		}
 	],
 	"display": {
@@ -183,13 +215,13 @@
 					"name": "mixerhead",
 					"origin": [8, 8, 8],
 					"color": 0,
-					"children": [0, 1]
+					"children": []
 				},
 				{
 					"name": "mechanical_press_head",
 					"origin": [8, 8, 8],
 					"color": 0,
-					"children": [2, 3, 4, 5, 6, 7, 8]
+					"children": [0, 1, 2, 3, 4, 5, 6]
 				},
 				{
 					"name": "mixer_base",
@@ -200,11 +232,17 @@
 							"name": "mixerbase",
 							"origin": [8, 8, 8],
 							"color": 0,
-							"children": [9]
+							"children": [7]
 						}
 					]
 				}
 			]
+		},
+		{
+			"name": "head",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [8, 9, 10, 11]
 		}
 	]
 }

@@ -52,7 +52,7 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public void tick(){
         super.tick();
 
-        if(running){
+        if(running && currentRecipe != null && currentRecipe instanceof ElectrolyzingRecipe){
             if(energy_consumption == 0){
                 ElectrolyzingRecipe electrolyzingRecipe = (ElectrolyzingRecipe) currentRecipe;
                 energy_consumption = electrolyzingRecipe.requiredEnergy / processingTicks;

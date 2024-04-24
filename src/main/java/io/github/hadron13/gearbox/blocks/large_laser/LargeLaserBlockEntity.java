@@ -83,8 +83,6 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             angle %= 360;
             return;
         }
-
-
         if(!isFront())
             return;
 
@@ -92,7 +90,6 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             neighbourChanged(getBlockState());
             firstTick = false;
         }
-
 
         if(back != null){
             BlockEntity backEntity = level.getBlockEntity(back);
@@ -103,21 +100,23 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
 
             //uncomment on release!!
 
-            if(beam.enabled) {
-                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 20f));
-                if (ext < 400) {
-                    beam.enabled = false;
-                    sendData();
-                }
-            }else{
-                if(backEnergy.getEnergyStored() > 400){
-                    beam.enabled = true;
-                    sendData();
-                }
-            }
+//            if(beam.enabled) {
+//                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 20f));
+//                if (ext < 400) {
+//                    beam.enabled = false;
+//                    sendData();
+//                }
+//            }else{
+//                if(backEnergy.getEnergyStored() > 400){
+//                    beam.enabled = true;
+//                    sendData();
+//                }
+//            }
         }
+    }
 
-
+    public void invalidate() {
+        lazyEnergy.invalidate();
     }
 
     @Override

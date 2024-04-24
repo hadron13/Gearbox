@@ -9,6 +9,9 @@ import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleRenderer;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressInstance;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressRenderer;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeInstance;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeRenderer;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorInstance;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
@@ -142,6 +145,14 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.USELESS_MACHINE)
             .renderer(() -> UselessMachineRenderer::new)
             .register();
+
+    public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = Gearbox.registrate()
+            .blockEntity("centrifuge", CentrifugeBlockEntity::new)
+            .instance(() -> CentrifugeInstance::new)
+            .validBlocks(ModBlocks.CENTRIFUGE)
+            .renderer(() -> CentrifugeRenderer::new)
+            .register();
+
 
     public static void register() {}
 }

@@ -3,6 +3,8 @@ package io.github.hadron13.gearbox.register;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.gauge.GaugeGenerator;
+import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
+import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.data.AssetLookup;
@@ -17,6 +19,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
@@ -35,6 +38,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 
+import static com.simibubi.create.Create.REGISTRATE;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -188,6 +192,17 @@ public class ModBlocks {
             .transform(axeOrPickaxe())
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
             .transform(BlockStressDefaults.setImpact(0))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+
+    public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.block("centrifuge", CentrifugeBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.sound(SoundType.METAL).color(MaterialColor.METAL))
+            .transform(pickaxeOnly())
+            .blockstate(BlockStateGen.axisBlockProvider(false))
+            .transform(BlockStressDefaults.setImpact(8.0))
             .item()
             .transform(customItemModel())
             .register();

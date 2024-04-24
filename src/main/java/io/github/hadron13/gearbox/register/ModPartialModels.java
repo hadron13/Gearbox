@@ -1,7 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
 import com.jozufozu.flywheel.core.PartialModel;
-import com.simibubi.create.Create;
 import io.github.hadron13.gearbox.Gearbox;
 
 public class ModPartialModels {
@@ -20,7 +19,8 @@ public class ModPartialModels {
             PG_RING_GEAR = block("planetary/ring_gear"),
             PG_SUN_GEAR = block("planetary/sun_gear"),
             PG_PLANET_GEAR = block("planetary/planet_gear"),
-            USELESS_COG = block("useless/cog");
+            USELESS_COG = block("useless/cog"),
+            CENTRIFUGE_COG = block("centrifuge/cogwheel");
 
     private static PartialModel block(String path) {
         return new PartialModel(Gearbox.asResource("block/" + path));

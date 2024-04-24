@@ -15,6 +15,9 @@ import com.simibubi.create.foundation.utility.Lang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -246,14 +249,20 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             b += color.getBlue();
         }
 
-//        float[] hsb = java.awt.Color.RGBtoHSB(r, g, b, null);
-//        hsb[2] = Mth.clamp(hsb[2] * 3f, 0.5f, 1f);
+        float ceil = Math.max(r, Math.max(g, b));
+        if(ceil == 0){
+            r = 0;
+            g = 0;
+            b = 0;
+        }else {
+            r = (int)(((float)r/ceil) * 255.0f);
+            g = (int)(((float)g/ceil) * 255.0f);
+            b = (int)(((float)b/ceil) * 255.0f);
+        }
 
-//        int rgb =  java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
         mixedColor = new Color(r,g,b);
         colorChanged = false;
         recipeColor = mixedColor;
-
         if(currentRecipe != null && mode == BASIN){
             if(!IrradiatingRecipe.match(this, getBasinRecipe()) ) {
                 recipeTimer = 0;

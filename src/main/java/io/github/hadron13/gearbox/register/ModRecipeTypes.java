@@ -8,6 +8,8 @@ import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
@@ -47,7 +49,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     MECHANIZING(MechanizingRecipe::new),
     IRRADIATING(IrradiatingRecipe::new),
     TRANSMUTING(TransmutingRecipe::new),
-    ELECTROLYZING(ElectrolyzingRecipe::new);
+    ELECTROLYZING(ElectrolyzingRecipe::new),
+    CENTRIFUGING(CentrifugingRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
@@ -148,6 +151,16 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
 
         Stream<TransmutingRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> TransmutingRecipe.match(blockEntity, recipe, ingredient) );
+
+        return matchingRecipes.findAny();
+    }
+    public Optional<CentrifugingRecipe> find(CentrifugeBlockEntity blockEntity, Level world){
+        if(world.isClientSide())
+            return Optional.empty();
+        List<CentrifugingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.CENTRIFUGING.getType());
+
+        Stream<CentrifugingRecipe> matchingRecipes =
+                allRecipes.stream().filter(recipe -> CentrifugingRecipe.match(blockEntity, recipe) );
 
         return matchingRecipes.findAny();
     }

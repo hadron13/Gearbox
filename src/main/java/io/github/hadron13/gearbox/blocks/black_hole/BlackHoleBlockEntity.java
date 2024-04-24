@@ -1,6 +1,8 @@
 package io.github.hadron13.gearbox.blocks.black_hole;
 
 import com.jozufozu.flywheel.util.Color;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntityInstance;
+import com.simibubi.create.content.logistics.depot.EntityLauncher;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.BBHelper;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EndGatewayBlock;
 import net.minecraft.world.level.block.EndPortalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,14 +33,15 @@ import java.util.*;
 
 public class BlackHoleBlockEntity extends SmartBlockEntity implements ILaserReceiver {
 
-    public static List<BlackHoleBlockEntity> blackHoles = new ArrayList<>();
+    public static List<Pair<Level, BlockPos>> blackHoles = new ArrayList<>();
 
     public LaserBeamBehavior beamBehavior;
+//    public EntityLauncher entityLauncher;
     public List<Entity> entitiesInside;
 
     public BlackHoleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        blackHoles.add(this);
+        blackHoles.add(Pair.of(getLevel(), getBlockPos()));
     }
 
     @Override
@@ -64,9 +68,7 @@ public class BlackHoleBlockEntity extends SmartBlockEntity implements ILaserRece
         entitiesInside = level.getEntities(null, teleportCollision);
         BlackHoleBlockEntity match;
         BlockPos teleportPos;
-        do{
-            teleportPos = blackHoles.get(level.random.nextInt(blackHoles.size())).getBlockPos();
-        }while (teleportPos == getBlockPos());
+
 
 
         for(Entity entity : entitiesInside){
@@ -77,11 +79,10 @@ public class BlackHoleBlockEntity extends SmartBlockEntity implements ILaserRece
             if(!entity.isOnPortalCooldown()) {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0, .8f, 0));
                 if(entity instanceof Player player){
-
                 }
 
 //                level.explode(null, teleportPos.getX() + 1, teleportPos.getY() + 3, teleportPos.getZ(), 3.0f, Explosion.BlockInteraction.NONE);
-                entity.teleportToWithTicket(teleportPos.getX() + 1 , teleportPos.getY() + 3, teleportPos.getZ() + 1);
+//                entity.teleportToWithTicket(teleportPos.getX() + 1 , teleportPos.getY() + 3, teleportPos.getZ() + 1);
 //                entity.push
                 entity.setPortalCooldown();
             }

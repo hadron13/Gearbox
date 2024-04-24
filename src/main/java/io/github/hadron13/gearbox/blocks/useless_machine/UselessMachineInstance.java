@@ -9,6 +9,7 @@ import io.github.hadron13.gearbox.register.ModPartialModels;
 public class UselessMachineInstance extends SingleRotatingInstance<UselessMachineBlockEntity> {
     public UselessMachineInstance(MaterialManager materialManager, UselessMachineBlockEntity blockEntity) {
         super(materialManager, blockEntity);
+
     }
 
 
