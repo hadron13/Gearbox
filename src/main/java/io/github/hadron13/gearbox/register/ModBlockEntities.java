@@ -33,10 +33,12 @@ import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamInstance;
+import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlockEntity;
+import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillRenderer;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
-import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlockEntity;
-import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetInstance;
-import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetRenderer;
+//import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlockEntity;
+//import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetInstance;
+//import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetRenderer;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
 import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
@@ -86,14 +88,12 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<LaserBlockEntity> LASER = Gearbox.registrate()
             .blockEntity("laser", LaserBlockEntity::new)
-            .instance(() -> LaserBeamInstance::new)
             .validBlocks(ModBlocks.LASER)
             .renderer(() -> LaserBeamRenderer::new)
             .register();
 
     public static final BlockEntityEntry<MirrorBlockEntity> MIRROR = Gearbox.registrate()
             .blockEntity("mirror", MirrorBlockEntity::new)
-            .instance(() -> LaserBeamInstance::new)
             .validBlocks(ModBlocks.MIRROR)
             .renderer(() -> LaserBeamRenderer::new)
             .register();
@@ -131,13 +131,13 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.ELECTROLYZER)
             .renderer(() -> ElectrolyzerRenderer::new)
             .register();
-
-    public static final BlockEntityEntry<PlanetaryGearsetBlockEntity> PLANETARY_GEARSET = Gearbox.registrate()
-            .blockEntity("planetary_gearset", PlanetaryGearsetBlockEntity::new)
-            .instance(() -> PlanetaryGearsetInstance::new, false)
-            .validBlocks(ModBlocks.PLANETARY_GEARSET)
-            .renderer(() -> PlanetaryGearsetRenderer::new)
-            .register();
+//
+//    public static final BlockEntityEntry<PlanetaryGearsetBlockEntity> PLANETARY_GEARSET = Gearbox.registrate()
+//            .blockEntity("planetary_gearset", PlanetaryGearsetBlockEntity::new)
+//            .instance(() -> PlanetaryGearsetInstance::new, false)
+//            .validBlocks(ModBlocks.PLANETARY_GEARSET)
+//            .renderer(() -> PlanetaryGearsetRenderer::new)
+//            .register();
 
     public static final BlockEntityEntry<UselessMachineBlockEntity> USELESS_MACHINE = Gearbox.registrate()
             .blockEntity("kinetic_machine", UselessMachineBlockEntity::new)
@@ -153,6 +153,12 @@ public class ModBlockEntities {
             .renderer(() -> CentrifugeRenderer::new)
             .register();
 
+    public static final BlockEntityEntry<LaserDrillBlockEntity> LASER_DRILL = Gearbox.registrate()
+            .blockEntity("laser_drill", LaserDrillBlockEntity::new)
+//            .instance(() -> LargeLaserInstance::new)
+            .validBlocks(ModBlocks.LASER_DRILL)
+            .renderer(() -> LaserDrillRenderer::new)
+            .register();
 
     public static void register() {}
 }

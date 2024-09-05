@@ -13,6 +13,7 @@
   "block.gearbox.large_laser": "Large Laser",
   "block.gearbox.planetary_gearset": "Planetary Gearset",
   "block.gearbox.kinetic_machine": "Kinetic Machine",
+  "block.gearbox.centrifuge": "Centrifuge",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -25,6 +26,7 @@
   "create.recipe.irradiating": "Irradiating",
   "create.recipe.transmuting": "Transmuting",
   "create.recipe.electrolyzing": "Electrolyzing",
+  "create.recipe.centrifuging": "Centrifuging",
 
   "create.recipe.assembly.mechanizing": "Mechanize",
   "create.recipe.compressing.campfire_heat": "Warm",
@@ -47,7 +49,6 @@
   "block.gearbox.spectrometer.tooltip.summary": "Measures passing laser's _power level_ and _color_",
   "item.gearbox.tau_cannon.tooltip": "TAU CANNON",
   "item.gearbox.tau_cannon.tooltip.summary": "Consumes _Geld Ingots_ to shoot tau particle beams",
-
   "block.gearbox.kinetic_machine.tooltip": "KINETIC MACHINE",
   "block.gearbox.kinetic_machine.tooltip.summary": "It spins",
 
@@ -57,5 +58,8 @@
   "gearbox.ponder.sapper.text_3": "And then pull the output fluids from the back",
 
   "gearbox.jei.red": "Red",
-  "gearbox.jei.green": "Green"
+  "gearbox.jei.green": "Green",
+
+  "death.attack.gearbox.laserdeath": "%1$s was burned by light",
+  "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s"
 }

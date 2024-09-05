@@ -40,8 +40,6 @@ public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
             ms.translate(recoil, 0, 0);
         }
 
-
-
         renderer.render(model.getOriginalModel(), light);
 
         LocalPlayer player = Minecraft.getInstance().player;
@@ -68,16 +66,6 @@ public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
         renderer.render(COIL.get(), light);
         ms.popPose();
 
-//        if (transformType == ItemTransforms.TransformType.GUI) {
-//            PotatoCannonItem.getAmmoforPreview(stack)
-//                    .ifPresent(ammo -> {
-//                        PoseStack localMs = new PoseStack();
-//                        localMs.translate(-1 / 4f, -1 / 4f, 1);
-//                        localMs.scale(.5f, .5f, .5f);
-//                        TransformStack.cast(localMs)
-//                                .rotateY(-34);
-//                        itemRenderer.renderStatic(ammo, ItemTransforms.TransformType.GUI, light, OverlayTexture.NO_OVERLAY, localMs, buffer, 0);
-//                    });
-//        }
+
     }
 }

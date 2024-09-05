@@ -6,6 +6,7 @@ import com.simibubi.create.compat.jei.category.MixingCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
@@ -118,6 +119,15 @@ public class GearboxJEI implements IModPlugin {
                 .doubleItemIcon(ModBlocks.ELECTROLYZER.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 103)
                 .build("electrolyzing", ElectrolyzingCategory::new);
+
+
+        CreateRecipeCategory<?>
+                centrifuging = builder(CentrifugingRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.CENTRIFUGING)
+                .catalyst(ModBlocks.CENTRIFUGE::get)
+                .itemIcon(ModBlocks.ELECTROLYZER.get())
+                .emptyBackground(177, 103)
+                .build("centrifuging", CentrifugingCategory::new);
 
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {

@@ -36,6 +36,10 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         public List<ILaserReader> readers = new ArrayList<>();
         public List<Entity> caughtEntities = new ArrayList<>();
     }
+
+
+    public static final DamageSource DAMAGE_SOURCE = new DamageSource("gearbox.laserdeath")
+            .setScalesWithDifficulty();
     public Map<Direction, LaserBeam> beams;
     public boolean wrenched = false;
 
@@ -191,7 +195,8 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             if(!entity.isAlive())
                 continue;
             //getWorld().explode(null, entity.getX(), entity.getY(), entity.getZ(), 10f, Explosion.BlockInteraction.NONE);
-            entity.hurt(DamageSource.IN_FIRE, beam.power * 5);
+            entity.hurt(DAMAGE_SOURCE, beam.power * 2);
+
             entity.setSecondsOnFire(3);
         }
     }

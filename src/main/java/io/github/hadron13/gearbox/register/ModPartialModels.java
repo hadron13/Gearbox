@@ -20,7 +20,9 @@ public class ModPartialModels {
             PG_SUN_GEAR = block("planetary/sun_gear"),
             PG_PLANET_GEAR = block("planetary/planet_gear"),
             USELESS_COG = block("useless/cog"),
-            CENTRIFUGE_COG = block("centrifuge/cogwheel");
+            CENTRIFUGE_COG = block("centrifuge/cogwheel"),
+            LASER_DRILL_HEAD = block("laser_drill/head");
+
 
     private static PartialModel block(String path) {
         return new PartialModel(Gearbox.asResource("block/" + path));

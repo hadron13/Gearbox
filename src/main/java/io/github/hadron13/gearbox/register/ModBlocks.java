@@ -27,8 +27,10 @@ import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
+import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
+import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillItem;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
-import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlock;
+//import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlock;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
@@ -172,7 +174,7 @@ public class ModBlocks {
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();
-
+/*
     public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
             .initialProperties(SharedProperties::stone)
             .properties(p -> p
@@ -184,6 +186,8 @@ public class ModBlocks {
             .item(CogwheelBlockItem::new)
             .transform(customItemModel())
             .register();
+
+ */
 
 
     public static final BlockEntry<UselessMachineBlock> USELESS_MACHINE = REGISTRATE.block("kinetic_machine", UselessMachineBlock::new)
@@ -207,4 +211,12 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
 
+    public static final BlockEntry<LaserDrillBlock> LASER_DRILL = REGISTRATE.block("laser_drill", LaserDrillBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.color(MaterialColor.METAL).noOcclusion())
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .item(LaserDrillItem::new)
+            .transform(customItemModel())
+            .register();
 }

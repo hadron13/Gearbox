@@ -15,6 +15,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -30,6 +33,7 @@ import static io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock.PART
 public class LargeLaserBlockEntity extends SmartBlockEntity {
 
     public LaserBeamBehavior beamBehavior;
+    public AABB renderBoundingBox;
     public InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
     public int redstoneSignal = 0;
@@ -57,10 +61,20 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
+    public AABB getRenderBoundingBox() {
+        if (renderBoundingBox == null) {
+            renderBoundingBox = new AABB(worldPosition, worldPosition.offset(1, 1, 1));
+        }
+        return renderBoundingBox;
+    }
+
+    @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
         beamBehavior.addLaser(getFacing(), getBlockPos(), Color.RED, 20.0f);
+        renderBoundingBox = new AABB(worldPosition, worldPosition.relative(getFacing(), LaserBeamBehavior.MAX_LENGTH).offset(1, 1, 1));
 //        beamBehavior.getLaser(getFacing()).enabled = false;
     }
     @Override
@@ -136,7 +150,6 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             BlockState backBlock = level.getBlockState(getBlockPos().relative(back, offset + 1));
 
             if(!(backBlock.getBlock() instanceof LargeLaserBlock)) {
-
                 break;
             }
             if(backBlock.getValue(HORIZONTAL_FACING) != getFacing()) {

@@ -8,18 +8,28 @@ import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
+import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.LangBuilder;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -43,7 +53,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
     public void tick(){
         super.tick();
         if(Mth.abs(speed) < 32.0f || inputTank.isEmpty()) {
-            lastRecipe = null;
             recipeTimer = 0;
             return;
         }
@@ -51,8 +60,10 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
         if(recipeTimer > 0){
             recipeTimer -= getProcessingSpeed();
 
-            if(recipeTimer == 0){
-
+            if(recipeTimer <= 0){
+                if(lastRecipe == null)
+                    return;
+                CentrifugingRecipe.apply(this, lastRecipe, false);
             }
             return;
         }
@@ -98,8 +109,11 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
     }
 
     public void addBehaviours(List<BlockEntityBehaviour> behaviours){
-        inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 3, 1000, true);
+        inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, true);
         outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 3, 1000, true);
+
+        inputTank.forbidExtraction();
+        outputTank.forbidInsertion();
 
         behaviours.add(inputTank);
         behaviours.add(outputTank);
@@ -111,10 +125,44 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
         });
     }
 
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+
+        IFluidHandler fluids = fluidCapability.orElse(new FluidTank(0));
+        boolean isEmpty = true;
+
+        LangBuilder mb = Lang.translate("generic.unit.millibuckets");
+        for (int i = 0; i < fluids.getTanks(); i++) {
+            FluidStack fluidStack = fluids.getFluidInTank(i);
+            if (fluidStack.isEmpty())
+                continue;
+            Lang.text("")
+                    .add(Lang.fluidName(fluidStack)
+                            .add(Lang.text(" "))
+                            .style(ChatFormatting.GRAY)
+                            .add(Lang.number(fluidStack.getAmount())
+                                    .add(mb)
+                                    .style(ChatFormatting.BLUE)))
+                    .forGoggles(tooltip, 1);
+            isEmpty = false;
+        }
+
+        if (isEmpty)
+            tooltip.remove(0);
+
+        return true;
+    }
+
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        fluidCapability.invalidate();
+    }
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && side.getAxis() == getBlockState().getValue(AXIS))
+        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && (side == null || side.getAxis() == getBlockState().getValue(AXIS)) )
             return fluidCapability.cast();
         return super.getCapability(cap, side);
     }

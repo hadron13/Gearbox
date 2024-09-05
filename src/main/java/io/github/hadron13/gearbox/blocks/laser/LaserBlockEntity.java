@@ -10,6 +10,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -24,16 +27,30 @@ import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACI
 public class LaserBlockEntity extends SmartBlockEntity {
 
     LaserBeamBehavior beamBehavior;
+
+    public AABB renderBoundingBox;
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
+    boolean dumbMode;
     public int redstoneSignal = 0;
     boolean firstTick = true;
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         energyStorage = new InternalEnergyStorage(100, 10, 10);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
-
     }
+
+
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public AABB getRenderBoundingBox() {
+        if (renderBoundingBox == null) {
+            renderBoundingBox = new AABB(worldPosition, worldPosition.offset(1, 1, 1));
+        }
+        return renderBoundingBox;
+    }
+
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours){
@@ -58,18 +75,23 @@ public class LaserBlockEntity extends SmartBlockEntity {
     @Override
     public void tick(){
         super.tick();
+
         if(firstTick) {
             neighbourChanged();
+            LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING));
+            renderBoundingBox = new AABB(worldPosition, worldPosition.relative(beam.facing, LaserBeamBehavior.MAX_LENGTH).offset(1, 1, 1));
             firstTick = false;
         }
         if(level.isClientSide)
             return;
 
+
+
         Direction facing = getBlockState().getValue(HORIZONTAL_FACING);
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(facing);
 
         //uncomment on release!!
-
+//
 //        if(beam.enabled) {
 //            int ext = energyStorage.internalConsumeEnergy(10);
 //            if (ext < 10) {
@@ -82,7 +104,7 @@ public class LaserBlockEntity extends SmartBlockEntity {
 //                sendData();
 //            }
 //        }
-//
+
 
 
     }

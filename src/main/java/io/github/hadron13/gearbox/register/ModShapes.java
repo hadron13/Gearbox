@@ -16,7 +16,9 @@ public class ModShapes {
 
 
     public static final VoxelShaper
-        SAPPER = shape(0, 0, 0, 32, 16, 16).forHorizontal(WEST);
+        SAPPER = shape(0, 0, 0, 32, 16, 16).forHorizontal(WEST),
+        SMALL_LASER = shape(3, 0, 0, 13, 12, 16).forHorizontal(NORTH),
+        LASER_DRILL = shape(0, -16, 0, 16, 16, 16).forAxis();
 
     private static ModShapes.Builder shape(VoxelShape shape) {
         return new ModShapes.Builder(shape);

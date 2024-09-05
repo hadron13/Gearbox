@@ -13,7 +13,7 @@ import net.minecraft.core.Direction;
 //  -* Petrolpark *-
 //
 //  link: https://github.com/petrolpark/Destroy/blob/1.20.1/src/main/java/com/petrolpark/destroy/mixin/accessor/RotationPropagatorAccessor.java
-@Mixin(RotationPropagator.class)
+/*@Mixin(RotationPropagator.class)
 public interface RotationPropagatorAccessor {
 
     @Invoker(
@@ -23,4 +23,4 @@ public interface RotationPropagatorAccessor {
     public static float invokeGetAxisModifier(KineticBlockEntity be, Direction direction) {
         return 0f; // This return value is ignored.
     };
-};
+};*/

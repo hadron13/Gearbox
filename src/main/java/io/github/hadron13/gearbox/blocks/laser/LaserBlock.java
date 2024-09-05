@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.laser;
 
 import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.ModShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -14,6 +15,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 
 public class LaserBlock extends Block implements IBE<LaserBlockEntity> {
@@ -25,6 +28,13 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity> {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HORIZONTAL_FACING);
         super.createBlockStateDefinition(builder);
+    }
+
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn,
+                               BlockPos pos, CollisionContext context) {
+        return ModShapes.SMALL_LASER.get(state.getValue(HORIZONTAL_FACING));
     }
 
     @Override

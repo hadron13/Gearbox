@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"6": "create:2fbf54f2/pipes",
+		"6": "create:block/pipes",
 		"4_1": "gearbox:block/centrifuge/pipe_casing",
 		"particle": "create:block/industrial_iron_block"
 	},

@@ -26,11 +26,11 @@ public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity>
 
     protected void renderSafe(LargeLaserBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
 
-        if (Backend.canUseInstancing(be.getLevel()))
-            return;
         ms.pushPose();
         super.renderSafe(be, partialTicks, ms, bufferSource, light, overlay);
         ms.popPose();
+        if (Backend.canUseInstancing(be.getLevel()))
+            return;
 
         BlockState blockState = be.getBlockState();
 

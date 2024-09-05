@@ -32,6 +32,7 @@ public class LaserBeamInstance<T extends SmartBlockEntity> extends BlockEntityIn
     }
 
     public void init(){
+
         if(beamsData == null) {
             beamsData = new HashMap<>();
         }else {

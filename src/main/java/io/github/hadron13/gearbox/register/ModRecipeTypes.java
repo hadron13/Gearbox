@@ -18,6 +18,8 @@ import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
+import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlockEntity;
+import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +52,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     IRRADIATING(IrradiatingRecipe::new),
     TRANSMUTING(TransmutingRecipe::new),
     ELECTROLYZING(ElectrolyzingRecipe::new),
-    CENTRIFUGING(CentrifugingRecipe::new);
+    CENTRIFUGING(CentrifugingRecipe::new),
+    LASER_DRILLING(LaserDrillingRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
@@ -161,6 +164,16 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
 
         Stream<CentrifugingRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> CentrifugingRecipe.match(blockEntity, recipe) );
+
+        return matchingRecipes.findAny();
+    }
+    public Optional<LaserDrillingRecipe> find(LaserDrillBlockEntity blockEntity, Level world){
+        if(world.isClientSide())
+            return Optional.empty();
+        List<LaserDrillingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.LASER_DRILLING.getType());
+
+        Stream<LaserDrillingRecipe> matchingRecipes =
+                allRecipes.stream().filter(recipe -> LaserDrillingRecipe.match(blockEntity, recipe) );
 
         return matchingRecipes.findAny();
     }
