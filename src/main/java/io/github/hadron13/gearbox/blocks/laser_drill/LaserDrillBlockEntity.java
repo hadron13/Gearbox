@@ -7,15 +7,18 @@ import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +35,11 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
     public boolean colorChanged = false;
     public Color mixedColor = Color.BLACK;
     public float totalPower = 0f;
-
     public Block blockUnder;
+
+
+    LerpedFloat visualSpeed = LerpedFloat.linear();
+    float angle;
     public int recipeTimer = 0;
     public LaserDrillingRecipe currentRecipe;
 
@@ -61,6 +67,16 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
                 colorChanged = true;
             }
         });
+
+        if(level.isClientSide) {
+            float targetSpeed = totalPower;
+
+            visualSpeed.updateChaseTarget(targetSpeed);
+            visualSpeed.tickChaser();
+            angle += visualSpeed.getValue() * 3 / 10f;
+            angle %= 360;
+        }
+
         if(colorChanged)
             updateColors();
     }
@@ -116,10 +132,18 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
         Lang.translate("gui.spectrometer.title")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
+
+
         Lang.text("\u2592 ").color(0xffffff)
                 .add(Lang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
                 .add(Lang.text(" " + truncatePrecision(totalPower, 2) ))
                 .forGoggles(tooltip);
+        if(totalPower < 20.0f) {
+            Lang.translate("gui.laserdrill.minimum_power")
+                    .style(ChatFormatting.GRAY)
+                    .forGoggles(tooltip);
+            return true;
+        }
         Lang.text("\u2588 ").color(0xbd5252)
                 .add(Lang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
                 .add(Lang.text(" " + truncatePrecision(mixedColor.getRed()/255f, 2) ))
@@ -154,5 +178,13 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
         }
         return false;
 
+    }
+
+
+    @Override
+    protected void read(CompoundTag compound, boolean clientPacket) {
+        super.read(compound, clientPacket);
+        if (clientPacket)
+            visualSpeed.chase(Math.log(totalPower+5), 1 / 64f, LerpedFloat.Chaser.EXP);
     }
 }

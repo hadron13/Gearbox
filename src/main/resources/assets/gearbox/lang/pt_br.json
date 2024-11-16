@@ -57,5 +57,8 @@
   "gearbox.ponder.sapper.text_3": "E depois puxar o flúido extraído por trás",
 
   "gearbox.jei.red": "Red",
-  "gearbox.jei.green": "Green"
+  "gearbox.jei.green": "Green",
+
+  "death.attack.gearbox.laserdeath": "%1$s esqueceu o protetor solar",
+  "death.attack.gearbox.laserdeath.player": "%1$s foi iluminado por %2$s"
 }

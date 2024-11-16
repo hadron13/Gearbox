@@ -44,11 +44,13 @@ public class AnimatedIrradiator extends AnimatedKinetics {
 
         blockElement(ModPartialModels.THICK_BEAM)
                 .atLocal(0,  1 + 3/16f, 0)
+                .color(color)
                 .scale(scale)
                 .render(matrixStack);
 
         blockElement(ModPartialModels.THICK_BEAM)
                 .atLocal(0,  0.5f, 0)
+                .color(color)
                 .scale(scale)
                 .render(matrixStack);
 

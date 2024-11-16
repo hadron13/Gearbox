@@ -23,7 +23,6 @@ public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity>
     }
 
     @Override
-
     protected void renderSafe(LargeLaserBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
 
         ms.pushPose();

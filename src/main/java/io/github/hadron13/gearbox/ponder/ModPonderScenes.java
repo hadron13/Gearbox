@@ -99,5 +99,17 @@ public class ModPonderScenes {
 
     }
 
+    public static void laser(SceneBuilder scene, SceneBuildingUtil util) {
+
+        scene.title("laser", "Using a laser");
+        scene.configureBasePlate(0, 0, 5);
+
+
+        scene.world.showSection(util.select.fromTo(0, 0, 0, 4, 1, 4), Direction.UP);
+
+
+
+    }
+
 
 }

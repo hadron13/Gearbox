@@ -18,5 +18,6 @@ public class ModPonderIndex {
 
     public static void register() {
         HELPER.forComponents(ModBlocks.SAPPER).addStoryBoard("sapper", ModPonderScenes::sapper);
+        HELPER.forComponents(ModBlocks.LASER).addStoryBoard("laser", ModPonderScenes::laser);
     }
 }

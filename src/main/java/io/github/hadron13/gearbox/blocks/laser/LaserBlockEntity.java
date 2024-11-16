@@ -31,7 +31,7 @@ public class LaserBlockEntity extends SmartBlockEntity {
     public AABB renderBoundingBox;
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
-    boolean dumbMode;
+    boolean noEnergyMode = true;
     public int redstoneSignal = 0;
     boolean firstTick = true;
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -40,11 +40,14 @@ public class LaserBlockEntity extends SmartBlockEntity {
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
-
+    public Direction getFacing(){
+        return getBlockState().getValue(HORIZONTAL_FACING);
+    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getRenderBoundingBox() {
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
         if (renderBoundingBox == null) {
             renderBoundingBox = new AABB(worldPosition, worldPosition.offset(1, 1, 1));
         }
@@ -56,18 +59,23 @@ public class LaserBlockEntity extends SmartBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> behaviours){
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
-        beamBehavior.addLaser(getBlockState().getValue(HORIZONTAL_FACING), getBlockPos(), Color.RED, 2.0f);
+        beamBehavior.addLaser(getFacing(), getBlockPos(), Color.RED, 2.0f);
+        if(noEnergyMode)
+            beamBehavior.getLaser(getFacing()).enabled = true;
     }
 
     public void neighbourChanged(){
         if(level == null)
             return;
         redstoneSignal = level.getBestNeighborSignal(worldPosition);
-        beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color = Color.rainbowColor(redstoneSignal*(1536/15));
+        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
+        if(beam == null)
+            return;
+        beam.color = Color.rainbowColor(redstoneSignal*(1536/15));
         if(redstoneSignal == 10){
-            beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color.setValue(0x0000FF);
+            beam.color.setValue(0x0000FF);
         }else if (redstoneSignal == 5){
-            beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING)).color.setValue(0x00FF00);
+            beam.color.setValue(0x00FF00);
         }
         sendData();
     }
@@ -78,8 +86,8 @@ public class LaserBlockEntity extends SmartBlockEntity {
 
         if(firstTick) {
             neighbourChanged();
-            LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getBlockState().getValue(HORIZONTAL_FACING));
-            renderBoundingBox = new AABB(worldPosition, worldPosition.relative(beam.facing, LaserBeamBehavior.MAX_LENGTH).offset(1, 1, 1));
+
+            renderBoundingBox = new AABB(worldPosition, worldPosition.relative(getBlockState().getValue(HORIZONTAL_FACING), LaserBeamBehavior.MAX_LENGTH).offset(1, 1, 1));
             firstTick = false;
         }
         if(level.isClientSide)
@@ -90,20 +98,21 @@ public class LaserBlockEntity extends SmartBlockEntity {
         Direction facing = getBlockState().getValue(HORIZONTAL_FACING);
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(facing);
 
-        //uncomment on release!!
-//
-//        if(beam.enabled) {
-//            int ext = energyStorage.internalConsumeEnergy(10);
-//            if (ext < 10) {
-//                beam.enabled = false;
-//                sendData();
-//            }
-//        }else{
-//            if(energyStorage.getEnergyStored() > 10){
-//                beam.enabled = true;
-//                sendData();
-//            }
-//        }
+        if(noEnergyMode)
+            return;
+
+        if(beam.enabled) {
+            int ext = energyStorage.internalConsumeEnergy(10);
+            if (ext < 10) {
+                beam.enabled = false;
+                sendData();
+            }
+        }else{
+            if(energyStorage.getEnergyStored() > 10){
+                beam.enabled = true;
+                sendData();
+            }
+        }
 
 
 

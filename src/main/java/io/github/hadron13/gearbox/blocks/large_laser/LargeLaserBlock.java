@@ -10,6 +10,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -126,6 +127,11 @@ public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity>
         return ModBlockEntities.LARGE_LASER.get();
     }
 
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(HORIZONTAL_FACING, rot.rotate(state.getValue(HORIZONTAL_FACING)));
+    }
 
     public enum LargeLaserPart implements StringRepresentable {
         SINGLE, FRONT, MIDDLE, BACK;

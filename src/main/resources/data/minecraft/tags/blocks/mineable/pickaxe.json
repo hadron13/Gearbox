@@ -8,7 +8,6 @@
     "gearbox:laser",
     "gearbox:mirror",
     "gearbox:irradiator",
-    "gearbox:large_laser",
-    "gearbox:planetary_gearset"
+    "gearbox:large_laser"
   ]
 }

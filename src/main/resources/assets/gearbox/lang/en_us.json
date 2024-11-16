@@ -42,6 +42,7 @@
   "create.gui.spectrometer.red": "Red",
   "create.gui.spectrometer.green": "Green",
   "create.gui.spectrometer.blue": "Blue",
+  "create.gui.laserdrill.minimum_power": "This machine requires 20 laser power",
 
   "block.gearbox.mirror.tooltip": "MIRROR",
   "block.gearbox.mirror.tooltip.summary": "Reflects incoming lasers",
@@ -60,6 +61,6 @@
   "gearbox.jei.red": "Red",
   "gearbox.jei.green": "Green",
 
-  "death.attack.gearbox.laserdeath": "%1$s was burned by light",
+  "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
   "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s"
 }

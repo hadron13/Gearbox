@@ -11,7 +11,7 @@ uniform mat4 ProjMat;
 
 out vec4 vertexColor;
 out vec2 texCoord0;
-out vec2 texCoord2;
+out vec2 texCoord1;
 out vec4 normal;
 out vec3 position;
 
@@ -20,6 +20,6 @@ void main() {
     position = (ModelViewMat * vec4(Position, 1.0)).xyz;//gl_Position.xyz;
     vertexColor = Color;
     texCoord0 = UV0;
-    texCoord2 = UV2;
+    texCoord1 = UV2;
     normal = vec4(Normal, 0.0f);//ProjMat * ModelViewMat * vec4(Normal, 0.0);
 }

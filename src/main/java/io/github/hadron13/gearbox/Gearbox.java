@@ -3,6 +3,7 @@ package io.github.hadron13.gearbox;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.Create;
+import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.data.AllLangPartials;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -20,12 +21,15 @@ import io.github.hadron13.gearbox.register.*;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
@@ -44,6 +48,7 @@ public class Gearbox {
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
     public Gearbox() {
         modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
         REGISTRATE.registerEventListeners(modEventBus);
 
         new ModGroup("main");
@@ -58,17 +63,21 @@ public class Gearbox {
         modEventBus.addListener(EventPriority.LOWEST, Gearbox::gatherData);
 
 
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(Gearbox::clientInit) );
+
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    public static void clientInit(final FMLClientSetupEvent event){
+
+        ModPonderTags.register();
+        ModPonderIndex.register();
+
+    }
 
     public static void gatherData(GatherDataEvent event) {
         TagGen.datagen();
         DataGenerator gen = event.getGenerator();
-        if (event.includeClient()) {
-            ModPonderIndex.register();
-            ModPonderTags.register();
-        }
 
     }
 
