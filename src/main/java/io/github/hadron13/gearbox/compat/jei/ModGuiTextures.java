@@ -12,7 +12,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum ModGuiTextures implements ScreenElement {
     JEI_HEAT_BAR_CENTERED("jei/widgets", 0, 16, 169, 19),
-    JEI_SHORT_ARROW("jei/widgets", 0, 0, 20, 9);
+    JEI_SHORT_ARROW("jei/widgets", 0, 0, 20, 9),
+    JEI_BACK_ARROW("jei/widgets", 0, 48, 14, 18);
 
     public static final int FONT_COLOR = 5726074;
     public final ResourceLocation location;

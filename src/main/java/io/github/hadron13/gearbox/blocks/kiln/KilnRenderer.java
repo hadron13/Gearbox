@@ -18,6 +18,6 @@ public class KilnRenderer extends KineticBlockEntityRenderer<KilnBlockEntity> {
     @Override
     protected SuperByteBuffer getRotatedModel(KilnBlockEntity be, BlockState state) {
         return CachedBufferer.partialFacing(AllPartialModels.SHAFT_HALF, state,
-                state.getValue(HORIZONTAL_FACING));
+                state.getValue(HORIZONTAL_FACING).getOpposite());
     }
 }

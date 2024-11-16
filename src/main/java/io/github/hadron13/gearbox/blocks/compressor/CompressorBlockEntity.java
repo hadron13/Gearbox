@@ -20,6 +20,7 @@ import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -200,8 +201,10 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, 1f);
         BlockPos pos = getBlockPos();
 
+        SoundScapes.play(SoundScapes.AmbienceGroup.MILLING, worldPosition, pitch);
+
         level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                AllSoundEvents.TRAIN.getMainEvent(), SoundSource.AMBIENT,0.5f, pitch, false);
+                SoundEvents.LAVA_EXTINGUISH, SoundSource.AMBIENT,0.5f, pitch, false);
     }
     public BlazeBurnerBlock.HeatLevel getHeat(){
         assert level != null;

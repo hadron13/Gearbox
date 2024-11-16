@@ -8,14 +8,17 @@ import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
+import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -36,6 +39,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock.AXIS;
+import static net.minecraft.ChatFormatting.GOLD;
 
 public class CentrifugeBlockEntity extends KineticBlockEntity {
 
@@ -131,6 +135,23 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
         IFluidHandler fluids = fluidCapability.orElse(new FluidTank(0));
         boolean isEmpty = true;
 
+
+        if (Math.abs(getSpeed()) < 32.0f) {
+            Lang.translate("tooltip.speedRequirement")
+                    .style(GOLD)
+                    .forGoggles(tooltip);
+            MutableComponent hint =
+                    Lang.translateDirect("gui.contraptions.not_fast_enough", I18n.get(getBlockState().getBlock()
+                            .getDescriptionId()));
+            List<Component> cutString = TooltipHelper.cutTextComponent(hint, TooltipHelper.Palette.GRAY_AND_WHITE);
+            for (int i = 0; i < cutString.size(); i++)
+                Lang.builder()
+                        .add(cutString.get(i)
+                                .copy())
+                        .forGoggles(tooltip);
+            isEmpty = false;
+        }
+
         LangBuilder mb = Lang.translate("generic.unit.millibuckets");
         for (int i = 0; i < fluids.getTanks(); i++) {
             FluidStack fluidStack = fluids.getFluidInTank(i);
@@ -147,10 +168,10 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
             isEmpty = false;
         }
 
-        if (isEmpty)
-            tooltip.remove(0);
+        //if (isEmpty)
+        //    tooltip.remove(0);
 
-        return true;
+        return !isEmpty;
     }
 
 

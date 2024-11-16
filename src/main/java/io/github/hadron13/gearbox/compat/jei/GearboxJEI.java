@@ -125,8 +125,8 @@ public class GearboxJEI implements IModPlugin {
                 centrifuging = builder(CentrifugingRecipe.class)
                 .addTypedRecipes(ModRecipeTypes.CENTRIFUGING)
                 .catalyst(ModBlocks.CENTRIFUGE::get)
-                .itemIcon(ModBlocks.ELECTROLYZER.get())
-                .emptyBackground(177, 103)
+                .itemIcon(ModBlocks.CENTRIFUGE.get())
+                .emptyBackground(177, 93)
                 .build("centrifuging", CentrifugingCategory::new);
 
     }
