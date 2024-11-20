@@ -43,6 +43,6 @@ public class PumpjackCrankBlockEntity extends KineticBlockEntity {
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         if (clientPacket)
-            visualSpeed.chase(getSpeed()/2f, 1 / 16f, LerpedFloat.Chaser.EXP);
+            visualSpeed.chase(getSpeed()/8f, 1 / 128f, LerpedFloat.Chaser.EXP);
     }
 }

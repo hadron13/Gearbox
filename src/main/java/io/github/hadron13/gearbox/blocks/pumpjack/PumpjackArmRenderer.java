@@ -45,7 +45,7 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
         SuperByteBuffer body = CachedBufferer.partialFacing(ModPartialModels.PUMPJACK_ARM, blockstate, facing);
         SuperByteBuffer tail = CachedBufferer.partialFacing(ModPartialModels.PUMPJACK_CONNECTOR, blockstate, facing);
         SuperByteBuffer pitman = CachedBufferer.partialFacing(ModPartialModels.PUMPJACK_PITMAN, blockstate, facing);
-        SuperByteBuffer crank = CachedBufferer.partialFacing(ModPartialModels.PUMPJACK_CRANK, blockstate, facing);
+        SuperByteBuffer smooth_rod = CachedBufferer.partialFacing(ModPartialModels.PUMPJACK_SMOOTHROD, blockstate, facing);
 
 
 
@@ -60,16 +60,7 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
         }
 
 
-        TransformStack.cast(ms)
-                .translate(Vec3i.ZERO.relative(facing, 2).below(2))
-                ;
-
-//        crank
-//                .light(light)
-//                .translate(0, 3/16f, 0)
-//                .rotateCentered(facing.getClockWise(), crank_angle )
-//                .translate(0, -3/16f, 0)
-//                .renderInto(ms,solid);
+        TransformStack.cast(ms).translate(Vec3i.ZERO.relative(facing, 2).below(2));
 
 
         Vec2 pitman_pivot = new Vec2(Mth.sin(-crank_angle) * 8f/16f, Mth.cos(-crank_angle) * 8/16f + 11/16f);
@@ -83,9 +74,17 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
         float pitman_angle = (float) Mth.atan2(pitman_pivot.y - intersections[1], pitman_pivot.x - intersections[0]) + Mth.HALF_PI;
         float beam_angle   = (float) Mth.atan2(intersections[1] - beam_pivot.y, intersections[0] - beam_pivot.x);
 
+        float x_coef = 0f, z_coef = 0f;
+        switch (facing){
+            case SOUTH -> {x_coef = 0; z_coef = 1f;}
+            case NORTH -> {x_coef = 0; z_coef = -1f;}
+            case EAST  -> {x_coef = 1f; z_coef = 0f;}
+            case WEST  -> {x_coef = -1f; z_coef = 0f;}
+        }
+
         pitman
                 .light(light)
-                .translate(0, pitman_pivot.y, pitman_pivot.x)
+                .translate(pitman_pivot.x * x_coef, pitman_pivot.y, pitman_pivot.x * z_coef)
                 .translate(0, -8/16f, 0)
                 .rotateCentered(facing.getClockWise(), pitman_angle)
                 .translate(0, 8/16f, 0)
@@ -93,7 +92,7 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
 
 
         TransformStack.cast(ms)
-                .translate(0, intersections[1], intersections[0])
+                .translate(intersections[0] * x_coef, intersections[1], intersections[0] * z_coef)
                 .translate(0, -8/16f, 0)
                 .rotateCentered(facing.getClockWise(), beam_angle)
         ;
@@ -102,8 +101,12 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
         body.light(light).translate(Vec3i.ZERO.relative(facing, -2)).renderInto(ms,solid);
         head.light(light).translate(Vec3i.ZERO.relative(facing, -4)).renderInto(ms,solid);
 
-
         ms.popPose();
+
+        float head_height = (float) Math.sin(-beam_angle) * 2f;
+
+        TransformStack.cast(ms).translate(Vec3i.ZERO.relative(facing, -2).below());
+        smooth_rod.translate(0, head_height - 1, 0).scale(1f, 2f, 1f).renderInto(ms, solid);
 
     }
     public static boolean findCircleIntersection(Vec2 c1, float r1,
