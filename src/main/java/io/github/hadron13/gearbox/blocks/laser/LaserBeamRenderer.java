@@ -26,8 +26,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
+import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACING;
 import static net.minecraft.core.Direction.Axis.X;
 import static net.minecraft.core.Direction.Axis.Z;
+import static net.minecraft.core.Direction.NORTH;
 
 public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEntityRenderer<T> {
 
@@ -54,6 +56,7 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
     protected void renderSafe(T be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
 //        if(Backend.canUseInstancing(be.getLevel()))
 //            return;
+
 
         LaserBeamBehavior beamBehavior = be.getBehaviour(LaserBeamBehavior.TYPE);
         if(beamBehavior == null)
@@ -92,7 +95,7 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
 
     private void renderBeam(Matrix4f pPose, VertexConsumer pConsumer, float size, float thickness, int color_rgb) {
         this.renderFace( pPose, pConsumer,(int)size, color_rgb, 0.0F, thickness, 0.0F, thickness, size, size, size, size, Direction.SOUTH);
-        this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, thickness, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, Direction.NORTH);
+        this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, thickness, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, NORTH);
         this.renderFace( pPose, pConsumer,(int)size,color_rgb, thickness, thickness, thickness, 0.0F, 0.0F, size, size, 0.0F, Direction.EAST);
         this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, 0.0F, 0.0F, thickness, 0.0F, size, size, 0.0F, Direction.WEST);
         this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, 0.0F, 0.0F, 0.0F, 0.0F, size, size, Direction.DOWN);

@@ -21,7 +21,13 @@ public class ModPartialModels {
             PG_PLANET_GEAR = block("planetary/planet_gear"),
             USELESS_COG = block("useless/cog"),
             CENTRIFUGE_COG = block("centrifuge/cogwheel"),
-            LASER_DRILL_HEAD = block("laser_drill/head");
+            LASER_DRILL_HEAD = block("laser_drill/head"),
+            PUMPJACK_ARM = block("pumpjack/arm"),
+            PUMPJACK_HEAD = block("pumpjack/head"),
+            PUMPJACK_CONNECTOR = block("pumpjack/connector"),
+            PUMPJACK_PITMAN = block("pumpjack/pitman"),
+            PUMPJACK_CRANK = block("pumpjack/crank"),
+            PUMPJACK_SMOOTHROD = block("pumpjack/smooth_rod");
 
 
     private static PartialModel block(String path) {

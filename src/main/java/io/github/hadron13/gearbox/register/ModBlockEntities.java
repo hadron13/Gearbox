@@ -39,6 +39,7 @@ import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlockEntity;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetInstance;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetRenderer;
+import io.github.hadron13.gearbox.blocks.pumpjack.*;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
 import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
@@ -159,6 +160,28 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.LASER_DRILL)
             .renderer(() -> LaserDrillRenderer::new)
             .register();
+
+
+    public static final BlockEntityEntry<PumpjackArmBlockEntity> PUMPJACK_ARM = Gearbox.registrate()
+            .blockEntity("pumpjack_arm", PumpjackArmBlockEntity::new)
+            //.instance(() -> ::new)
+            .validBlocks(ModBlocks.PUMPJACK_ARM)
+            .renderer(() -> PumpjackArmRenderer::new)
+            // TODO: renderer/instance
+            .register();
+    public static final BlockEntityEntry<PumpjackCrankBlockEntity> PUMPJACK_CRANK = Gearbox.registrate()
+            .blockEntity("pumpjack_crank", PumpjackCrankBlockEntity::new)
+            //.instance(() -> ::new)
+            .validBlocks(ModBlocks.PUMPJACK_CRANK)
+            .renderer(() -> PumpjackCrankRenderer::new)
+            // TODO: renderer/instance
+            .register();
+
+    public static final BlockEntityEntry<PumpjackWellBlockEntity> PUMPJACK_WELL = Gearbox.registrate()
+            .blockEntity("pumpjack_well", PumpjackWellBlockEntity::new)
+            .validBlocks(ModBlocks.PUMPJACK_WELL)
+            .register();
+
 
     public static void register() {}
 }

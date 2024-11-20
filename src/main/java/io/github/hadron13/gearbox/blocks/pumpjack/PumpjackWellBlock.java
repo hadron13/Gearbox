@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.blocks.pumpjack;
 
+
 import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
 import io.github.hadron13.gearbox.register.ModShapes;
@@ -16,17 +17,11 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class PumpjackArmBlock extends Block implements IBE<PumpjackArmBlockEntity> {
+public class PumpjackWellBlock extends Block implements IBE<PumpjackWellBlockEntity> {
 
     public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn,
-                               BlockPos pos, CollisionContext context) {
-        return ModShapes.PUMPJACK_PIVOT.get(state.getValue(HORIZONTAL_FACING));
-    }
-
-    public PumpjackArmBlock(Properties pProperties) {
+    public PumpjackWellBlock(Properties pProperties) {
         super(pProperties);
     }
 
@@ -44,12 +39,18 @@ public class PumpjackArmBlock extends Block implements IBE<PumpjackArmBlockEntit
     }
 
     @Override
-    public Class<PumpjackArmBlockEntity> getBlockEntityClass() {
-        return PumpjackArmBlockEntity.class;
+    public Class<PumpjackWellBlockEntity> getBlockEntityClass() {
+        return PumpjackWellBlockEntity.class;
     }
     @Override
-    public BlockEntityType<? extends PumpjackArmBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.PUMPJACK_ARM.get();
+    public BlockEntityType<? extends PumpjackWellBlockEntity> getBlockEntityType() {
+        return ModBlockEntities.PUMPJACK_WELL.get();
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn,
+                               BlockPos pos, CollisionContext context) {
+        return ModShapes.PUMPJACK_WELL.get(state.getValue(HORIZONTAL_FACING));
     }
 
 }
