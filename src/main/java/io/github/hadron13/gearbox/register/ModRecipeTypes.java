@@ -20,6 +20,8 @@ import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
+import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
+import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -53,7 +55,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     TRANSMUTING(TransmutingRecipe::new),
     ELECTROLYZING(ElectrolyzingRecipe::new),
     CENTRIFUGING(CentrifugingRecipe::new),
-    LASER_DRILLING(LaserDrillingRecipe::new);
+    LASER_DRILLING(LaserDrillingRecipe::new),
+    PUMPJACK(PumpjackRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
@@ -178,6 +181,16 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
         return matchingRecipes.findAny();
     }
 
+    public Optional<PumpjackRecipe> find(PumpjackWellBlockEntity blockEntity, Level world){
+        if(world.isClientSide())
+            return Optional.empty();
+        List<PumpjackRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.PUMPJACK.getType());
+
+        Stream<PumpjackRecipe> matchingRecipes =
+                allRecipes.stream().filter(recipe -> PumpjackRecipe.match(blockEntity, recipe) );
+
+        return matchingRecipes.findAny();
+    }
 
     public List<SappingRecipe> getAll(Level world){
         if(world.isClientSide())

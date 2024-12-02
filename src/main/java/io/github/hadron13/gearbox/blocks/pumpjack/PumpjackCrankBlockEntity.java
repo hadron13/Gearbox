@@ -3,8 +3,10 @@ package io.github.hadron13.gearbox.blocks.pumpjack;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import io.github.hadron13.gearbox.Gearbox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -17,6 +19,8 @@ public class PumpjackCrankBlockEntity extends KineticBlockEntity {
 
     public PumpjackCrankBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
+        setLazyTickRate(5);
+        visualSpeed.chase(0f, 1 / 128f, LerpedFloat.Chaser.EXP);
     }
 
     @Override
@@ -28,21 +32,34 @@ public class PumpjackCrankBlockEntity extends KineticBlockEntity {
     public void tick() {
         super.tick();
 
-        if(level.isClientSide) {
-            float targetSpeed = getSpeed()/8f;
+//        if(level != null && level.isClientSide)
+//            return;
 
-            visualSpeed.updateChaseTarget(targetSpeed);
-            visualSpeed.tickChaser();
-            angle += visualSpeed.getValue() * 6/20f;
-            angle %= 360;
-            return;
-        }
+        float targetSpeed = Mth.log2((int)getSpeed()) * 4;
+
+        visualSpeed.updateChaseTarget(targetSpeed);
+        visualSpeed.tickChaser();
+        angle += visualSpeed.getValue() * 6/20f;
+        angle %= 360;
+    }
+
+    @Override
+    public void lazyTick() {
+        super.lazyTick();
+        sendData();
+    }
+
+    @Override
+    protected void write(CompoundTag compound, boolean clientPacket) {
+        super.write(compound, clientPacket);
+        compound.putFloat("angle", angle);
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        if (clientPacket)
-            visualSpeed.chase(getSpeed()/8f, 1 / 128f, LerpedFloat.Chaser.EXP);
+        angle = compound.getFloat("angle");
+//        if (clientPacket)
+//            visualSpeed.chase(getSpeed()/8f, 1 / 128f, LerpedFloat.Chaser.EXP);
     }
 }

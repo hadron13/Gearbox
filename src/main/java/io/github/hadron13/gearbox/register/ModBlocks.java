@@ -32,10 +32,7 @@ import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillItem;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlock;
-import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackArmBlock;
-import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackCrankBlock;
-import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlock;
-import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlockEntity;
+import io.github.hadron13.gearbox.blocks.pumpjack.*;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
@@ -229,7 +226,7 @@ public class ModBlocks {
             .transform(pickaxeOnly())
             .properties(p -> p.sound(SoundType.METAL).color(MaterialColor.METAL).noOcclusion())
             .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
-            .item()
+            .item(PumpjackArmBlockItem::new)
             .transform(customItemModel())
             .register();
     public static final BlockEntry<PumpjackCrankBlock> PUMPJACK_CRANK = REGISTRATE.block("pumpjack_crank", PumpjackCrankBlock::new)

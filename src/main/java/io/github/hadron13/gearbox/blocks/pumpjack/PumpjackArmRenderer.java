@@ -53,7 +53,7 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
         //TransformStack.cast(ms).rotateCentered(facing.getClockWise(), (float) Math.sin(AnimationTickHolder.getRenderTime()/10f)/4f);
 
         float crank_angle = 0;
-        if(be.crank instanceof PumpjackCrankBlockEntity){
+        if(be.crank != null){
             float speed = be.crank.visualSpeed.getValue(partialTicks) * 6 / 20f;
             float angle = be.crank.angle + speed * partialTicks;
             crank_angle = angle * Mth.DEG_TO_RAD;
@@ -106,7 +106,7 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
         float head_height = (float) Math.sin(-beam_angle) * 2f;
 
         TransformStack.cast(ms).translate(Vec3i.ZERO.relative(facing, -2).below());
-        smooth_rod.translate(0, head_height - 1, 0).scale(1f, 2f, 1f).renderInto(ms, solid);
+        smooth_rod.light(light).translate(0, head_height - 1, 0).scale(1f, 2f, 1f).renderInto(ms, solid);
 
     }
     public static boolean findCircleIntersection(Vec2 c1, float r1,
