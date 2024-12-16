@@ -119,7 +119,7 @@ public class IrradiatingCategory extends CreateRecipeCategory<IrradiatingRecipe>
         Component blue = Components.literal("\u2588 " +
                 SpectrometerBlockEntity.truncatePrecision(recipe.requiredColor.getBlue()/255f, 2));
 
-        font.draw(matrixStack, power, 20, 1, 0xffffff);
+        font.drawShadow(matrixStack, power, 20, 1, 0xffffff);
         font.draw(matrixStack, red, 20, 11, 0xbd5252);
         font.draw(matrixStack, green, 20, 21, 0x2d9636);
         font.draw(matrixStack, blue, 20, 31, 0x2e2d96);

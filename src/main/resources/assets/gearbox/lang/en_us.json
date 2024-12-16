@@ -14,6 +14,9 @@
   "block.gearbox.planetary_gearset": "Planetary Gearset",
   "block.gearbox.kinetic_machine": "Kinetic Machine",
   "block.gearbox.centrifuge": "Centrifuge",
+  "block.gearbox.pumpjack_well": "Pumpjack Well",
+  "block.gearbox.pumpjack_arm": "Pumpjack Arm",
+  "block.gearbox.pumpjack_crank": "Pumpjack Crank",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -27,6 +30,7 @@
   "create.recipe.transmuting": "Transmuting",
   "create.recipe.electrolyzing": "Electrolyzing",
   "create.recipe.centrifuging": "Centrifuging",
+  "create.recipe.pumpjack": "Pumping",
 
   "create.recipe.assembly.mechanizing": "Mechanize",
   "create.recipe.compressing.campfire_heat": "Warm",

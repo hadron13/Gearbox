@@ -103,6 +103,9 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
 
         ms.popPose();
 
+        if(be.well == null)
+            return;
+
         float head_height = (float) Math.sin(-beam_angle) * 2f;
 
         TransformStack.cast(ms).translate(Vec3i.ZERO.relative(facing, -2).below());

@@ -13,6 +13,10 @@
   "block.gearbox.large_laser": "Laser Grande",
   "block.gearbox.planetary_gearset": "Engrenagens planetárias",
   "block.gearbox.kinetic_machine": "Máquina Cinética",
+  "block.gearbox.centrifuge": "Centrífuga",
+  "block.gearbox.pumpjack_well": "Poço de petróleo",
+  "block.gearbox.pumpjack_arm": "Braço de bombeamento",
+  "block.gearbox.pumpjack_crank": "Virabrequim de bombeamento",
 
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
@@ -25,6 +29,8 @@
   "create.recipe.irradiating": "Irradiação",
   "create.recipe.transmuting": "Transmutação",
   "create.recipe.electrolyzing": "Eletrólise",
+  "create.recipe.centrifuging": "Centrifugação",
+  "create.recipe.pumpjack": "Bombeamento",
 
   "create.recipe.assembly.mechanizing": "Mecanize",
   "create.recipe.compressing.campfire_heat": "Morno",

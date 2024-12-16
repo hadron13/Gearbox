@@ -1,5 +1,7 @@
 package io.github.hadron13.gearbox.blocks.pumpjack;
 
+import com.mojang.datafixers.TypeRewriteRule;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -68,12 +71,30 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
             timer = 10f;
         }
     }
+    public boolean validPiping(){
+        if(level == null)
+            return true;
+        BlockPos position = getBlockPos().below();
+        BlockState block = level.getBlockState(position);
+        while(block.getBlock() != Blocks.BEDROCK){
+            if(block.getBlock() != AllBlocks.FLUID_PIPE.get() &&
+               block.getBlock() != AllBlocks.ENCASED_FLUID_PIPE.get()) {
+                return false;
+            }
 
+            position = position.below();
+            block = level.getBlockState(position);
+        }
+        return true;
+
+    }
 
     public void pump(float speed){
         if(currentRecipe == null)
             return;
         if(isTankFull())
+            return;
+        if(!validPiping())
             return;
 
         timer -= speed;

@@ -38,6 +38,7 @@ import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
@@ -249,4 +250,9 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
 
+    public static final BlockEntry<Block> PUMPJACK_WELL_PIPE = REGISTRATE.block("pumpjack_well_pipe.json", Block::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .register();
+//            .blockstate()
 }

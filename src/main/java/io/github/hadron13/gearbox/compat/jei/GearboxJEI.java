@@ -12,6 +12,7 @@ import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
+import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import io.github.hadron13.gearbox.compat.jei.category.*;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
@@ -128,6 +129,16 @@ public class GearboxJEI implements IModPlugin {
                 .itemIcon(ModBlocks.CENTRIFUGE.get())
                 .emptyBackground(177, 93)
                 .build("centrifuging", CentrifugingCategory::new);
+
+        CreateRecipeCategory<?>
+                pumpjack = builder(PumpjackRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.PUMPJACK)
+                .catalyst(ModBlocks.PUMPJACK_WELL::get)
+                .catalyst(ModBlocks.PUMPJACK_ARM::get)
+                .catalyst(ModBlocks.PUMPJACK_CRANK::get)
+                .itemIcon(ModBlocks.PUMPJACK_WELL.get())
+                .emptyBackground(177, 65)
+                .build("pumpjack", PumpjackCategory::new);
 
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {

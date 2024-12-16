@@ -3,14 +3,19 @@ package io.github.hadron13.gearbox.blocks.compressor;
 import com.jozufozu.flywheel.backend.Backend;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.processing.basin.BasinBlock;
+import com.simibubi.create.foundation.render.CachedBufferer;
+import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.IntAttached;
 import com.simibubi.create.foundation.utility.VecHelper;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
@@ -33,14 +38,22 @@ public class CompressorRenderer extends KineticBlockEntityRenderer<CompressorBlo
         return true;
     }
 
+
     @Override
     protected void renderSafe(CompressorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
-        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
-
+//
         BlockState blockState = be.getBlockState();
         if (!(blockState.getBlock() instanceof CompressorBlock))
             return;
+
+
+        VertexConsumer solid = buffer.getBuffer(RenderType.solid());
+        SuperByteBuffer roll = CachedBufferer.partialFacing(ModPartialModels.COMPRESSOR_ROLL, blockState, blockState.getValue(HORIZONTAL_FACING));
+
+        roll.renderInto(ms, solid);
+
+
         Direction direction = blockState.getValue(HORIZONTAL_FACING);
 
         Vec3 directionVec = Vec3.atLowerCornerOf(direction.getNormal());
