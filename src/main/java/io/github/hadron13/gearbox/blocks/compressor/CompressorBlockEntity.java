@@ -143,12 +143,16 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         if (timer > 0) {
             timer -= getProcessingSpeed();
 
-            if (level.isClientSide) {
-
-
-                return;
-            }
             if (timer <= 0) {
+                if (level.isClientSide) {
+                    float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, 1f);
+                    BlockPos pos = getBlockPos();
+
+                    level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
+                            SoundEvents.LAVA_EXTINGUISH, SoundSource.AMBIENT,0.5f, pitch, false);
+                    return;
+                }
+
                 process();
             }
             return;
@@ -172,6 +176,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         timer = recipe.getProcessingDuration();
         sendData();
     }
+
     public boolean validSpeed(){
         switch (getBlockState().getValue(HORIZONTAL_FACING)){
             case EAST, NORTH -> {
@@ -183,19 +188,20 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         }
         return false;
     }
+
     public int getProcessingSpeed() {
         return Mth.clamp((int) Math.abs(getSpeed() / 16f), 1, 512);
     }
+
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public void tickAudio() {
         super.tickAudio();
 
-        if (getSpeed() == 0)
+        if (validSpeed())
             return;
-        if (tank.isEmpty())
-            return;
-        if(level.random.nextInt(3) != 1)
+        if(level.random.nextInt(5) != 1)
             return;
 
         float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, 1f);
@@ -203,13 +209,13 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
 
         SoundScapes.play(SoundScapes.AmbienceGroup.MILLING, worldPosition, pitch);
 
-        level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                SoundEvents.LAVA_EXTINGUISH, SoundSource.AMBIENT,0.5f, pitch, false);
     }
+
     public BlazeBurnerBlock.HeatLevel getHeat(){
         assert level != null;
         return BasinBlockEntity.getHeatLevelOf(level.getBlockState(getBlockPos().below()));
     }
+
     private void process() {
 
         if (!CompressingRecipe.match(this, recipe)) {
@@ -229,6 +235,10 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
             if(!spoutputIndex.contains(i))
                 spoutputIndex.add(i);
         }
+
+
+
+
         sendData();
         setChanged();
     }
@@ -237,16 +247,13 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
     public void write(CompoundTag compound, boolean clientPacket){
         super.write(compound, clientPacket);
         compound.put("OutputItems", output.serializeNBT());
-
         compound.putIntArray("Overflow",spoutputIndex);
 
         if (!clientPacket)
             return;
-
         compound.put("VisualizedItems", NBTHelper.writeCompoundList(visualizedOutputItems, ia -> ia.getValue()
                 .serializeNBT()));
         visualizedOutputItems.clear();
-
     }
 
     @Override
@@ -258,7 +265,6 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         int[] spoutput = compound.getIntArray("Overflow");
         spoutputIndex.clear();
         for(int index : spoutput) spoutputIndex.add(index);
-
 
         if (!clientPacket)
             return;

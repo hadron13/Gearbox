@@ -57,6 +57,8 @@
   "block.gearbox.kinetic_machine.tooltip": "KINETIC MACHINE",
   "block.gearbox.kinetic_machine.tooltip.summary": "It spins",
 
+  "item.gearbox.ultimate_mechanism": "Ultimate Mechanism",
+
   "gearbox.ponder.sapper.header": "Extracting fluids with a sapper",
   "gearbox.ponder.sapper.text_1": "Sappers are machines made to extract fluids from trees",
   "gearbox.ponder.sapper.text_2": "You can power them with cogs",

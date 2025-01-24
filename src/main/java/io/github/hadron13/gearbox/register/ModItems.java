@@ -6,7 +6,9 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import io.github.hadron13.gearbox.item.tau_cannon.TauCannonItem;
+import io.github.hadron13.gearbox.item.ultimate_mechanism.UltimateMechanismItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 
 public class ModItems {
     private static final CreateRegistrate REGISTRATE = Gearbox.registrate()
@@ -19,6 +21,12 @@ public class ModItems {
     public static final ItemEntry<TauCannonItem> TAU_CANNON =
             REGISTRATE.item("tau_cannon", TauCannonItem::new)
                     .model(AssetLookup.itemModelWithPartials())
+                    .register();
+
+    public static final ItemEntry<UltimateMechanismItem> ULTIMATE_MECHANISM =
+            REGISTRATE.item("ultimate_mechanism", UltimateMechanismItem::new)
+                    .model(AssetLookup.itemModelWithPartials())
+                    .properties((p)->p.rarity(Rarity.EPIC))
                     .register();
 
     private static ItemEntry<Item> ingredient(String name) {

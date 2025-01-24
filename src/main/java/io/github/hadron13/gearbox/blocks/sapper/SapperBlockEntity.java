@@ -104,7 +104,10 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
             case RETRACTED -> {
                 if (valid && speed > 0 && !isTankFull()) {
                     setSapperState(EXTENDING);
-                    sapTimer = 40*32;
+
+
+                    sapTimer = 200*32;
+
                 }
             }
             case EXTENDING -> {
@@ -114,7 +117,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
 
             }
             case EXTENDED -> {
-                sapTimer -= speed;
+                sapTimer -= (speed - (0.0019f * speed * speed));
                 if(!valid || isTankFull()){
                     setSapperState(RETRACTING);
                     break;
@@ -133,7 +136,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
                     if(outputFluid != null)
                         localTank.fill(outputFluid, EXECUTE);
 
-                    sapTimer = 40*32;
+                    sapTimer = 200*32;
                     sendData();
                 }
             }

@@ -2,20 +2,34 @@ package io.github.hadron13.gearbox.blocks.irradiator;
 
 import com.google.gson.JsonObject;
 import com.jozufozu.flywheel.util.Color;
+import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
+import com.simibubi.create.foundation.utility.Lang;
+import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyMechanizing;
+import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyTransmuting;
+import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
-public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implements LaserRecipe{
+
+public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implements LaserRecipe, IAssemblyRecipe {
     public Color requiredColor;
     public float requiredPower;
 
@@ -33,6 +47,8 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
             return false;
         if(Mth.abs(required.getBlue() - provided.getBlue()) > 5)
             return false;
+
+
         return true;
     }
 
@@ -95,5 +111,25 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
     @Override
     public float getPower() {
         return requiredPower;
+    }
+
+    @Override
+    public Component getDescriptionForAssembly() {
+        return Lang.translateDirect("recipe.assembly.mechanizing");
+    }
+
+    @Override
+    public void addRequiredMachines(Set<ItemLike> set) {
+        set.add(ModBlocks.IRRADIATOR.get());
+    }
+
+    @Override
+    public void addAssemblyIngredients(List<Ingredient> list) {
+
+    }
+
+    @Override
+    public Supplier<Supplier<SequencedAssemblySubCategory>> getJEISubCategory() {
+        return () -> AssemblyTransmuting::new;
     }
 }

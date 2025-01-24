@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.blocks.compressor;
 
+import com.jozufozu.flywheel.Flywheel;
 import com.jozufozu.flywheel.backend.Backend;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -44,15 +45,14 @@ public class CompressorRenderer extends KineticBlockEntityRenderer<CompressorBlo
                               int light, int overlay) {
 //
         BlockState blockState = be.getBlockState();
-        if (!(blockState.getBlock() instanceof CompressorBlock))
-            return;
 
 
         VertexConsumer solid = buffer.getBuffer(RenderType.solid());
-        SuperByteBuffer roll = CachedBufferer.partialFacing(ModPartialModels.COMPRESSOR_ROLL, blockState, blockState.getValue(HORIZONTAL_FACING));
-
-        roll.renderInto(ms, solid);
-
+        if(!Backend.canUseInstancing(be.getLevel()) ) {
+            SuperByteBuffer roll = CachedBufferer.partialFacing(ModPartialModels.COMPRESSOR_ROLL, blockState, blockState.getValue(HORIZONTAL_FACING));
+            standardKineticRotationTransform(roll, be, light);
+            roll.renderInto(ms, solid);
+        }
 
         Direction direction = blockState.getValue(HORIZONTAL_FACING);
 
