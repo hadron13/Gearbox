@@ -15,6 +15,7 @@ import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeRenderer;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorInstance;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
+import io.github.hadron13.gearbox.blocks.dipper.DipperBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerInstance;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerRenderer;
@@ -167,19 +168,25 @@ public class ModBlockEntities {
             //.instance(() -> ::new)
             .validBlocks(ModBlocks.PUMPJACK_ARM)
             .renderer(() -> PumpjackArmRenderer::new)
-            // TODO: renderer/instance
+            // TODO: instance
             .register();
     public static final BlockEntityEntry<PumpjackCrankBlockEntity> PUMPJACK_CRANK = Gearbox.registrate()
             .blockEntity("pumpjack_crank", PumpjackCrankBlockEntity::new)
             //.instance(() -> ::new)
             .validBlocks(ModBlocks.PUMPJACK_CRANK)
             .renderer(() -> PumpjackCrankRenderer::new)
-            // TODO: renderer/instance
+            // TODO: instance
             .register();
 
     public static final BlockEntityEntry<PumpjackWellBlockEntity> PUMPJACK_WELL = Gearbox.registrate()
             .blockEntity("pumpjack_well", PumpjackWellBlockEntity::new)
             .validBlocks(ModBlocks.PUMPJACK_WELL)
+            .register();
+
+    public static final BlockEntityEntry<DipperBlockEntity> DIPPER = Gearbox.registrate()
+            .blockEntity("dipper", DipperBlockEntity::new)
+            .validBlocks(ModBlocks.DIPPER)
+
             .register();
 
 

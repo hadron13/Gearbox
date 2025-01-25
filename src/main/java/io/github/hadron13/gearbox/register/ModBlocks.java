@@ -22,6 +22,7 @@ import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
+import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
@@ -250,9 +251,23 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
 
-    public static final BlockEntry<Block> PUMPJACK_WELL_PIPE = REGISTRATE.block("pumpjack_well_pipe.json", Block::new)
+//    public static final BlockEntry<Block> PUMPJACK_WELL_PIPE = REGISTRATE.block("pumpjack_well_pipe", Block::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .register();
+//            .blockstate()
+
+
+
+    public static final BlockEntry<DipperBlock> DIPPER = REGISTRATE.block("dipper", DipperBlock::new)
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
+            .properties(p -> p.color(MaterialColor.COLOR_GRAY).noOcclusion())
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .item(AssemblyOperatorBlockItem::new)
+            .transform(customItemModel())
             .register();
-//            .blockstate()
+
+
 }

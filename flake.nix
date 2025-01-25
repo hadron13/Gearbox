@@ -12,6 +12,7 @@
         libGL
         glfw
         openal
+        xorg.libX11
         stdenv.cc.cc.lib
       ];
   in {

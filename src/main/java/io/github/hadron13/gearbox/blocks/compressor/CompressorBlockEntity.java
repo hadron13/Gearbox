@@ -145,11 +145,11 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
 
             if (timer <= 0) {
                 if (level.isClientSide) {
-                    float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, 1f);
+                    float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .35f, .75f, 0.85f);
                     BlockPos pos = getBlockPos();
 
                     level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                            SoundEvents.LAVA_EXTINGUISH, SoundSource.AMBIENT,0.5f, pitch, false);
+                            AllSoundEvents.STEAM.getMainEvent(), SoundSource.AMBIENT,0.5f, pitch, false);
                     return;
                 }
 
@@ -204,7 +204,7 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
         if(level.random.nextInt(5) != 1)
             return;
 
-        float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, 1f);
+        float pitch = Mth.clamp((Math.abs(getSpeed()) / 256f) + .45f, .85f, .95f);
         BlockPos pos = getBlockPos();
 
         SoundScapes.play(SoundScapes.AmbienceGroup.MILLING, worldPosition, pitch);

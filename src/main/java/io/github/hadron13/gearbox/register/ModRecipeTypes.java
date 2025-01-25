@@ -12,6 +12,7 @@ import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
+import io.github.hadron13.gearbox.blocks.dipper.DippingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
@@ -56,7 +57,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     ELECTROLYZING(ElectrolyzingRecipe::new),
     CENTRIFUGING(CentrifugingRecipe::new),
     LASER_DRILLING(LaserDrillingRecipe::new),
-    PUMPJACK(PumpjackRecipe::new);
+    PUMPJACK(PumpjackRecipe::new),
+    DIPPING(DippingRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;

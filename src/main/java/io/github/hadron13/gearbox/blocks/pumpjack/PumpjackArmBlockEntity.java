@@ -1,5 +1,7 @@
 package io.github.hadron13.gearbox.blocks.pumpjack;
 
+import com.jozufozu.flywheel.util.AnimationTickHolder;
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import io.github.hadron13.gearbox.Gearbox;
@@ -7,6 +9,7 @@ import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -49,6 +52,10 @@ public class PumpjackArmBlockEntity extends SmartBlockEntity  {
 
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+    }
 
     @Override
     public void lazyTick() {
@@ -72,22 +79,34 @@ public class PumpjackArmBlockEntity extends SmartBlockEntity  {
 
         if(crank == null || well == null)
             return;
-        if(level.isClientSide) {
-            float ola = 1f;
-            return;
-        }
+
+
+
 
         if(Mth.abs(crank.getSpeed()) > 0f ){
             float crank_angle = Mth.abs(crank.angle);
             if(crank_angle > 100 && !pumped){
                 pumped = true;
+
+                if(level.isClientSide ){
+                    float pitch = Mth.clamp((Math.abs(crank.visualSpeed.getValue()) / 256f) , 0, 0.75f);
+                    BlockPos pos = getBlockPos();
+
+                    level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
+                            AllSoundEvents.TRAIN.getMainEvent(), SoundSource.AMBIENT,0.05f, pitch, false);
+                    return;
+                }
                 well.updateRecipe();
                 well.pump(10f);
             }else if(pumped && crank_angle < 100){
+
+
                 pumped = false;
+
             }
         }
     }
+
 
 
 }

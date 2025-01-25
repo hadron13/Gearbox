@@ -21,7 +21,8 @@ public class ModShapes {
         LASER_DRILL = shape(0, -16, 0, 16, 16, 16).forAxis(),
         PUMPJACK_CRANK = shape(2, 0, 2, 14, 16,14).forDirectional(NORTH),
         PUMPJACK_WELL = shape(2, 0, 0, 14, 16, 14).forDirectional(NORTH),
-        PUMPJACK_PIVOT = shape(1, 0, 1, 15, 14, 15).forDirectional(NORTH);
+        PUMPJACK_PIVOT = shape(1, 0, 1, 15, 14, 15).forDirectional(NORTH),
+        DIPPER = shape(0, -16, 0, 16, 16, 16).forDirectional(DOWN);
 
     private static ModShapes.Builder shape(VoxelShape shape) {
         return new ModShapes.Builder(shape);

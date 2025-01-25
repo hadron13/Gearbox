@@ -1,6 +1,5 @@
 {
   "itemGroup.gearbox:main": "Gearbox",
-
   "block.gearbox.kiln": "Forno cinético",
   "block.gearbox.sapper": "Extrator",
   "block.gearbox.compressor": "Compressor",
@@ -17,11 +16,9 @@
   "block.gearbox.pumpjack_well": "Poço de petróleo",
   "block.gearbox.pumpjack_arm": "Braço de bombeamento",
   "block.gearbox.pumpjack_crank": "Virabrequim de bombeamento",
-
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
   "item.gearbox.tau_cannon": "Arma de Gauss",
-
   "create.recipe.pyroprocessing": "Queima",
   "create.recipe.sapping": "Extração",
   "create.recipe.compressing": "Compressão",
@@ -31,40 +28,34 @@
   "create.recipe.electrolyzing": "Eletrólise",
   "create.recipe.centrifuging": "Centrifugação",
   "create.recipe.pumpjack": "Bombeamento",
-
   "create.recipe.assembly.mechanizing": "Mecanize",
   "create.recipe.compressing.campfire_heat": "Morno",
-
   "create.hint.sapper.full.title": "Tanque Cheio",
   "create.hint.sapper.full": "",
   "create.hint.compressor.reverse.title": "Sentido Da Rotação",
   "create.hint.compressor.reverse": "Parece que este compressor está girando no _sentido errado_",
-
   "create.gui.spectrometer.title": "Espectrometria",
   "create.gui.spectrometer.power": "Potência do laser",
   "create.gui.spectrometer.nolaser": "Sem laser",
   "create.gui.spectrometer.red": "Vermelho",
   "create.gui.spectrometer.green": "Verde",
   "create.gui.spectrometer.blue": "Azul",
-
+  "create.gui.laserdrill.minimum_power": "This machine requires 20 laser power",
   "block.gearbox.mirror.tooltip": "ESPELHO",
   "block.gearbox.mirror.tooltip.summary": "Reflete lasers",
   "block.gearbox.spectrometer.tooltip": "ESPECTROMETRO",
   "block.gearbox.spectrometer.tooltip.summary": "Mede a _potência_ e _cor_ do laser passando",
   "item.gearbox.tau_cannon.tooltip": "ARMA DE GAUSS",
   "item.gearbox.tau_cannon.tooltip.summary": "Consome _Barras de geld_ para atirar rajadas de partículas tau",
-
   "block.gearbox.kinetic_machine.tooltip": "KINETIC MACHINE",
   "block.gearbox.kinetic_machine.tooltip.summary": "It spins",
-
+  "item.gearbox.ultimate_mechanism": "Mecanismo Terminal",
   "gearbox.ponder.sapper.header": "Extraindo flúidos com um extrator",
   "gearbox.ponder.sapper.text_1": "Extratores são máquinas feitas para extrair flúidos de árvores",
   "gearbox.ponder.sapper.text_2": "Você pode energizar eles com engrenagens",
   "gearbox.ponder.sapper.text_3": "E depois puxar o flúido extraído por trás",
-
   "gearbox.jei.red": "Red",
   "gearbox.jei.green": "Green",
-
   "death.attack.gearbox.laserdeath": "%1$s esqueceu o protetor solar",
   "death.attack.gearbox.laserdeath.player": "%1$s foi iluminado por %2$s"
 }
