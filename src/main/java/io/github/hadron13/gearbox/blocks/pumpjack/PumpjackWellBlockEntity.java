@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.item.TooltipHelper;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
+import io.github.hadron13.gearbox.register.ModFluids;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,6 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.List;
@@ -89,7 +91,18 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
 
     }
 
+    @Override
+    public void lazyTick() {
+        super.lazyTick();
+        if(isVirtual()){
+            tank.allowInsertion();
+            tank.getPrimaryHandler().fill(new FluidStack(ModFluids.PETROLEUM.get(), 2000), EXECUTE);
+        }
+    }
+
     public void pump(float speed){
+
+
         if(currentRecipe == null)
             return;
         if(isTankFull())
@@ -106,6 +119,9 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         tank.forbidInsertion();
         timer = 10f;
     }
+
+
+
     public boolean isTankFull(){
         return tank.getPrimaryHandler().getFluidAmount() == 2000;
     }

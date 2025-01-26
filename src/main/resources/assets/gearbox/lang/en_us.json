@@ -64,6 +64,16 @@
   "gearbox.ponder.sapper.text_2": "You can power them with cogs",
   "gearbox.ponder.sapper.text_3": "And then pull the output fluids from the back",
 
+  "gearbox.ponder.pumpjack.header": "Extracting fluids with a pumpjack",
+  "gearbox.ponder.pumpjack.text_1": "The pumpjack is a multi-block resource extractor",
+  "gearbox.ponder.pumpjack.text_2": "It consists of 3 blocks",
+  "gearbox.ponder.pumpjack.text_3": "Arm",
+  "gearbox.ponder.pumpjack.text_4": "Crank",
+  "gearbox.ponder.pumpjack.text_5": "Well",
+  "gearbox.ponder.pumpjack.text_6": "The well needs to be connected to bedrock through pipes",
+  "gearbox.ponder.pumpjack.text_7": "And the crank be connected to a shaft to power the machine",
+  "gearbox.ponder.pumpjack.text_8": "The results can then be extracted from the well with a pipe",
+
   "gearbox.jei.red": "Red",
   "gearbox.jei.green": "Green",
 
