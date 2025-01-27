@@ -16,6 +16,7 @@
   "block.gearbox.pumpjack_well": "Poço de petróleo",
   "block.gearbox.pumpjack_arm": "Braço de bombeamento",
   "block.gearbox.pumpjack_crank": "Manivela de bombeamento",
+  "block.gearbox.laser_drill": "Broca a laser",
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
   "item.gearbox.tau_cannon": "Arma de Gauss",
@@ -28,6 +29,7 @@
   "create.recipe.electrolyzing": "Eletrólise",
   "create.recipe.centrifuging": "Centrifugação",
   "create.recipe.pumpjack": "Bombeamento",
+  "create.recipe.laser_drilling": "Perfuração a laser",
   "create.recipe.assembly.mechanizing": "Mecanize",
   "create.recipe.compressing.campfire_heat": "Morno",
   "create.hint.sapper.full.title": "Tanque Cheio",
@@ -65,8 +67,8 @@
   "gearbox.ponder.pumpjack.text_6": "O poço precisa estar conectado à bedrock por canos",
   "gearbox.ponder.pumpjack.text_7": "e a manivela conectada a um eixo para ligar a máquina",
   "gearbox.ponder.pumpjack.text_8": "Os resultados podem ser extraidos do poço com um cano",
-  "gearbox.jei.red": "Red",
-  "gearbox.jei.green": "Green",
+  "gearbox.jei.red": "Vermelho",
+  "gearbox.jei.green": "Verde",
   "death.attack.gearbox.laserdeath": "%1$s esqueceu o protetor solar",
   "death.attack.gearbox.laserdeath.player": "%1$s foi iluminado por %2$s"
 }

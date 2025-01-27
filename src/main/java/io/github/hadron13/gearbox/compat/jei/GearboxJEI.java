@@ -12,6 +12,7 @@ import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
+import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import io.github.hadron13.gearbox.compat.jei.category.*;
@@ -139,6 +140,14 @@ public class GearboxJEI implements IModPlugin {
                 .itemIcon(ModBlocks.PUMPJACK_WELL.get())
                 .emptyBackground(177, 65)
                 .build("pumpjack", PumpjackCategory::new);
+
+        CreateRecipeCategory<?>
+                laser_drilling = builder(LaserDrillingRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.LASER_DRILLING)
+                .catalyst(ModBlocks.LASER_DRILL::get)
+                .itemIcon(ModBlocks.LASER_DRILL.get())
+                .emptyBackground(177, 75)
+                .build("laser_drilling", LaserDrillingCategory::new);
 
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {

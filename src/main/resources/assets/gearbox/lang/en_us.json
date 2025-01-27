@@ -32,6 +32,7 @@
   "create.recipe.electrolyzing": "Electrolyzing",
   "create.recipe.centrifuging": "Centrifuging",
   "create.recipe.pumpjack": "Pumping",
+  "create.recipe.laser_drilling": "Laser Drilling",
 
   "create.recipe.assembly.mechanizing": "Mechanize",
   "create.recipe.compressing.campfire_heat": "Warm",
