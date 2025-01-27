@@ -1,9 +1,7 @@
 {
   "type": "gearbox:pumpjack",
   "biome": "minecraft:desert",
-  "ingredients": [
-
-  ],
+  "ingredients": [],
   "results": [
     {
       "fluid": "minecraft:lava",

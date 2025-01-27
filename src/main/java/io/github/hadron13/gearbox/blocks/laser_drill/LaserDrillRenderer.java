@@ -8,6 +8,7 @@ import com.mojang.math.Matrix4f;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
+import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
@@ -17,9 +18,15 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public class LaserDrillRenderer extends SafeBlockEntityRenderer<LaserDrillBlockEntity> {
 
+
+    @Override
+    public boolean shouldRender(LaserDrillBlockEntity pBlockEntity, Vec3 pCameraPos) {
+        return true;
+    }
 
     public LaserDrillRenderer(BlockEntityRendererProvider.Context context) {
 
@@ -49,7 +56,7 @@ public class LaserDrillRenderer extends SafeBlockEntityRenderer<LaserDrillBlockE
         SuperByteBuffer thick_beam = CachedBufferer.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
         thick_beam
                 .translate(0.5f - thickness/2.0f, 1.0, 0.5f - thickness/2.0f)
-                .scale(thickness, -200.0f, thickness)
+                .scale(thickness, -be.laserLength, thickness)
                 .rotateCentered(Direction.UP, angle * Mth.DEG_TO_RAD)
                 .color(be.mixedColor.getRGB())
                 .renderInto(ms, vb);

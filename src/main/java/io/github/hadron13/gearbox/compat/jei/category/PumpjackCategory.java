@@ -47,7 +47,6 @@ public class PumpjackCategory extends CreateRecipeCategory<PumpjackRecipe>{
 
         Font font = Minecraft.getInstance().font;
         int width = font.width(biome_name);
-//        font.draw(matrixStack, biome_name, xcenter - width/2, ycenter-20, 0);
         font.drawShadow(matrixStack, biome_name, xcenter - width/2, ycenter-20, 0xFFFFFF);
 
         AllGuiTextures.JEI_ARROW.render(matrixStack, xcenter-15, ycenter+10);
