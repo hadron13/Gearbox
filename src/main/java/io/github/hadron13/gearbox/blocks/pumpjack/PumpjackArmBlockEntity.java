@@ -97,7 +97,7 @@ public class PumpjackArmBlockEntity extends SmartBlockEntity  {
                     return;
                 }
                 well.updateRecipe();
-                well.pump(10f);
+                well.pump();
             }else if(pumped && crank_angle < 100){
 
 

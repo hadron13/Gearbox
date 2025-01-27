@@ -16,9 +16,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.Tags;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +37,9 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
     public boolean colorChanged = false;
     public Color mixedColor = Color.BLACK;
     public float totalPower = 0f;
-    public Block blockUnder;
 
+    public int breakTimer = 0;
+    public boolean bedrockContact = false;
 
     LerpedFloat visualSpeed = LerpedFloat.linear();
     float angle;
@@ -50,14 +53,57 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
         powers = new HashMap<>();
         colors = new HashMap<>();
         timeouts = new HashMap<>();
+        setLazyTickRate(20);
     }
 
     @Override
     public void lazyTick(){
-        blockUnder = level.getBlockState(getBlockPos().below(2)).getBlock();
+
+        if(level.isClientSide)
+            return;
+        if(bedrockContact){
+            BlockPos pos = getBlockPos();
+            int y = pos.getY();
+
+            for(int i = 0; i < y; i++){
+                BlockState block = level.getBlockState(pos.below(i));
+                if(block.isAir() ||  block.getFluidState().isEmpty())
+                    continue;
+                if(block.is(Tags.Blocks.GLASS) || block.is(Tags.Blocks.GLASS_PANES))
+                    continue;
+                if(block.is(Blocks.BEDROCK))
+                    return;
+                bedrockContact = false;
+            }
+        }
     }
     @Override
     public void tick(){
+
+        if(level.isClientSide)
+            return;
+
+        if(!bedrockContact){
+            BlockPos pos = getBlockPos();
+            int y = pos.getY();
+
+            for(int i = 0; i < y; i++){
+                BlockState block = level.getBlockState(pos.below(i));
+                if(block.isAir() ||  block.getFluidState().isEmpty())
+                    continue;
+                if(block.is(Tags.Blocks.GLASS) || block.is(Tags.Blocks.GLASS_PANES))
+                    continue;
+                if(block.is(Blocks.BEDROCK))
+                    return;
+                bedrockContact = false;
+            }
+        }
+
+
+
+
+
+
         timeouts.forEach((dir, timer) -> {
             if(timer != 0)
                 timeouts.replace(dir, --timer);
@@ -85,6 +131,7 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 
     }
+
     public void updateColors(){
         totalPower = 0f;
         for(float power : powers.values())

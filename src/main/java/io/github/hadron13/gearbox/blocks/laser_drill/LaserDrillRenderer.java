@@ -48,8 +48,8 @@ public class LaserDrillRenderer extends SafeBlockEntityRenderer<LaserDrillBlockE
         float thickness = 1.0f;
         SuperByteBuffer thick_beam = CachedBufferer.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
         thick_beam
-                .translate(0.5f - thickness/2.0f, -1.0, 0.5f - thickness/2.0f)
-                .scale(thickness, 1.0f, thickness)
+                .translate(0.5f - thickness/2.0f, 1.0, 0.5f - thickness/2.0f)
+                .scale(thickness, -200.0f, thickness)
                 .rotateCentered(Direction.UP, angle * Mth.DEG_TO_RAD)
                 .color(be.mixedColor.getRGB())
                 .renderInto(ms, vb);

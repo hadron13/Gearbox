@@ -61,24 +61,41 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
 
         beams.put(face, beam);
     }
+
     @Nullable
     public LaserBeam getLaser(Direction face){
         return beams.get(face);
     }
+
     public void enableLaser(Direction face){
         LaserBeam beam = getLaser(face);
         if(beam != null)beam.enabled = true;
     }
+
     public void disableLaser(Direction face){
         LaserBeam beam = getLaser(face);
         if(beam != null)beam.enabled = false;
     }
+
+    public void setPower(Direction face, float power){
+        LaserBeam beam = getLaser(face);
+        if(beam != null)beam.power = power;
+    }
+
+    public void setColor(Direction face, Color color){
+        LaserBeam beam = getLaser(face);
+        if(beam != null)beam.color = color;
+
+    }
+
     public List<Entity> getAllCaughtEntities(){
         List<Entity> allCaughtEntities = new ArrayList<>();
         for(LaserBeam beam : beams.values())
             allCaughtEntities.addAll(beam.caughtEntities);
         return allCaughtEntities;
     }
+
+
 
     /**
      * for redirecting lasers at sub-tick speeds, made for ILaserReceiver blocks
@@ -118,6 +135,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
                 updateCaughtEntities(beam);
         }
     }
+
     public void destroy() {
         for(LaserBeam beam: beams.values()) {
             if (beam.targetReceiver != null) {

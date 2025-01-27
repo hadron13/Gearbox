@@ -7,18 +7,23 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.utility.Lang;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.register.ModFluids;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -30,10 +35,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlock.HORIZONTAL_FACING;
+import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
@@ -41,7 +48,11 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
     public SmartFluidTankBehaviour tank;
     public AABB renderBoundingBox;
     public PumpjackRecipe currentRecipe;
-    public float timer;
+
+
+    public static ArrayList<BlockPos> loadedWells = new ArrayList<>();
+
+    public float efficiency = 1f;
 
     @Override
     @OnlyIn(Dist.CLIENT)
@@ -57,10 +68,33 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
     }
 
     @Override
+    public void setLevel(Level pLevel) {
+        if(!hasLevel() && !pLevel.isClientSide){
+            loadedWells.add(getBlockPos());
+        }
+        super.setLevel(pLevel);
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        if(!level.isClientSide)
+            loadedWells.remove(getBlockPos());
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+        super.onChunkUnloaded();
+        if(!level.isClientSide)
+            loadedWells.remove(getBlockPos());
+    }
+
+    @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         tank = SmartFluidTankBehaviour.single(this, 2000);
         tank.forbidInsertion();
         behaviours.add(tank);
+
     }
 
 
@@ -70,8 +104,21 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
             if(match.isEmpty())
                 return;
             currentRecipe = match.get();
-            timer = 10f;
         }
+    }
+
+    public void updateEfficiency(){
+        BlockPos pos = getBlockPos();
+        efficiency = 1f;
+        for(BlockPos other : loadedWells){
+            if(pos.equals(other))
+                continue;
+
+            if(pos.closerThan(other.atY(pos.getY()), 8)){
+                efficiency *= 0.75f;
+            }
+        }
+        sendData();
     }
     public boolean validPiping(){
         if(level == null)
@@ -100,24 +147,23 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     }
 
-    public void pump(float speed){
-
-
+    public void pump(){
         if(currentRecipe == null)
-            return;
-        if(isTankFull())
             return;
         if(!validPiping())
             return;
 
-        timer -= speed;
+        updateEfficiency();
 
-        if(timer > 0)
+        if(isTankFull())
             return;
+
+        FluidStack result = currentRecipe.getFluidResult().copy();
+        result.setAmount((int) ((float)result.getAmount() * efficiency));
         tank.allowInsertion();
-        tank.getPrimaryHandler().fill(currentRecipe.getFluidResult(), EXECUTE);
+        tank.getPrimaryHandler().fill(result, EXECUTE);
         tank.forbidInsertion();
-        timer = 10f;
+
     }
 
 
@@ -137,10 +183,29 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        if(efficiency < 1f){
+            int percentage = (int)(efficiency * 100f);
+
+            Lang.translate("gui.pumpjack_well.efficiency")
+                    .add(Lang.text(" " + percentage + "%"))
+                    .forGoggles(tooltip);
+            Lang.translate("gui.pumpjack_well.other_wells")
+                    .style(ChatFormatting.GRAY)
+                    .forGoggles(tooltip);
+        }
+
         return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
     }
 
+    @Override
+    protected void write(CompoundTag tag, boolean clientPacket) {
+        super.write(tag, clientPacket);
+        tag.putFloat("efficiency", efficiency);
+    }
 
-
-
+    @Override
+    protected void read(CompoundTag tag, boolean clientPacket) {
+        super.read(tag, clientPacket);
+        efficiency = tag.getFloat("efficiency");
+    }
 }

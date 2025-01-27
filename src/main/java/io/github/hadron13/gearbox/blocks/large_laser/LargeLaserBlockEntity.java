@@ -133,19 +133,15 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
         lazyEnergy.invalidate();
     }
 
-    @Override
-    public void lazyTick(){
-        super.lazyTick();
+    public void updatePower(){
+
         if(level == null || level.isClientSide)
             return;
         if(!isFront())
             return;
-
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
         beam.power = 20f;
         Direction back = getFacing().getOpposite();
-
-//        BlockState backBlock = level.getBlockState(getBlockPos().relative(back));
         for(int offset = 0; offset <= 200; offset++){
             BlockState backBlock = level.getBlockState(getBlockPos().relative(back, offset + 1));
 
@@ -163,6 +159,12 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
                 break;
             }
         }
+    }
+
+    @Override
+    public void lazyTick(){
+        super.lazyTick();
+        updatePower();
         sendData();
 
     }
@@ -189,6 +191,8 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
         }else if (redstoneSignal == 5){
             beam.color.setValue(0x00FF00);
         }
+        updatePower();
+
         sendData();
     }
     @Override

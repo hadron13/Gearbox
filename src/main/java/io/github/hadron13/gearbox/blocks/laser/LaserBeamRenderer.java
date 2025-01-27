@@ -62,6 +62,7 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
         if(beamBehavior == null)
             return;
         for(LaserBeamBehavior.LaserBeam beam : beamBehavior.beams.values()) {
+
             if(!beam.enabled) {
                 continue;
             }
@@ -69,10 +70,11 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
             float scale = beam.length;
 
             if(scale == 0)
-                return;
+                continue;
 
             float thickness =  Mth.clamp( (float)Math.sqrt((beam.power+20f)/20f), 1f, 3f ) * (1.4f/16f);
 
+            ms.pushPose();
             TransformStack
                     .cast(ms)
                     .translate(0.5f - thickness/2, 0.5f - thickness/2, 0.5f - thickness/2)
@@ -87,7 +89,7 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
             beam.color.setAlpha(0.8f);
 
             renderBeam(ms.last().pose(), vbTranslucent, scale, thickness, beam.color.getRGB());
-
+            ms.popPose();
         }
     }
 

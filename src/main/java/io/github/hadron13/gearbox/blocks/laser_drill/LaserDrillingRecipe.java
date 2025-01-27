@@ -20,21 +20,17 @@ public class LaserDrillingRecipe extends ProcessingRecipe<RecipeWrapper> impleme
 
     public LaserDrillingRecipe( ProcessingRecipeBuilder.ProcessingRecipeParams params) {
         super(ModRecipeTypes.LASER_DRILLING, params);
-        Item block = this.getIngredients().get(0).getItems()[0].getItem();
 
-        if(!(block instanceof BlockItem)){
-            Gearbox.LOGGER.warn("recipe contains non-block items");
-        }
     }
 
     @Override
     protected int getMaxInputCount() {
-        return 1;
+        return 0;
     }
 
     @Override
     protected int getMaxOutputCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -54,13 +50,7 @@ public class LaserDrillingRecipe extends ProcessingRecipe<RecipeWrapper> impleme
 
     public static boolean match(LaserDrillBlockEntity entity, LaserDrillingRecipe recipe){
 
-        Item input = recipe.getIngredients().get(0).getItems()[0].getItem();
-        if(input instanceof BlockItem block){
 
-            if(entity.blockUnder != block.getBlock())
-                return false;
-
-        }
 
         return false;
     }

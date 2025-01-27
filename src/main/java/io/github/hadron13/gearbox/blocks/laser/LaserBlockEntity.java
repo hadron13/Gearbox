@@ -34,6 +34,7 @@ public class LaserBlockEntity extends SmartBlockEntity {
     boolean noEnergyMode = true;
     public int redstoneSignal = 0;
     boolean firstTick = true;
+
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         energyStorage = new InternalEnergyStorage(100, 10, 10);
@@ -53,6 +54,7 @@ public class LaserBlockEntity extends SmartBlockEntity {
         }
         return renderBoundingBox;
     }
+
 
 
     @Override

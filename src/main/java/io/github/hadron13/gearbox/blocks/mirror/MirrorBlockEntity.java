@@ -36,6 +36,7 @@ public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceive
     public MirrorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
+
     public void wrenched(BlockState newState){
         Direction newLeft = newState.getValue(HORIZONTAL_FACING);
         Direction newRight = newLeft.getCounterClockWise();
@@ -93,12 +94,16 @@ public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceive
             timeoutLeft--;
         }else{
             beamBehavior.disableLaser(getRight());
+            beamBehavior.setPower(getRight(), 0);
+            beamBehavior.propagate(getRight(), 50);
             sendData();
         }
         if(timeoutRight != 0){
             timeoutRight--;
         }else {
             beamBehavior.disableLaser(getLeft());
+            beamBehavior.setPower(getLeft(), 0);
+            beamBehavior.propagate(getLeft(), 50);
             sendData();
         }
 
@@ -125,18 +130,18 @@ public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceive
         if(beam == null)
             return false;
         if(face == getLeft()) {
-            timeoutLeft = 2;
+            timeoutLeft = 1;
         }
         else if(face == getRight()) {
-            timeoutRight = 2;
+            timeoutRight = 1;
         }
 
-        if(Mth.equal(beam.power, power)|| beam.color != color) {
-            beam.enabled = power > 0;
-            beam.power = power;
-            beam.color = color;
-            beamBehavior.propagate(getMirroredFace(face), 50);
-        }
+        //if(Mth.equal(beam.power, power) || beam.color.getRGB() != color.getRGB()) {
+        beam.enabled = power > 0;
+        beam.power = power;
+        beam.color = color;
+        beamBehavior.propagate(getMirroredFace(face), 50);
+        //}
         return true;
     }
 
