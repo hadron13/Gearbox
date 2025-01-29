@@ -11,11 +11,15 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
+import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.sound.SoundScapes;
 import com.simibubi.create.foundation.sound.SoundScapes.AmbienceGroup;
+import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -248,6 +252,23 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
             return super.extractItem(slot, amount, simulate);
         }
 
+    }
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+
+        for (int i = 0; i < outputInv.getSlots(); i++) {
+            ItemStack stackInSlot = outputInv.getStackInSlot(i);
+            if (stackInSlot.isEmpty())
+                continue;
+            Lang.text("")
+                    .add(Components.translatable(stackInSlot.getDescriptionId())
+                            .withStyle(ChatFormatting.GRAY))
+                    .add(Lang.text(" x" + stackInSlot.getCount())
+                            .style(ChatFormatting.GREEN))
+                    .forGoggles(tooltip, 1);
+        }
+
+        return true;
     }
 
 }

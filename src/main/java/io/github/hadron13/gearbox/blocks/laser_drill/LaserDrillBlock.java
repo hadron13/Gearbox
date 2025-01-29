@@ -6,6 +6,7 @@ import io.github.hadron13.gearbox.register.ModShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -34,8 +35,12 @@ public class LaserDrillBlock extends Block implements IBE<LaserDrillBlockEntity>
         super(pProperties);
     }
 
-
     @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        IBE.onRemove(pState, pLevel, pPos, pNewState);
+    }
+
+        @Override
     public Class<LaserDrillBlockEntity> getBlockEntityClass() {
         return LaserDrillBlockEntity.class;
     }

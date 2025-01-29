@@ -235,10 +235,6 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
             if(!spoutputIndex.contains(i))
                 spoutputIndex.add(i);
         }
-
-
-
-
         sendData();
         setChanged();
     }

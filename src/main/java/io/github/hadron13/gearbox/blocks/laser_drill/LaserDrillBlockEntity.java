@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
@@ -90,13 +91,19 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
         output = new SmartInventory(3, this)
                 .forbidInsertion()
                 .withMaxStackSize(64);
-        
+
 
         capability = LazyOptional.of(() -> new InvWrapper(output));
     }
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {}
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        ItemHelper.dropContents(level, worldPosition, output);
+    }
 
     public boolean drill(boolean test){
         BlockPos pos = getBlockPos();

@@ -20,5 +20,8 @@ public class ModPonderIndex {
         HELPER.forComponents(ModBlocks.SAPPER).addStoryBoard("sapper", ModPonderScenes::sapper);
         HELPER.forComponents(ModBlocks.LASER).addStoryBoard("laser", ModPonderScenes::laser);
         HELPER.forComponents(ModBlocks.PUMPJACK_ARM, ModBlocks.PUMPJACK_CRANK, ModBlocks.PUMPJACK_WELL).addStoryBoard("pumpjack", ModPonderScenes::pumpjack);
+        HELPER.forComponents(ModBlocks.KILN).addStoryBoard("kiln", ModPonderScenes::kiln);
+
+
     }
 }
