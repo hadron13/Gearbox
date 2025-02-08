@@ -8,16 +8,26 @@ import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 public class DippingRecipe extends BasinRecipe  {
 
     int dips;
-    FluidStack atmosphere;
     Item []layers = new Item[16];
 
     public DippingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
         super(ModRecipeTypes.DIPPING, params);
+    }
+
+    public static boolean match(DipperBlockEntity dipper, DippingRecipe recipe){
+
+        ItemStack input_item = recipe.getIngredients().get(0).getItems()[0];
+        FluidStack atmosphere = recipe.getFluidResults().get(0);
+        FluidStack dipped_fluid = recipe.getFluidResults().get(0);
+
+
+        return false;
     }
 
 
