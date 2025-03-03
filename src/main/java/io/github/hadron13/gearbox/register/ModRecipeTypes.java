@@ -14,7 +14,6 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.dipper.DippingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
-import io.github.hadron13.gearbox.blocks.exchanger.ExchangingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
@@ -47,7 +46,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public enum ModRecipeTypes implements IRecipeTypeInfo {
-    EXCHANGING(ExchangingRecipe::new),
     PYROPROCESSING(PyroprocessingRecipe::new),
     SAPPING(SappingRecipe::new),
     COMPRESSING(CompressingRecipe::new),
@@ -131,13 +129,6 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
                 .getRecipeFor(getType(), inv, world);
     }
 
-    public Optional<ExchangingRecipe> find(Container inv, Level world,boolean waterlogged, float speed) {
-        if(world.isClientSide())
-            return Optional.empty();
-        List<ExchangingRecipe> exchangingRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.EXCHANGING.getType());
-        Stream<ExchangingRecipe> exchangingRecipesFiltered = exchangingRecipes.stream().filter(exchangingRecipe -> exchangingRecipe.matches((RecipeWrapper) inv,world));
-        return exchangingRecipesFiltered.findAny();
-    }
 
     public Optional<CompressingRecipe> find(CompressorBlockEntity blockEntity, Level world) {
 

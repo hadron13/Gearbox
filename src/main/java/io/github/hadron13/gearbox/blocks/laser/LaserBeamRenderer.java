@@ -10,25 +10,15 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlockEntity;
-import io.github.hadron13.gearbox.register.ModPartialModels;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
-import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACING;
-import static net.minecraft.core.Direction.Axis.X;
-import static net.minecraft.core.Direction.Axis.Z;
 import static net.minecraft.core.Direction.NORTH;
 
 public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEntityRenderer<T> {

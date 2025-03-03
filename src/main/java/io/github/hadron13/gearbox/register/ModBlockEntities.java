@@ -3,8 +3,6 @@ package io.github.hadron13.gearbox.register;
 
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlockEntity;
-import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleRenderer;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressInstance;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressRenderer;
