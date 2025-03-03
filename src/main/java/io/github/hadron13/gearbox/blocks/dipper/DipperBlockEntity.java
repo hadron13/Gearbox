@@ -1,16 +1,11 @@
 package io.github.hadron13.gearbox.blocks.dipper;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
-import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.utility.Couple;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -23,7 +18,6 @@ import java.util.List;
 
 public class DipperBlockEntity extends KineticBlockEntity {
 
-
     public LazyOptional<IFluidHandler> fluidCapability;
     public SmartFluidTankBehaviour atmosphere;
 
@@ -32,7 +26,6 @@ public class DipperBlockEntity extends KineticBlockEntity {
 
     public boolean running = false;
     public int remainingDips = 0;
-
 
     public DipperBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
