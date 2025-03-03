@@ -31,7 +31,7 @@ public class LaserBlockEntity extends SmartBlockEntity {
     public AABB renderBoundingBox;
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
-    boolean noEnergyMode = true;
+    boolean noEnergyMode = false;
     public int redstoneSignal = 0;
     boolean firstTick = true;
 

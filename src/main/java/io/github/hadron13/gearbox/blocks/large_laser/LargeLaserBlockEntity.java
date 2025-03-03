@@ -114,18 +114,18 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
 
             //uncomment on release!!
 
-//            if(beam.enabled) {
-//                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 20f));
-//                if (ext < 400) {
-//                    beam.enabled = false;
-//                    sendData();
-//                }
-//            }else{
-//                if(backEnergy.getEnergyStored() > 400){
-//                    beam.enabled = true;
-//                    sendData();
-//                }
-//            }
+            if(beam.enabled) {
+                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 20f));
+                if (ext < 400) {
+                    beam.enabled = false;
+                    sendData();
+                }
+            }else{
+                if(backEnergy.getEnergyStored() > 400){
+                    beam.enabled = true;
+                    sendData();
+                }
+            }
         }
     }
 
