@@ -1,11 +1,7 @@
 package io.github.hadron13.gearbox.register;
 
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.gauge.GaugeGenerator;
-import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
-import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
-import com.simibubi.create.content.kinetics.simpleRelays.CogwheelBlockItem;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -15,16 +11,13 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
-import com.simibubi.create.infrastructure.ponder.scenes.fluid.PumpScenes;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.blocks.black_hole.BlackHoleBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
-import io.github.hadron13.gearbox.blocks.exchanger.ExchangerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock;
@@ -32,19 +25,16 @@ import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillItem;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
-//import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetBlock;
 import io.github.hadron13.gearbox.blocks.pumpjack.*;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
 
-import static com.simibubi.create.Create.REGISTRATE;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -63,15 +53,15 @@ public class ModBlocks {
     }
 
     public static void register() {}
-    public static final BlockEntry<ExchangerBlock> EXCHANGER = REGISTRATE.block("exchanger", ExchangerBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .properties(p -> p.color(MaterialColor.METAL))
-            .transform(pickaxeOnly())
-            .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
-            .transform(BlockStressDefaults.setImpact(2.0))
-            .item()
-            .transform(customItemModel())
-            .register();
+//    public static final BlockEntry<ExchangerBlock> EXCHANGER = REGISTRATE.block("exchanger", ExchangerBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .properties(p -> p.color(MaterialColor.METAL))
+//            .transform(pickaxeOnly())
+//            .blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
+//            .transform(BlockStressDefaults.setImpact(2.0))
+//            .item()
+//            .transform(customItemModel())
+//            .register();
 
     public static final BlockEntry<KilnBlock> KILN = REGISTRATE.block("kiln", KilnBlock::new)
             .initialProperties(SharedProperties::stone)
@@ -160,14 +150,14 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
 
-    public static final BlockEntry<BlackHoleBlock> BLACK_HOLE  = REGISTRATE.block("black_hole", BlackHoleBlock::new)
-            .initialProperties(SharedProperties::netheriteMetal)
-            .transform(pickaxeOnly())
-            .properties(p -> p.color(MaterialColor.COLOR_BLACK).noCollission())
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
-            .item()
-            .transform(customItemModel())
-            .register();
+//    public static final BlockEntry<BlackHoleBlock> BLACK_HOLE  = REGISTRATE.block("black_hole", BlackHoleBlock::new)
+//            .initialProperties(SharedProperties::netheriteMetal)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.color(MaterialColor.COLOR_BLACK).noCollission())
+//            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+//            .item()
+//            .transform(customItemModel())
+//            .register();
 
     public static final BlockEntry<ElectrolyzerBlock> ELECTROLYZER = REGISTRATE.block("electrolyzer", ElectrolyzerBlock::new)
             .initialProperties(SharedProperties::stone)
@@ -250,13 +240,6 @@ public class ModBlocks {
             .item()
             .transform(customItemModel())
             .register();
-
-//    public static final BlockEntry<Block> PUMPJACK_WELL_PIPE = REGISTRATE.block("pumpjack_well_pipe", Block::new)
-//            .initialProperties(SharedProperties::stone)
-//            .transform(pickaxeOnly())
-//            .register();
-//            .blockstate()
-
 
 
     public static final BlockEntry<DipperBlock> DIPPER = REGISTRATE.block("dipper", DipperBlock::new)
