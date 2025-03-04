@@ -46,7 +46,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     public LargeLaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         setLazyTickRate(5);
-        energyStorage = new InternalEnergyStorage(32768, 4096, 4096);
+        energyStorage = new InternalEnergyStorage(65536, 4096, 4096);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
@@ -75,7 +75,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
         behaviours.add(beamBehavior);
         beamBehavior.addLaser(getFacing(), getBlockPos(), Color.RED, 20.0f);
         renderBoundingBox = new AABB(worldPosition, worldPosition.relative(getFacing(), LaserBeamBehavior.MAX_LENGTH).offset(1, 1, 1));
-//        beamBehavior.getLaser(getFacing()).enabled = false;
+        beamBehavior.getLaser(getFacing()).enabled = false;
     }
     @Override
     public void tick(){
@@ -115,7 +115,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             //uncomment on release!!
 
             if(beam.enabled) {
-                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 20f));
+                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 10f));
                 if (ext < 400) {
                     beam.enabled = false;
                     sendData();

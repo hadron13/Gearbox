@@ -37,7 +37,7 @@ public class LaserBlockEntity extends SmartBlockEntity {
 
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        energyStorage = new InternalEnergyStorage(100, 10, 10);
+        energyStorage = new InternalEnergyStorage(1000, 50, 50);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
@@ -62,8 +62,8 @@ public class LaserBlockEntity extends SmartBlockEntity {
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
         beamBehavior.addLaser(getFacing(), getBlockPos(), Color.RED, 2.0f);
-        if(noEnergyMode)
-            beamBehavior.getLaser(getFacing()).enabled = true;
+        if(!noEnergyMode)
+            beamBehavior.getLaser(getFacing()).enabled = false;
     }
 
     public void neighbourChanged(){
@@ -95,8 +95,6 @@ public class LaserBlockEntity extends SmartBlockEntity {
         if(level.isClientSide)
             return;
 
-
-
         Direction facing = getBlockState().getValue(HORIZONTAL_FACING);
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(facing);
 
@@ -104,13 +102,13 @@ public class LaserBlockEntity extends SmartBlockEntity {
             return;
 
         if(beam.enabled) {
-            int ext = energyStorage.internalConsumeEnergy(10);
-            if (ext < 10) {
+            int ext = energyStorage.internalConsumeEnergy(100);
+            if (ext < 100) {
                 beam.enabled = false;
                 sendData();
             }
         }else{
-            if(energyStorage.getEnergyStored() > 10){
+            if(energyStorage.getEnergyStored() > 100){
                 beam.enabled = true;
                 sendData();
             }

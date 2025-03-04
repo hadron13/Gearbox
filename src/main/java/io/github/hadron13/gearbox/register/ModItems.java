@@ -15,8 +15,7 @@ public class ModItems {
             .creativeModeTab(() -> ModGroup.MAIN);
 
     public static void register() {}
-    public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot"),
-                                        DIAMOND_TUBE = ingredient("diamond_tube");
+    public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot");
 
     public static final ItemEntry<TauCannonItem> TAU_CANNON =
             REGISTRATE.item("tau_cannon", TauCannonItem::new)

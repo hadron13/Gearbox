@@ -55,6 +55,14 @@
   "item.gearbox.tau_cannon.tooltip.summary": "Consome _Barras de geld_ para atirar rajadas de partículas tau",
   "block.gearbox.kinetic_machine.tooltip": "KINETIC MACHINE",
   "block.gearbox.kinetic_machine.tooltip.summary": "Ela gira",
+  "block.gearbox.laser.tooltip": "LASER",
+  "block.gearbox.laser.tooltip.summary": "Emite um poderoso raio laser quando energizado, a _cor_ pode ser mudada com um sinal de redstone.",
+  "block.gearbox.laser.tooltip.condition1": "",
+  "block.gearbox.laser.tooltip.behaviour1": "Consome _50 FE/t_",
+  "block.gearbox.large_laser.tooltip": "LASER GRANDE",
+  "block.gearbox.large_laser.tooltip.summary": "Emite um poderoso raio laser quando energizado, a _cor_ pode ser mudada com um sinal de redstone.",
+  "block.gearbox.large_laser.tooltip.condition1": "",
+  "block.gearbox.large_laser.tooltip.behaviour1": "Consome _200 FE/t/bloco_",
   "item.gearbox.ultimate_mechanism": "Mecanismo Terminal",
   "gearbox.ponder.sapper.header": "Extraindo flúidos com um extrator",
   "gearbox.ponder.sapper.text_1": "Extratores são máquinas feitas para extrair flúidos de árvores",
@@ -72,5 +80,5 @@
   "gearbox.jei.red": "Vermelho",
   "gearbox.jei.green": "Verde",
   "death.attack.gearbox.laserdeath": "%1$s esqueceu o protetor solar",
-  "death.attack.gearbox.laserdeath.player": "%1$s foi iluminado por %2$s"
+  "death.attack.gearbox.laserdeath.player": "%1$s foi iluminado por %2$s",
 }
