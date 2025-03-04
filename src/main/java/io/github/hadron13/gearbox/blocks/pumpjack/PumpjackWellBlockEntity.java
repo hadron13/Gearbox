@@ -3,6 +3,7 @@ package io.github.hadron13.gearbox.blocks.pumpjack;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
@@ -43,7 +44,7 @@ import static io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlock.HORIZ
 import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation{
 
     public SmartFluidTankBehaviour tank;
     public AABB renderBoundingBox;

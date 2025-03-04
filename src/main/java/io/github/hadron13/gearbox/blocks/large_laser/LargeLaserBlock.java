@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.blocks.large_laser;
 
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
@@ -21,7 +22,7 @@ import org.lwjgl.system.CallbackI;
 
 import static io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock.LargeLaserPart.*;
 
-public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity> {
+public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity>, IWrenchable {
     public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final Property<LargeLaserPart> PART = EnumProperty.create("part", LargeLaserPart.class);
 

@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.blocks.pumpjack;
 
 
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
 import io.github.hadron13.gearbox.register.ModShapes;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class PumpjackWellBlock extends Block implements IBE<PumpjackWellBlockEntity> {
+public class PumpjackWellBlock extends Block implements IBE<PumpjackWellBlockEntity>, IWrenchable {
 
     public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 

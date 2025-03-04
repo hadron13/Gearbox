@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.electrolyzer;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllShapes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlock;
 import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
@@ -21,7 +22,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ElectrolyzerBlock extends Block implements IBE<ElectrolyzerBlockEntity> {
+public class ElectrolyzerBlock extends Block implements IBE<ElectrolyzerBlockEntity>, IWrenchable {
     public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public ElectrolyzerBlock(Properties pProperties) {
