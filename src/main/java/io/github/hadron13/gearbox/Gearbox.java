@@ -91,11 +91,6 @@ public class Gearbox {
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MODID, path);
     }
-
-    public static String returnAddition() {
-        String addition = "addition";
-        return addition;
-    }
     
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
