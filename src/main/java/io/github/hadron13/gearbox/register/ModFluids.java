@@ -51,6 +51,12 @@ public class ModFluids {
     public static final FluidEntry<ForgeFlowingFluid.Flowing> HYDROGEN = gas("hydrogen");
     public static final FluidEntry<ForgeFlowingFluid.Flowing> ARGON = gas("argon");
 
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> STEAM = gas("steam");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> AMMONIA = gas("ammonia");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> CHLORINE = gas("chlorine");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> DINITROGEN_TETROXIDE = gas("dinitrogen_tetroxide");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> HYDROGEN_SULFIDE = gas("hydrogen_sulfide");
+
     public static FluidEntry<ForgeFlowingFluid.Flowing> gas(String name){
         return REGISTRATE
             .fluid(name,

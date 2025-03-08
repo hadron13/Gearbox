@@ -23,6 +23,11 @@
   "block.gearbox.oxygen": "Oxigênio",
   "block.gearbox.hydrogen": "Hidrogênio",
   "block.gearbox.argon": "Argônio",
+  "block.gearbox.ammonia": "Amônia",
+  "block.gearbox.chlorine": "Cloro",
+  "block.gearbox.dinitrogen_tetroxide": "Tetróxido de Dinitrogênio",
+  "block.gearbox.hydrogen_sulfide": "Sulfeto de Hidrogênio",
+  "block.gearbox.steam": "Vapor",
 
   "item.gearbox.geld_ingot": "Barra de geld",
   "item.gearbox.diamond_tube": "Tubo de diamante",
@@ -32,6 +37,11 @@
   "item.gearbox.oxygen_bucket": "Tanque de Oxigênio",
   "item.gearbox.hydrogen_bucket": "Tanque de Hidrogênio",
   "item.gearbox.argon_bucket": "Tanque de Argônio",
+  "item.gearbox.ammonia_bucket": "Tanque de Amônia",
+  "item.gearbox.chlorine_bucket": "Tanque de Cloro",
+  "item.gearbox.dinitrogen_tetroxide_bucket": "Tanque de Tetróxido de Dinitrogênio",
+  "item.gearbox.hydrogen_sulfide_bucket": "Tanque de Sulfeto de Hidrogênio",
+  "item.gearbox.steam_bucket": "Tanque de Vapor",
 
   "create.recipe.pyroprocessing": "Queima",
   "create.recipe.sapping": "Extração",
