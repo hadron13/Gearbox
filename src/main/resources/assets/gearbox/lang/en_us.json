@@ -19,6 +19,7 @@
   "block.gearbox.pumpjack_crank": "Pumpjack Crank",
   "block.gearbox.laser_drill": "Laser Drill",
   "block.gearbox.petroleum": "Petroleum",
+  "block.gearbox.chemical_reactor": "Chemical Reactor",
 
   "item.gearbox.geld_ingot": "Geld Ingot",
   "item.gearbox.diamond_tube": "Diamond Tube",
@@ -35,6 +36,7 @@
   "create.recipe.centrifuging": "Centrifuging",
   "create.recipe.pumpjack": "Pumping",
   "create.recipe.laser_drilling": "Laser Drilling",
+  "create.recipe.reacting": "Chemical Reaction",
 
   "create.recipe.assembly.mechanizing": "Mechanize",
   "create.recipe.compressing.campfire_heat": "Warm",
@@ -43,6 +45,7 @@
   "create.hint.sapper.full": "",
   "create.hint.compressor.reverse.title": "Rotation Direction",
   "create.hint.compressor.reverse": "It appears that this compressor is rotating in the _wrong direction_.",
+  "create.hint.reactor.atmosphere": "Atmosphere",
 
   "create.gui.spectrometer.title": "Spectrometry",
   "create.gui.spectrometer.power": "Laser Power",

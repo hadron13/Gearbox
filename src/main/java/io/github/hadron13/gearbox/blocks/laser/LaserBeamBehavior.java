@@ -58,6 +58,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         beam.origin = origin;
         beam.color = color;
         beam.power = power;
+        beam.enabled = false;
 
         beams.put(face, beam);
     }

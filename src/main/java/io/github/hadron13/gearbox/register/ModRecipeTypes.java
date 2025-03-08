@@ -10,6 +10,7 @@ import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
+import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.dipper.DippingRecipe;
@@ -56,7 +57,8 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     CENTRIFUGING(CentrifugingRecipe::new),
     LASER_DRILLING(LaserDrillingRecipe::new),
     PUMPJACK(PumpjackRecipe::new),
-    DIPPING(DippingRecipe::new);
+    DIPPING(DippingRecipe::new),
+    REACTING(ReactingRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
@@ -64,18 +66,6 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     private final RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
-    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
-        String name = Lang.asId(name());
-        id = Gearbox.asResource(name);
-        serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
-        if (registerType) {
-            typeObject = Registers.TYPE_REGISTER.register(name, typeSupplier);
-            type = typeObject;
-        } else {
-            typeObject = null;
-            type = typeSupplier;
-        }
-    }
 
     ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
@@ -185,11 +175,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
         return matchingRecipes.findAny();
     }
 
-    public List<SappingRecipe> getAll(Level world){
-        if(world.isClientSide())
-            return null;
-        return world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.SAPPING.getType());
-    }
+
 
     public static final Set<ResourceLocation> RECIPE_DENY_SET =
             ImmutableSet.of(new ResourceLocation("occultism", "spirit_trade"), new ResourceLocation("occultism", "ritual"));

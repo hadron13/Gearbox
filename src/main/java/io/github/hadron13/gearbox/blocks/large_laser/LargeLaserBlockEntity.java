@@ -37,7 +37,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     public InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
     public int redstoneSignal = 0;
-    public BlockPos back = null;
+    public LargeLaserBlockEntity back = this;
     boolean firstTick = true;
     LerpedFloat visualSpeed = LerpedFloat.linear();
     float angle;
@@ -74,8 +74,8 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
         beamBehavior = new LaserBeamBehavior(this);
         behaviours.add(beamBehavior);
         beamBehavior.addLaser(getFacing(), getBlockPos(), Color.RED, 20.0f);
+        updatePower();
         renderBoundingBox = new AABB(worldPosition, worldPosition.relative(getFacing(), LaserBeamBehavior.MAX_LENGTH).offset(1, 1, 1));
-        beamBehavior.getLaser(getFacing()).enabled = false;
     }
     @Override
     public void tick(){
@@ -104,29 +104,16 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             neighbourChanged(getBlockState());
             firstTick = false;
         }
+        InternalEnergyStorage backEnergy;
 
-        if(back != null){
-            BlockEntity backEntity = level.getBlockEntity(back);
-            if(!(backEntity instanceof LargeLaserBlockEntity))
-                return;
-            LargeLaserBlockEntity backLaser = (LargeLaserBlockEntity) backEntity;
-            InternalEnergyStorage backEnergy = backLaser.energyStorage;
+        backEnergy = back.energyStorage;
+        //uncomment on release!!
 
-            //uncomment on release!!
-
-            if(beam.enabled) {
-                int ext = backEnergy.internalConsumeEnergy((int)(beam.power * 10f));
-                if (ext < 400) {
-                    beam.enabled = false;
-                    sendData();
-                }
-            }else{
-                if(backEnergy.getEnergyStored() > 400){
-                    beam.enabled = true;
-                    sendData();
-                }
-            }
+        if(beam.enabled) {
+            backEnergy.internalConsumeEnergy((int)(beam.power * 10f));
         }
+        beam.enabled = backEnergy.getEnergyStored() > 400;
+        sendData();
     }
 
     public void invalidate() {
@@ -141,8 +128,9 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
             return;
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
         beam.power = 20f;
+        this.back = this;
         Direction back = getFacing().getOpposite();
-        for(int offset = 0; offset <= 200; offset++){
+        for(int offset = 0; offset <= 20; offset++){
             BlockState backBlock = level.getBlockState(getBlockPos().relative(back, offset + 1));
 
             if(!(backBlock.getBlock() instanceof LargeLaserBlock)) {
@@ -155,7 +143,11 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
                 beam.power += 20f;
 
             if(backBlock.getValue(PART) == BACK){
-                this.back = getBlockPos().relative(back, offset + 1);
+                BlockPos back_pos = getBlockPos().relative(back, offset + 1);
+                BlockEntity be = level.getBlockEntity(back_pos);
+                if(be instanceof LargeLaserBlockEntity back_laser){
+                    this.back = back_laser;
+                }
                 break;
             }
         }
@@ -173,12 +165,14 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
         if(level == null)
             return;
 
+
         beamBehavior.beams.clear();
         beamBehavior.addLaser(newState.getValue(HORIZONTAL_FACING), getBlockPos(), Color.BLACK, 20f);
         beamBehavior.wrenched = true;
         LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(newState.getValue(HORIZONTAL_FACING));
 
-        beam.enabled = newState.getValue(PART) == FRONT || newState.getValue(PART) == SINGLE;
+        beam.enabled = (newState.getValue(PART) == FRONT || newState.getValue(PART) == SINGLE) && back.energyStorage.getEnergyStored() > 400;
+
         if(!beam.enabled){
             sendData();
             return;

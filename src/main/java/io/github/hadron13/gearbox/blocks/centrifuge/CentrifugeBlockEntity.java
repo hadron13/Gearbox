@@ -114,7 +114,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
 
     public void addBehaviours(List<BlockEntityBehaviour> behaviours){
         inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, 1000, true);
-        outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 3, 1000, true);
+        outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 6, 1000, true);
 
         inputTank.forbidExtraction();
         outputTank.forbidInsertion();
@@ -136,7 +136,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
         boolean isEmpty = true;
 
 
-        if (Math.abs(getSpeed()) < 32.0f) {
+        if (Math.abs(getSpeed()) < 64.0f) {
             Lang.translate("tooltip.speedRequirement")
                     .style(GOLD)
                     .forGoggles(tooltip);

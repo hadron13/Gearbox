@@ -16,5 +16,6 @@ public class KubeJSGearboxPlugin extends KubeJSPlugin {
         event.register("gearbox:centrifuging", ProcessingRecipeJS::new);
         event.register("gearbox:pumpjack", PumpjackRecipeJS::new);
         event.register("gearbox:laser_drilling", LaserRecipeJS::new);
+        event.register("gearbox:reacting", ReactingRecipeJS::new);
     }
 }

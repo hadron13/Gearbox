@@ -46,8 +46,8 @@ public class CentrifugingCategory extends CreateRecipeCategory<CentrifugingRecip
 
         int size = recipe.getRollableResults().size() + recipe.getFluidResults().size();
         for (FluidStack fluidResult : recipe.getFluidResults()) {
-            int xPosition = 110 + i * 19;
-            int yPosition = 68;
+            int xPosition = 110 + i%3 * 19 + (size > 3? 10:0);
+            int yPosition = 68 - ((i>=3)?19:0);
 
             builder
                     .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)

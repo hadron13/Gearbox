@@ -111,7 +111,7 @@ public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     @Override
     protected int getMaxFluidOutputCount() {
-        return 3;
+        return 6;
     }
 
 

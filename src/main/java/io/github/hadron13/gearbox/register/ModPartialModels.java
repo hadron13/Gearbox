@@ -28,7 +28,8 @@ public class ModPartialModels {
             PUMPJACK_PITMAN = block("pumpjack/pitman"),
             PUMPJACK_CRANK = block("pumpjack/crank"),
             PUMPJACK_SMOOTHROD = block("pumpjack/smooth_rod"),
-            PUMPJACK_TRUSS = block("pumpjack/truss");
+            PUMPJACK_TRUSS = block("pumpjack/truss"),
+            DIPPER_POLE = block("dipper/pole");
 
 
     private static PartialModel block(String path) {

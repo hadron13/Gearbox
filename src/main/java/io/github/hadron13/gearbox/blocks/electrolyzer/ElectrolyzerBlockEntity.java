@@ -70,8 +70,8 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     @Override
     public float getSpeed(){
-        if(energyStorage.getEnergyStored() < 1)
-            return 0;
+//        if(energyStorage.getEnergyStored() < 1)
+//            return 0;
         return 32f;
     }
 
