@@ -1,11 +1,15 @@
 package io.github.hadron13.gearbox.ponder;
+import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.drain.ItemDrainBlockEntity;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.millstone.MillstoneBlockEntity;
+import com.simibubi.create.content.logistics.depot.DepotBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.PonderPalette;
@@ -15,18 +19,24 @@ import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.WorldSectionElement;
+import com.simibubi.create.foundation.utility.IntAttached;
+import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.Pointing;
+import com.simibubi.create.infrastructure.ponder.PonderIndex;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
+import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlockEntity;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
+import io.github.hadron13.gearbox.register.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -39,6 +49,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.lwjgl.system.CallbackI;
 
 public class ModPonderScenes {
 
@@ -104,8 +115,109 @@ public class ModPonderScenes {
         scene.world.propagatePipeChange(util.grid.at(6, 1, 3));
 
         scene.idle(30);
+    }
 
+    public static void compressor(SceneBuilder scene, SceneBuildingUtil util){
+        scene.title("compressor", "Using a compressor to process fluids");
+        scene.configureBasePlate(0, 0, 5);
 
+        scene.world.showSection(util.select.fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
+        scene.idle(10);
+        scene.world.showSection(util.select.fromTo(2, 1, 2, 2, 2, 2), Direction.DOWN);
+
+        BlockPos compressor = util.grid.at(2, 2, 2);
+        BlockPos depot      = util.grid.at(1, 1, 2);
+        Selection large_cog  = util.select.position(1, 0, 5);
+        Selection intermediate_cogs = util.select.fromTo(2, 1, 3, 2, 1, 5);
+        Selection last_cog = util.select.position(2, 2, 3);
+        BlockPos pump = util.grid.at(3, 1, 3);
+        Selection tank = util.select.fromTo(3, 1, 4, 3, 2, 4);
+        Selection pipes = util.select.fromTo(3, 1, 3, 3, 2, 2);
+
+        scene.idle(10);
+        scene.overlay.showText(40)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The Compressor can process fluids into items")
+                .pointAt(Vec3.atCenterOf(compressor));
+
+        scene.idle(60);
+
+        scene.rotateCameraY(-90f);
+        scene.idle(20);
+        scene.overlay.showText(40)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("It can be powered with a shaft from the side")
+                .pointAt(Vec3.atCenterOf(compressor));
+        scene.idle(30);
+        scene.world.setKineticSpeed(large_cog, -16f);
+        scene.world.setKineticSpeed(intermediate_cogs, 32f);
+        scene.world.showSection(large_cog, Direction.DOWN);
+        scene.idle(5);
+        scene.world.showSection(intermediate_cogs, Direction.DOWN);
+        scene.idle(5);
+        scene.world.setKineticSpeed(last_cog.add(util.select.position(compressor)), -32f);
+        scene.world.showSection(last_cog, Direction.DOWN);
+        scene.idle(30);
+
+        scene.overlay.showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("It must move clockwise from the right side")
+                .pointAt(Vec3.atCenterOf(compressor));
+        scene.idle(80);
+
+        scene.rotateCameraY(180f);
+        scene.idle(10);
+        scene.world.showSection(tank, Direction.DOWN);
+        scene.idle(10);
+        scene.world.setKineticSpeed(pipes, -32f);
+        scene.world.showSection(pipes, Direction.DOWN);
+
+        FluidStack content = new FluidStack(Fluids.LAVA
+                .getSource(), 16000);
+        scene.world.modifyBlockEntity(util.grid.at(3, 1, 4), FluidTankBlockEntity.class, be -> be.getTankInventory()
+                .fill(content, IFluidHandler.FluidAction.EXECUTE));
+        scene.world.propagatePipeChange(pump);
+
+        scene.overlay.showText(40)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("Fluids can be inserted from the back")
+                .pointAt(Vec3.atCenterOf(compressor));
+        scene.idle(60);
+
+        scene.rotateCameraY(-90f);
+        scene.idle(10);
+
+        scene.world.replaceBlocks(util.select.position(compressor.below()), Blocks.CAMPFIRE.defaultBlockState(), true);
+
+        scene.overlay.showText(40)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("Minimum heat must be provided")
+                .pointAt(Vec3.atCenterOf(compressor.below()));
+        scene.idle(60);
+
+        scene.world.showSection(util.select.position(1, 1, 2), Direction.DOWN);
+        scene.idle(10);
+        scene.world.modifyBlockEntityNBT(util.select.position(compressor), CompressorBlockEntity.class, nbt -> {
+            nbt.put("VisualizedItems",
+                    NBTHelper.writeCompoundList(ImmutableList.of(IntAttached.with(1, new ItemStack(Blocks.OBSIDIAN))),
+                            ia -> ia.getValue()
+                                    .serializeNBT()));
+        });
+        scene.world.createItemOnBeltLike(compressor.below().west(), Direction.UP, new ItemStack(Items.OBSIDIAN));
+        scene.idle(10);
+        scene.overlay.showControls(new InputWindowElement(util.vector.topOf(compressor.below().west()), Pointing.DOWN)
+                .withItem(new ItemStack(Items.OBSIDIAN)), 30);
+
+        scene.overlay.showText(40)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("Lastly, the output can be retrieved with a depot, belt or basin")
+                .pointAt(Vec3.atCenterOf(compressor.below().west()));
     }
 
     public static void laser(SceneBuilder scene, SceneBuildingUtil util) {

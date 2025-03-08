@@ -47,12 +47,12 @@ import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXE
 
 public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHoveringInformation {
 
-    private SmartFluidTankBehaviour tank;
-    private SmartInventory output;
+    public SmartFluidTankBehaviour tank;
+    public SmartInventory output;
 
     protected LazyOptional<IItemHandlerModifiable> itemCapability;
 
-    private int timer;
+    public int timer;
     public static final int OUTPUT_SLOTS = 3;
     public List<Integer> spoutputIndex;
     public CompressingRecipe recipe;
