@@ -118,6 +118,13 @@
   "gearbox.ponder.compressor.text_5": "Minimum heat must be provided",
   "gearbox.ponder.compressor.text_6": "Lastly, the output can be retrieved with a depot, belt or basin",
 
+  "gearbox.ponder.kiln.header": "Processing items with a Kinetic Oven",
+  "gearbox.ponder.kiln.text_1": "The Kinetic Oven can process items with friction",
+  "gearbox.ponder.kiln.text_2": "It can be powered from the back with a shaft",
+  "gearbox.ponder.kiln.text_3": "Throw or Insert items at the top",
+  "gearbox.ponder.kiln.text_4": "After some time, the result can be obtained via Right-click",
+  "gearbox.ponder.kiln.text_5": "The outputs can also be extracted by automation",
+
   "gearbox.jei.red": "Red",
   "gearbox.jei.green": "Green",
 
