@@ -45,7 +45,7 @@ import java.util.*;
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHoveringInformation {
+public class CompressorBlockEntity extends KineticBlockEntity {
 
     public SmartFluidTankBehaviour tank;
     public SmartInventory output;
@@ -284,12 +284,16 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
     //
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+        boolean kinetic_tooltip = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+
+        boolean fluid_tooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
         if(!validSpeed() && speed != 0) {
+            kinetic_tooltip = true;
             TooltipHelper.addHint(tooltip, "hint.compressor.reverse");
         }
-
+        boolean item_tooltip = false;
         for (int i = 0; i < output.getSlots(); i++) {
+            item_tooltip = true;
             ItemStack stackInSlot = output.getStackInSlot(i);
             if (stackInSlot.isEmpty())
                 continue;
@@ -301,7 +305,8 @@ public class CompressorBlockEntity extends KineticBlockEntity implements IHaveHo
                     .forGoggles(tooltip, 1);
         }
 
-        return true;
+        return kinetic_tooltip || fluid_tooltip || item_tooltip;
+
     }
 
 

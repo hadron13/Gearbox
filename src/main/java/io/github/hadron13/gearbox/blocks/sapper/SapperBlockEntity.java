@@ -161,11 +161,12 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
     }
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        boolean addToGoggleTooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+        boolean kineticTooltip = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+        boolean fluidTooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
         if(isTankFull())
             TooltipHelper.addHint(tooltip,"hint.sapper.full");
 
-        return addToGoggleTooltip;
+        return kineticTooltip || fluidTooltip;
     }
     public boolean isTankFull(){
         return tank.getPrimaryHandler().getFluidAmount() == 1000;

@@ -131,9 +131,9 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        boolean isEmpty = !super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
         IFluidHandler fluids = fluidCapability.orElse(new FluidTank(0));
-        boolean isEmpty = true;
 
 
         if (Math.abs(getSpeed()) < 64.0f) {
@@ -168,8 +168,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
             isEmpty = false;
         }
 
-        //if (isEmpty)
-        //    tooltip.remove(0);
 
         return !isEmpty;
     }

@@ -255,8 +255,22 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
     }
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-
+        boolean kinetic_tooltip = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+        boolean item_tooltip = false;
+        for (int i = 0; i < inputInv.getSlots(); i++) {
+            item_tooltip = true;
+            ItemStack stackInSlot = inputInv.getStackInSlot(i);
+            if (stackInSlot.isEmpty())
+                continue;
+            Lang.text("")
+                    .add(Components.translatable(stackInSlot.getDescriptionId())
+                            .withStyle(ChatFormatting.GRAY))
+                    .add(Lang.text(" x" + stackInSlot.getCount())
+                            .style(ChatFormatting.GREEN))
+                    .forGoggles(tooltip, 1);
+        }
         for (int i = 0; i < outputInv.getSlots(); i++) {
+            item_tooltip = true;
             ItemStack stackInSlot = outputInv.getStackInSlot(i);
             if (stackInSlot.isEmpty())
                 continue;
@@ -267,8 +281,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
                             .style(ChatFormatting.GREEN))
                     .forGoggles(tooltip, 1);
         }
-
-        return true;
+        return kinetic_tooltip || item_tooltip;
     }
 
 }
