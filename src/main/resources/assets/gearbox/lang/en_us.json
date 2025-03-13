@@ -75,6 +75,9 @@
   "create.gui.laserdrill.minimum_power": "This machine requires 20 laser power",
   "create.gui.pumpjack_well.efficiency": "Efficiency: ",
   "create.gui.pumpjack_well.other_wells": "Other wells nearby reduce efficiency",
+  "create.gui.goggles.energy_stats": "Energy Stats",
+  "create.gui.goggles.energy_stored": "Energy Stored",
+  "create.gui.goggles.energy_consumption": "Consumption",
 
   "block.gearbox.mirror.tooltip": "MIRROR",
   "block.gearbox.mirror.tooltip.summary": "Reflects incoming lasers",

@@ -7,11 +7,15 @@ import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import com.simibubi.create.foundation.utility.Lang;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -44,33 +48,30 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     public ElectrolyzerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        energyStorage = new InternalEnergyStorage(2048, 128, 128);
+        energyStorage = new InternalEnergyStorage(8192, 512, 512);
+
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
     public void tick(){
-        super.tick();
-
-        if(running && currentRecipe != null && currentRecipe instanceof ElectrolyzingRecipe){
-            if(energy_consumption == 0){
-                ElectrolyzingRecipe electrolyzingRecipe = (ElectrolyzingRecipe) currentRecipe;
-                energy_consumption = electrolyzingRecipe.requiredEnergy / processingTicks;
+        if(level != null && !level.isClientSide) {
+            if (currentRecipe != null && currentRecipe instanceof ElectrolyzingRecipe electrolyzingRecipe) {
+                if (energyStorage.internalConsumeEnergy(electrolyzingRecipe.requiredEnergy) < electrolyzingRecipe.requiredEnergy){
+                    runningTicks++;
+                }
             }
-            energyStorage.internalConsumeEnergy(energy_consumption);
-
-            if(processingTicks == -1){
-                energy_consumption = 0;
-            }
-        }else{
-            energy_consumption = 0;
+            sendData();
         }
+        super.tick();
     }
 
 
     @Override
     public float getSpeed(){
-//        if(energyStorage.getEnergyStored() < 1)
+        if(energyStorage.getEnergyStored() == 0)
+            return 0;
+//        if(currentRecipe != null && energyStorage.getEnergyStored() < ((ElectrolyzingRecipe)currentRecipe).requiredEnergy)
 //            return 0;
         return 32f;
     }
@@ -129,6 +130,37 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
                         - r1.getIngredients()
                         .size())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+
+        energyStorage.storedEnergyTooltip(tooltip);
+
+        Lang.number(energy_consumption)
+                .add(Lang.text(" FE/tick"))
+                .style(ChatFormatting.AQUA)
+                .space()
+                .add(Lang.translate("gui.goggles.energy_consumption")
+                        .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 1);
+        return true;
+    }
+
+    @Override
+    protected void read(CompoundTag compound, boolean clientPacket) {
+        super.read(compound, clientPacket);
+        if(clientPacket) {
+            energy_consumption = compound.getInt("consumption");
+            energyStorage.read(compound);
+        }
+    }
+
+    @Override
+    public void write(CompoundTag compound, boolean clientPacket) {
+        super.write(compound, clientPacket);
+        compound.putInt("consumption", energy_consumption);
+        energyStorage.write(compound);
     }
 
     @Override

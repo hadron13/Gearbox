@@ -31,7 +31,7 @@ public class ElectrolyzingCategory extends BasinCategory {
         Font font = Minecraft.getInstance().font;
 
         int requiredEnergy = electrolyzingRecipe.requiredEnergy;
-        String powerString = (requiredEnergy > 999)? (float)requiredEnergy/1000f + "kFe"  :  requiredEnergy + "Fe";
+        String powerString = ((requiredEnergy > 999)? (float)requiredEnergy/1000f + "kFe"  :  requiredEnergy + "Fe") + "/tick";
 
         Component power = Components.literal("\u2592 " + powerString);
 

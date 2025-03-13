@@ -5,7 +5,7 @@
 		"0": "gearbox:block/electrolyzer/top",
 		"1": "gearbox:block/electrolyzer/base_side",
 		"2": "gearbox:block/electrolyzer/side_with_connector",
-		"particle": "gearbox:block/electrolyzer/base_size"
+		"particle": "gearbox:block/electrolyzer/top"
 	},
 	"elements": [
 		{

@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
 import com.jozufozu.flywheel.util.Color;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
@@ -8,6 +9,7 @@ import io.github.hadron13.gearbox.Gearbox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -24,7 +26,7 @@ import java.util.List;
 
 import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACING;
 
-public class LaserBlockEntity extends SmartBlockEntity {
+public class LaserBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
     LaserBeamBehavior beamBehavior;
 
@@ -113,9 +115,11 @@ public class LaserBlockEntity extends SmartBlockEntity {
                 sendData();
             }
         }
-
-
-
+    }
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        energyStorage.storedEnergyTooltip(tooltip);
+        return true;
     }
 
     @Override

@@ -1,7 +1,12 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
+import com.simibubi.create.foundation.utility.Lang;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.energy.EnergyStorage;
+
+import java.util.List;
 
 
 //carefully stolen from https://github.com/mrh0/createaddition/blob/1.18/src/main/java/com/mrh0/createaddition/energy/InternalEnergyStorage.java
@@ -66,4 +71,23 @@ public class InternalEnergyStorage extends EnergyStorage {
     public void setEnergy(int energy) {
         this.energy = energy;
     }
+
+    public void storedEnergyTooltip(List<Component> tooltip){
+        Lang.translate("gui.goggles.energy_stats").forGoggles(tooltip);
+
+        Lang.number(this.getEnergyStored())
+                .add(Lang.text("/"))
+                .add(Lang.number(this.getMaxEnergyStored()))
+                .add(Lang.text(" FE"))
+                .style(ChatFormatting.AQUA)
+                .space()
+                .add(Lang.translate("gui.goggles.energy_stored")
+                        .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 1);
+
+    }
+
+//    public static void energyConsumptionTooltip(List<Component> tooltip){}
+
+
 }
