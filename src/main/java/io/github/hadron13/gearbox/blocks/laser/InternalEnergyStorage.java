@@ -87,7 +87,15 @@ public class InternalEnergyStorage extends EnergyStorage {
 
     }
 
-//    public static void energyConsumptionTooltip(List<Component> tooltip){}
+    public static void energyConsumptionTooltip(List<Component> tooltip, int consumption){
+        Lang.number(consumption)
+                .add(Lang.text(" FE/tick"))
+                .style(ChatFormatting.AQUA)
+                .space()
+                .add(Lang.translate("gui.goggles.energy_consumption")
+                        .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 1);
+    }
 
 
 }

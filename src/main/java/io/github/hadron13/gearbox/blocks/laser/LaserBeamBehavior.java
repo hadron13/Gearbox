@@ -67,6 +67,9 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
     public LaserBeam getLaser(Direction face){
         return beams.get(face);
     }
+    public LaserBeam getLaser(){
+        return beams.get(beams.keySet().iterator().next());
+    }
 
     public void enableLaser(Direction face){
         LaserBeam beam = getLaser(face);

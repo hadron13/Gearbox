@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.blocks.large_laser;
 
 import com.jozufozu.flywheel.util.Color;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
@@ -12,6 +13,7 @@ import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +32,7 @@ import static io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock.HORI
 import static io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock.LargeLaserPart.*;
 import static io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock.PART;
 
-public class LargeLaserBlockEntity extends SmartBlockEntity {
+public class LargeLaserBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
     public LaserBeamBehavior beamBehavior;
     public AABB renderBoundingBox;
@@ -41,7 +43,6 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
     boolean firstTick = true;
     LerpedFloat visualSpeed = LerpedFloat.linear();
     float angle;
-    public LaserBeamBehavior.LaserBeam mainLaser;
 
     public LargeLaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -189,16 +190,34 @@ public class LargeLaserBlockEntity extends SmartBlockEntity {
 
         sendData();
     }
+
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        if(isFront()) {
+//            energyStorage.storedEnergyTooltip(tooltip);
+            LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser();
+            if(beam != null) {
+                InternalEnergyStorage.energyConsumptionTooltip(tooltip, beam.enabled?(int)beamBehavior.getLaser().power * 10:0);
+            }
+        }
+        return true;
+    }
+
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
         compound.putInt("signal", redstoneSignal);
+//        compound.putInt("storage", back.energyStorage.getEnergyStored());
+        energyStorage.write(compound);
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         redstoneSignal = compound.getInt("signal");
+//        consumption = compound.getInt("consumption");
+        energyStorage.read(compound);
         if (clientPacket)
 //            visualSpeed.chase(10f, 1 / 32f, LerpedFloat.Chaser.EXP);
             visualSpeed.chase(beamBehavior.getLaser(getFacing()).power / 10, 1 / 64f, LerpedFloat.Chaser.EXP);

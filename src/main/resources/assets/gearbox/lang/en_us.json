@@ -64,7 +64,7 @@
   "create.hint.sapper.full": "",
   "create.hint.compressor.reverse.title": "Rotation Direction",
   "create.hint.compressor.reverse": "It appears that this compressor is rotating in the _wrong direction_.",
-  "create.hint.reactor.atmosphere": "Atmosphere",
+  "create.hint.reactor.atmosphere": "Atmosphere Stats:",
 
   "create.gui.spectrometer.title": "Spectrometry",
   "create.gui.spectrometer.power": "Laser Power",

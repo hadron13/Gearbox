@@ -66,13 +66,10 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
         super.tick();
     }
 
-
     @Override
     public float getSpeed(){
         if(energyStorage.getEnergyStored() == 0)
             return 0;
-//        if(currentRecipe != null && energyStorage.getEnergyStored() < ((ElectrolyzingRecipe)currentRecipe).requiredEnergy)
-//            return 0;
         return 32f;
     }
 
@@ -134,16 +131,8 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-
         energyStorage.storedEnergyTooltip(tooltip);
-
-        Lang.number(energy_consumption)
-                .add(Lang.text(" FE/tick"))
-                .style(ChatFormatting.AQUA)
-                .space()
-                .add(Lang.translate("gui.goggles.energy_consumption")
-                        .style(ChatFormatting.DARK_GRAY))
-                .forGoggles(tooltip, 1);
+        InternalEnergyStorage.energyConsumptionTooltip(tooltip, energy_consumption);
         return true;
     }
 

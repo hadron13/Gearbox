@@ -60,7 +60,7 @@
   "create.hint.sapper.full": "",
   "create.hint.compressor.reverse.title": "Sentido Da Rotação",
   "create.hint.compressor.reverse": "Parece que este compressor está girando no _sentido errado_",
-  "create.hint.reactor.atmosphere": "Atmosfera",
+  "create.hint.reactor.atmosphere": "Status da Atmosfera:",
   "create.gui.spectrometer.title": "Espectrometria",
   "create.gui.spectrometer.power": "Potência do laser",
   "create.gui.spectrometer.nolaser": "Sem laser",

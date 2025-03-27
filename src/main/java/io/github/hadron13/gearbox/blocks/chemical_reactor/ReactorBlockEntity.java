@@ -169,20 +169,19 @@ public class ReactorBlockEntity extends MechanicalMixerBlockEntity {
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) { LangBuilder mb = Lang.translate("generic.unit.millibuckets");
-        boolean empty_tooltip = true;
+        boolean empty_tooltip = !super.addToGoggleTooltip(tooltip, isPlayerSneaking);
         FluidStack atmosphere = atmosphere_tank.getPrimaryHandler().getFluidInTank(0);
         if (!atmosphere.isEmpty()) {
             empty_tooltip = false;
-            Lang.text("")
-                    .add(Lang.translate("hint.reactor.atmosphere"))
-                    .add(Lang.text(" "))
-                    .add(Lang.fluidName(atmosphere)
-                            .add(Lang.text(" "))
-                            .style(ChatFormatting.GRAY)
-                            .add(Lang.number(atmosphere.getAmount())
-                                    .add(mb)
-                                    .style(ChatFormatting.BLUE)))
-                    .forGoggles(tooltip, 1);
+            Lang.translate("hint.reactor.atmosphere")
+                .forGoggles(tooltip);
+            Lang.fluidName(atmosphere)
+                .space()
+                .style(ChatFormatting.GRAY)
+                    .add(Lang.number(atmosphere.getAmount())
+                    .add(mb)
+                    .style(ChatFormatting.BLUE))
+                .forGoggles(tooltip, 1);
         }
         return !empty_tooltip || super.addToGoggleTooltip(tooltip, isPlayerSneaking);
     }

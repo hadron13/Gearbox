@@ -118,7 +118,7 @@ public class LaserBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     }
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        energyStorage.storedEnergyTooltip(tooltip);
+        InternalEnergyStorage.energyConsumptionTooltip(tooltip, energyStorage.getEnergyStored() > 0? 100:0);
         return true;
     }
 
