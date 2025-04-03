@@ -1,9 +1,7 @@
 package io.github.hadron13.gearbox.blocks.spectrometer;
 
 import com.jozufozu.flywheel.util.Color;
-import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
-import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReader;
 import net.minecraft.ChatFormatting;
@@ -13,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.util.List;
 

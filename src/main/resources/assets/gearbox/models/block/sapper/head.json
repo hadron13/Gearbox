@@ -6,6 +6,7 @@
 		"1": "gearbox:block/sapper/head",
 		"particle": "create:block/pipes"
 	},
+	"render_type": "cutout_mipped",
 	"elements": [
 		{
 			"name": "Bottom",

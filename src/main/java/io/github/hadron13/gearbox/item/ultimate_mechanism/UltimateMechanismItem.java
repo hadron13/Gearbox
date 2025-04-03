@@ -1,11 +1,10 @@
 package io.github.hadron13.gearbox.item.ultimate_mechanism;
 
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
-import io.github.hadron13.gearbox.item.tau_cannon.TauCannonRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.function.Consumer;
 
@@ -16,7 +15,7 @@ public class UltimateMechanismItem extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(SimpleCustomRenderer.create(this, new UltimateMechanismRenderer()));
     }
 }

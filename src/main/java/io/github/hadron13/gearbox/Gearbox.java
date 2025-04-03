@@ -1,21 +1,9 @@
 package io.github.hadron13.gearbox;
 
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.Create;
-import com.simibubi.create.CreateClient;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.data.AllLangPartials;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.data.LangMerger;
 import com.simibubi.create.foundation.data.TagGen;
-import com.simibubi.create.foundation.data.recipe.MechanicalCraftingRecipeGen;
-import com.simibubi.create.foundation.data.recipe.ProcessingRecipeGen;
-import com.simibubi.create.foundation.data.recipe.SequencedAssemblyRecipeGen;
-import com.simibubi.create.foundation.data.recipe.StandardRecipeGen;
-import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.ponder.ModPonderIndex;
-import io.github.hadron13.gearbox.ponder.ModPonderScenes;
 import io.github.hadron13.gearbox.ponder.ModPonderTags;
 import io.github.hadron13.gearbox.register.*;
 import io.github.hadron13.gearbox.groups.ModGroup;
@@ -23,6 +11,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,9 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import org.slf4j.Logger;
 
 import java.util.Scanner;
@@ -78,9 +65,7 @@ public class Gearbox {
     }
 
     public static void gatherData(GatherDataEvent event) {
-        TagGen.datagen();
         DataGenerator gen = event.getGenerator();
-
     }
 
     public static CreateRegistrate registrate(){

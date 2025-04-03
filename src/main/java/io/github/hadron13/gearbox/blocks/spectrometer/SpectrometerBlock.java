@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -101,7 +102,7 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
         throw new IllegalStateException("Unknown axis??");
     }
     @Override
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
         BlockEntity be = worldIn.getBlockEntity(pos);
         if (be == null || !(be instanceof SpectrometerBlockEntity))
             return;

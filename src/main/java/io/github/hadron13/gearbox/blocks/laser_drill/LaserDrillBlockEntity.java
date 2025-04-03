@@ -1,10 +1,7 @@
 package io.github.hadron13.gearbox.blocks.laser_drill;
 
 import com.jozufozu.flywheel.util.Color;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
-import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
@@ -12,11 +9,7 @@ import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
-import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
-import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -24,14 +17,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -45,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode.BASIN;
 import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 
 public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserReceiver, IHaveGoggleInformation {

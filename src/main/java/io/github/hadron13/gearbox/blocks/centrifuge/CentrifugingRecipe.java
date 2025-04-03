@@ -1,22 +1,17 @@
 package io.github.hadron13.gearbox.blocks.centrifuge;
 
-import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Iterate;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
-import net.minecraft.world.Container;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-import java.util.Collections;
 import java.util.List;
 
 public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {

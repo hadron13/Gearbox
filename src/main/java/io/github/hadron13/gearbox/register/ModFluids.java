@@ -1,16 +1,21 @@
 package io.github.hadron13.gearbox.register;
 
+import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.FluidEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+
+import java.util.function.Consumer;
 
 public class ModFluids {
     private static final CreateRegistrate REGISTRATE = Gearbox.registrate()
@@ -21,8 +26,8 @@ public class ModFluids {
                     Gearbox.asResource("fluid/petroleum_still"),
                     Gearbox.asResource("fluid/petroleum_flow"))
             .lang("Petroleum")
-            .attributes(b -> b.viscosity(2000).density(1500))
-            .properties(p -> p.levelDecreasePerBlock(3)
+            .properties(p -> p.viscosity(2000).density(1500))
+            .fluidProperties(p -> p.levelDecreasePerBlock(3)
                             .tickRate(25)
                             .slopeFindDistance(3)
                             .explosionResistance(100f))
@@ -36,8 +41,8 @@ public class ModFluids {
                     Gearbox.asResource("fluid/resin_still"),
                     Gearbox.asResource("fluid/resin_flow"))
             .lang("Resin")
-            .attributes(b -> b.viscosity(2000).density(1500))
-            .properties(p -> p.levelDecreasePerBlock(3)
+            .properties(p -> p.density(1500).viscosity(2000))
+            .fluidProperties(p -> p.levelDecreasePerBlock(3)
                     .tickRate(25)
                     .slopeFindDistance(3)
                     .explosionResistance(100f))
@@ -59,13 +64,9 @@ public class ModFluids {
 
     public static FluidEntry<ForgeFlowingFluid.Flowing> gas(String name){
         return REGISTRATE
-            .fluid(name,
-                    Gearbox.asResource("fluid/" + name + "_still"),
-                    Gearbox.asResource("fluid/" + name + "_flow"),
-                    TransparentFluidAttributes::new)
-            .attributes(b -> b.viscosity(0)
-                    .density(-100).gaseous())
-            .properties(p -> p.levelDecreasePerBlock(7)
+            .fluid(name, Gearbox.asResource("fluid/" + name + "_still"), Gearbox.asResource("fluid/" + name + "_flow"), TransparentFluidType::new)
+            .properties(p -> p.viscosity(0).density(-100))
+            .fluidProperties(p -> p.levelDecreasePerBlock(7)
                     .tickRate(1)
                     .slopeFindDistance(3)
                     .explosionResistance(100f))
@@ -75,18 +76,32 @@ public class ModFluids {
             .register();
     }
 
+    public static class TransparentFluidType extends FluidType {
+        private ResourceLocation stillTexture;
+        private ResourceLocation flowingTexture;
 
-    public static class TransparentFluidAttributes extends FluidAttributes {
-
-        protected TransparentFluidAttributes(Builder builder, Fluid fluid) {
-            super(builder, fluid);
+        protected TransparentFluidType(FluidType.Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
+            super(properties);
+            this.stillTexture = stillTexture;
+            this.flowingTexture = flowingTexture;
         }
 
-        @Override
-        public int getColor(BlockAndTintGetter world, BlockPos pos) {
-            return 0x00ffffff;
-        }
+        public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+            consumer.accept(new IClientFluidTypeExtensions() {
+                public ResourceLocation getStillTexture() {
+                    return TransparentFluidType.this.stillTexture;
+                }
 
+                public ResourceLocation getFlowingTexture() {
+                    return TransparentFluidType.this.flowingTexture;
+                }
+
+                @Override
+                public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
+                    return 0x00ffffff;
+                }
+            });
+        }
     }
 
     public static void register() {}

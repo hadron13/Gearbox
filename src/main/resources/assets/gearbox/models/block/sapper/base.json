@@ -10,6 +10,7 @@
 		"casing": "create:block/andesite_casing",
 		"side": "gearbox:block/sapper/cogwheel_side"
 	},
+	"render_type": "cutout_mipped",
 	"elements": [
 		{
 			"from": [0, 0, 1],
