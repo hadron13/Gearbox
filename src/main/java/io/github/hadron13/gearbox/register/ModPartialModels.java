@@ -1,6 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
-import com.jozufozu.flywheel.core.PartialModel;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import io.github.hadron13.gearbox.Gearbox;
 
 public class ModPartialModels {
@@ -19,7 +19,7 @@ public class ModPartialModels {
             PG_RING_GEAR = block("planetary/ring_gear"),
             PG_SUN_GEAR = block("planetary/sun_gear"),
             PG_PLANET_GEAR = block("planetary/planet_gear"),
-            USELESS_COG = block("useless/cog"),
+            USELESS_COG = block("kinetic_machine/cog"),
             CENTRIFUGE_COG = block("centrifuge/cogwheel"),
             LASER_DRILL_HEAD = block("laser_drill/head"),
             PUMPJACK_ARM = block("pumpjack/arm"),
@@ -29,15 +29,22 @@ public class ModPartialModels {
             PUMPJACK_CRANK = block("pumpjack/crank"),
             PUMPJACK_SMOOTHROD = block("pumpjack/smooth_rod"),
             PUMPJACK_TRUSS = block("pumpjack/truss"),
-            DIPPER_POLE = block("dipper/pole");
+            DIPPER_POLE = block("dipper/pole"),
+
+            ULTIMATE_MECH_CORE = item("ultimate_mechanism/core"),
+            TAU_CANNON_COIL = item("tau_cannon/coil");
 
 
     private static PartialModel block(String path) {
-        return new PartialModel(Gearbox.asResource("block/" + path));
+        return PartialModel.of(Gearbox.asResource("block/" + path));
+    }
+
+    private static PartialModel item(String path) {
+        return PartialModel.of(Gearbox.asResource("item/" + path));
     }
 
     private static PartialModel entity(String path) {
-        return new PartialModel(Gearbox.asResource("entity/" + path));
+        return PartialModel.of(Gearbox.asResource("entity/" + path));
     }
 
     public static void init() {

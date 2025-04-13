@@ -4,11 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.base.SingleRotatingInstance;
-import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -33,8 +31,8 @@ public class PumpjackCrankRenderer  extends KineticBlockEntityRenderer<PumpjackC
 
         BlockState blockstate = be.getBlockState();
         Direction facing = blockstate.getValue(HORIZONTAL_FACING);
-        SuperByteBuffer crank = CachedBufferer.partialFacing(ModPartialModels.PUMPJACK_CRANK, blockstate, facing);
-        SuperByteBuffer half_shaft = CachedBufferer.partialFacing(AllPartialModels.SHAFT_HALF, blockstate, facing);
+        SuperByteBuffer crank = CachedBuffers.partialFacing(ModPartialModels.PUMPJACK_CRANK, blockstate, facing);
+        SuperByteBuffer half_shaft = CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, blockstate, facing);
 
         standardKineticRotationTransform(half_shaft, be, light);
 
@@ -47,7 +45,7 @@ public class PumpjackCrankRenderer  extends KineticBlockEntityRenderer<PumpjackC
         crank
                 .light(light)
                 .translate(0, 3/16f, 0)
-                .rotateCentered(facing.getClockWise(), angle * Mth.DEG_TO_RAD)
+                .rotateCentered(angle * Mth.DEG_TO_RAD, facing.getClockWise())
                 .translate(0, -3/16f, 0)
                 .renderInto(ms, solid);
 

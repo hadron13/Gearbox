@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.blocks.irradiator;
 
-import com.jozufozu.flywheel.util.Color;
+
+import net.createmod.catnip.theme.Color;
 
 public interface LaserRecipe {
     public Color getColor();

@@ -1,18 +1,16 @@
 package io.github.hadron13.gearbox.blocks.centrifuge;
 
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.lang.FontHelper;
+import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -20,19 +18,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -137,31 +131,31 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
 
 
         if (Math.abs(getSpeed()) < 64.0f) {
-            Lang.translate("tooltip.speedRequirement")
+            GearboxLang.translate("tooltip.speedRequirement")
                     .style(GOLD)
                     .forGoggles(tooltip);
             MutableComponent hint =
-                    Lang.translateDirect("gui.contraptions.not_fast_enough", I18n.get(getBlockState().getBlock()
+                    GearboxLang.translateDirect("gui.contraptions.not_fast_enough", I18n.get(getBlockState().getBlock()
                             .getDescriptionId()));
-            List<Component> cutString = TooltipHelper.cutTextComponent(hint, TooltipHelper.Palette.GRAY_AND_WHITE);
+            List<Component> cutString = TooltipHelper.cutTextComponent(hint, FontHelper.Palette.GRAY_AND_WHITE);
             for (int i = 0; i < cutString.size(); i++)
-                Lang.builder()
+                GearboxLang.builder()
                         .add(cutString.get(i)
                                 .copy())
                         .forGoggles(tooltip);
             isEmpty = false;
         }
 
-        LangBuilder mb = Lang.translate("generic.unit.millibuckets");
+        LangBuilder mb = GearboxLang.translate("generic.unit.millibuckets");
         for (int i = 0; i < fluids.getTanks(); i++) {
             FluidStack fluidStack = fluids.getFluidInTank(i);
             if (fluidStack.isEmpty())
                 continue;
-            Lang.text("")
-                    .add(Lang.fluidName(fluidStack)
-                            .add(Lang.text(" "))
+            GearboxLang.text("")
+                    .add(GearboxLang.fluidName(fluidStack)
+                            .add(GearboxLang.text(" "))
                             .style(ChatFormatting.GRAY)
-                            .add(Lang.number(fluidStack.getAmount())
+                            .add(GearboxLang.number(fluidStack.getAmount())
                                     .add(mb)
                                     .style(ChatFormatting.BLUE)))
                     .forGoggles(tooltip, 1);
@@ -181,7 +175,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && (side == null || side.getAxis() == getBlockState().getValue(AXIS)) )
+        if (cap == ForgeCapabilities.FLUID_HANDLER && (side == null || side.getAxis() == getBlockState().getValue(AXIS)) )
             return fluidCapability.cast();
         return super.getCapability(cap, side);
     }

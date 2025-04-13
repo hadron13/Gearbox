@@ -5,20 +5,17 @@ import java.util.List;
 import java.util.Optional;
 
 
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.sound.SoundScapes;
 import com.simibubi.create.foundation.sound.SoundScapes.AmbienceGroup;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -262,10 +259,10 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
             ItemStack stackInSlot = inputInv.getStackInSlot(i);
             if (stackInSlot.isEmpty())
                 continue;
-            Lang.text("")
-                    .add(Components.translatable(stackInSlot.getDescriptionId())
+            GearboxLang.text("")
+                    .add(Component.translatable(stackInSlot.getDescriptionId())
                             .withStyle(ChatFormatting.GRAY))
-                    .add(Lang.text(" x" + stackInSlot.getCount())
+                    .add(GearboxLang.text(" x" + stackInSlot.getCount())
                             .style(ChatFormatting.GREEN))
                     .forGoggles(tooltip, 1);
         }
@@ -274,10 +271,10 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
             ItemStack stackInSlot = outputInv.getStackInSlot(i);
             if (stackInSlot.isEmpty())
                 continue;
-            Lang.text("")
-                    .add(Components.translatable(stackInSlot.getDescriptionId())
+            GearboxLang.text("")
+                    .add(Component.translatable(stackInSlot.getDescriptionId())
                             .withStyle(ChatFormatting.GRAY))
-                    .add(Lang.text(" x" + stackInSlot.getCount())
+                    .add(GearboxLang.text(" x" + stackInSlot.getCount())
                             .style(ChatFormatting.GREEN))
                     .forGoggles(tooltip, 1);
         }

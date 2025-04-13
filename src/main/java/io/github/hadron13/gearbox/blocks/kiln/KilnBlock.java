@@ -3,8 +3,8 @@ package io.github.hadron13.gearbox.blocks.kiln;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,8 +29,8 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -114,7 +114,7 @@ public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEn
     public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
         super.updateEntityAfterFallOn(worldIn, entityIn);
 
-        if (entityIn.level.isClientSide)
+        if (entityIn.level().isClientSide)
             return;
         if (!(entityIn instanceof ItemEntity))
             return;
@@ -130,7 +130,7 @@ public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEn
             return;
 
         ItemEntity itemEntity = (ItemEntity) entityIn;
-        LazyOptional<IItemHandler> capability = kiln.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+        LazyOptional<IItemHandler> capability = kiln.getCapability(ForgeCapabilities.ITEM_HANDLER);
         if (!capability.isPresent())
             return;
 

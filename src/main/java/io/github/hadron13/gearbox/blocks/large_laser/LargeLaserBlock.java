@@ -2,9 +2,9 @@ package io.github.hadron13.gearbox.blocks.large_laser;
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -139,7 +139,7 @@ public class LargeLaserBlock extends Block implements IBE<LargeLaserBlockEntity>
 
         @Override
         public String getSerializedName() {
-            return Lang.asId(name());
+            return GearboxLang.asId(name());
         }
     }
 

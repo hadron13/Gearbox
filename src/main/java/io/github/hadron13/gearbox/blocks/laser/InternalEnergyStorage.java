@@ -1,6 +1,6 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
-import com.simibubi.create.foundation.utility.Lang;
+import io.github.hadron13.gearbox.GearboxLang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -73,26 +73,26 @@ public class InternalEnergyStorage extends EnergyStorage {
     }
 
     public void storedEnergyTooltip(List<Component> tooltip){
-        Lang.translate("gui.goggles.energy_stats").forGoggles(tooltip);
+        GearboxLang.translate("gui.goggles.energy_stats").forGoggles(tooltip);
 
-        Lang.number(this.getEnergyStored())
-                .add(Lang.text("/"))
-                .add(Lang.number(this.getMaxEnergyStored()))
-                .add(Lang.text(" FE"))
+        GearboxLang.number(this.getEnergyStored())
+                .add(GearboxLang.text("/"))
+                .add(GearboxLang.number(this.getMaxEnergyStored()))
+                .add(GearboxLang.text(" FE"))
                 .style(ChatFormatting.AQUA)
                 .space()
-                .add(Lang.translate("gui.goggles.energy_stored")
+                .add(GearboxLang.translate("gui.goggles.energy_stored")
                         .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);
 
     }
 
     public static void energyConsumptionTooltip(List<Component> tooltip, int consumption){
-        Lang.number(consumption)
-                .add(Lang.text(" FE/tick"))
+        GearboxLang.number(consumption)
+                .add(GearboxLang.text(" FE/tick"))
                 .style(ChatFormatting.AQUA)
                 .space()
-                .add(Lang.translate("gui.goggles.energy_consumption")
+                .add(GearboxLang.translate("gui.goggles.energy_consumption")
                         .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);
     }

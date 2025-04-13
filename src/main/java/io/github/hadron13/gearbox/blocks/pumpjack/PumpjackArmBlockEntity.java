@@ -1,23 +1,15 @@
 package io.github.hadron13.gearbox.blocks.pumpjack;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.world.level.levelgen.synth.PerlinNoise;
-import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

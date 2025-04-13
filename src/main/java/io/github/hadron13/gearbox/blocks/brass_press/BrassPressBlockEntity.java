@@ -5,26 +5,17 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour.PressingBehaviourSpecifics;
-import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
-import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -43,7 +34,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,8 +114,7 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 //		pressingBehaviour.particleItems.add(input.stack);
 		particleItems.add(input.stack);
 
-		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(
-			canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
+		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(getLevel(), canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
 
 		for (ItemStack created : outputs) {
 			if (!created.isEmpty()) {

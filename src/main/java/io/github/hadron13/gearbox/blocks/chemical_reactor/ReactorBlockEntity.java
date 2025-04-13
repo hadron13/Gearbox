@@ -3,25 +3,18 @@ package io.github.hadron13.gearbox.blocks.chemical_reactor;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -29,20 +22,16 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACING;
 
@@ -168,17 +157,17 @@ public class ReactorBlockEntity extends MechanicalMixerBlockEntity {
     }
 
     @Override
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) { LangBuilder mb = Lang.translate("generic.unit.millibuckets");
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) { LangBuilder mb = GearboxLang.translate("generic.unit.millibuckets");
         boolean empty_tooltip = !super.addToGoggleTooltip(tooltip, isPlayerSneaking);
         FluidStack atmosphere = atmosphere_tank.getPrimaryHandler().getFluidInTank(0);
         if (!atmosphere.isEmpty()) {
             empty_tooltip = false;
-            Lang.translate("hint.reactor.atmosphere")
+            GearboxLang.translate("hint.reactor.atmosphere")
                 .forGoggles(tooltip);
-            Lang.fluidName(atmosphere)
+            GearboxLang.fluidName(atmosphere)
                 .space()
                 .style(ChatFormatting.GRAY)
-                    .add(Lang.number(atmosphere.getAmount())
+                    .add(GearboxLang.number(atmosphere.getAmount())
                     .add(mb)
                     .style(ChatFormatting.BLUE))
                 .forGoggles(tooltip, 1);
@@ -189,11 +178,11 @@ public class ReactorBlockEntity extends MechanicalMixerBlockEntity {
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
         if(side.getClockWise().getAxis() == getBlockState().getValue(HORIZONTAL_FACING).getAxis() &&
-                cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+                cap == ForgeCapabilities.ITEM_HANDLER){
             if(getBasin().isPresent()) return getBasin().get().getCapability(cap);
         }
         if(side == getBlockState().getValue(HORIZONTAL_FACING) &&
-                cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+                cap == ForgeCapabilities.FLUID_HANDLER){
             return atmosphere_tank.getCapability().cast();
         }
 

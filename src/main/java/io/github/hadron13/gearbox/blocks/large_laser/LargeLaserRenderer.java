@@ -1,20 +1,18 @@
 package io.github.hadron13.gearbox.blocks.large_laser;
 
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock.HORIZONTAL_FACING;
 import static net.minecraft.core.Direction.Axis.Z;
 
 public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity> {
@@ -28,7 +26,7 @@ public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity>
         ms.pushPose();
         super.renderSafe(be, partialTicks, ms, bufferSource, light, overlay);
         ms.popPose();
-        if (Backend.canUseInstancing(be.getLevel()))
+        if (VisualizationManager.supportsVisualization(be.getLevel()))
             return;
 
         BlockState blockState = be.getBlockState();
@@ -38,9 +36,10 @@ public class LargeLaserRenderer extends LaserBeamRenderer<LargeLaserBlockEntity>
 
         VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
 
-        SuperByteBuffer lens = CachedBufferer.partial(ModPartialModels.LARGE_LASER_LENS, blockState);
+        SuperByteBuffer lens = CachedBuffers.partial(ModPartialModels.LARGE_LASER_LENS, blockState);
 
-        TransformStack.cast(ms)
+        var tfStack = TransformStack.of(ms);
+        tfStack
                 .translate(0.5f, 0.5f, 0.5f)
                 .rotateToFace(be.getFacing())
                 .rotate(angle, Z)

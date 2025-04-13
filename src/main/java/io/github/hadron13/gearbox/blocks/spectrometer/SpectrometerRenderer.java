@@ -1,25 +1,21 @@
 package io.github.hadron13.gearbox.blocks.spectrometer;
 
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.Iterate;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.AirBlock;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SpectrometerRenderer extends SafeBlockEntityRenderer<SpectrometerBlockEntity> {
@@ -29,15 +25,15 @@ public class SpectrometerRenderer extends SafeBlockEntityRenderer<SpectrometerBl
 
     @Override
     protected void renderSafe(SpectrometerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        if (Backend.canUseInstancing(be.getLevel())) return;
+        if (VisualizationManager.supportsVisualization(be.getLevel())) return;
 
         BlockState gaugeState = be.getBlockState();
         SpectrometerBlockEntity gaugeBE = be;
 
         PartialModel partialModel = ModPartialModels.SPECTROGAUGE;
         SuperByteBuffer headBuffer =
-                CachedBufferer.partial(partialModel, gaugeState);
-        SuperByteBuffer dialBuffer = CachedBufferer.partial(AllPartialModels.GAUGE_DIAL, gaugeState);
+                CachedBuffers.partial(partialModel, gaugeState);
+        SuperByteBuffer dialBuffer = CachedBuffers.partial(AllPartialModels.GAUGE_DIAL, gaugeState);
 
         float dialPivot = 5.75f / 16;
         float progress = Mth.lerp(partialTicks, gaugeBE.prevDialState, gaugeBE.dialState);
@@ -49,7 +45,7 @@ public class SpectrometerRenderer extends SafeBlockEntityRenderer<SpectrometerBl
 
             VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
             rotateBufferTowards(dialBuffer, facing).translate(0, dialPivot, dialPivot)
-                    .rotate(Direction.EAST, (float) (Math.PI / 2 * -progress))
+                    .rotate((float) (Math.PI / 2 * -progress), Direction.EAST)
                     .translate(0, -dialPivot, -dialPivot)
                     .light(light)
                     .renderInto(ms, vb);
@@ -58,6 +54,6 @@ public class SpectrometerRenderer extends SafeBlockEntityRenderer<SpectrometerBl
         }
     }
     protected SuperByteBuffer rotateBufferTowards(SuperByteBuffer buffer, Direction target) {
-        return buffer.rotateCentered(Direction.UP, (float) ((-target.toYRot() - 90) / 180 * Math.PI));
+        return buffer.rotateCentered((float) ((-target.toYRot() - 90) / 180 * Math.PI), Direction.UP);
     }
 }

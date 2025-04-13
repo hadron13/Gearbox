@@ -1,6 +1,5 @@
 package io.github.hadron13.gearbox.compat.jei.category;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 //import io.github.hadron13.gearbox.content.contraptions.components.sifter.PyroprocessingRecipe;
 //import io.github.hadron13.gearbox.foundation.gui.ModGUITextures;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
@@ -12,6 +11,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.List;
 
@@ -38,16 +38,15 @@ public class PyroprocessingCategory extends CreateRecipeCategory<PyroprocessingR
             builder
                     .addSlot(RecipeIngredientRole.OUTPUT, single ? 139 : 133 + xOffset, 27 + yOffset)
                     .setBackground(getRenderedSlot(output), -1, -1)
-                    .addItemStack(output.getStack())
-                    .addTooltipCallback(addStochasticTooltip(output));
+                    .addItemStack(output.getStack()).addRichTooltipCallback(addStochasticTooltip(output));
 
             i++;
         }
 
     }
-    public void draw(PyroprocessingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        AllGuiTextures.JEI_ARROW.render(matrixStack, 85, 32);
-        AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 43, 4);
-        kiln.draw(matrixStack, 48, 27);
+    public void draw(PyroprocessingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        AllGuiTextures.JEI_ARROW.render(graphics, 85, 32);
+        AllGuiTextures.JEI_DOWN_ARROW.render(graphics, 43, 4);
+        kiln.draw(graphics, 48, 27);
     }
 }

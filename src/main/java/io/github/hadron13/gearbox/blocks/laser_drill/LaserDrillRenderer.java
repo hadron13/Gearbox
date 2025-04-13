@@ -1,22 +1,16 @@
 package io.github.hadron13.gearbox.blocks.laser_drill;
 
-import com.google.common.cache.Cache;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
-import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
@@ -40,10 +34,10 @@ public class LaserDrillRenderer extends SafeBlockEntityRenderer<LaserDrillBlockE
 
         VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
 
-        SuperByteBuffer head = CachedBufferer.partial(ModPartialModels.LASER_DRILL_HEAD, be.getBlockState());
+        SuperByteBuffer head = CachedBuffers.partial(ModPartialModels.LASER_DRILL_HEAD, be.getBlockState());
 
 
-        head.rotateCentered(Direction.UP, angle * Mth.DEG_TO_RAD)
+        head.rotateCentered(angle * Mth.DEG_TO_RAD, Direction.UP)
             .renderInto(ms, vb);
 
         if(be.totalPower < 0.1f) {
@@ -53,11 +47,11 @@ public class LaserDrillRenderer extends SafeBlockEntityRenderer<LaserDrillBlockE
         vb = bufferSource.getBuffer(ModRenderTypes.laserBeam());
 
         float thickness = 1.0f;
-        SuperByteBuffer thick_beam = CachedBufferer.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
+        SuperByteBuffer thick_beam = CachedBuffers.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
         thick_beam
                 .translate(0.5f - thickness/2.0f, 1.0, 0.5f - thickness/2.0f)
                 .scale(thickness, -be.laserLength, thickness)
-                .rotateCentered(Direction.UP, angle * Mth.DEG_TO_RAD)
+                .rotateCentered(angle * Mth.DEG_TO_RAD, Direction.UP)
                 .color(be.mixedColor.getRGB())
                 .renderInto(ms, vb);
     }

@@ -1,7 +1,6 @@
 package io.github.hadron13.gearbox.blocks.compressor;
 
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -14,19 +13,16 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.sound.SoundScapes;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.IntAttached;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.data.IntAttached;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -117,7 +114,7 @@ public class CompressorBlockEntity extends KineticBlockEntity {
                 }
 
                 IItemHandler targetInv = be == null ? null
-                        : be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite())
+                        : be.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite())
                         .orElse(inserter == null ? null : inserter.getInventory());
 
                 if (targetInv == null)
@@ -297,10 +294,10 @@ public class CompressorBlockEntity extends KineticBlockEntity {
             ItemStack stackInSlot = output.getStackInSlot(i);
             if (stackInSlot.isEmpty())
                 continue;
-            Lang.text("")
-                    .add(Components.translatable(stackInSlot.getDescriptionId())
+            GearboxLang.text("")
+                    .add(Component.translatable(stackInSlot.getDescriptionId())
                             .withStyle(ChatFormatting.GRAY))
-                    .add(Lang.text(" x" + stackInSlot.getCount())
+                    .add(GearboxLang.text(" x" + stackInSlot.getCount())
                             .style(ChatFormatting.GREEN))
                     .forGoggles(tooltip, 1);
         }

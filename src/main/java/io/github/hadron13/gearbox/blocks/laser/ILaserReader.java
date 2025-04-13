@@ -1,6 +1,6 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
-import com.jozufozu.flywheel.util.Color;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.Direction;
 
 /**

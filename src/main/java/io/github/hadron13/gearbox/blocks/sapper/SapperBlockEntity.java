@@ -1,63 +1,37 @@
 package io.github.hadron13.gearbox.blocks.sapper;
 
-import com.mojang.datafixers.TypeRewriteRule;
 import com.simibubi.create.AllFluids;
-import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
-import com.simibubi.create.content.fluids.hosePulley.HosePulleyBlock;
-import com.simibubi.create.content.fluids.hosePulley.HosePulleyFluidHandler;
-import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.VecHelper;
 
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.data.Couple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.antlr.runtime.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
-import static net.minecraft.world.level.block.LeavesBlock.DISTANCE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveringInformation {

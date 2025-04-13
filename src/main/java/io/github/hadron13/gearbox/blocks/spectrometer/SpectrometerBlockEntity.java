@@ -1,9 +1,9 @@
 package io.github.hadron13.gearbox.blocks.spectrometer;
 
-import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
-import com.simibubi.create.foundation.utility.Lang;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReader;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -62,30 +62,30 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
         if(currentPower == 0 || currentColor == Color.BLACK){
-            Lang.translate("gui.spectrometer.nolaser")
+            GearboxLang.translate("gui.spectrometer.nolaser")
                     .style(ChatFormatting.DARK_GRAY)
                     .forGoggles(tooltip);
             return true;
         }
 
-        Lang.translate("gui.spectrometer.title")
+        GearboxLang.translate("gui.spectrometer.title")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
-        Lang.text("\u2592 ").color(0xffffff)
-                .add(Lang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
-                .add(Lang.text(" " + truncatePrecision(currentPower, 2) ))
+        GearboxLang.text("\u2592 ").color(0xffffff)
+                .add(GearboxLang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
+                .add(GearboxLang.text(" " + truncatePrecision(currentPower, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("\u2588 ").color(0xbd5252)
-                .add(Lang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
-                .add(Lang.text(" " + truncatePrecision(currentColor.getRed()/255f, 2) ))
+        GearboxLang.text("\u2588 ").color(0xbd5252)
+                .add(GearboxLang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
+                .add(GearboxLang.text(" " + truncatePrecision(currentColor.getRed()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("\u2588 ").color(0x2d9636)
-                .add(Lang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
-                .add(Lang.text(" " + truncatePrecision(currentColor.getGreen()/255f, 2) ))
+        GearboxLang.text("\u2588 ").color(0x2d9636)
+                .add(GearboxLang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
+                .add(GearboxLang.text(" " + truncatePrecision(currentColor.getGreen()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("\u2588 ").color(0x3e3dbf)
-                .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
-                .add(Lang.text(" " + truncatePrecision(currentColor.getBlue()/255f, 2) ))
+        GearboxLang.text("\u2588 ").color(0x3e3dbf)
+                .add(GearboxLang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
+                .add(GearboxLang.text(" " + truncatePrecision(currentColor.getBlue()/255f, 2) ))
                 .forGoggles(tooltip);
 
         return true;

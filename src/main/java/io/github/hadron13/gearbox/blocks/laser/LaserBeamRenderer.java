@@ -1,23 +1,19 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
-import com.google.common.cache.Cache;
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.core.materials.model.ModelData;
-import com.jozufozu.flywheel.util.Color;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
 import static net.minecraft.core.Direction.NORTH;
 
@@ -65,11 +61,10 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
             float thickness =  Mth.clamp( (float)Math.sqrt((beam.power+20f)/20f), 1f, 3f ) * (1.4f/16f);
 
             ms.pushPose();
-            TransformStack
-                    .cast(ms)
+            TransformStack.of(ms)
                     .translate(0.5f - thickness/2, 0.5f - thickness/2, 0.5f - thickness/2)
                     .translate( thickness/2,  thickness/2, thickness/2)
-                    .rotate(facing, AnimationTickHolder.getRenderTime()/30f)
+                    .rotate(AnimationTickHolder.getRenderTime()/30f, facing)
                     .rotateToFace( facing.getOpposite())
                     .translate(- thickness/2, - thickness/2, -thickness/2)
             ;

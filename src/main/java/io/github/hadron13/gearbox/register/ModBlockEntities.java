@@ -1,32 +1,34 @@
 package io.github.hadron13.gearbox.register;
 
 
+import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.kinetics.base.OrientedRotatingVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
-import io.github.hadron13.gearbox.blocks.brass_press.BrassPressInstance;
+import io.github.hadron13.gearbox.blocks.brass_press.BrassPressVisual;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressRenderer;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
-import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeInstance;
+import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeVisual;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeRenderer;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorBlockEntity;
-import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorInstance;
+import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorVisual;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorRenderer;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
-import io.github.hadron13.gearbox.blocks.compressor.CompressorInstance;
+import io.github.hadron13.gearbox.blocks.compressor.CompressorVisual;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlockEntity;
-import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerInstance;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerVisual;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerRenderer;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorInstance;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlockEntity;
 import io.github.hadron13.gearbox.blocks.kiln.KilnRenderer;
-import io.github.hadron13.gearbox.blocks.kiln.KilnInstance;
+import io.github.hadron13.gearbox.blocks.kiln.KilnVisual;
 import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlockEntity;
-import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserInstance;
+import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserVisual;
 import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
@@ -38,11 +40,11 @@ import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetRenderer;
 import io.github.hadron13.gearbox.blocks.pumpjack.*;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
-import io.github.hadron13.gearbox.blocks.sapper.SapperInstance;
+import io.github.hadron13.gearbox.blocks.sapper.SapperVisual;
 import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerRenderer;
-import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerInstance;
+import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerVisual;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlockEntity;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineInstance;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineRenderer;
@@ -52,28 +54,28 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<KilnBlockEntity> KILN = Gearbox.registrate()
             .blockEntity("kiln", KilnBlockEntity::new)
-            .instance(() -> KilnInstance::new)
+            .visual(() -> KilnVisual::new)
             .validBlocks(ModBlocks.KILN)
             .renderer(() -> KilnRenderer::new)
             .register();
 
     public static final BlockEntityEntry<SapperBlockEntity> SAPPER = Gearbox.registrate()
             .blockEntity("sapper", SapperBlockEntity::new)
-            .instance(() -> SapperInstance::new)
+            .visual(() -> SapperVisual::new)
             .validBlocks(ModBlocks.SAPPER)
             .renderer(() -> SapperRenderer::new)
             .register();
 
     public static final BlockEntityEntry<CompressorBlockEntity> COMPRESSOR = Gearbox.registrate()
             .blockEntity("compressor", CompressorBlockEntity::new)
-            .instance(() -> CompressorInstance::new)
+            .visual(() -> CompressorVisual::new)
             .validBlocks(ModBlocks.COMPRESSOR)
             .renderer(() -> CompressorRenderer::new)
             .register();
 
     public static final BlockEntityEntry<BrassPressBlockEntity> BRASS_PRESS = Gearbox.registrate()
             .blockEntity("brass_press", BrassPressBlockEntity::new)
-            .instance(() -> BrassPressInstance::new)
+            .visual(() -> BrassPressVisual::new)
             .validBlocks(ModBlocks.BRASS_PRESS)
             .renderer(() -> BrassPressRenderer::new)
             .register();
@@ -92,14 +94,14 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<SpectrometerBlockEntity> SPECTROMETER = Gearbox.registrate()
             .blockEntity("spectrometer", SpectrometerBlockEntity::new)
-            .instance(() -> SpectrometerInstance::new)
+            .visual(() -> SpectrometerVisual::new)
             .validBlocks(ModBlocks.SPECTROMETER)
             .renderer(() -> SpectrometerRenderer::new)
             .register();
 
     public static final BlockEntityEntry<IrradiatorBlockEntity> IRRADIATOR = Gearbox.registrate()
             .blockEntity("irradiator", IrradiatorBlockEntity::new)
-            .instance(() -> IrradiatorInstance::new)
+            .visual(() -> IrradiatorInstance::new)
             .validBlocks(ModBlocks.IRRADIATOR)
             .renderer(()-> IrradiatorRenderer::new)
             .register();
@@ -112,14 +114,14 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<LargeLaserBlockEntity> LARGE_LASER = Gearbox.registrate()
             .blockEntity("large_laser", LargeLaserBlockEntity::new)
-            .instance(() -> LargeLaserInstance::new)
+            .visual(() -> LargeLaserVisual::new)
             .validBlocks(ModBlocks.LARGE_LASER)
             .renderer(() -> LargeLaserRenderer::new)
             .register();
 
     public static final BlockEntityEntry<ElectrolyzerBlockEntity> ELECTROLYZER = Gearbox.registrate()
             .blockEntity("electrolyzer", ElectrolyzerBlockEntity::new)
-            .instance(() -> ElectrolyzerInstance::new)
+            .visual(() -> ElectrolyzerVisual::new)
             .validBlocks(ModBlocks.ELECTROLYZER)
             .renderer(() -> ElectrolyzerRenderer::new)
             .register();
@@ -133,21 +135,21 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<UselessMachineBlockEntity> USELESS_MACHINE = Gearbox.registrate()
             .blockEntity("kinetic_machine", UselessMachineBlockEntity::new)
-            .instance(() -> UselessMachineInstance::new)
+            .visual(() -> UselessMachineInstance::new)
             .validBlocks(ModBlocks.USELESS_MACHINE)
             .renderer(() -> UselessMachineRenderer::new)
             .register();
 
     public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = Gearbox.registrate()
             .blockEntity("centrifuge", CentrifugeBlockEntity::new)
-            .instance(() -> CentrifugeInstance::new)
+            .visual(() -> CentrifugeVisual::new)
             .validBlocks(ModBlocks.CENTRIFUGE)
             .renderer(() -> CentrifugeRenderer::new)
             .register();
 
     public static final BlockEntityEntry<LaserDrillBlockEntity> LASER_DRILL = Gearbox.registrate()
             .blockEntity("laser_drill", LaserDrillBlockEntity::new)
-//            .instance(() -> LargeLaserInstance::new)
+//            .instance(() -> LargeLaserVisual::new)
             .validBlocks(ModBlocks.LASER_DRILL)
             .renderer(() -> LaserDrillRenderer::new)
             .register();
@@ -181,7 +183,7 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<ReactorBlockEntity> REACTOR = Gearbox.registrate()
             .blockEntity("chemical_reactor", ReactorBlockEntity::new)
-            .instance(() -> ReactorInstance::new)
+            .visual(() -> ReactorVisual::new)
             .validBlocks(ModBlocks.REACTOR)
             .renderer(() -> ReactorRenderer::new)
             .register();

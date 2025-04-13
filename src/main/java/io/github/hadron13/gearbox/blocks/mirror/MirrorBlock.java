@@ -3,7 +3,6 @@ package io.github.hadron13.gearbox.blocks.mirror;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.*;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;

@@ -1,13 +1,12 @@
 package io.github.hadron13.gearbox.blocks.mirror;
 
-import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;

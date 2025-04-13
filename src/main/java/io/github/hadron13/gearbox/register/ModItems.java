@@ -4,15 +4,14 @@ import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.groups.ModGroup;
 import io.github.hadron13.gearbox.item.tau_cannon.TauCannonItem;
 import io.github.hadron13.gearbox.item.ultimate_mechanism.UltimateMechanismItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
 public class ModItems {
-    private static final CreateRegistrate REGISTRATE = Gearbox.registrate()
-            .creativeModeTab(() -> ModGroup.MAIN);
+    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(ModCreativeTabs.MAIN_TAB);
+
 
     public static void register() {}
     public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot");

@@ -1,13 +1,13 @@
 package io.github.hadron13.gearbox.blocks.brass_press;
 
-import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
+import dev.engine_room.flywheel.api.backend.Backend;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import dev.engine_room.flywheel.lib.backend.SimpleBackend;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -29,11 +29,10 @@ public class BrassPressRenderer extends KineticBlockEntityRenderer<BrassPressBlo
 	}
 
 	@Override
-	protected void renderSafe(BrassPressBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
-							  int light, int overlay) {
+	protected void renderSafe(BrassPressBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
 		super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
 
-		if (Backend.canUseInstancing(be.getLevel()))
+		if (VisualizationManager.supportsVisualization(be.getLevel()))
 			return;
 
 		BlockState blockState = be.getBlockState();
@@ -43,9 +42,9 @@ public class BrassPressRenderer extends KineticBlockEntityRenderer<BrassPressBlo
 		float renderedHeadOffset =
 				be.getRenderedHeadOffset(partialTicks) * be.pressingBehaviour.mode.headOffset;
 
-		SuperByteBuffer headRender = CachedBufferer.partialFacing(ModPartialModels.BRASS_PRESS_HEAD, blockState,
+		SuperByteBuffer headRender = CachedBuffers.partialFacing(ModPartialModels.BRASS_PRESS_HEAD, blockState,
 				blockState.getValue(HORIZONTAL_FACING));
-		SuperByteBuffer poleRender = CachedBufferer.partialFacing(ModPartialModels.BRASS_PRESS_POLE, blockState,
+		SuperByteBuffer poleRender = CachedBuffers.partialFacing(ModPartialModels.BRASS_PRESS_POLE, blockState,
 				blockState.getValue(HORIZONTAL_FACING));
 
 		poleRender.translate(0, -renderedHeadOffset, 0)
@@ -53,7 +52,7 @@ public class BrassPressRenderer extends KineticBlockEntityRenderer<BrassPressBlo
 				.renderInto(ms, buffer.getBuffer(RenderType.solid()));
 
 		headRender.translate(0, -renderedHeadOffset, 0)
-				.rotateCentered(Direction.UP, renderedHeadRotation * Mth.DEG_TO_RAD)
+				.rotateCentered(renderedHeadRotation * Mth.DEG_TO_RAD, Direction.UP)
 				.light(light)
 				.renderInto(ms, buffer.getBuffer(RenderType.solid()));
 	}

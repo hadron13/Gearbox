@@ -2,10 +2,10 @@ package io.github.hadron13.gearbox.blocks.irradiator;
 
 
 import com.google.gson.JsonObject;
-import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 

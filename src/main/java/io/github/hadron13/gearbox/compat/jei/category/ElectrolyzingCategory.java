@@ -1,18 +1,15 @@
 package io.github.hadron13.gearbox.compat.jei.category;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.jei.category.BasinCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.foundation.utility.Components;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
-import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedElectrolyzer;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class ElectrolyzingCategory extends BasinCategory {
@@ -24,8 +21,8 @@ public class ElectrolyzingCategory extends BasinCategory {
     }
 
     @Override
-    public void draw(BasinRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        super.draw(recipe, iRecipeSlotsView, matrixStack, mouseX, mouseY);
+    public void draw(BasinRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, iRecipeSlotsView, graphics, mouseX, mouseY);
         ElectrolyzingRecipe electrolyzingRecipe = (ElectrolyzingRecipe) recipe;
 
         Font font = Minecraft.getInstance().font;
@@ -33,15 +30,15 @@ public class ElectrolyzingCategory extends BasinCategory {
         int requiredEnergy = electrolyzingRecipe.requiredEnergy;
         String powerString = ((requiredEnergy > 999)? (float)requiredEnergy/1000f + "kFe"  :  requiredEnergy + "Fe") + "/tick";
 
-        Component power = Components.literal("\u2592 " + powerString);
+        Component power = Component.literal("\u2592 " + powerString);
 
-        font.draw(matrixStack, power, 20, 20, 0xffffff);
+        graphics.drawString(Minecraft.getInstance().font, power, 20, 20, 0xffffff);
 
         HeatCondition requiredHeat = recipe.getRequiredHeat();
         if (requiredHeat != HeatCondition.NONE)
             heater.withHeat(requiredHeat.visualizeAsBlazeBurner())
-                    .draw(matrixStack, getBackground().getWidth() / 2 + 3, 55);
-        electrolyzer.draw(matrixStack, getBackground().getWidth() / 2 + 3, 34);
+                    .draw(graphics, getBackground().getWidth() / 2 + 3, 55);
+        electrolyzer.draw(graphics, getBackground().getWidth() / 2 + 3, 34);
     }
 
 

@@ -1,11 +1,11 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
-import com.jozufozu.flywheel.util.Color;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import io.github.hadron13.gearbox.Gearbox;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,8 +16,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 
@@ -136,7 +136,7 @@ public class LaserBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == CapabilityEnergy.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING).getOpposite())// && !level.isClientSide
+        if (cap == ForgeCapabilities.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING).getOpposite())// && !level.isClientSide
             return lazyEnergy.cast();
         return LazyOptional.empty();
     }

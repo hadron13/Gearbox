@@ -1,15 +1,15 @@
 package io.github.hadron13.gearbox.blocks.large_laser;
 
-import com.jozufozu.flywheel.util.Color;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,8 +21,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.lwjgl.system.CallbackI;
 
@@ -225,7 +225,7 @@ public class LargeLaserBlockEntity extends SmartBlockEntity implements IHaveGogg
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == CapabilityEnergy.ENERGY && isBack() && side == getFacing().getOpposite())// && !level.isClientSide
+        if (cap == ForgeCapabilities.ENERGY && isBack() && side == getFacing().getOpposite())// && !level.isClientSide
             return lazyEnergy.cast();
         return LazyOptional.empty();
     }

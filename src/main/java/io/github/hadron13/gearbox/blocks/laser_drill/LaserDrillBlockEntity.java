@@ -1,16 +1,15 @@
 package io.github.hadron13.gearbox.blocks.laser_drill;
 
-import com.jozufozu.flywheel.util.Color;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -257,37 +256,37 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
 
 
         if(totalPower == 0 || mixedColor== Color.BLACK){
-            Lang.translate("gui.spectrometer.nolaser")
+            GearboxLang.translate("gui.spectrometer.nolaser")
                     .style(ChatFormatting.DARK_GRAY)
                     .forGoggles(tooltip);
         }else {
 
-            Lang.translate("gui.spectrometer.title")
+            GearboxLang.translate("gui.spectrometer.title")
                     .style(ChatFormatting.GRAY)
                     .forGoggles(tooltip);
 
 
-            Lang.text("\u2592 ").color(0xffffff)
-                    .add(Lang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
-                    .add(Lang.text(" " + truncatePrecision(totalPower, 2)))
+            GearboxLang.text("\u2592 ").color(0xffffff)
+                    .add(GearboxLang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
+                    .add(GearboxLang.text(" " + truncatePrecision(totalPower, 2)))
                     .forGoggles(tooltip);
             if (totalPower < 20.0f) {
-                Lang.translate("gui.laserdrill.minimum_power")
+                GearboxLang.translate("gui.laserdrill.minimum_power")
                         .style(ChatFormatting.GRAY)
                         .forGoggles(tooltip);
                 return true;
             }
-            Lang.text("\u2588 ").color(0xbd5252)
-                    .add(Lang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
-                    .add(Lang.text(" " + truncatePrecision(mixedColor.getRed() / 255f, 2)))
+            GearboxLang.text("\u2588 ").color(0xbd5252)
+                    .add(GearboxLang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
+                    .add(GearboxLang.text(" " + truncatePrecision(mixedColor.getRed() / 255f, 2)))
                     .forGoggles(tooltip);
-            Lang.text("\u2588 ").color(0x2d9636)
-                    .add(Lang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
-                    .add(Lang.text(" " + truncatePrecision(mixedColor.getGreen() / 255f, 2)))
+            GearboxLang.text("\u2588 ").color(0x2d9636)
+                    .add(GearboxLang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
+                    .add(GearboxLang.text(" " + truncatePrecision(mixedColor.getGreen() / 255f, 2)))
                     .forGoggles(tooltip);
-            Lang.text("\u2588 ").color(0x3e3dbf)
-                    .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
-                    .add(Lang.text(" " + truncatePrecision(mixedColor.getBlue() / 255f, 2)))
+            GearboxLang.text("\u2588 ").color(0x3e3dbf)
+                    .add(GearboxLang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
+                    .add(GearboxLang.text(" " + truncatePrecision(mixedColor.getBlue() / 255f, 2)))
                     .forGoggles(tooltip);
         }
 
@@ -295,10 +294,10 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
             ItemStack stackInSlot = output.getStackInSlot(i);
             if (stackInSlot.isEmpty())
                 continue;
-            Lang.text("")
-                    .add(Components.translatable(stackInSlot.getDescriptionId())
+            GearboxLang.text("")
+                    .add(Component.translatable(stackInSlot.getDescriptionId())
                             .withStyle(ChatFormatting.GRAY))
-                    .add(Lang.text(" x" + stackInSlot.getCount())
+                    .add(GearboxLang.text(" x" + stackInSlot.getCount())
                             .style(ChatFormatting.GREEN))
                     .forGoggles(tooltip, 1);
         }

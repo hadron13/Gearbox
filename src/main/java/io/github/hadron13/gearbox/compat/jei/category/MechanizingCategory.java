@@ -1,8 +1,6 @@
 package io.github.hadron13.gearbox.compat.jei.category;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
@@ -11,6 +9,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.List;
 
@@ -31,18 +30,17 @@ public class MechanizingCategory extends CreateRecipeCategory<MechanizingRecipe>
         for (ProcessingOutput output : results) {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 51)
                     .setBackground(getRenderedSlot(output), -1, -1)
-                    .addItemStack(output.getStack())
-                    .addTooltipCallback(addStochasticTooltip(output));
+                    .addItemStack(output.getStack()).addRichTooltipCallback(addStochasticTooltip(output));
             i++;
         }
     }
 
     @Override
-    public void draw(MechanizingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
-        AllGuiTextures.JEI_SHADOW.render(matrixStack, 61, 41 + 23);
-        AllGuiTextures.JEI_DOWN_ARROW.render(matrixStack, 126, 29);
+    public void draw(MechanizingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        AllGuiTextures.JEI_SHADOW.render(graphics, 61, 41 + 23);
+        AllGuiTextures.JEI_DOWN_ARROW.render(graphics, 126, 29);
 
-        press.draw(matrixStack, getBackground().getWidth() / 2 - 17, 22);
+        press.draw(graphics, getBackground().getWidth() / 2 - 17, 22);
     }
 
 }

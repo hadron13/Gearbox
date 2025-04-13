@@ -4,11 +4,11 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.utility.Iterate;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -26,7 +26,7 @@ public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
     public static boolean apply(CentrifugeBlockEntity centrifuge, CentrifugingRecipe recipe, boolean test){
         List<FluidIngredient> fluidIngredients = recipe.getFluidIngredients();
 
-        IFluidHandler availableFluids = centrifuge.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        IFluidHandler availableFluids = centrifuge.getCapability(ForgeCapabilities.FLUID_HANDLER)
                 .orElse(null);
 
         int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];

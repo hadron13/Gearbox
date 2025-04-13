@@ -1,15 +1,12 @@
 package io.github.hadron13.gearbox.compat.jei;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.compat.jei.category.MixingCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
-import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
-import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
@@ -21,9 +18,7 @@ import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import com.simibubi.create.compat.jei.*;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
-import com.simibubi.create.foundation.config.ConfigBase;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 import mezz.jei.api.IModPlugin;
@@ -33,6 +28,7 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
+import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -343,7 +339,7 @@ public class GearboxJEI implements IModPlugin {
 
             CreateRecipeCategory.Info<T> info = new CreateRecipeCategory.Info<>(
                     new mezz.jei.api.recipe.RecipeType<>(Gearbox.asResource(name), recipeClass),
-                    Lang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
+                    GearboxLang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
             CreateRecipeCategory<T> category = factory.create(info);
             modCategories.add(category);
             return category;

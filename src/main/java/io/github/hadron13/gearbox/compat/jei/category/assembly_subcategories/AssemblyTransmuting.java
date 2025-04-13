@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
 import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedIrradiator;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class AssemblyTransmuting extends SequencedAssemblySubCategory {
 
@@ -15,13 +16,13 @@ public class AssemblyTransmuting extends SequencedAssemblySubCategory {
     }
 
     @Override
-    public void draw(SequencedRecipe<?> sequencedRecipe, PoseStack ms, double v, double v1, int index) {
-
+    public void draw(SequencedRecipe<?> sequencedRecipe, GuiGraphics graphics, double v, double v1, int index) {
+        PoseStack ms = graphics.pose();
         irradiator.offset = index;
         ms.pushPose();
         ms.translate(-5, 50, 0);
         ms.scale(.6f, .6f, .6f);
-        irradiator.draw(ms, getWidth() / 2, 0);
+        irradiator.draw(graphics, getWidth() / 2, 0);
         ms.popPose();
     }
 }

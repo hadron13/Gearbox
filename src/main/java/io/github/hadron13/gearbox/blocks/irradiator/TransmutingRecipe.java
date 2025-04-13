@@ -1,19 +1,18 @@
 package io.github.hadron13.gearbox.blocks.irradiator;
 
 import com.google.gson.JsonObject;
-import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
-import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
-import com.simibubi.create.foundation.utility.Lang;
-import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyMechanizing;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyTransmuting;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
@@ -65,7 +64,7 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
         if(!matchColor(recipe.requiredColor, be.recipeColor))
             return false;
         ItemStack recipeStack = recipe.getIngredients().get(0).getItems()[0];
-        return recipeStack.sameItem(ingredient) && ingredient.getCount() >= recipeStack.getCount();
+        return recipeStack.equals(ingredient) && ingredient.getCount() >= recipeStack.getCount();
     }
 
     @Override
@@ -115,7 +114,7 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
 
     @Override
     public Component getDescriptionForAssembly() {
-        return Lang.translateDirect("recipe.assembly.mechanizing");
+        return GearboxLang.translateDirect("recipe.assembly.mechanizing");
     }
 
     @Override

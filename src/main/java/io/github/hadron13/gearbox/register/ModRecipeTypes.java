@@ -1,11 +1,11 @@
 package io.github.hadron13.gearbox.register;
 
 import com.google.common.collect.ImmutableSet;
+import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.AllTags;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
@@ -24,7 +24,9 @@ import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -65,6 +68,10 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     @Nullable
     private final RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
+
+    public static final Predicate<? super Recipe<?>> CAN_BE_AUTOMATED = r -> !r.getId()
+            .getPath()
+            .endsWith("_manual_only");
 
 
     ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
@@ -182,16 +189,14 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
 
     public static boolean shouldIgnoreInAutomation(Recipe<?> recipe) {
         RecipeSerializer<?> serializer = recipe.getSerializer();
-        if (serializer != null && RECIPE_DENY_SET.contains(RegisteredObjects.getKeyOrThrow(serializer)))
+        if (serializer != null && AllTags.AllRecipeSerializerTags.AUTOMATION_IGNORE.matches(serializer))
             return true;
-        return recipe.getId()
-                .getPath()
-                .endsWith("_manual_only");
+        return !CAN_BE_AUTOMATED.test(recipe);
     }
 
     private static class Registers {
         private static final DeferredRegister<RecipeSerializer<?>> SERIALIZER_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Gearbox.MODID);
-        private static final DeferredRegister<RecipeType<?>> TYPE_REGISTER = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, Gearbox.MODID);
+        private static final DeferredRegister<RecipeType<?>> TYPE_REGISTER = DeferredRegister.create(Registries.RECIPE_TYPE, Gearbox.MODID);
     }
 
 }

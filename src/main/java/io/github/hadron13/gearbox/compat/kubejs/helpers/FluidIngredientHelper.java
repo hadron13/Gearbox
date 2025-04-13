@@ -1,16 +1,10 @@
 package io.github.hadron13.gearbox.compat.kubejs.helpers;
 
-import com.simibubi.create.api.behaviour.BlockSpoutingBehaviour;
+import com.simibubi.create.content.fluids.FlowSource;
 import com.simibubi.create.content.fluids.OpenEndedPipe;
-import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import dev.architectury.hooks.fluid.forge.FluidStackHooksForge;
-import dev.latvian.mods.kubejs.block.state.BlockStatePredicate;
-//import dev.latvian.mods.kubejs.create.events.SpecialSpoutHandlerEvent;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
-import dev.latvian.mods.kubejs.level.BlockContainerJS;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.BiConsumer;
@@ -20,19 +14,21 @@ public class FluidIngredientHelper {
         return FluidIngredient.fromFluidStack(FluidStackHooksForge.toForge(fluidStack.getFluidStack()));
     }
 
-    public static OpenEndedPipe.IEffectHandler createEffectHandler(FluidIngredient fluidIngredient, BiConsumer<OpenEndedPipe, FluidStackJS> handler) {
-        return new OpenEndedPipe.IEffectHandler() {
-            @Override
-            public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-                return fluidIngredient.test(fluid);
-            }
+    // Commented out because it is unused and needs reformatting
 
-            @Override
-            public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-                handler.accept(pipe, FluidStackJS.of(fluid));
-            }
-        };
-    }
+    //public static FlowSource.FluidHandler createEffectHandler(FluidIngredient fluidIngredient, BiConsumer<OpenEndedPipe, FluidStackJS> handler) {
+    //    return new OpenEndedPipe.FluidHandler() {
+    //        @Override
+    //        public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
+    //            return fluidIngredient.test(fluid);
+    //        }
+//
+    //        @Override
+    //        public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
+    //            handler.accept(pipe, FluidStackJS.of(fluid));
+    //        }
+    //    };
+    //}
 
 //    public static BlockSpoutingBehaviour createSpoutingHandler(BlockStatePredicate block, SpecialSpoutHandlerEvent.SpoutHandler handler) {
 //        return new BlockSpoutingBehaviour() {

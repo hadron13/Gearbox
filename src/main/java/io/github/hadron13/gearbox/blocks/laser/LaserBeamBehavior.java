@@ -1,13 +1,15 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
-import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.VecHelper;
+import io.github.hadron13.gearbox.register.data.ModDamageTypes;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -37,9 +39,6 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
         public List<Entity> caughtEntities = new ArrayList<>();
     }
 
-
-    public static final DamageSource DAMAGE_SOURCE = new DamageSource("gearbox.laserdeath")
-            .setScalesWithDifficulty();
     public Map<Direction, LaserBeam> beams;
     public boolean wrenched = false;
 
@@ -217,7 +216,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             if(!entity.isAlive())
                 continue;
             //getWorld().explode(null, entity.getX(), entity.getY(), entity.getZ(), 10f, Explosion.BlockInteraction.NONE);
-            entity.hurt(DAMAGE_SOURCE, beam.power * 2);
+            entity.hurt(new DamageSource(getWorld().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ModDamageTypes.laser)), beam.power * 2);
 
             entity.setSecondsOnFire(3);
         }

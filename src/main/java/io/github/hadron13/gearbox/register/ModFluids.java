@@ -1,15 +1,12 @@
 package io.github.hadron13.gearbox.register;
 
-import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.FluidEntry;
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.groups.ModGroup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
@@ -18,8 +15,8 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import java.util.function.Consumer;
 
 public class ModFluids {
-    private static final CreateRegistrate REGISTRATE = Gearbox.registrate()
-            .creativeModeTab(() -> ModGroup.MAIN);
+    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(ModCreativeTabs.MAIN_TAB);
+
 
     public static final FluidEntry<ForgeFlowingFluid.Flowing> PETROLEUM = REGISTRATE
             .fluid("petroleum",

@@ -1,12 +1,10 @@
 package io.github.hadron13.gearbox.blocks.brass_press;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
-import com.simibubi.create.foundation.utility.Lang;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyMechanizing;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
@@ -54,7 +52,7 @@ public class MechanizingRecipe extends ProcessingRecipe<RecipeWrapper> implement
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public Component getDescriptionForAssembly() {
-		return Lang.translateDirect("recipe.assembly.mechanizing");
+		return GearboxLang.translateDirect("recipe.assembly.mechanizing");
 	}
 	
 	@Override

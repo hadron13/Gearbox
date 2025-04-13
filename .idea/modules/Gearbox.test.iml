@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="minecraft" name="Minecraft">
+      <configuration>
+        <autoDetectTypes>
+          <platformType>ARCHITECTURY</platformType>
+        </autoDetectTypes>
+        <projectReimportVersion>1</projectReimportVersion>
+      </configuration>
+    </facet>
+  </component>
+  <component name="McpModuleSettings">
+    <option name="mappingFile" value="C:\Users\pouff\Documents\GitHub\Gearbox\build\createMcpToSrg\output.tsrg" />
+    <option name="mcpVersion" value="parchment_2022.11.27-1.19.2" />
+    <option name="minecraftVersion" value="1.19.2" />
+    <option name="platformVersion" value="43.2.11" />
+    <option name="srgType" value="TSRG" />
+  </component>
+</module>

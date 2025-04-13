@@ -3,7 +3,6 @@ package io.github.hadron13.gearbox.compat.kubejs.schemas;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.jozufozu.flywheel.util.Color;
 import com.mojang.datafixers.util.Either;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
@@ -22,15 +21,9 @@ import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import dev.latvian.mods.kubejs.util.MapJS;
 import io.github.hadron13.gearbox.compat.kubejs.helpers.CreateInputFluid;
 import io.github.hadron13.gearbox.compat.kubejs.helpers.FluidIngredientHelper;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
-import oshi.util.tuples.Triplet;
 
 public interface ProcessingRecipeSchema {
     RecipeKey<Either<OutputFluid, OutputItem>[]> RESULTS = FluidComponents.OUTPUT_OR_ITEM_ARRAY.key("results");

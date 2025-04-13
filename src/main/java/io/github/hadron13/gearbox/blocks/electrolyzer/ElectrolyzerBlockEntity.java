@@ -7,9 +7,7 @@ import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import com.simibubi.create.foundation.utility.Lang;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -19,14 +17,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.ArrayList;
@@ -168,7 +163,7 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == CapabilityEnergy.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING))// && !level.isClientSide
+        if (cap == ForgeCapabilities.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING))// && !level.isClientSide
             return lazyEnergy.cast();
         return LazyOptional.empty();
     }

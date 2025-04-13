@@ -1,15 +1,15 @@
 package io.github.hadron13.gearbox.blocks.irradiator;
 
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -39,7 +39,7 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
         VertexConsumer vb = buffer.getBuffer(ModRenderTypes.laserBeam());
 
         float thickness = 0.5f + (lerpedLensPos/0.4f)*1.3f;
-        SuperByteBuffer thick_beam = CachedBufferer.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
+        SuperByteBuffer thick_beam = CachedBuffers.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
         thick_beam
                 .translate(0.5f - thickness/2.0f, -be.mode.headOffset, 0.5f - thickness/2.0f)
                 .scale(thickness, 0.5f + be.mode.headOffset, thickness)
@@ -48,14 +48,14 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
                 .renderInto(ms, vb);
 
 
-        if(Backend.canUseInstancing(be.getLevel()))
+        if(VisualizationManager.supportsVisualization(be.getLevel()))
             return;
 
 
         vb = buffer.getBuffer(RenderType.solid());
 
 
-        CachedBufferer.partial(ModPartialModels.IRRADIATOR_LENS, be.getBlockState())
+        CachedBuffers.partial(ModPartialModels.IRRADIATOR_LENS, be.getBlockState())
                 .translate(0, lerpedLensPos, 0)
                 .renderInto(ms, vb);
 
@@ -65,6 +65,6 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
 
     @Override
     protected SuperByteBuffer getRotatedModel(IrradiatorBlockEntity be, BlockState state) {
-        return CachedBufferer.partialFacing(AllPartialModels.SHAFT_HALF, state, Direction.UP);
+        return CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, state, Direction.UP);
     }
 }

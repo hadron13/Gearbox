@@ -1,27 +1,26 @@
 package io.github.hadron13.gearbox.blocks.compressor;
 
-import com.jozufozu.flywheel.Flywheel;
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.processing.basin.BasinBlock;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.IntAttached;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.hadron13.gearbox.Gearbox;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.data.IntAttached;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -39,17 +38,21 @@ public class CompressorRenderer extends KineticBlockEntityRenderer<CompressorBlo
         return true;
     }
 
+    //@Override
+    //protected SuperByteBuffer getRotatedModel(CompressorBlockEntity be, BlockState state) {
+    //    Direction dir = state.getValue(CompressorBlock.HORIZONTAL_FACING);
+    //    PoseStack transform = CachedBuffers.rotateToFaceVertical(dir).get();
+    //    return SuperBufferFactory.getInstance().createForBlock(Models.partial(ModPartialModels.COMPRESSOR_ROLL), Blocks.AIR.defaultBlockState(), transform);
+    //}
 
     @Override
-    protected void renderSafe(CompressorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
-                              int light, int overlay) {
-//
+    protected void renderSafe(CompressorBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         BlockState blockState = be.getBlockState();
-
+        ms = CachedBuffers.rotateToFaceVertical(blockState.getValue(HORIZONTAL_FACING)).get();
 
         VertexConsumer solid = buffer.getBuffer(RenderType.solid());
-        if(!Backend.canUseInstancing(be.getLevel()) ) {
-            SuperByteBuffer roll = CachedBufferer.partialFacing(ModPartialModels.COMPRESSOR_ROLL, blockState, blockState.getValue(HORIZONTAL_FACING));
+        if(!VisualizationManager.supportsVisualization(be.getLevel())) {
+            SuperByteBuffer roll = CachedBuffers.partialFacing(ModPartialModels.COMPRESSOR_ROLL, blockState, blockState.getValue(HORIZONTAL_FACING));
             standardKineticRotationTransform(roll, be, light);
             roll.renderInto(ms, solid);
         }
@@ -73,25 +76,23 @@ public class CompressorRenderer extends KineticBlockEntityRenderer<CompressorBlo
                 continue;
 
             ms.pushPose();
-            TransformStack.cast(ms)
+            TransformStack.of(ms)
                     .translate(outVec)
                     .translate(new Vec3(0, Math.max(-.55f, -(progress * progress * 2)), 0))
                     .translate(directionVec.scale(progress * .5f))
                     .rotateY(AngleHelper.horizontalAngle(direction))
                     .rotateX(progress * 180);
-            renderItem(ms, buffer, light, overlay, intAttached.getValue());
+            renderItem(ms, buffer, light, overlay, be.getLevel(), intAttached.getValue());
             ms.popPose();
         }
-        if (Backend.canUseInstancing(be.getLevel()))
+        if (VisualizationManager.supportsVisualization(be.getLevel()))
             return;
-
-
     }
 
-    protected void renderItem(PoseStack ms, MultiBufferSource buffer, int light, int overlay, ItemStack stack) {
+    protected void renderItem(PoseStack ms, MultiBufferSource buffer, int light, int overlay, Level level, ItemStack stack) {
         Minecraft.getInstance()
                 .getItemRenderer()
-                .renderStatic(stack, ItemTransforms.TransformType.GROUND, light, overlay, ms, buffer, 0);
+                .renderStatic(stack, ItemDisplayContext.GROUND, light, overlay, ms, buffer, level, 0);
     }
 
     @Override

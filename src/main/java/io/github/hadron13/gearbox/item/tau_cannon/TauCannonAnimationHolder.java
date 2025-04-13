@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.item.tau_cannon;
 
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+
+import net.createmod.catnip.animation.LerpedFloat;
 
 public class TauCannonAnimationHolder {
 

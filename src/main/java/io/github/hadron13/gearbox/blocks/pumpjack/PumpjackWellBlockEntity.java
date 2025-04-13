@@ -1,11 +1,11 @@
 package io.github.hadron13.gearbox.blocks.pumpjack;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.utility.Lang;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.ModFluids;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.minecraft.ChatFormatting;
@@ -31,7 +31,7 @@ import java.util.Optional;
 import static io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlock.HORIZONTAL_FACING;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation{
+public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
     public SmartFluidTankBehaviour tank;
     public AABB renderBoundingBox;
@@ -174,10 +174,10 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         if(efficiency < 1f){
             int percentage = (int)(efficiency * 100f);
 
-            Lang.translate("gui.pumpjack_well.efficiency")
-                    .add(Lang.text(" " + percentage + "%"))
+            GearboxLang.translate("gui.pumpjack_well.efficiency")
+                    .add(GearboxLang.text(" " + percentage + "%"))
                     .forGoggles(tooltip);
-            Lang.translate("gui.pumpjack_well.other_wells")
+            GearboxLang.translate("gui.pumpjack_well.other_wells")
                     .style(ChatFormatting.GRAY)
                     .forGoggles(tooltip);
         }

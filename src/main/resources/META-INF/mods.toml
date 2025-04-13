@@ -1,6 +1,6 @@
 
 modLoader="javafml" #mandatory
-loaderVersion="[43,)"
+loaderVersion="[47,)"
 license="MIT License"
 [[mods]]
 modId="gearbox"
@@ -14,18 +14,18 @@ Mod made for use in Create: Back on Track modpack
 [[dependencies.gearbox]]
 modId="forge"
 mandatory=true
-versionRange="[43,)"
+versionRange="[47,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.gearbox]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.19.2,1.20)"
+versionRange="[1.20.1,1.21)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.gearbox]]
     modId="create"
     mandatory=true
-    versionRange="[0.5.1.f,)"
+    versionRange="[0.6.4,)"
     ordering="NONE"
     side="BOTH"

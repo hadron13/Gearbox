@@ -29,7 +29,7 @@ public class ModRenderTypes {
         @SubscribeEvent
         public static void shaderRegistry(RegisterShadersEvent event) throws IOException {
             // Adds a shader to the list, the callback runs when loading is complete.
-            event.registerShader(new ShaderInstance(event.getResourceManager(), new ResourceLocation("gearbox:rendertype_laser_beam"), DefaultVertexFormat.NEW_ENTITY), shaderInstance -> {
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation("gearbox:rendertype_laser_beam"), DefaultVertexFormat.NEW_ENTITY), shaderInstance -> {
                 CustomRenderTypes.laserBeamShader = shaderInstance;
             });
         }

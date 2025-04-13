@@ -1,26 +1,25 @@
 package io.github.hadron13.gearbox.item.tau_cannon;
 
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
-import com.simibubi.create.Create;
+import com.mojang.math.Axis;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.content.equipment.potatoCannon.PotatoCannonItem;
+import com.simibubi.create.content.equipment.potatoCannon.PotatoCannonItemRenderer;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
@@ -28,9 +27,8 @@ public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
     public static LerpedFloat speed = LerpedFloat.linear();
     public static LerpedFloat recoil = LerpedFloat.linear();
 
-    protected static final PartialModel COIL = new PartialModel(Gearbox.asResource("item/tau_cannon/coil"));
     @Override
-    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemTransforms.TransformType transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+    protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext context, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         ItemRenderer itemRenderer = Minecraft.getInstance()
                 .getItemRenderer();
 
@@ -61,9 +59,9 @@ public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
 
         ms.pushPose();
         ms.translate(0, offset, 0);
-        ms.mulPose(Vector3f.ZP.rotationDegrees(angle));
+        ms.mulPose(Axis.ZP.rotationDegrees(angle));
         ms.translate(0, -offset, 0);
-        renderer.render(COIL.get(), light);
+        renderer.render(ModPartialModels.TAU_CANNON_COIL.get(), light);
         ms.popPose();
 
 

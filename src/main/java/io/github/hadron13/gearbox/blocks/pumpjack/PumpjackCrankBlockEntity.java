@@ -2,8 +2,7 @@ package io.github.hadron13.gearbox.blocks.pumpjack;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import io.github.hadron13.gearbox.Gearbox;
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;

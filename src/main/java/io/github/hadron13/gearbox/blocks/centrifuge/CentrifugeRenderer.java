@@ -1,12 +1,10 @@
 package io.github.hadron13.gearbox.blocks.centrifuge;
 
-import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
-import com.simibubi.create.foundation.render.CachedBufferer;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -19,14 +17,14 @@ public class CentrifugeRenderer extends KineticBlockEntityRenderer<CentrifugeBlo
     @Override
     public void renderSafe(CentrifugeBlockEntity be, float partialTicks, PoseStack ms,
                               MultiBufferSource buffer, int light, int overlay){
-        if(Backend.canUseInstancing(be.getLevel()))
+        if(VisualizationManager.supportsVisualization(be.getLevel()))
             return;
 
 
         Direction.Axis axis = getRotationAxisOf(be);
         Direction facing = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
         renderRotatingBuffer(be,
-                CachedBufferer.partialFacingVertical(ModPartialModels.CENTRIFUGE_COG, be.getBlockState(), facing),
+                CachedBuffers.partialFacingVertical(ModPartialModels.CENTRIFUGE_COG, be.getBlockState(), facing),
                 ms, buffer.getBuffer(RenderType.solid()), light);
     }
 }

@@ -1,0 +1,43 @@
+{
+  "itemGroup.gearbox.main": "Gearbox",
+
+  "gearbox.hint.sapper.full.title": "Internal Tank Full",
+  "gearbox.hint.sapper.full": "",
+  "gearbox.hint.compressor.reverse.title": "Rotation Direction",
+  "gearbox.hint.compressor.reverse": "It appears that this compressor is rotating in the _wrong direction_.",
+  "gearbox.hint.reactor.atmosphere": "Atmosphere Stats:",
+
+  "gearbox.gui.spectrometer.title": "Spectrometry",
+  "gearbox.gui.spectrometer.power": "Laser Power",
+  "gearbox.gui.spectrometer.nolaser": "No Laser",
+  "gearbox.gui.spectrometer.red": "Red",
+  "gearbox.gui.spectrometer.green": "Green",
+  "gearbox.gui.spectrometer.blue": "Blue",
+  "gearbox.gui.laserdrill.minimum_power": "This machine requires 20 laser power",
+  "gearbox.gui.pumpjack_well.efficiency": "Efficiency: ",
+  "gearbox.gui.pumpjack_well.other_wells": "Other wells nearby reduce efficiency",
+  "gearbox.gui.goggles.energy_stats": "Energy Stats",
+  "gearbox.gui.goggles.energy_stored": "Energy Stored",
+  "gearbox.gui.goggles.energy_consumption": "Consumption",
+
+  "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
+  "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s",
+
+  "gearbox.jei.red": "Red",
+  "gearbox.jei.green": "Green",
+
+  "gearbox.recipe.assembly.mechanizing": "Mechanize",
+  "gearbox.recipe.compressing.campfire_heat": "Warm",
+
+  "gearbox.recipe.pyroprocessing": "Pyroprocessing",
+  "gearbox.recipe.sapping": "Sapping",
+  "gearbox.recipe.compressing": "Compressing",
+  "gearbox.recipe.mechanizing": "Mechanizing",
+  "gearbox.recipe.irradiating": "Irradiating",
+  "gearbox.recipe.transmuting": "Transmuting",
+  "gearbox.recipe.electrolyzing": "Electrolyzing",
+  "gearbox.recipe.centrifuging": "Centrifuging",
+  "gearbox.recipe.pumpjack": "Pumping",
+  "gearbox.recipe.laser_drilling": "Laser Drilling",
+  "gearbox.recipe.reacting": "Chemical Reaction"
+}

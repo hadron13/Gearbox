@@ -1,17 +1,13 @@
 package io.github.hadron13.gearbox.compat.jei.category;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
-import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import io.github.hadron13.gearbox.compat.jei.ModGuiTextures;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedCampfire;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedCompressor;
@@ -21,13 +17,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.fluids.FluidStack;
-import org.apache.commons.lang3.mutable.MutableInt;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.client.gui.GuiGraphics;
 
 import static com.simibubi.create.content.processing.recipe.HeatCondition.NONE;
 
@@ -50,8 +40,7 @@ public class CompressingCategory extends CreateRecipeCategory<CompressingRecipe>
         builder
                 .addSlot(RecipeIngredientRole.INPUT, getBackground().getWidth() / 4 - 19 / 2, 23)
                 .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
-                .addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
+                .addIngredients(ForgeTypes.FLUID_STACK, fluidIngredient.getMatchingFluidStacks());
 
         int size = recipe.getRollableResults().size() + recipe.getFluidResults().size();
         int i = 0;
@@ -63,8 +52,7 @@ public class CompressingCategory extends CreateRecipeCategory<CompressingRecipe>
             builder
                     .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
                     .setBackground(getRenderedSlot(result), -1, -1)
-                    .addItemStack(result.getStack())
-                    .addTooltipCallback(addStochasticTooltip(result));
+                    .addItemStack(result.getStack()).addRichTooltipCallback(addStochasticTooltip(result));
             i++;
         }
 
@@ -72,30 +60,29 @@ public class CompressingCategory extends CreateRecipeCategory<CompressingRecipe>
 
     }
 
-    public void draw(CompressingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, PoseStack matrixStack, double mouseX, double mouseY) {
+    public void draw(CompressingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         HeatCondition requiredHeat = recipe.getRequiredHeat();
 
         boolean useCampfire = requiredHeat == NONE;
 
-        AllGuiTextures.JEI_LIGHT.render(matrixStack, 81 - 17, 60);
-        ModGuiTextures.JEI_HEAT_BAR_CENTERED.render(matrixStack, 4, 52);
+        AllGuiTextures.JEI_LIGHT.render(graphics, 81 - 17, 60);
+        ModGuiTextures.JEI_HEAT_BAR_CENTERED.render(graphics, 4, 52);
 
-        ModGuiTextures.JEI_SHORT_ARROW.render(matrixStack, getBackground().getWidth() / 2 + 20, 27);
+        ModGuiTextures.JEI_SHORT_ARROW.render(graphics, getBackground().getWidth() / 2 + 20, 27);
 
         String translationKey = (useCampfire)? "recipe.compressing.campfire_heat" : requiredHeat.getTranslationKey();
 
-        Minecraft.getInstance().font.draw(matrixStack, Lang.translateDirect(translationKey), 9,
-                58, requiredHeat.getColor());
+        graphics.drawString(Minecraft.getInstance().font, GearboxLang.translateDirect(translationKey), 9, 58, requiredHeat.getColor());
 
         if (useCampfire){
-            campfire.draw(matrixStack, getBackground().getWidth() / 2 + 3 - 17, 27);
+            campfire.draw(graphics, getBackground().getWidth() / 2 + 3 - 17, 27);
 
         }else{
             heater.withHeat(requiredHeat.visualizeAsBlazeBurner())
-                    .draw(matrixStack, getBackground().getWidth() / 2 + 3 - 17, 27);
+                    .draw(graphics, getBackground().getWidth() / 2 + 3 - 17, 27);
         }
 
-        compressor.draw(matrixStack, getBackground().getWidth() / 2 + 3 - 17, 6);
+        compressor.draw(graphics, getBackground().getWidth() / 2 + 3 - 17, 6);
 
     }
 }

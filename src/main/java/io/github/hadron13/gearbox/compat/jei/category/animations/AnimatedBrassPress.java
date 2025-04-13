@@ -1,14 +1,13 @@
 package io.github.hadron13.gearbox.compat.jei.category.animations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import com.simibubi.create.compat.jei.category.animations.AnimatedPress;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 
@@ -16,37 +15,38 @@ public class AnimatedBrassPress extends AnimatedKinetics {
 
     public AnimatedBrassPress(){}
     @Override
-    public void draw(PoseStack matrixStack, int xOffset, int yOffset) {
+    public void draw(GuiGraphics graphics, int xOffset, int yOffset) {
+        PoseStack matrixStack = graphics.pose();
         matrixStack.pushPose();
         matrixStack.translate(xOffset, yOffset, 200);
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-15.5f));
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(22.5f));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(-15.5f));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(22.5f));
         int scale = 24;
 
         blockElement(shaft(Direction.Axis.Z))
                 .rotateBlock(0, 0, getCurrentAngle())
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(ModBlocks.BRASS_PRESS.getDefaultState())
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(ModPartialModels.BRASS_PRESS_POLE)
                 .atLocal(0, -getAnimatedHeadOffset()  * (1f + 3/16f), 0)
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(ModPartialModels.BRASS_PRESS_HEAD)
                 .rotateBlock(0, getAnimatedHeadRotation(), 0)
                 .atLocal(0, -getAnimatedHeadOffset()  * (1f + 3/16f), 0)
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         blockElement(AllBlocks.DEPOT.getDefaultState())
                 .atLocal(0, 2, 0)
                 .scale(scale)
-                .render(matrixStack);
+                .render(graphics);
 
         matrixStack.popPose();
     }

@@ -1,17 +1,16 @@
 package io.github.hadron13.gearbox.blocks.spectrometer;
 
 
-import com.mojang.math.Vector3f;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
 
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.levelWrappers.WrappedLevel;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -32,6 +31,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 
 import java.util.Random;
 
@@ -83,7 +83,7 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
             return false;
         if (getRotationAxis(state) == Direction.Axis.Y && face != state.getValue(FACING))
             return false;
-        if (!Block.shouldRenderFace(state, world, pos, face, pos.relative(face)) && !(world instanceof WrappedWorld))
+        if (!Block.shouldRenderFace(state, world, pos, face, pos.relative(face)) && !(world instanceof WrappedLevel))
             return false;
         return true;
     }

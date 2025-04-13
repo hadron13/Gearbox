@@ -1,7 +1,5 @@
 package io.github.hadron13.gearbox.blocks.irradiator;
 
-import com.jozufozu.flywheel.util.Color;
-import com.mojang.math.Vector3f;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour;
@@ -11,18 +9,15 @@ import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
-import com.simibubi.create.foundation.utility.Lang;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -135,7 +130,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(recipe.isEmpty())
             return PASS;
 
-        List<ItemStack> results = RecipeApplier.applyRecipeOn(
+        List<ItemStack> results = RecipeApplier.applyRecipeOn(getLevel(),
                  ItemHandlerHelper.copyStackWithSize(transported.stack, 1), recipe.get());
 
         List<TransportedItemStack> collect = results.stream()
@@ -324,31 +319,31 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
         if(totalPower == 0 || mixedColor== Color.BLACK){
-            Lang.translate("gui.spectrometer.nolaser")
+            GearboxLang.translate("gui.spectrometer.nolaser")
                     .style(ChatFormatting.DARK_GRAY)
                     .forGoggles(tooltip);
             return true;
         }
 
 
-        Lang.translate("gui.spectrometer.title")
+        GearboxLang.translate("gui.spectrometer.title")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
-        Lang.text("\u2592 ").color(0xffffff)
-                .add(Lang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
-                .add(Lang.text(" " + truncatePrecision(totalPower, 2) ))
+        GearboxLang.text("\u2592 ").color(0xffffff)
+                .add(GearboxLang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
+                .add(GearboxLang.text(" " + truncatePrecision(totalPower, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("\u2588 ").color(0xbd5252)
-                .add(Lang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
-                .add(Lang.text(" " + truncatePrecision(recipeColor.getRed()/255f, 2) ))
+        GearboxLang.text("\u2588 ").color(0xbd5252)
+                .add(GearboxLang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
+                .add(GearboxLang.text(" " + truncatePrecision(recipeColor.getRed()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("\u2588 ").color(0x2d9636)
-                .add(Lang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
-                .add(Lang.text(" " + truncatePrecision(recipeColor.getGreen()/255f, 2) ))
+        GearboxLang.text("\u2588 ").color(0x2d9636)
+                .add(GearboxLang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
+                .add(GearboxLang.text(" " + truncatePrecision(recipeColor.getGreen()/255f, 2) ))
                 .forGoggles(tooltip);
-        Lang.text("\u2588 ").color(0x3e3dbf)
-                .add(Lang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
-                .add(Lang.text(" " + truncatePrecision(recipeColor.getBlue()/255f, 2) ))
+        GearboxLang.text("\u2588 ").color(0x3e3dbf)
+                .add(GearboxLang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
+                .add(GearboxLang.text(" " + truncatePrecision(recipeColor.getBlue()/255f, 2) ))
                 .forGoggles(tooltip);
 
 

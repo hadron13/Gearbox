@@ -1,22 +1,14 @@
 package io.github.hadron13.gearbox.blocks.laser_drill;
 
 import com.google.gson.JsonObject;
-import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import dev.latvian.mods.rhino.ast.Block;
-import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.LaserRecipe;
-import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
