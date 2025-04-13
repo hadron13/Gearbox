@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "gearbox:block/chemical_reactor/block"
+    }
+  }
+}

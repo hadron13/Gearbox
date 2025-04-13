@@ -1,0 +1,22 @@
+{
+  "values": [
+    "gearbox:kiln",
+    "gearbox:sapper",
+    "gearbox:compressor",
+    "gearbox:brass_press",
+    "gearbox:laser",
+    "gearbox:mirror",
+    "gearbox:spectrometer",
+    "gearbox:irradiator",
+    "gearbox:large_laser",
+    "gearbox:electrolyzer",
+    "gearbox:kinetic_machine",
+    "gearbox:centrifuge",
+    "gearbox:laser_drill",
+    "gearbox:pumpjack_arm",
+    "gearbox:pumpjack_crank",
+    "gearbox:pumpjack_well",
+    "gearbox:dipper",
+    "gearbox:chemical_reactor"
+  ]
+}
