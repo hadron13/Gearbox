@@ -38,18 +38,21 @@ public class SapperRenderer extends KineticBlockEntityRenderer<SapperBlockEntity
 
         VertexConsumer vb = buffer.getBuffer(RenderType.solid());
 
-        SuperByteBuffer cogModel = CachedBuffers.partialDirectional(
-                AllPartialModels.SHAFTLESS_COGWHEEL, blockState, facing, () -> {
-            PoseStack poseStack = new PoseStack();
-                    TransformStack.of(poseStack)
-                    .center()
-                    .rotateToFace(facing)
-                    .rotate(Axis.XN.rotationDegrees(90))
-                    .uncenter();
-            return poseStack;
-        });
+        SuperByteBuffer superBuffer = CachedBuffers.partial(AllPartialModels.SHAFTLESS_COGWHEEL, blockState);
+        standardKineticRotationTransform(superBuffer, be, light).renderInto(ms, vb);
 
-        standardKineticRotationTransform(cogModel, be, light).renderInto(ms, vb);
+        //SuperByteBuffer cogModel = CachedBuffers.partialDirectional(
+        //        AllPartialModels.SHAFTLESS_COGWHEEL, blockState, facing, () -> {
+        //    PoseStack poseStack = new PoseStack();
+        //            TransformStack.of(poseStack)
+        //            .center()
+        //            .rotateToFace(facing)
+        //            .rotate(Axis.XN.rotationDegrees(90))
+        //            .uncenter();
+        //    return poseStack;
+        //});
+
+        //standardKineticRotationTransform(cogModel, be, light).renderInto(ms, vb);
 
         float renderedHeadOffset = be.getRenderedHeadOffset(partialTicks);
         float speed = be.getRenderedHeadRotationSpeed(partialTicks);
@@ -59,13 +62,13 @@ public class SapperRenderer extends KineticBlockEntityRenderer<SapperBlockEntity
         int x_multiplier = (facing==WEST)?  1 : (facing==EAST)?  -1 : 0;
         int z_multiplier = (facing==NORTH)? 1 : (facing==SOUTH)? -1 : 0;
 
-        SuperByteBuffer poleRender = CachedBuffers.partialFacing(ModPartialModels.SAPPER_POLE, blockState, facing.getOpposite());
+        SuperByteBuffer poleRender = CachedBuffers.partialFacing(ModPartialModels.SAPPER_POLE, blockState, facing);
         poleRender.translate(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier)
                 .light(light)
                 .renderInto(ms, vb);
 
         VertexConsumer vbCutout = buffer.getBuffer(RenderType.cutoutMipped());
-        SuperByteBuffer headRender = CachedBuffers.partialFacing(ModPartialModels.SAPPER_HEAD, blockState, facing.getOpposite());
+        SuperByteBuffer headRender = CachedBuffers.partialFacing(ModPartialModels.SAPPER_HEAD, blockState, facing);
         headRender.rotateCentered(angle, facing.getOpposite())
                 .translate(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier)
                 .light(light)

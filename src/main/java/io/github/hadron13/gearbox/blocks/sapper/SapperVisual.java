@@ -1,9 +1,14 @@
 package io.github.hadron13.gearbox.blocks.sapper;
 
 import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
+import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerRenderer;
+import com.simibubi.create.content.kinetics.mixer.MixerVisual;
 import com.simibubi.create.content.kinetics.simpleRelays.encased.EncasedCogVisual;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
+import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
@@ -14,64 +19,79 @@ import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
 import static net.minecraft.core.Direction.*;
 
-public class SapperVisual extends EncasedCogVisual implements SimpleDynamicVisual {
+public class SapperVisual extends SingleAxisRotatingVisual<SapperBlockEntity> implements SimpleDynamicVisual {
 
     private final RotatingInstance drillHead;
     private final OrientedInstance drillPole;
     private final SapperBlockEntity sapper;
 
+
     final Direction direction;
-    private final Direction opposite;
+
 
     public SapperVisual(VisualizationContext context, SapperBlockEntity blockEntity, float partialTick) {
-        super(context, blockEntity, false, partialTick, Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL));
+        super(context, blockEntity, partialTick, Models.partial(AllPartialModels.SHAFTLESS_COGWHEEL));
         this.sapper = blockEntity;
+
         direction = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        opposite = direction.getOpposite();
 
-        drillHead = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(ModPartialModels.SAPPER_HEAD))
-                .createInstance();
+        drillHead = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(ModPartialModels.SAPPER_HEAD)).createInstance();
 
-//:3
-        drillHead.setup(blockEntity, blockEntity.getRenderedHeadRotationSpeed(partialTick) * 2)
-                .setPosition(getVisualPosition())
-                .rotateToFace(direction)
-                .setChanged();
+        drillHead.setRotationAxis(direction.getAxis());
 
         drillPole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.SAPPER_POLE)).createInstance();
 
-        drillPole.position(getVisualPosition()).rotateToFace(direction).setChanged();
+        drillHead.rotateToFace(direction);
+        drillPole.rotateToFace(direction);
 
+        animate(partialTick);
     }
 
-    @Override
-    public void beginFrame(DynamicVisual.Context ctx) {
+    private void animate(float pt) {
+        float renderedHeadOffset = sapper.getRenderedHeadOffset(pt);
 
-        float ticks = AnimationTickHolder.getPartialTicks();
+        transformHead(renderedHeadOffset, pt);
+        transformPole(renderedHeadOffset);
+    }
 
-        float renderedHeadOffset =  sapper.getRenderedHeadOffset(ticks);
-
-        Direction direction = blockState.getValue(HORIZONTAL_FACING);
+    private void transformHead(float renderedHeadOffset, float pt) {
+        float speed = sapper.getRenderedHeadRotationSpeed(pt);
 
         int x_multiplier = (direction==WEST)?  1 : (direction==EAST)?  -1 : 0;
         int z_multiplier = (direction==NORTH)? 1 : (direction==SOUTH)? -1 : 0;
 
-        drillHead.nudge(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier);
 
-//        renderedHeadOffset -= 1/16f;
-        drillPole.translatePosition(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier);
-
+        drillHead.setPosition(getVisualPosition())
+                //.rotateToFace(direction)
+                .nudge(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier)
+                .setRotationalSpeed(speed * 2 * RotatingInstance.SPEED_MULTIPLIER)
+                .setChanged();
     }
 
+    private void transformPole(float renderedHeadOffset) {
+        int x_multiplier = (direction==WEST)?  1 : (direction==EAST)?  -1 : 0;
+        int z_multiplier = (direction==NORTH)? 1 : (direction==SOUTH)? -1 : 0;
+        drillPole.position(getVisualPosition())
+                //.rotateToFace(direction)
+                .translatePosition(renderedHeadOffset * x_multiplier ,  0 , renderedHeadOffset * z_multiplier)
+                .setChanged();
+    }
+
+    @Override
+    public void beginFrame(DynamicVisual.Context ctx) {
+        animate(ctx.partialTick());
+    }
 
     @Override
     public void updateLight(float partialTicks) {
         super.updateLight(partialTicks);
-
         relight(pos.relative(blockState.getValue(HORIZONTAL_FACING).getOpposite(), 1), drillHead);
         relight(pos, drillPole);
     }
@@ -81,5 +101,12 @@ public class SapperVisual extends EncasedCogVisual implements SimpleDynamicVisua
         super._delete();
         drillHead.delete();
         drillPole.delete();
+    }
+
+    @Override
+    public void collectCrumblingInstances(Consumer<@Nullable Instance> consumer) {
+        super.collectCrumblingInstances(consumer);
+        consumer.accept(drillHead);
+        consumer.accept(drillPole);
     }
 }
