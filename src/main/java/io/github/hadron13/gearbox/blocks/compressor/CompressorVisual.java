@@ -2,16 +2,13 @@ package io.github.hadron13.gearbox.blocks.compressor;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
-import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.model.Models;
-import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -31,16 +28,15 @@ public class CompressorVisual extends KineticBlockEntityVisual<CompressorBlockEn
         roll = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(ModPartialModels.COMPRESSOR_ROLL))
                 .createInstance();
 
-        roll.setup(blockEntity, blockEntity.getSpeed())
-                .setPosition(getVisualPosition())
+        roll.setPosition(getVisualPosition())
                 .rotateToFace(Direction.SOUTH, opposite)
                 .setChanged();
     }
 
     @Override
     public void update(float pt) {
-        roll.setup(blockEntity, blockEntity.getSpeed())
-                .setChanged();
+        super.update(pt);
+        roll.setup(blockEntity, blockEntity.getSpeed()).setChanged();
     }
 
     @Override

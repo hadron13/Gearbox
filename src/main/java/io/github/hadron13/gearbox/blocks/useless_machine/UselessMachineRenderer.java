@@ -14,11 +14,10 @@ public class UselessMachineRenderer extends KineticBlockEntityRenderer<UselessMa
         super(context);
     }
     @Override
-    protected void renderSafe(UselessMachineBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
-                              int light, int overlay) {
+    protected void renderSafe(UselessMachineBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         int aboveLight = be.getLevel().getLightEmission(be.getBlockPos().above());
 
-        super.renderSafe(be, partialTicks, ms, buffer, aboveLight, overlay);
+        super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
     }
 
     @Override

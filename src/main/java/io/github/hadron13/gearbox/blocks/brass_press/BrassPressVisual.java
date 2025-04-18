@@ -1,14 +1,9 @@
 package io.github.hadron13.gearbox.blocks.brass_press;
 
 import com.mojang.math.Axis;
-import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.ShaftVisual;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlock;
-import com.simibubi.create.content.kinetics.press.PressVisual;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import com.simibubi.create.content.logistics.depot.EjectorRenderer;
-import com.simibubi.create.content.logistics.depot.EjectorVisual;
-import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
@@ -17,10 +12,10 @@ import dev.engine_room.flywheel.lib.instance.OrientedInstance;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.math.AngleHelper;
-import net.minecraft.core.Direction;
 import org.joml.Quaternionf;
 
 import java.util.function.Consumer;
@@ -28,10 +23,12 @@ import java.util.function.Consumer;
 public class BrassPressVisual extends ShaftVisual<BrassPressBlockEntity> implements SimpleDynamicVisual {
 	private final TransformedInstance pressHead;
 	private final OrientedInstance pressPole;
+	private final BrassPressBlockEntity brassPress;
 
 
 	public BrassPressVisual(VisualizationContext context, BrassPressBlockEntity blockEntity, float partialTick) {
 		super(context, blockEntity, partialTick);
+		this.brassPress = blockEntity;
 
 		pressHead = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(ModPartialModels.BRASS_PRESS_HEAD)).createInstance();
 
@@ -49,10 +46,15 @@ public class BrassPressVisual extends ShaftVisual<BrassPressBlockEntity> impleme
 		transformModels(ctx.partialTick());
 	}
 
-	private void transformModels(float pt) {
-		float renderedHeadRotation = blockEntity.getRenderedHeadRotation(AnimationTickHolder.getPartialTicks());
-		float renderedHeadOffset = getRenderedHeadOffset(blockEntity);
+	private void animate() {
 
+	}
+
+	private void transformModels(float pt) {
+		PressingBehaviour pressingBehaviour = brassPress.getPressingBehaviour();
+		float renderedHeadRotation = brassPress.getRenderedHeadRotation(AnimationTickHolder.getPartialTicks());
+		float renderedHeadOffset = pressingBehaviour.getRenderedHeadOffset(pt) * pressingBehaviour.mode.headOffset;
+		pressHead.setVisible(true);
 		pressPole.position(getVisualPosition())
 				.translatePosition(0, -renderedHeadOffset, 0)
 				.setChanged();
@@ -65,9 +67,13 @@ public class BrassPressVisual extends ShaftVisual<BrassPressBlockEntity> impleme
 	}
 
 	private void rotateHead(float rotation, float partialTicks) {
-
-		BrassPressRenderer.applyHeadRotation(blockEntity, partialTicks, rotation, pressHead.setIdentityTransform().translate(getVisualPosition()));
-		pressHead.setChanged();
+		pressHead.setIdentityTransform()
+				//.translate(getVisualPosition())
+				//.center()
+				//.rotateYDegrees(rotation)
+				//.uncenter()
+				.translate(0, -(brassPress.getRenderedHeadOffset(partialTicks) * brassPress.getPressingBehaviour().mode.headOffset), 0)
+				.setChanged();
 	}
 
 	private float getRenderedHeadOffset(BrassPressBlockEntity press) {
