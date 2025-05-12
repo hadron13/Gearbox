@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -43,8 +44,7 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     public ElectrolyzerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        energyStorage = new InternalEnergyStorage(8192, 512, 512);
-
+        energyStorage = new InternalEnergyStorage(8192, 8192, 512);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
@@ -52,9 +52,14 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public void tick(){
         if(level != null && !level.isClientSide) {
             if (currentRecipe != null && currentRecipe instanceof ElectrolyzingRecipe electrolyzingRecipe) {
+                energy_consumption = electrolyzingRecipe.requiredEnergy;
                 if (energyStorage.internalConsumeEnergy(electrolyzingRecipe.requiredEnergy) < electrolyzingRecipe.requiredEnergy){
                     runningTicks++;
                 }
+            }
+            if(!isRunning()){
+                energy_consumption = 0;
+                currentRecipe = null;
             }
             sendData();
         }
@@ -127,7 +132,8 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         energyStorage.storedEnergyTooltip(tooltip);
-        InternalEnergyStorage.energyConsumptionTooltip(tooltip, energy_consumption);
+        if(energy_consumption > 0)
+            InternalEnergyStorage.energyConsumptionTooltip(tooltip, energy_consumption);
         return true;
     }
 
@@ -163,7 +169,7 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING))// && !level.isClientSide
+        if (cap == ForgeCapabilities.ENERGY && side.getAxis().isHorizontal())// && !level.isClientSide
             return lazyEnergy.cast();
         return LazyOptional.empty();
     }

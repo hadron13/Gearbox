@@ -8,9 +8,9 @@
   "results": [
     {
       "fluid" : "minecraft:water",
-      "amount": 50
+      "amount": 1
     }
   ],
-  "processingTime": 150,
+  "processingTime": 500,
   "energy": 10
 }

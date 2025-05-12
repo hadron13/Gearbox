@@ -4,7 +4,7 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"4": "gearbox:block/electrolyzer/base_side",
+		"4": "gearbox:block/electrolyzer/side",
 		"5": "gearbox:block/electrolyzer/side_with_connector",
 		"6": "gearbox:block/electrolyzer/head",
 		"7": "create:block/waterwheel_metal",
@@ -108,7 +108,7 @@
 			"to": [16, 23, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 15, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 16, 14], "texture": "#5"},
+				"north": {"uv": [0, 0, 16, 14], "texture": "#4"},
 				"east": {"uv": [0, 0, 16, 14], "texture": "#4"},
 				"south": {"uv": [0, 0, 16, 14], "texture": "#4"},
 				"west": {"uv": [0, 0, 16, 14], "texture": "#4"},
