@@ -5,3 +5,4 @@ logs
 run
 .idea
 /.idea/
+.idea/*

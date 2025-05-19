@@ -3,7 +3,7 @@
 	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
-		"0": "create:block/pipes"
+		"0": "gearbox:block/sapper/pipes"
 	},
 	"elements": [
 		{

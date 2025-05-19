@@ -3,7 +3,7 @@
 	"parent": "block/block",
 	"render_type": "cutout_mipped",
 	"textures": {
-		"0": "create:block/pipes",
+		"0": "gearbox:block/sapper/pipes",
 		"1": "gearbox:block/sapper/head"
 	},
 	"elements": [

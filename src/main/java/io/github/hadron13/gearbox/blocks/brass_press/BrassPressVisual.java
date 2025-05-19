@@ -1,9 +1,11 @@
 package io.github.hadron13.gearbox.blocks.brass_press;
 
 import com.mojang.math.Axis;
+import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.ShaftVisual;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlock;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
+import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
@@ -21,86 +23,82 @@ import org.joml.Quaternionf;
 import java.util.function.Consumer;
 
 public class BrassPressVisual extends ShaftVisual<BrassPressBlockEntity> implements SimpleDynamicVisual {
-	private final TransformedInstance pressHead;
-	private final OrientedInstance pressPole;
-	private final BrassPressBlockEntity brassPress;
+    private final OrientedInstance pressHead;
+    private final OrientedInstance pressPole;
+    private final BrassPressBlockEntity brassPress;
+    private float lastRenderedHeadRotation = 0;
 
 
-	public BrassPressVisual(VisualizationContext context, BrassPressBlockEntity blockEntity, float partialTick) {
-		super(context, blockEntity, partialTick);
-		this.brassPress = blockEntity;
+    public BrassPressVisual(VisualizationContext context, BrassPressBlockEntity blockEntity, float partialTick) {
+        super(context, blockEntity, partialTick);
+        this.brassPress = blockEntity;
 
-		pressHead = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(ModPartialModels.BRASS_PRESS_HEAD)).createInstance();
+        pressHead = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.BRASS_PRESS_HEAD)).createInstance();
 
-		pressPole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.BRASS_PRESS_POLE)).createInstance();
+        pressPole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.BRASS_PRESS_POLE)).createInstance();
 
-		Quaternionf q = Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(blockState.getValue(MechanicalPressBlock.HORIZONTAL_FACING)));
+        Quaternionf q = Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(blockState.getValue(MechanicalPressBlock.HORIZONTAL_FACING)));
 
-		pressPole.rotation(q);
+        pressPole.rotation(q);
 
-		transformModels(partialTick);
-	}
+        transformModels(partialTick);
+    }
 
-	@Override
-	public void beginFrame(DynamicVisual.Context ctx) {
-		transformModels(ctx.partialTick());
-	}
+    @Override
+    public void beginFrame(DynamicVisual.Context ctx) {
+        transformModels(ctx.partialTick());
+    }
 
-	private void animate() {
+    private void animate() {
 
-	}
+    }
 
-	private void transformModels(float pt) {
-		PressingBehaviour pressingBehaviour = brassPress.getPressingBehaviour();
-		float renderedHeadRotation = brassPress.getRenderedHeadRotation(AnimationTickHolder.getPartialTicks());
-		float renderedHeadOffset = pressingBehaviour.getRenderedHeadOffset(pt) * pressingBehaviour.mode.headOffset;
-		pressHead.setVisible(true);
-		pressPole.position(getVisualPosition())
-				.translatePosition(0, -renderedHeadOffset, 0)
-				.setChanged();
+    private void transformModels(float pt) {
+        PressingBehaviour pressingBehaviour = brassPress.getPressingBehaviour();
+        float renderedHeadRotation = brassPress.getRenderedHeadRotation(AnimationTickHolder.getPartialTicks());
+        float renderedHeadOffset = getRenderedHeadOffset(brassPress);
+        pressHead.setVisible(true);
+        pressPole.position(getVisualPosition())
+                .translatePosition(0, -renderedHeadOffset, 0)
+                .setChanged();
 
-		rotateHead(renderedHeadRotation, pt);
-		//pressHead.setPosition(getVisualPosition())
-		//		.nudge(0, -renderedHeadOffset, 0)
-		//		.rotateToFace(0, renderedHeadRotation, 0)
-		//		.setChanged();
-	}
+        rotateHead(renderedHeadRotation, renderedHeadOffset);
 
-	private void rotateHead(float rotation, float partialTicks) {
-		pressHead.setIdentityTransform()
-				//.translate(getVisualPosition())
-				//.center()
-				//.rotateYDegrees(rotation)
-				//.uncenter()
-				.translate(0, -(brassPress.getRenderedHeadOffset(partialTicks) * brassPress.getPressingBehaviour().mode.headOffset), 0)
-				.setChanged();
-	}
+    }
 
-	private float getRenderedHeadOffset(BrassPressBlockEntity press) {
-		PressingBehaviour pressingBehaviour = press.getPressingBehaviour();
+    private void rotateHead(float rotation, float offset) {
+        pressHead.position(getVisualPosition())
+                .translatePosition(0, -offset, 0)
+                .rotateYDegrees(rotation-lastRenderedHeadRotation)
+                .setChanged();
+        lastRenderedHeadRotation = rotation;
+    }
 
-		return press.getRenderedHeadOffset(AnimationTickHolder.getPartialTicks())
-			* pressingBehaviour.mode.headOffset;
-	}
+    private float getRenderedHeadOffset(BrassPressBlockEntity press) {
+        PressingBehaviour pressingBehaviour = press.getPressingBehaviour();
 
-	@Override
-	public void updateLight(float partialTick) {
-		super.updateLight(partialTick);
-		relight(pos, pressHead);
-		relight(pos, pressPole);
-	}
+        return press.getRenderedHeadOffset(AnimationTickHolder.getPartialTicks())
+                * pressingBehaviour.mode.headOffset;
+    }
 
-	@Override
-	protected void _delete() {
-		super._delete();
-		pressHead.delete();
-		pressPole.delete();
-	}
+    @Override
+    public void updateLight(float partialTick) {
+        super.updateLight(partialTick);
+        relight(pos, pressHead);
+        relight(pos, pressPole);
+    }
 
-	@Override
-	public void collectCrumblingInstances(Consumer<Instance> consumer) {
-		super.collectCrumblingInstances(consumer);
-		consumer.accept(pressHead);
-		consumer.accept(pressPole);
-	}
+    @Override
+    protected void _delete() {
+        super._delete();
+        pressHead.delete();
+        pressPole.delete();
+    }
+
+    @Override
+    public void collectCrumblingInstances(Consumer<Instance> consumer) {
+        super.collectCrumblingInstances(consumer);
+        consumer.accept(pressHead);
+        consumer.accept(pressPole);
+    }
 }

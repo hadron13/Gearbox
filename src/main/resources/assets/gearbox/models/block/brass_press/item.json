@@ -6,7 +6,7 @@
 		"1": "create:block/axis_top",
 		"8": "gearbox:block/brass_press/side",
 		"particle": "gearbox:block/brass_press/side",
-		"mechanical_press_head": "create:block/brass_press/head",
+		"mechanical_press_head": "gearbox:block/brass_press/head",
 		"gearbox_top": "create:block/gearbox_top",
 		"mechanical_press_pole": "gearbox:block/brass_press/pole",
 		"gearbox": "create:block/brass_gearbox",
