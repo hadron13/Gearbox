@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,8 +116,13 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         BlockPos position = getBlockPos().below();
         BlockState block = level.getBlockState(position);
         while(block.getBlock() != Blocks.BEDROCK){
-            if(block.getBlock() != AllBlocks.FLUID_PIPE.get() &&
-               block.getBlock() != AllBlocks.ENCASED_FLUID_PIPE.get()) {
+            Block[] validBlocks = {
+                    AllBlocks.FLUID_PIPE.get(),
+                    AllBlocks.GLASS_FLUID_PIPE.get(),
+                    AllBlocks.ENCASED_FLUID_PIPE.get()
+            };
+            BlockState finalBlock = block;
+            if(Arrays.stream(validBlocks).noneMatch(n -> n == finalBlock.getBlock())) {
                 return false;
             }
 

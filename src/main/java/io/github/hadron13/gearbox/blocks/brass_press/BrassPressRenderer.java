@@ -13,6 +13,7 @@ import dev.engine_room.flywheel.lib.transform.Rotate;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import dev.engine_room.flywheel.lib.transform.Translate;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -48,12 +49,11 @@ public class BrassPressRenderer extends KineticBlockEntityRenderer<BrassPressBlo
 
 
 		float renderedHeadRotation = be.getRenderedHeadRotation(partialTicks);
-		PressingBehaviour pressingBehaviour = be.getPressingBehaviour();
-		float renderedHeadOffset = pressingBehaviour.getRenderedHeadOffset(partialTicks) * pressingBehaviour.mode.headOffset;
+		float renderedHeadOffset = getRenderedHeadOffset(be);
 		var msr = TransformStack.of(ms);
 
-		//SuperByteBuffer headRender = CachedBuffers.partialFacing(ModPartialModels.BRASS_PRESS_HEAD, blockState,
-		//		blockState.getValue(HORIZONTAL_FACING));
+		SuperByteBuffer headRender = CachedBuffers.partialFacing(ModPartialModels.BRASS_PRESS_HEAD, blockState,
+				blockState.getValue(HORIZONTAL_FACING));
 		SuperByteBuffer poleRender = CachedBuffers.partialFacing(ModPartialModels.BRASS_PRESS_POLE, blockState,
 				blockState.getValue(HORIZONTAL_FACING));
 
@@ -61,11 +61,11 @@ public class BrassPressRenderer extends KineticBlockEntityRenderer<BrassPressBlo
 				.light(light)
 				.renderInto(ms, buffer.getBuffer(RenderType.solid()));
 
-		//headRender.translate(0, -renderedHeadOffset, 0)
-		//		.rotateCentered(renderedHeadRotation * Mth.DEG_TO_RAD, Direction.UP)
-		//		.light(light)
-		//		.renderInto(ms, buffer.getBuffer(RenderType.solid()));
-		applyHeadRotation(be, partialTicks, renderedHeadRotation, msr);
+		headRender.translate(0, -renderedHeadOffset, 0)
+				.rotateCentered(renderedHeadRotation * Mth.DEG_TO_RAD, Direction.UP)
+				.light(light)
+				.renderInto(ms, buffer.getBuffer(RenderType.solid()));
+		applyHeadRotation(renderedHeadRotation, msr, renderedHeadOffset);
 	}
 
 	@Override
@@ -73,10 +73,17 @@ public class BrassPressRenderer extends KineticBlockEntityRenderer<BrassPressBlo
 		return shaft(getRotationAxisOf(be));
 	}
 
-	static <T extends Translate<T> & Rotate<T>> void applyHeadRotation(BrassPressBlockEntity be, float partialTicks, float angle, T tr) {
+	private float getRenderedHeadOffset(BrassPressBlockEntity press) {
+		PressingBehaviour pressingBehaviour = press.getPressingBehaviour();
+
+		return press.getRenderedHeadOffset(AnimationTickHolder.getPartialTicks())
+				* pressingBehaviour.mode.headOffset;
+	}
+
+	static <T extends Translate<T> & Rotate<T>> void applyHeadRotation(float angle, T tr, float renderedHeadOffset) {
 		tr.center()
 				.rotateYDegrees(angle)
 				.uncenter()
-				.translate(0, -be.getRenderedHeadOffset(partialTicks), 0);
+				.translate(0, renderedHeadOffset, 0);
 	}
 }

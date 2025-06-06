@@ -54,7 +54,6 @@ public class BrassPressVisual extends ShaftVisual<BrassPressBlockEntity> impleme
     }
 
     private void transformModels(float pt) {
-        PressingBehaviour pressingBehaviour = brassPress.getPressingBehaviour();
         float renderedHeadRotation = brassPress.getRenderedHeadRotation(AnimationTickHolder.getPartialTicks());
         float renderedHeadOffset = getRenderedHeadOffset(brassPress);
         pressHead.setVisible(true);
