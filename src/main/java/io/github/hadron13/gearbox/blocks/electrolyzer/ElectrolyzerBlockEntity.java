@@ -1,13 +1,25 @@
 package io.github.hadron13.gearbox.blocks.electrolyzer;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlock;
+import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
+import com.simibubi.create.content.kinetics.motor.KineticScrollValueBehaviour;
+import com.simibubi.create.content.kinetics.speedController.SpeedControllerBlock;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import com.simibubi.create.foundation.utility.CreateLang;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -17,9 +29,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -34,12 +48,17 @@ import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACI
 
 public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
+    public static final float DEFAULT_SPEED = 32f;
+    public static final int MAX_SPEED_MODIFIER = 3;
+
+    protected SpeedMultiplierScrollValueBehaviour speed;
+
+
     public static final Object electrolyzingRecipeKey = new Object();
 
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
     public int energy_consumption = 0;
-
 
 
     public ElectrolyzerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -49,10 +68,26 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     }
 
     @Override
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        super.addBehaviours(behaviours);
+
+        speed = new SpeedMultiplierScrollValueBehaviour(CreateLang.translateDirect("kinetics.creative_motor.rotation_speed"),
+                this, new SpeedValueBox());
+        speed.between(1, MAX_SPEED_MODIFIER);
+        speed.value = 2;
+        speed.withCallback(i -> this.updateTargetRotation());
+        behaviours.add(speed);
+    }
+
+    public void updateTargetRotation() {
+
+    }
+
+    @Override
     public void tick(){
         if(level != null && !level.isClientSide) {
             if (currentRecipe != null && currentRecipe instanceof ElectrolyzingRecipe electrolyzingRecipe) {
-                energy_consumption = electrolyzingRecipe.requiredEnergy;
+                energy_consumption = electrolyzingRecipe.requiredEnergy*speed.getValue();
                 if (energyStorage.internalConsumeEnergy(electrolyzingRecipe.requiredEnergy) < electrolyzingRecipe.requiredEnergy){
                     runningTicks++;
                 }
@@ -70,7 +105,10 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public float getSpeed(){
         if(energyStorage.getEnergyStored() == 0)
             return 0;
-        return 32f;
+        return DEFAULT_SPEED*speed.getValue();
+    }
+
+    public void setSpeed(float speed) {
     }
 
     @Override
@@ -133,7 +171,7 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         energyStorage.storedEnergyTooltip(tooltip);
         if(energy_consumption > 0)
-            InternalEnergyStorage.energyConsumptionTooltip(tooltip, energy_consumption);
+            InternalEnergyStorage.energyConsumptionTooltip(tooltip, (energy_consumption*speed.getValue()));
         return true;
     }
 
@@ -174,4 +212,16 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
         return LazyOptional.empty();
     }
 
+    class SpeedValueBox extends ValueBoxTransform.Sided {
+
+        @Override
+        protected Vec3 getSouthLocation() {
+            return VecHelper.voxelSpace(8, 8, 12.5);
+        }
+
+        protected boolean isSideActive(BlockState state, Direction direction) {
+            return !direction.getAxis().isVertical();
+        }
+
+    }
 }

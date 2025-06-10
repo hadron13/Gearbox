@@ -24,6 +24,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ElectrolyzerBlock extends Block implements IBE<ElectrolyzerBlockEntity>, IWrenchable {
     public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final Property<Direction.Axis> HORIZONTAL_AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 
     public ElectrolyzerBlock(Properties pProperties) {
         super(pProperties);
