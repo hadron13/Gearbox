@@ -35,13 +35,14 @@ public class ModRenderTypes {
         }
     }
 
-    // Keep private because this stuff isn't meant to be public
-    private static class CustomRenderTypes extends RenderType {
+    // "Keep private because this stuff isn't meant to be public" ~someone
+    // Laughs in I know what I'm doing
+    public static class CustomRenderTypes extends RenderType {
         // Holds the object loaded via RegisterShadersEvent
-        private static ShaderInstance laserBeamShader;
+        public static ShaderInstance laserBeamShader;
 
         // Shader state for use in the render type, the supplier ensures it updates automatically with resource reloads
-        private static final ShaderStateShard RENDERTYPE_LASER_BEAM_SHADER = new ShaderStateShard(() -> laserBeamShader);
+        public static final ShaderStateShard RENDERTYPE_LASER_BEAM_SHADER = new ShaderStateShard(() -> laserBeamShader);
 
         // Dummy constructor needed to make java happy
         private CustomRenderTypes(String s, VertexFormat v, VertexFormat.Mode m, int i, boolean b, boolean b2, Runnable r, Runnable r2) {

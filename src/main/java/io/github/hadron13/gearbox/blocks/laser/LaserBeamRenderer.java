@@ -7,12 +7,16 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
 import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 import org.joml.Matrix4f;
 
 import static net.minecraft.core.Direction.NORTH;
@@ -40,66 +44,53 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
 
     @Override
     protected void renderSafe(T be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-//        if(Backend.canUseInstancing(be.getLevel()))
-//            return;
+        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
+//        SuperByteBuffer cube = CachedBuffers.block(Blocks.COBBLESTONE.defaultBlockState());
+        //cube.renderInto(ms, laserVertexConsumer);
 
 
-        LaserBeamBehavior beamBehavior = be.getBehaviour(LaserBeamBehavior.TYPE);
-        if(beamBehavior == null)
-            return;
-        for(LaserBeamBehavior.LaserBeam beam : beamBehavior.beams.values()) {
-
-            if(!beam.enabled) {
-                continue;
-            }
-            Direction facing = beam.facing;
-            float scale = beam.length;
-
-            if(scale == 0)
-                continue;
-
-            float thickness =  Mth.clamp( (float)Math.sqrt((beam.power+20f)/20f), 1f, 3f ) * (1.4f/16f);
-
-            ms.pushPose();
-            TransformStack.of(ms)
-                    .translate(0.5f - thickness/2, 0.5f - thickness/2, 0.5f - thickness/2)
-                    .translate( thickness/2,  thickness/2, thickness/2)
-                    .rotate(AnimationTickHolder.getRenderTime()/30f, facing)
-                    .rotateToFace( facing.getOpposite())
-                    .translate(- thickness/2, - thickness/2, -thickness/2)
-            ;
-
-            VertexConsumer vbTranslucent = bufferSource.getBuffer(ModRenderTypes.laserBeam());
-
-            beam.color.setAlpha(0.8f);
-
-            renderBeam(ms.last().pose(), vbTranslucent, scale, thickness, beam.color.getRGB());
-            ms.popPose();
-        }
+        renderBeam(ms.last().pose(), laserVertexConsumer, 10.0f, 0.5f, 0xFFFF0000);
     }
+
 
 
 
     private void renderBeam(Matrix4f pPose, VertexConsumer pConsumer, float size, float thickness, int color_rgb) {
-        this.renderFace( pPose, pConsumer,(int)size, color_rgb, 0.0F, thickness, 0.0F, thickness, size, size, size, size, Direction.SOUTH);
-        this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, thickness, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, NORTH);
-        this.renderFace( pPose, pConsumer,(int)size,color_rgb, thickness, thickness, thickness, 0.0F, 0.0F, size, size, 0.0F, Direction.EAST);
-        this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, 0.0F, 0.0F, thickness, 0.0F, size, size, 0.0F, Direction.WEST);
-        this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, 0.0F, 0.0F, 0.0F, 0.0F, size, size, Direction.DOWN);
-        this.renderFace( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, thickness, thickness, size, size, 0.0F, 0.0F, Direction.UP);
+        this.renderFaceSouth( pPose, pConsumer,(int)size, color_rgb, 0.0F, thickness, 0.0F, thickness, size, size, size, size, Direction.SOUTH);
+        this.renderFaceNorth( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, thickness, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, NORTH);
+        this.renderFaceEastWest( pPose, pConsumer,(int)size,color_rgb, thickness, thickness, thickness, 0.0F, 0.0F, size, size, 0.0F, Direction.EAST);
+        this.renderFaceEastWest( pPose, pConsumer,(int)size,color_rgb, 0.0F, 0.0F, 0.0F, thickness, 0.0F, size, size, 0.0F, Direction.WEST);
+        this.renderFaceSouth( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, 0.0F, 0.0F, 0.0F, 0.0F, size, size, Direction.DOWN);
+        this.renderFaceUp( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, thickness, thickness, size, size, 0.0F, 0.0F, Direction.UP);
     }
 
-
-    private void renderFace(Matrix4f pPose, VertexConsumer pConsumer, int laser_size, int color_rgb, float pX0, float pX1, float pY0, float pY1, float pZ0, float pZ1, float pZ2, float pZ3, Direction pDirection) {
+    private void renderFaceSouth(Matrix4f pPose, VertexConsumer pConsumer, int size, int color_rgb, float pX0, float pX1, float pY0, float pY1, float pZ0, float pZ1, float pZ2, float pZ3, Direction pDirection) {
         Vec3i normal = pDirection.getNormal();
-
-        pConsumer.vertex(pPose, pX0, pY0, pZ0).color(color_rgb).uv(0.0F, 1.0F).uv2(laser_size).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
-        pConsumer.vertex(pPose, pX1, pY0, pZ1).color(color_rgb).uv(0.0F, 0.0F).uv2(laser_size).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
-        pConsumer.vertex(pPose, pX1, pY1, pZ2).color(color_rgb).uv(1.0F, 0.0F).uv2(laser_size).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
-        pConsumer.vertex(pPose, pX0, pY1, pZ3).color(color_rgb).uv(1.0F, 1.0F).uv2(laser_size).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
-
-
+        pConsumer.vertex(pPose, pX0, pY0, pZ0).color(color_rgb).uv(0.0F, size).uv2(size,0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY0, pZ1).color(color_rgb).uv(0.0F, size).uv2(size,0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY1, pZ2).color(color_rgb).uv(0.0F, 0.0F).uv2(size,0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX0, pY1, pZ3).color(color_rgb).uv(0.0F, 0.0F).uv2(size,0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
     }
-
-
+    //UV shenanigans
+    private void renderFaceEastWest(Matrix4f pPose, VertexConsumer pConsumer, int size, int color_rgb, float pX0, float pX1, float pY0, float pY1, float pZ0, float pZ1, float pZ2, float pZ3, Direction pDirection) {
+        Vec3i normal = pDirection.getNormal();
+        pConsumer.vertex(pPose, pX0, pY0, pZ0).color(color_rgb).uv(0.0F, size).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY0, pZ1).color(color_rgb).uv(0.0F, 0.0F).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY1, pZ2).color(color_rgb).uv(0.0F, 0.0F).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX0, pY1, pZ3).color(color_rgb).uv(0.0F, size).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+    }
+    private void renderFaceUp(Matrix4f pPose, VertexConsumer pConsumer, int size, int color_rgb, float pX0, float pX1, float pY0, float pY1, float pZ0, float pZ1, float pZ2, float pZ3, Direction pDirection) {
+        Vec3i normal = pDirection.getNormal();
+        pConsumer.vertex(pPose, pX0, pY0, pZ0).color(color_rgb).uv(0.0F, 0.0F).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY0, pZ1).color(color_rgb).uv(0.0F, 0.0F).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY1, pZ2).color(color_rgb).uv(0.0F, size).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX0, pY1, pZ3).color(color_rgb).uv(0.0F, size).uv2(size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+    }
+    private void renderFaceNorth(Matrix4f pPose, VertexConsumer pConsumer, int laser_size, int color_rgb, float pX0, float pX1, float pY0, float pY1, float pZ0, float pZ1, float pZ2, float pZ3, Direction pDirection) {
+        Vec3i normal = pDirection.getNormal();
+        pConsumer.vertex(pPose, pX0, pY0, pZ0).color(color_rgb).uv(0.0F, 1.0F).uv2(laser_size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY0, pZ1).color(color_rgb).uv(0.0F, 1.0F).uv2(laser_size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX1, pY1, pZ2).color(color_rgb).uv(0.0F, 1.0F).uv2(laser_size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+        pConsumer.vertex(pPose, pX0, pY1, pZ3).color(color_rgb).uv(0.0F, 1.0F).uv2(laser_size, 0).normal(normal.getX(), normal.getY(), normal.getZ()).endVertex();
+    }
 }

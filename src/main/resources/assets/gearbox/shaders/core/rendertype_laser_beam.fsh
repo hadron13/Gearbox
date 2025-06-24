@@ -14,7 +14,7 @@ in float vertexDistance;
 in vec4 vertexColor;
 in vec2 texCoord0;
 in vec2 texCoord1;
-in vec4 normal;
+in vec3 normal;
 in vec3 position;
 
 
@@ -177,6 +177,6 @@ vec2 worley(vec3 P, float jitter, bool manhattanDistance) {
 
 
 void main() {
-    fragColor = vertexColor * worley(vec3(position.xy, GameTime*1000.0f), 1.0, false).y + 0.2f;
-
+    //fragColor = vertexColor * worley(vec3(position.xy, GameTime*1000.0f), 1.0, false).y + 0.2f;
+    fragColor = vec4((step(0.0,sin(texCoord0.y * 8.0 + GameTime*40000.0f)) + 0.75) * vertexColor, 0.8);
 }
