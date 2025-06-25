@@ -45,18 +45,24 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
     @Override
     protected void renderSafe(T be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
         VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
-//        SuperByteBuffer cube = CachedBuffers.block(Blocks.COBBLESTONE.defaultBlockState());
-        //cube.renderInto(ms, laserVertexConsumer);
 
+        float thickness = 4/16f;
+        TransformStack.of(ms)
+                //.rotateZCentered(AnimationTickHolder.getRenderTime()/10f)
+                .translate(-0.5f + thickness/2f, 0.5f - thickness/2f, -1f)
+                .translate(0.5f)
+                .rotateYDegrees(180f)
+                .translate(-0.5f)
+        ;
 
-        renderBeam(ms.last().pose(), laserVertexConsumer, 10.0f, 0.5f, 0xFFFF0000);
+        renderBeam(ms.last().pose(), laserVertexConsumer, 500.0f, thickness, 0xFFFF0000);
     }
 
 
 
 
     private void renderBeam(Matrix4f pPose, VertexConsumer pConsumer, float size, float thickness, int color_rgb) {
-        this.renderFaceSouth( pPose, pConsumer,(int)size, color_rgb, 0.0F, thickness, 0.0F, thickness, size, size, size, size, Direction.SOUTH);
+        this.renderFaceNorth( pPose, pConsumer,(int)size, color_rgb, 0.0F, thickness, 0.0F, thickness, size, size, size, size, Direction.SOUTH);
         this.renderFaceNorth( pPose, pConsumer,(int)size,color_rgb, 0.0F, thickness, thickness, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, NORTH);
         this.renderFaceEastWest( pPose, pConsumer,(int)size,color_rgb, thickness, thickness, thickness, 0.0F, 0.0F, size, size, 0.0F, Direction.EAST);
         this.renderFaceEastWest( pPose, pConsumer,(int)size,color_rgb, 0.0F, 0.0F, 0.0F, thickness, 0.0F, size, size, 0.0F, Direction.WEST);

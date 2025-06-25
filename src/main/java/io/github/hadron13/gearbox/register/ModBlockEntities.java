@@ -1,8 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
 
-import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.content.kinetics.base.OrientedRotatingVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
@@ -85,6 +83,7 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.LASER)
             .renderer(() -> LaserBeamRenderer::new)
             .register();
+
 
     public static final BlockEntityEntry<MirrorBlockEntity> MIRROR = Gearbox.registrate()
             .blockEntity("mirror", MirrorBlockEntity::new)

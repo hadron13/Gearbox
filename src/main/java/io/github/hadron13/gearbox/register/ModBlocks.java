@@ -107,6 +107,7 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
 
+
     public static final BlockEntry<MirrorBlock> MIRROR = REGISTRATE.block("mirror", MirrorBlock::new)
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
