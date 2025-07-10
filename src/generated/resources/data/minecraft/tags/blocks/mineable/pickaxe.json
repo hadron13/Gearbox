@@ -8,7 +8,6 @@
     "gearbox:mirror",
     "gearbox:spectrometer",
     "gearbox:irradiator",
-    "gearbox:large_laser",
     "gearbox:electrolyzer",
     "gearbox:kinetic_machine",
     "gearbox:centrifuge",

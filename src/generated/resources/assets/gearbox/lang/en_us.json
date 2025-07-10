@@ -16,7 +16,6 @@
   "block.gearbox.kinetic_machine": "Kinetic Machine",
   "block.gearbox.kinetic_machine.tooltip": "KINETIC MACHINE",
   "block.gearbox.kinetic_machine.tooltip.summary": "It spins",
-  "block.gearbox.large_laser": "Large Laser",
   "block.gearbox.large_laser.tooltip": "LARGE LASER",
   "block.gearbox.large_laser.tooltip.behaviour1": "Consumes _200 FE/t/block_",
   "block.gearbox.large_laser.tooltip.condition1": "",

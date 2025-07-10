@@ -16,8 +16,6 @@ import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.data.client.blockstates.KilnGenerator;
-import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserBlock;
-import io.github.hadron13.gearbox.blocks.large_laser.LargeLaserGenerator;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillItem;
@@ -102,7 +100,7 @@ public class ModBlocks {
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .item()
             .transform(customItemModel())
             .register();
@@ -134,16 +132,6 @@ public class ModBlocks {
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();
-
-    public static final BlockEntry<LargeLaserBlock> LARGE_LASER = REGISTRATE.block("large_laser", LargeLaserBlock::new)
-            .initialProperties(SharedProperties::netheriteMetal)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.METAL))
-            .blockstate(new LargeLaserGenerator()::generate)
-            .item()
-            .transform(customItemModel())
-            .register();
-
 //    public static final BlockEntry<BlackHoleBlock> BLACK_HOLE  = REGISTRATE.block("black_hole", BlackHoleBlock::new)
 //            .initialProperties(SharedProperties::netheriteMetal)
 //            .transform(pickaxeOnly())

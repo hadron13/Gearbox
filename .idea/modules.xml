@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Gearbox.iml" filepath="$PROJECT_DIR$/.idea/modules/Gearbox.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Gearbox.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Gearbox.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Gearbox.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Gearbox.test.iml" />
     </modules>

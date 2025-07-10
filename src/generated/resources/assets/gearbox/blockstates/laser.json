@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "gearbox:block/laser/block",
+      "y": 90
+    },
+    "facing=north": {
       "model": "gearbox:block/laser/block"
+    },
+    "facing=south": {
+      "model": "gearbox:block/laser/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gearbox:block/laser/block",
+      "y": 270
     }
   }
 }

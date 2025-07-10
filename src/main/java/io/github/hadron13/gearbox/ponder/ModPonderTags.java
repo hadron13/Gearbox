@@ -42,7 +42,6 @@ public class ModPonderTags {
 
         HELPER.addToTag(LASER_STUFF)
                 .add(ModBlocks.LASER)
-                .add(ModBlocks.LARGE_LASER)
                 .add(ModBlocks.IRRADIATOR)
                 .add(ModBlocks.MIRROR)
                 .add(ModBlocks.LASER_DRILL)

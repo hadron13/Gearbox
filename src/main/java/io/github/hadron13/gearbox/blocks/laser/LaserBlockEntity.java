@@ -8,8 +8,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -21,11 +24,8 @@ import java.util.List;
 
 import static io.github.hadron13.gearbox.blocks.laser.LaserBlock.HORIZONTAL_FACING;
 
-public class LaserBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
-
-
-    public ArrayList<Laser> lasers;
-
+public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,IHaveGoggleInformation {
+    public Laser laserBeam;
 
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
@@ -34,35 +34,27 @@ public class LaserBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         super(type, pos, state);
         energyStorage = new InternalEnergyStorage(1000, 50, 50);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
+        laserBeam = new Laser(0xFF0000, getBlockPos().getCenter(), new Vec3(getFacing().step()));
     }
 
     public Direction getFacing(){
         return getBlockState().getValue(HORIZONTAL_FACING);
     }
 
-//    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public AABB getRenderBoundingBox() {
-//        LaserBeamBehavior.LaserBeam beam = beamBehavior.getLaser(getFacing());
-//        if (renderBoundingBox == null) {
-//            renderBoundingBox = new AABB(worldPosition, worldPosition.offset(1, 1, 1));
-//        }
-//        return renderBoundingBox;
-//    }
-
-
+    @Override
+    protected AABB createRenderBoundingBox() {
+        return new AABB(worldPosition).inflate(100);
+    }
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours){
     }
-
-    public void neighbourChanged(){
-
-    }
-
     @Override
     public void tick(){
-
+        super.tick();
+        if(level != null) {
+            laserBeam.tick(level);
+        }
     }
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -87,4 +79,8 @@ public class LaserBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         return LazyOptional.empty();
     }
 
+    @Override
+    public List<Laser> getLasers() {
+        return List.of(laserBeam);
+    }
 }

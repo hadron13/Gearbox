@@ -11,17 +11,22 @@ import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
+import java.util.List;
 
 import static net.minecraft.core.Direction.NORTH;
 
-public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEntityRenderer<T> {
+public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends SafeBlockEntityRenderer<T> {
 
 
     public LaserBeamRenderer(BlockEntityRendererProvider.Context context) {
@@ -46,16 +51,21 @@ public class LaserBeamRenderer<T extends SmartBlockEntity> extends SafeBlockEnti
     protected void renderSafe(T be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
         VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
 
-        float thickness = 4/16f;
-        TransformStack.of(ms)
-                //.rotateZCentered(AnimationTickHolder.getRenderTime()/10f)
-                .translate(-0.5f + thickness/2f, 0.5f - thickness/2f, -1f)
-                .translate(0.5f)
-                .rotateYDegrees(180f)
-                .translate(-0.5f)
-        ;
+        List<Laser> lasers = be.getLasers();
 
-        renderBeam(ms.last().pose(), laserVertexConsumer, 500.0f, thickness, 0xFFFF0000);
+        BlockPos blockPos = be.getBlockPos();
+
+        for(Laser l : lasers) {
+            float thickness = 4 / 16f ;//+ Mth.sin(t) * 1/16f;
+            Vec3 relativeLaserPos = l.position.subtract(blockPos.getCenter());
+            TransformStack.of(ms)
+                    .translate(relativeLaserPos)
+                    .translate(0.5f )
+                    .rotateTo(new Vector3f(0, 0, 1.0f), l.rotation.toVector3f())
+                    .translate(-thickness/2f, -thickness/2f, 0)
+            ;
+            renderBeam(ms.last().pose(), laserVertexConsumer, 500.0f, thickness, l.color);
+        }
     }
 
 

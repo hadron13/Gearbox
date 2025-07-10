@@ -33,7 +33,6 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity>, IWrencha
         super.createBlockStateDefinition(builder);
     }
 
-
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn,
                                BlockPos pos, CollisionContext context) {
@@ -47,14 +46,7 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity>, IWrencha
                         .getOpposite());
     }
 
-    @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos,
-                                boolean isMoving) {
-        if (worldIn.isClientSide)
-            return;
 
-        withBlockEntityDo(worldIn, pos, LaserBlockEntity::neighbourChanged);
-    }
 
     @Override
     public Class<LaserBlockEntity> getBlockEntityClass() {

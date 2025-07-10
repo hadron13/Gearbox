@@ -2,6 +2,8 @@ package io.github.hadron13.gearbox.blocks.mirror;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import io.github.hadron13.gearbox.blocks.laser.ILaserEmitter;
+import io.github.hadron13.gearbox.blocks.laser.Laser;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import net.createmod.catnip.theme.Color;
@@ -17,7 +19,7 @@ import java.util.List;
 
 import static io.github.hadron13.gearbox.blocks.mirror.MirrorBlock.HORIZONTAL_FACING;
 
-public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceiver {
+public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceiver, ILaserEmitter {
 
     LaserBeamBehavior beamBehavior;
     public int timeoutLeft = 0;
@@ -147,5 +149,10 @@ public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceive
     @Override
     public float getLoss() {
         return 0.03f;
+    }
+
+    @Override
+    public List<Laser> getLasers() {
+        return List.of();
     }
 }
