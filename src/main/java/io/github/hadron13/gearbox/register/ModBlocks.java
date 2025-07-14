@@ -110,7 +110,7 @@ public class ModBlocks {
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+            .blockstate(BlockStateGen.axisBlockProvider(true))
             .item()
             .transform(customItemModel())
             .register();

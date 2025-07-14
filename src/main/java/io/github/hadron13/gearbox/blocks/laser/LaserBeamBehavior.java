@@ -100,22 +100,6 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
 
 
 
-    /**
-     * for redirecting lasers at sub-tick speeds, made for ILaserReceiver blocks
-     * @param face face of the laser
-     * @param index recursion index
-     */
-    public void propagate(Direction face, int index){
-        if(index == 0)
-            return;
-        LaserBeam beam = getLaser(face);
-        if(beam != null && beam.targetReceiver != null){
-            beam.targetReceiver.propagate(beam.facing.getOpposite(),
-                                          beam.color,
-                                    beam.power - beam.targetReceiver.getLoss(),
-                                    index-1);
-        }
-    }
 
     @Override
     public void tick(){
@@ -142,7 +126,6 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
     public void destroy() {
         for(LaserBeam beam: beams.values()) {
             if (beam.targetReceiver != null) {
-                beam.targetReceiver.receiveLaser(beam.facing.getOpposite(), Color.BLACK, 0);
             }
             for(ILaserReader reader : beam.readers){
                 if(reader != null)
@@ -172,9 +155,7 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
             }
             BlockEntity blockEntityAtPos = level.getBlockEntity(currentPosition);
             if(blockEntityAtPos instanceof ILaserReceiver receiver){
-                if(receiver.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power - receiver.getLoss())){
-                    beam.targetReceiver = receiver;
-                }
+
                 beam.breakTimer = 0;
                 break;
             }

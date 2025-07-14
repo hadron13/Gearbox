@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.*;
@@ -351,7 +352,6 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         return true;
     }
 
-    @Override
     public boolean receiveLaser(Direction face, Color color, float power) {
 
         if(face.getAxis() != Direction.Axis.Y){
@@ -371,5 +371,10 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         }
 
         return false;
+    }
+
+    @Override
+    public void receiveLaser(int color, Vec3 direction, float power) {
+
     }
 }

@@ -26,7 +26,7 @@ import java.util.List;
 public class Laser {
     public int color;
     public Vec3 position;
-    public Vec3 direction;
+    public Vec3 direction; //normalized
     public float power;
     public float length;
 
@@ -42,7 +42,7 @@ public class Laser {
     public Laser(int color, Vec3 position, Vec3 rotation) {
         this.color = color;
         this.position = position;
-        this.direction = rotation.add(0, 1f, 0);
+        this.direction = rotation.normalize();//.add(0, 1f, 0);
         this.power = 2f;
         this.length = 100f;
     }
@@ -52,16 +52,17 @@ public class Laser {
 
         BlockHitResult block;
         Optional<Vec3> nextPosition = Optional.of(position);
+        length = 0;
         do{
            block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(1000f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
-           nextPosition = handleBlockIntersection(level, block);
+            if(block.getType() == HitResult.Type.MISS) {
+                length = 100f;
+                break;
+            }
+            nextPosition = handleBlockIntersection(level, nextPosition.get(), block);
         }while (nextPosition.isPresent());
 
-        if(block.getType() != HitResult.Type.MISS){
-            handleBlockIntersection(level, block);
-        }else{
-            length = 100f;
-        }
+
 
         AABB aabb = new AABB(position, position.add(direction.scale(100f))).inflate(1.0); // Expand AABB slightly to catch entities
         List<Entity> entities = level.getEntities((Entity) null, aabb, entity -> entity.isAlive() && entity.isPickable());
@@ -76,15 +77,25 @@ public class Laser {
 
     }
 
+
+    /**
+     * Handles block raycast result
+     * @param level current world
+     * @param position previous position used for raycasting
+     * @param block the result from raycasting
+     * @return new position to raycast from, in case it hits a block such as glass and needs to continue
+     */
     public Optional<Vec3> handleBlockIntersection(Level level, Vec3 position, BlockHitResult block){
         BlockState blockState = level.getBlockState(block.getBlockPos());
-        boolean catchesFire = blockState.isFlammable(level, block.getBlockPos(), block.getDirection());
 
+        boolean catchesFire = blockState.isFlammable(level, block.getBlockPos(), block.getDirection());
         float hardness = blockState.getDestroySpeed(level, block.getBlockPos());
+        float distance = (float)VecHelper.getCenterOf(block.getBlockPos()).distanceTo(position);
         boolean canBreak = hardness > -1 && hardness < power;
 
+        length += distance;
         if(blockState.is(Tags.Blocks.GLASS)){
-            return Optional.of(position.add(block.getBlockPos().getCenter()));
+            return Optional.of( position.add(direction.scale(distance)) );
         }
 
         BlockEntity be = level.getBlockEntity(block.getBlockPos());
@@ -113,7 +124,6 @@ public class Laser {
                 breakTimer = 0;
             }
         }
-        length = (float)VecHelper.getCenterOf(block.getBlockPos()).distanceTo(position);
         return Optional.absent();
     }
 

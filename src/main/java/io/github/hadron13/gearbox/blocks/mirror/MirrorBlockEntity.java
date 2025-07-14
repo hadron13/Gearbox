@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.blocks.mirror;
 
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import io.github.hadron13.gearbox.blocks.laser.ILaserEmitter;
@@ -19,9 +20,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 
-public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceiver, ILaserEmitter {
+public class MirrorBlockEntity extends KineticBlockEntity implements ILaserReceiver, ILaserEmitter {
 
-    LaserBeamBehavior beamBehavior;
+
+    public float angle;
+
 
     public AABB renderBoundingBox;
     @Override
@@ -34,6 +37,12 @@ public class MirrorBlockEntity extends SmartBlockEntity implements ILaserReceive
     }
     public MirrorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
     }
 
     @Override
