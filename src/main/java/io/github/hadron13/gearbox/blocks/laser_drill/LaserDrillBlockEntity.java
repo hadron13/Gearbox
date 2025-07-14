@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
@@ -305,7 +306,6 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
         return true;
     }
 
-    @Override
     public boolean receiveLaser(Direction face, Color color, float power) {
         if(face.getAxis() != Direction.Axis.Y){
             if(color == Color.BLACK || power <= 0.1f){
@@ -347,5 +347,10 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
         output.deserializeNBT(compound.getCompound("OutputItems"));
         if (clientPacket)
             visualSpeed.chase(Math.log(totalPower+5), 1 / 64f, LerpedFloat.Chaser.EXP);
+    }
+
+    @Override
+    public void receiveLaser(int color, Vec3 direction, float power) {
+
     }
 }

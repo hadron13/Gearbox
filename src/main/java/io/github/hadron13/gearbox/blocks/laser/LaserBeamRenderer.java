@@ -2,23 +2,16 @@ package io.github.hadron13.gearbox.blocks.laser;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
-import net.createmod.catnip.animation.AnimationTickHolder;
-import net.createmod.catnip.render.CachedBuffers;
-import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -61,10 +54,10 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
             TransformStack.of(ms)
                     .translate(relativeLaserPos)
                     .translate(0.5f )
-                    .rotateTo(new Vector3f(0, 0, 1.0f), l.rotation.toVector3f())
+                    .rotateTo(new Vector3f(0, 0, 1.0f), l.direction.toVector3f())
                     .translate(-thickness/2f, -thickness/2f, 0)
             ;
-            renderBeam(ms.last().pose(), laserVertexConsumer, 500.0f, thickness, l.color);
+            renderBeam(ms.last().pose(), laserVertexConsumer, l.length, thickness, l.color);
         }
     }
 

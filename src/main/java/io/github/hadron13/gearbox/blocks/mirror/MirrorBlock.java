@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class MirrorBlock extends Block implements IBE<MirrorBlockEntity>, IWrenchable {
 
-    public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final Property<Direction> FACING = BlockStateProperties.FACING;
 
     public MirrorBlock(Properties pProperties) {
         super(pProperties);
@@ -27,7 +27,7 @@ public class MirrorBlock extends Block implements IBE<MirrorBlockEntity>, IWrenc
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HORIZONTAL_FACING);
+        builder.add(FACING);
         super.createBlockStateDefinition(builder);
     }
 
@@ -35,7 +35,7 @@ public class MirrorBlock extends Block implements IBE<MirrorBlockEntity>, IWrenc
     public BlockState getStateForPlacement(BlockPlaceContext context) {
 
         return this.defaultBlockState()
-                .setValue(HORIZONTAL_FACING, context.getHorizontalDirection()
+                .setValue(FACING, context.getHorizontalDirection()
                         .getOpposite());
     }
 
@@ -47,12 +47,12 @@ public class MirrorBlock extends Block implements IBE<MirrorBlockEntity>, IWrenc
     }
 
     public BlockState getRotatedBlockState(BlockState originalState, Direction targetedFace) {
-
+        //TODO: fix this for all directions
         if (targetedFace.getAxis() == Direction.Axis.Y) {
             return originalState.setValue(HorizontalKineticBlock.HORIZONTAL_FACING, originalState
                     .getValue(HorizontalKineticBlock.HORIZONTAL_FACING).getClockWise(targetedFace.getAxis()));
         }else{
-            return originalState.setValue(HORIZONTAL_FACING, targetedFace);
+            return originalState.setValue(FACING, targetedFace);
         }
     }
     @Override
@@ -67,7 +67,7 @@ public class MirrorBlock extends Block implements IBE<MirrorBlockEntity>, IWrenc
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(HORIZONTAL_FACING, rot.rotate(state.getValue(HORIZONTAL_FACING)));
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
 }

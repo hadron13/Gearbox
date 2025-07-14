@@ -1,100 +1,122 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
+import com.google.common.base.Optional;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.irradiator.LaserRecipe;
 import io.github.hadron13.gearbox.register.data.ModDamageTypes;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.EnderMan;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
+import net.minecraftforge.common.Tags;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Laser {
     public int color;
     public Vec3 position;
-    public Vec3 rotation;
+    public Vec3 direction;
     public float power;
     public float length;
 
 
     public int breakTimer = 0;
-    public List<Entity> caughtEntities = new ArrayList<>();
 
     public Laser(){
         color = 0;
         position = Vec3.ZERO;
-        rotation = Vec3.ZERO;
+        direction = Vec3.ZERO;
     }
 
     public Laser(int color, Vec3 position, Vec3 rotation) {
         this.color = color;
         this.position = position;
-        this.rotation = rotation;
+        this.direction = rotation.add(0, 1f, 0);
         this.power = 2f;
+        this.length = 100f;
     }
 
     public void tick(Level level){
-        BlockHitResult block = level.clip(new ClipContext(position, position.add(rotation.scale(1000f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+
+
+        BlockHitResult block;
+        Optional<Vec3> nextPosition = Optional.of(position);
+        do{
+           block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(1000f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+           nextPosition = handleBlockIntersection(level, block);
+        }while (nextPosition.isPresent());
+
         if(block.getType() != HitResult.Type.MISS){
-
-            BlockState blockState = level.getBlockState(block.getBlockPos());
-            boolean catchesFire = blockState.isFlammable(level, block.getBlockPos(), block.getDirection());
-
-            float hardness = blockState.getDestroySpeed(level, block.getBlockPos());
-            boolean canBreak = hardness > -1 && hardness < power;
-
-            if(!canBreak && !catchesFire) {
-                breakTimer = 0;
-            }else {
-                breakTimer++;
-                if(level.isClientSide){
-                    Vec3 opposite= rotation.reverse();
-                    Vec3 particlePos = Vec3.atCenterOf(block.getBlockPos());
-
-                    Vec3 velocity = VecHelper.offsetRandomly(opposite, level.random, 0.5f);
-
-                    level.addParticle(ParticleTypes.LAVA,
-                            particlePos.x + opposite.x, particlePos.y + opposite.y, particlePos.z + opposite.z,
-                            velocity.x, velocity.y, velocity.z);
-                }
-
-                if ((canBreak && breakTimer >= (hardness * 10) / power) || (catchesFire && breakTimer >= 20 / power)) {
-                    level.destroyBlock(block.getBlockPos(), true);
-                    breakTimer = 0;
-                }
-            }
+            handleBlockIntersection(level, block);
+        }else{
+            length = 100f;
         }
 
-        AABB aabb = new AABB(position, position.add(rotation.scale(100f))).inflate(1.0); // Expand AABB slightly to catch entities
+        AABB aabb = new AABB(position, position.add(direction.scale(100f))).inflate(1.0); // Expand AABB slightly to catch entities
         List<Entity> entities = level.getEntities((Entity) null, aabb, entity -> entity.isAlive() && entity.isPickable());
 
-
         for (Entity entity : entities) {
-            // Get the entity's bounding box, expanded by its collision border
             AABB entityAABB = entity.getBoundingBox().inflate(entity.getPickRadius());
-            // Check if the ray intersects the entity's bounding box
-            if (entityAABB.clip(position, position.add(rotation.scale(100f))).isPresent()) {
+            if (entityAABB.clip(position, position.add(direction.scale(100f))).isPresent()) {
                 entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ModDamageTypes.laser)), power * 2);
                 entity.setSecondsOnFire(3);
             }
         }
 
     }
+
+    public Optional<Vec3> handleBlockIntersection(Level level, Vec3 position, BlockHitResult block){
+        BlockState blockState = level.getBlockState(block.getBlockPos());
+        boolean catchesFire = blockState.isFlammable(level, block.getBlockPos(), block.getDirection());
+
+        float hardness = blockState.getDestroySpeed(level, block.getBlockPos());
+        boolean canBreak = hardness > -1 && hardness < power;
+
+        if(blockState.is(Tags.Blocks.GLASS)){
+            return Optional.of(position.add(block.getBlockPos().getCenter()));
+        }
+
+        BlockEntity be = level.getBlockEntity(block.getBlockPos());
+        if(be instanceof ILaserReceiver receiver){
+            canBreak = false;
+            receiver.receiveLaser(color, direction, power);
+        }
+
+        if(!canBreak && !catchesFire) {
+            breakTimer = 0;
+        }else {
+            breakTimer++;
+            if(level.isClientSide){
+                Vec3 opposite= direction.reverse();
+                Vec3 particlePos = Vec3.atCenterOf(block.getBlockPos());
+
+                Vec3 velocity = VecHelper.offsetRandomly(opposite, level.random, 0.5f);
+
+                level.addParticle(ParticleTypes.LAVA,
+                        particlePos.x + opposite.x, particlePos.y + opposite.y, particlePos.z + opposite.z,
+                        velocity.x, velocity.y, velocity.z);
+            }
+
+            if ((canBreak && breakTimer >= (hardness * 10) / power) || (catchesFire && breakTimer >= 20 / power)) {
+                level.destroyBlock(block.getBlockPos(), true);
+                breakTimer = 0;
+            }
+        }
+        length = (float)VecHelper.getCenterOf(block.getBlockPos()).distanceTo(position);
+        return Optional.absent();
+    }
+
 
     public int getColor() {
         return color;
@@ -113,18 +135,18 @@ public class Laser {
     }
 
     public Vec3 getRotation() {
-        return rotation;
+        return direction;
     }
 
     public void setRotation(Vec3 rotation) {
-        this.rotation = rotation;
+        this.direction = rotation;
     }
 
     public CompoundTag write(CompoundTag nbt, String prefix) {
         nbt.putInt(prefix + "color", color);
         nbt.putFloat(prefix + "length", length);
         nbt.put(prefix + "position", writeVec3(position));
-        nbt.put(prefix + "rotation", writeVec3(rotation));
+        nbt.put(prefix + "rotation", writeVec3(direction));
         return nbt;
     }
 
@@ -132,7 +154,7 @@ public class Laser {
         color = nbt.getInt(prefix + "color");
         length = nbt.getFloat(prefix + "length");
         position = readVec3(nbt.getList(prefix + "position", Tag.TAG_INT));
-        rotation = readVec3(nbt.getList(prefix + "rotation", Tag.TAG_INT));
+        direction = readVec3(nbt.getList(prefix + "rotation", Tag.TAG_INT));
     }
 
 
