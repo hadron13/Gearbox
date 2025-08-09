@@ -2,25 +2,10 @@
 	"credit": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
 	"parent": "block/block",
 	"textures": {
-		"0": "create:block/axis",
-		"1": "create:block/axis_top",
 		"2": "gearbox:block/mirror",
 		"particle": "create:block/axis"
 	},
 	"elements": [
-		{
-			"name": "Axis",
-			"from": [6, 0, 6],
-			"to": [10, 16, 10],
-			"faces": {
-				"north": {"uv": [6, 0, 10, 16], "texture": "#0"},
-				"east": {"uv": [6, 0, 10, 16], "texture": "#0"},
-				"south": {"uv": [6, 0, 10, 16], "texture": "#0"},
-				"west": {"uv": [6, 0, 10, 16], "texture": "#0"},
-				"up": {"uv": [6, 6, 10, 10], "texture": "#1"},
-				"down": {"uv": [6, 6, 10, 10], "texture": "#1"}
-			}
-		},
 		{
 			"from": [1, 1, 5],
 			"to": [15, 15, 11],
@@ -40,8 +25,20 @@
 			"name": "shaft",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [0]
+			"children": []
 		},
-		1
+		0,
+		{
+			"name": "shaft",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "shaft",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": []
+		}
 	]
 }

@@ -1,32 +1,33 @@
 package io.github.hadron13.gearbox.blocks.mirror;
 
+import com.simibubi.create.content.fluids.pipes.valve.FluidValveBlock;
+import com.simibubi.create.content.fluids.pipes.valve.FluidValveBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
-import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import io.github.hadron13.gearbox.blocks.laser.ILaserEmitter;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
-import io.github.hadron13.gearbox.blocks.laser.LaserBeamBehavior;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
-import net.createmod.catnip.theme.Color;
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MirrorBlockEntity extends KineticBlockEntity implements ILaserReceiver, ILaserEmitter {
 
-
-    public float angle;
-
-
+    public Map<Laser, Laser> lasers = new HashMap<>();
     public AABB renderBoundingBox;
+    LerpedFloat angle;
+
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public AABB getRenderBoundingBox() {
@@ -37,27 +38,63 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     }
     public MirrorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+
+        angle = LerpedFloat.linear()
+                .startWithValue(0)
+                .chase(0, 0, LerpedFloat.Chaser.LINEAR);
+    }
+
+    @Override
+    public void onSpeedChanged(float previousSpeed) {
+        super.onSpeedChanged(previousSpeed);
+        float speed = getSpeed();
+        angle.chase(speed > 0 ? angle.getValue() + 100 : 0, getChaseSpeed(), LerpedFloat.Chaser.LINEAR);
+        sendData();
+    }
+    public float getChaseSpeed() {
+        return Mth.clamp(Math.abs(getSpeed()) / 16 / 20, 0, 1);
     }
 
     @Override
     public void tick() {
         super.tick();
+        angle.setValue(angle.getValue()+getSpeed());
+        //angle.tickChaser();
 
+        for(Laser l : lasers.values()){
+            l.tick(this.getLevel());
+        }
     }
 
     @Override
-    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-
+    public void receiveLaser(Laser laser) {
+        if(!lasers.containsKey(laser)){
+            lasers.put(laser, new Laser(laser.color, getBlockPos().getCenter(), laser.direction.yRot(90 * Mth.DEG_TO_RAD) ));
+        }
     }
 
+    @Override
+    public void endReceiveLaser(Laser laser) {
+        lasers.get(laser).disable();
+        lasers.remove(laser);
+    }
 
     @Override
     public List<Laser> getLasers() {
-        return List.of();
+        return lasers.values().stream().toList();
+    }
+    @Override
+    protected void write(CompoundTag compound, boolean clientPacket) {
+        super.write(compound, clientPacket);
+        compound.put("Angle", angle.writeNBT());
     }
 
     @Override
-    public void receiveLaser(int color, Vec3 direction, float power) {
-
+    protected void read(CompoundTag compound, boolean clientPacket) {
+        super.read(compound, clientPacket);
+        angle.readNBT(compound.getCompound("Angle"), clientPacket);
     }
+
+
+
 }

@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
+import io.github.hadron13.gearbox.blocks.laser.Laser;
 import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
@@ -374,7 +375,12 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     }
 
     @Override
-    public void receiveLaser(int color, Vec3 direction, float power) {
+    public void receiveLaser(Laser laser) {
+
+    }
+
+    @Override
+    public void endReceiveLaser(Laser laser) {
 
     }
 }
