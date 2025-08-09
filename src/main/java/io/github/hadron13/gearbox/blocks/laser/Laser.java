@@ -29,9 +29,9 @@ public class Laser {
     public Vec3 direction; //normalized
     public float power;
     public float length;
-
-
     public int breakTimer = 0;
+    public boolean enabled = true;
+    public ILaserReceiver receiver = null;
 
     public Laser(){
         color = 0;
@@ -48,7 +48,7 @@ public class Laser {
     }
 
     public void tick(Level level){
-
+        if(!enabled) return;
 
         BlockHitResult block;
         Optional<Vec3> nextPosition = Optional.of(position);
@@ -101,7 +101,17 @@ public class Laser {
         BlockEntity be = level.getBlockEntity(block.getBlockPos());
         if(be instanceof ILaserReceiver receiver){
             canBreak = false;
-            receiver.receiveLaser(color, direction, power);
+            receiver.receiveLaser(this);
+            if(this.receiver != receiver){
+                if(this.receiver != null) this.receiver.endReceiveLaser(this);
+                this.receiver = receiver;
+            }
+            return Optional.absent();
+        }
+
+        if(this.receiver != null){
+            this.receiver.endReceiveLaser(this);
+            this.receiver = null;
         }
 
         if(!canBreak && !catchesFire) {
@@ -127,6 +137,13 @@ public class Laser {
         return Optional.absent();
     }
 
+    public void enable(){
+        this.enabled = true;
+    }
+    public void disable(){
+        this.enabled = false;
+        if(this.receiver != null) this.receiver.endReceiveLaser(this);
+    }
 
     public int getColor() {
         return color;

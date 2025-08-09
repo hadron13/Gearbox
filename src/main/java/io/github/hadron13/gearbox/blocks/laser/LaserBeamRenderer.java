@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
@@ -53,8 +54,11 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
 
 
     public static void renderLaserBeam(Laser laser, PoseStack ms, VertexConsumer vertexConsumer, BlockPos blockEntityPos){
+        if(!laser.enabled) return;
+
+        ms.pushPose();
         float thickness = 4 / 16f ;
-        Vec3 relativeLaserPos = laser.position.subtract(blockEntityPos.getCenter());
+        Vec3 relativeLaserPos = laser.position.subtract(Vec3.atCenterOf(blockEntityPos));
         TransformStack.of(ms)
                 .translate(relativeLaserPos)
                 .translate(0.5f )
@@ -62,6 +66,7 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
                 .translate(-thickness/2f, -thickness/2f, 0)
         ;
         renderBeam(ms.last().pose(), vertexConsumer, laser.length, thickness, laser.color);
+        ms.popPose();
     }
 
 

@@ -16,9 +16,6 @@ public class ModPartialModels {
             THICK_BEAM = block("irradiator/thick_beam"),
             LARGE_LASER_LENS = block("large_laser/lens"),
             ELECTROLYZER_HEAD = block("electrolyzer/head"),
-            PG_RING_GEAR = block("planetary/ring_gear"),
-            PG_SUN_GEAR = block("planetary/sun_gear"),
-            PG_PLANET_GEAR = block("planetary/planet_gear"),
             USELESS_COG = block("kinetic_machine/cog"),
             CENTRIFUGE_COG = block("centrifuge/cogwheel"),
             LASER_DRILL_HEAD = block("laser_drill/head"),
@@ -30,6 +27,7 @@ public class ModPartialModels {
             PUMPJACK_SMOOTHROD = block("pumpjack/smooth_rod"),
             PUMPJACK_TRUSS = block("pumpjack/truss"),
             DIPPER_POLE = block("dipper/pole"),
+            MIRROR = block("mirror/block"),
 
             ULTIMATE_MECH_CORE = item("ultimate_mechanism/core"),
             TAU_CANNON_COIL = item("tau_cannon/coil");

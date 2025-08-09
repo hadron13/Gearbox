@@ -56,6 +56,13 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
             laserBeam.tick(level);
         }
     }
+
+    @Override
+    public void remove() {
+        laserBeam.disable();
+        super.remove();
+    }
+
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
 //        InternalEnergyStorage.energyConsumptionTooltip(tooltip, energyStorage.getEnergyStored() > 0? 100:0);

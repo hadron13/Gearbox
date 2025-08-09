@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,8 +25,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.Objects;
 
 public class MirrorBlock extends RotatedPillarKineticBlock implements IBE<MirrorBlockEntity>, IWrenchable {
-
-
 
     public MirrorBlock(Properties pProperties) {
         super(pProperties);
@@ -45,5 +44,10 @@ public class MirrorBlock extends RotatedPillarKineticBlock implements IBE<Mirror
     @Override
     public Direction.Axis getRotationAxis(BlockState state) {
         return state.getValue(AXIS);
+    }
+
+    @Override
+    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+        return face.getAxis() == state.getValue(AXIS);
     }
 }

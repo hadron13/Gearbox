@@ -36,12 +36,5 @@ public class KilnRenderer extends SafeBlockEntityRenderer<KilnBlockEntity> {
         return CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, state.rotate(be.getLevel(), be.getBlockPos(), Rotation.NONE), state.getValue(HORIZONTAL_FACING).getOpposite());
     }
 
-    protected BlockState getRenderedBlockState(KineticBlockEntity be) {
-        return KineticBlockEntityRenderer.shaft(KineticBlockEntityRenderer.getRotationAxisOf(be));
-    }
 
-    //@Override
-    //protected SuperByteBuffer getRotatedModel(KilnBlockEntity be, BlockState state) {
-    //    return CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, state, state.getValue(HORIZONTAL_FACING).getOpposite());
-    //}
 }
