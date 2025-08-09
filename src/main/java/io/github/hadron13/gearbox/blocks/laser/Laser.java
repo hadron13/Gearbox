@@ -51,10 +51,10 @@ public class Laser {
         if(!enabled) return;
 
         BlockHitResult block;
-        Optional<Vec3> nextPosition = Optional.of(position);
-        length = 0;
+        Optional<Vec3> nextPosition = Optional.of(position.add(getRotation()));
+        length = 1;
         do{
-           block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(1000f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+            block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(100f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
             if(block.getType() == HitResult.Type.MISS) {
                 length = 100f;
                 break;
@@ -69,7 +69,7 @@ public class Laser {
 
         for (Entity entity : entities) {
             AABB entityAABB = entity.getBoundingBox().inflate(entity.getPickRadius());
-            if (entityAABB.clip(position, position.add(direction.scale(100f))).isPresent()) {
+            if (entityAABB.clip(position, position.add(direction.scale(length))).isPresent()) {
                 entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ModDamageTypes.laser)), power * 2);
                 entity.setSecondsOnFire(3);
             }

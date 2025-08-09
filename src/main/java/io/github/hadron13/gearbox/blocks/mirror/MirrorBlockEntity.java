@@ -25,8 +25,7 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
 
     public Map<Laser, Laser> lasers = new HashMap<>();
     public AABB renderBoundingBox;
-    LerpedFloat angle;
-
+    public float angle = 0;
 
     @Override
     @OnlyIn(Dist.CLIENT)
@@ -39,29 +38,20 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     public MirrorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
 
-        angle = LerpedFloat.linear()
-                .startWithValue(0)
-                .chase(0, 0, LerpedFloat.Chaser.LINEAR);
+
     }
 
-    @Override
-    public void onSpeedChanged(float previousSpeed) {
-        super.onSpeedChanged(previousSpeed);
-        float speed = getSpeed();
-        angle.chase(speed > 0 ? angle.getValue() + 100 : 0, getChaseSpeed(), LerpedFloat.Chaser.LINEAR);
-        sendData();
-    }
-    public float getChaseSpeed() {
-        return Mth.clamp(Math.abs(getSpeed()) / 16 / 20, 0, 1);
-    }
+
 
     @Override
     public void tick() {
         super.tick();
-        angle.setValue(angle.getValue()+getSpeed());
         //angle.tickChaser();
+        angle += getSpeed()/8;
 
-        for(Laser l : lasers.values()){
+        for(Laser key : lasers.keySet()){
+            Laser l = lasers.get(key);
+            l.setRotation(key.getRotation().yRot(angle * 2 * Mth.DEG_TO_RAD));
             l.tick(this.getLevel());
         }
     }
@@ -69,7 +59,7 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     @Override
     public void receiveLaser(Laser laser) {
         if(!lasers.containsKey(laser)){
-            lasers.put(laser, new Laser(laser.color, getBlockPos().getCenter(), laser.direction.yRot(90 * Mth.DEG_TO_RAD) ));
+            lasers.put(laser, new Laser(laser.color, getBlockPos().getCenter(), laser.direction.yRot(angle * 2 * Mth.DEG_TO_RAD) ));
         }
     }
 
@@ -86,13 +76,13 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     @Override
     protected void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
-        compound.put("Angle", angle.writeNBT());
+        compound.putFloat("angle", angle);
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
-        angle.readNBT(compound.getCompound("Angle"), clientPacket);
+        angle = compound.getFloat("angle");
     }
 
 
