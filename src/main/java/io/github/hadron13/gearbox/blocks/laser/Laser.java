@@ -53,6 +53,10 @@ public class Laser {
             block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(100f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
             if(block.getType() == HitResult.Type.MISS) {
                 length = 100f;
+                if(this.receiver != null){
+                    this.receiver.endReceiveLaser(this);
+                    this.receiver = null;
+                }
                 break;
             }
             nextPosition = handleBlockIntersection(level, nextPosition.get(), block);
@@ -96,7 +100,6 @@ public class Laser {
 
         BlockEntity be = level.getBlockEntity(block.getBlockPos());
         if(be instanceof ILaserReceiver receiver){
-            canBreak = false;
             receiver.receiveLaser(this);
             if(this.receiver != receiver){
                 if(this.receiver != null) this.receiver.endReceiveLaser(this);

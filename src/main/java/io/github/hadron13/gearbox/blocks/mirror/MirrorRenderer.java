@@ -16,8 +16,11 @@ import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+
+import static com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock.AXIS;
 
 public class MirrorRenderer extends KineticBlockEntityRenderer<MirrorBlockEntity> {
 
@@ -41,8 +44,14 @@ public class MirrorRenderer extends KineticBlockEntityRenderer<MirrorBlockEntity
 
         SuperByteBuffer mirror = CachedBuffers.partial(ModPartialModels.MIRROR, state);
 
-        mirror.rotateCentered((be.angle + (partialTicks * be.getSpeed()/8)) * Mth.DEG_TO_RAD, state.getValue(MirrorBlock.AXIS)).light(light).renderInto(ms, solid);
-
+        ms.pushPose();
+        mirror
+                .rotateCentered((be.angle + (partialTicks * be.getSpeed()/8)) * Mth.DEG_TO_RAD, state.getValue(AXIS))
+                .rotateYCentered(state.getValue(AXIS) == Direction.Axis.Z? 90 * Mth.DEG_TO_RAD : 0)
+                .light(light)
+                .renderInto(ms, solid)
+        ;
+        ms.popPose();
 
         VertexConsumer laserConsumer = buffer.getBuffer(ModRenderTypes.laserBeam());
         for(Laser l : be.lasers.values()){
