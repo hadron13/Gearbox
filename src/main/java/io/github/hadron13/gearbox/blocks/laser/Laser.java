@@ -1,13 +1,8 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
 import com.google.common.base.Optional;
-import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.blocks.irradiator.LaserRecipe;
 import io.github.hadron13.gearbox.register.data.ModDamageTypes;
 import net.createmod.catnip.math.VecHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
@@ -20,13 +15,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.minecraftforge.common.Tags;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Laser {
     public int color;
     public Vec3 position;
     public Vec3 direction; //normalized
+    public Vec3 lastDirection; //rotation in the last frame, for interpolation
     public float power;
     public float length;
     public int breakTimer = 0;
@@ -45,13 +40,14 @@ public class Laser {
         this.direction = rotation.normalize();//.add(0, 1f, 0);
         this.power = 2f;
         this.length = 100f;
+        this.lastDirection = this.direction;
     }
 
     public void tick(Level level){
         if(!enabled) return;
 
         BlockHitResult block;
-        Optional<Vec3> nextPosition = Optional.of(position.add(getRotation()));
+        Optional<Vec3> nextPosition = Optional.of(position.add(getDirection()));
         length = 1;
         do{
             block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(100f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
@@ -161,12 +157,13 @@ public class Laser {
         this.position = position;
     }
 
-    public Vec3 getRotation() {
+    public Vec3 getDirection() {
         return direction;
     }
 
-    public void setRotation(Vec3 rotation) {
-        this.direction = rotation;
+    public void setDirection(Vec3 direction) {
+        lastDirection = this.direction;
+        this.direction = direction;
     }
 
     public CompoundTag write(CompoundTag nbt, String prefix) {

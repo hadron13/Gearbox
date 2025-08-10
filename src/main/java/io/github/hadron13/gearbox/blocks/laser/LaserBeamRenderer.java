@@ -69,6 +69,24 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
         ms.popPose();
     }
 
+    public static void renderLaserBeamInterpolated(Laser laser, PoseStack ms, VertexConsumer vertexConsumer, BlockPos blockEntityPos, float partialTicks){
+        if(!laser.enabled) return;
+
+        ms.pushPose();
+        float thickness = 4 / 16f ;
+        Vec3 relativeLaserPos = laser.position.subtract(Vec3.atCenterOf(blockEntityPos));
+        Vec3 interpolatedDirection = laser.lastDirection.lerp(laser.direction, partialTicks);
+
+        TransformStack.of(ms)
+                .translate(relativeLaserPos)
+                .translate(0.5f )
+                .rotateTo(new Vector3f(0, 0, 1.0f), interpolatedDirection.toVector3f())
+                .translate(-thickness/2f, -thickness/2f, 0)
+        ;
+        renderBeam(ms.last().pose(), vertexConsumer, laser.length, thickness, laser.color);
+        ms.popPose();
+    }
+
 
 
     private static void renderBeam(Matrix4f pPose, VertexConsumer pConsumer, float size, float thickness, int color_rgb) {

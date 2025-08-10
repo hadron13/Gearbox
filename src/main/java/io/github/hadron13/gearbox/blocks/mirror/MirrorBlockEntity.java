@@ -1,18 +1,18 @@
 package io.github.hadron13.gearbox.blocks.mirror;
 
-import com.simibubi.create.content.fluids.pipes.valve.FluidValveBlock;
-import com.simibubi.create.content.fluids.pipes.valve.FluidValveBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.laser.ILaserEmitter;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
-import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -49,24 +49,40 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
         //angle.tickChaser();
         angle += getSpeed()/8;
 
-        for(Laser key : lasers.keySet()){
-            Laser l = lasers.get(key);
-            l.setRotation(key.getRotation().yRot(angle * 2 * Mth.DEG_TO_RAD));
-            l.tick(this.getLevel());
-        }
     }
 
     @Override
     public void receiveLaser(Laser laser) {
-        if(!lasers.containsKey(laser)){
-            lasers.put(laser, new Laser(laser.color, getBlockPos().getCenter(), laser.direction.yRot(angle * 2 * Mth.DEG_TO_RAD) ));
+        
+
+        if(Math.abs(getNormal().dot(laser.direction)) < 0.5f){
+            if(lasers.containsKey(laser)){
+                endReceiveLaser(laser);
+            }
+            return;
         }
+        if(!lasers.containsKey(laser)){
+            lasers.put(laser, new Laser(laser.color, getBlockPos().getCenter(),  getNormal()));
+        }
+        Laser reflected = lasers.get(laser);
+        reflected.setDirection(reflect(laser.direction, getNormal()));
+        reflected.tick(this.getLevel());
+    }
+
+    //I - 2.0 * dot(N, I) * N
+    public static Vec3 reflect(Vec3 incident, Vec3 normal){
+        return incident.subtract(normal.scale(2.0 * normal.dot(incident)));
+    }
+    public Vec3 getNormal(){
+        return Vec3.atLowerCornerOf(Direction.NORTH.getNormal()).yRot(angle * Mth.DEG_TO_RAD);
     }
 
     @Override
     public void endReceiveLaser(Laser laser) {
-        lasers.get(laser).disable();
-        lasers.remove(laser);
+        if(lasers.containsKey(laser)) {
+            lasers.get(laser).disable();
+            lasers.remove(laser);
+        }
     }
 
     @Override
