@@ -29,16 +29,13 @@ import static net.minecraft.core.Direction.Axis.Z;
 public class MirrorBlockEntity extends KineticBlockEntity implements ILaserReceiver, ILaserEmitter {
 
     public Map<Laser, Laser> lasers = new HashMap<>();
-    public AABB renderBoundingBox;
     public float angle = 0;
+    public static final int SPEED_DIVIDER = 32;
+
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public AABB getRenderBoundingBox() {
-        if (renderBoundingBox == null) {
-            renderBoundingBox = new AABB(worldPosition, worldPosition.offset(1, 1, 1));
-        }
-        return renderBoundingBox;
+    protected AABB createRenderBoundingBox() {
+        return new AABB(worldPosition).inflate(100);
     }
     public MirrorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -47,9 +44,7 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     @Override
     public void tick() {
         super.tick();
-        //angle.tickChaser();
-        angle += getSpeed()/8;
-
+        angle += getSpeed()/SPEED_DIVIDER;
     }
 
     @Override

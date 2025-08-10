@@ -46,7 +46,7 @@ public class MirrorRenderer extends KineticBlockEntityRenderer<MirrorBlockEntity
 
         ms.pushPose();
         mirror
-                .rotateCentered((be.angle + (partialTicks * be.getSpeed()/8)) * Mth.DEG_TO_RAD, state.getValue(AXIS))
+                .rotateCentered((be.angle + (partialTicks * be.getSpeed()/MirrorBlockEntity.SPEED_DIVIDER)) * Mth.DEG_TO_RAD, state.getValue(AXIS))
                 .rotateYCentered(state.getValue(AXIS) == Direction.Axis.Z? 90 * Mth.DEG_TO_RAD : 0)
                 .light(light)
                 .renderInto(ms, solid)

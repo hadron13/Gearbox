@@ -70,7 +70,7 @@ public class Laser {
         for (Entity entity : entities) {
             AABB entityAABB = entity.getBoundingBox().inflate(entity.getPickRadius());
             if (entityAABB.clip(position, position.add(direction.scale(length))).isPresent()) {
-                entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ModDamageTypes.laser)), power * 2);
+                entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ModDamageTypes.laser)), power * 4);
                 entity.setSecondsOnFire(3);
             }
         }
