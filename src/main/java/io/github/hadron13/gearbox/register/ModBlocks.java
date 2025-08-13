@@ -1,5 +1,7 @@
 package io.github.hadron13.gearbox.register;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.kinetics.base.ShaftRenderer;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -114,6 +116,7 @@ public class ModBlocks {
             .item()
             .transform(customItemModel())
             .register();
+
     public static final BlockEntry<SpectrometerBlock> SPECTROMETER = REGISTRATE.block("spectrometer", SpectrometerBlock::new)
             .initialProperties(SharedProperties::wooden)
             .transform(axeOrPickaxe())

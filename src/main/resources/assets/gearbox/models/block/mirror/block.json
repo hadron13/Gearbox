@@ -3,7 +3,7 @@
 	"parent": "block/block",
 	"textures": {
 		"2": "gearbox:block/mirror",
-		"particle": "create:block/axis"
+		"particle": "gearbox:block/mirror"
 	},
 	"elements": [
 		{
