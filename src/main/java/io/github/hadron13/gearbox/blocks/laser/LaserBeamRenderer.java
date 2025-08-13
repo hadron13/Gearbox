@@ -4,9 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
+import io.github.hadron13.gearbox.register.ModBlocks;
+import io.github.hadron13.gearbox.register.ModPartialModels;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
 import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,18 +48,18 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
 
     @Override
     protected void renderSafe(T be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
         List<Laser> lasers = be.getLasers();
         BlockPos blockPos = be.getBlockPos();
 
         for(Laser l : lasers) {
-            renderLaserBeam(l, ms, laserVertexConsumer, blockPos);
+            renderLaserBeam(l, ms, bufferSource, blockPos);
         }
     }
 
 
-    public static void renderLaserBeam(Laser laser, PoseStack ms, VertexConsumer vertexConsumer, BlockPos blockEntityPos){
+    public static void renderLaserBeam(Laser laser, PoseStack ms, MultiBufferSource bufferSource, BlockPos blockEntityPos){
         if(!laser.enabled) return;
+
 
         ms.pushPose();
         float thickness = 4 / 16f ;
@@ -65,12 +70,29 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
                 .rotateTo(new Vector3f(0, 0, 1.0f), laser.direction.toVector3f())
                 .translate(-thickness/2f, -thickness/2f, 0)
         ;
-        renderBeam(ms.last().pose(), vertexConsumer, laser.length, thickness, laser.color);
+
+        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
+        renderBeam(ms.last().pose(), laserVertexConsumer, laser.length, thickness, laser.color);
+
+        VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
+        SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());
+
+        outerBeam
+                .translate(-1/16f)
+                .scale(1, 1, laser.length)
+                .color((laser.color >> 16) & 0xFF, (laser.color >> 8) & 0xFF, laser.color & 0xFF, 100)
+                .light(255)
+                .renderInto(ms, transluscentVertexConsumer);
+
         ms.popPose();
+
+
     }
 
-    public static void renderLaserBeamInterpolated(Laser laser, PoseStack ms, VertexConsumer vertexConsumer, BlockPos blockEntityPos, float partialTicks){
+    public static void renderLaserBeamInterpolated(Laser laser, PoseStack ms, MultiBufferSource bufferSource, BlockPos blockEntityPos, float partialTicks){
         if(!laser.enabled) return;
+
+        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
 
         ms.pushPose();
         float thickness = 4 / 16f ;
@@ -83,7 +105,19 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
                 .rotateTo(new Vector3f(0, 0, 1.0f), interpolatedDirection.toVector3f())
                 .translate(-thickness/2f, -thickness/2f, 0)
         ;
-        renderBeam(ms.last().pose(), vertexConsumer, laser.length, thickness, laser.color);
+        renderBeam(ms.last().pose(), laserVertexConsumer, laser.length, thickness, laser.color);
+
+
+        VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
+        SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());
+
+        outerBeam
+                .translate(-1/16f)
+                .scale(1, 1, laser.length)
+                .color((laser.color >> 16) & 0xFF, (laser.color >> 8) & 0xFF, laser.color & 0xFF, 100)
+                .light(255)
+                .renderInto(ms, transluscentVertexConsumer);
+
         ms.popPose();
     }
 

@@ -53,9 +53,8 @@ public class MirrorRenderer extends KineticBlockEntityRenderer<MirrorBlockEntity
         ;
         ms.popPose();
 
-        VertexConsumer laserConsumer = buffer.getBuffer(ModRenderTypes.laserBeam());
         for(Laser l : be.lasers.values()){
-            LaserBeamRenderer.renderLaserBeamInterpolated(l, ms, laserConsumer, be.getBlockPos(), partialTicks);
+            LaserBeamRenderer.renderLaserBeamInterpolated(l, ms, buffer, be.getBlockPos(), partialTicks);
         }
     }
 }
