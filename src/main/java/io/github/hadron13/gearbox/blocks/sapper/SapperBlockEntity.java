@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.item.TooltipHelper;
 
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.GearboxLang;
 import net.createmod.catnip.data.Couple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -138,7 +139,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
         boolean kineticTooltip = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
         boolean fluidTooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
         if(isTankFull())
-            TooltipHelper.addHint(tooltip,"hint.sapper.full");
+            GearboxLang.addHint(tooltip,"hint.sapper.full");
 
         return kineticTooltip || fluidTooltip;
     }

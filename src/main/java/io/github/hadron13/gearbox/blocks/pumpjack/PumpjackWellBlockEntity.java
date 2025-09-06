@@ -41,7 +41,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
 
 
     public static ArrayList<BlockPos> loadedWells = new ArrayList<>();
-
+    public boolean isPipingValid = false;
     public float efficiency = 1f;
 
     @Override
@@ -110,7 +110,8 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         }
         sendData();
     }
-    public boolean validPiping(){
+
+    public boolean validatePiping(){
         if(level == null)
             return true;
         BlockPos position = getBlockPos().below();
@@ -136,6 +137,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
     @Override
     public void lazyTick() {
         super.lazyTick();
+        isPipingValid = validatePiping();
         if(isVirtual()){
             tank.allowInsertion();
             tank.getPrimaryHandler().fill(new FluidStack(ModFluids.PETROLEUM.get(), 2000), EXECUTE);
@@ -145,7 +147,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
     public void pump(){
         if(currentRecipe == null)
             return;
-        if(!validPiping())
+        if(isPipingValid)
             return;
 
         updateEfficiency();
@@ -187,6 +189,9 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
             GearboxLang.translate("gui.pumpjack_well.other_wells")
                     .style(ChatFormatting.GRAY)
                     .forGoggles(tooltip);
+        }
+        if(!isPipingValid){
+            GearboxLang.addHint(tooltip, "hint.pumpjack_well.pipes");
         }
 
         return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());

@@ -1,8 +1,12 @@
 package io.github.hadron13.gearbox;
 
+import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
+import net.createmod.catnip.lang.FontHelper;
 import net.createmod.catnip.lang.Lang;
 import net.createmod.catnip.lang.LangBuilder;
 import net.createmod.catnip.lang.LangNumberFormat;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
@@ -65,5 +69,15 @@ public class GearboxLang extends Lang {
     @Deprecated // Use while implementing and replace all references with Lang.translate
     public static LangBuilder temporaryText(String text) {
         return builder().text(text);
+    }
+
+
+
+    public static void addHint(List<Component> tooltip, String hintKey, Object... messageParams) {
+        translate(hintKey + ".title").style(ChatFormatting.GOLD).forGoggles(tooltip);
+        Component hint = translateDirect(hintKey);
+        List<Component> cutComponent = TooltipHelper.cutTextComponent(hint, FontHelper.Palette.GRAY_AND_WHITE);
+        for (Component component : cutComponent)
+            builder().add(component).forGoggles(tooltip);
     }
 }
