@@ -2,16 +2,22 @@ package io.github.hadron13.gearbox.blocks.prism;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.item.TooltipHelper;
 import io.github.hadron13.gearbox.blocks.laser.ILaserEmitter;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
+import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
+
+import static io.github.hadron13.gearbox.blocks.prism.PrismBlock.HORIZONTAL_AXIS;
 
 public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver, ILaserEmitter {
 
@@ -54,14 +60,31 @@ public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver
         return laserList;
     }
 
+    public Vec3 getNormal(){
+        return  Vec3.atLowerCornerOf(
+                getBlockState().getValue(HORIZONTAL_AXIS) == Direction.Axis.Z?
+                Direction.NORTH.getNormal():
+                Direction.EAST.getNormal());
+
+    }
+
     @Override
     public void receiveLaser(Laser laser) {
+
+        if((MirrorBlockEntity.angleFromVectors(getNormal(), laser.direction.normalize()) * Mth.RAD_TO_DEG > 30 &&
+            MirrorBlockEntity.angleFromVectors(getNormal().scale(-1), laser.direction.normalize()) * Mth.RAD_TO_DEG > 30)){
+
+            if(lasers.containsKey(laser)){
+                endReceiveLaser(laser);
+            }
+            return;
+        }
+
+
         if(!lasers.containsKey(laser)){
-
-
-
             Laser[] scatter = new Laser[3];
-            Vec3 position =  getBlockPos().getCenter();
+//            Vec3 position = laser.position.add(laser.direction.scale(laser.length));
+            Vec3 position = getBlockPos().getCenter();
 
             scatter[0] = ((laser.color & 0xFF0000) > 0)?new Laser(laser.color & 0xFF0000, position, laser.direction): null;
             scatter[1] = ((laser.color & 0x00FF00) > 0)?new Laser(laser.color & 0xFF00, position.add(0.001, 0, 0.001), laser.direction.add(0, 0.1, 0)):null;
@@ -75,6 +98,9 @@ public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver
     public void endReceiveLaser(Laser laser) {
         if(!lasers.containsKey(laser))
             return;
+        for(Laser l : lasers.get(laser)){
+            l.disable();
+        }
         lasers.remove(laser);
     }
 }

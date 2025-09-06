@@ -286,7 +286,7 @@ public class CompressorBlockEntity extends KineticBlockEntity {
         boolean fluid_tooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
         if(!validSpeed() && speed != 0) {
             kinetic_tooltip = true;
-            TooltipHelper.addHint(tooltip, "hint.compressor.reverse");
+            GearboxLang.addHint(tooltip, "hint.compressor.reverse");
         }
         boolean item_tooltip = false;
         for (int i = 0; i < output.getSlots(); i++) {

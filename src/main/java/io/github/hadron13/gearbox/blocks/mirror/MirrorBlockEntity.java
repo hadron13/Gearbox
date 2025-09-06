@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -49,9 +50,11 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
 
     @Override
     public void receiveLaser(Laser laser) {
-        Vec3 toHere = laser.position.vectorTo(this.getBlockPos().getCenter()).normalize();
-        if(Math.abs(getNormal().dot(laser.direction)) < 0.5f ||
-           toHere.dot(laser.direction) < 1.0 - (0.001/laser.length * 5)){
+        Vec3 toHere = laser.getPosition().vectorTo(this.getBlockPos().getCenter());
+        Vec3 laserEnd = laser.getDirection().scale(laser.length);
+        if((angleFromVectors(getNormal(), laser.direction.normalize()) * Mth.RAD_TO_DEG > 50 &&
+            angleFromVectors(getNormal().scale(-1), laser.direction.normalize()) * Mth.RAD_TO_DEG > 50) ||
+           laserEnd.distanceTo(toHere) > .15){
             if(lasers.containsKey(laser)){
                 endReceiveLaser(laser);
             }
@@ -69,6 +72,11 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     public static Vec3 reflect(Vec3 incident, Vec3 normal){
         return incident.subtract(normal.scale(2.0 * normal.dot(incident)));
     }
+
+    public static double angleFromVectors(Vec3 a, Vec3 b){
+        return Math.acos( a.dot(b) / (a.length() * b.length()) );
+    }
+
     public Vec3 getNormal(){
         Direction.Axis axis = getBlockState().getValue(AXIS);
         return VecHelper.rotate(Vec3.atLowerCornerOf((axis==Z? Direction.EAST: Direction.NORTH).getNormal()), angle, axis);
@@ -102,7 +110,7 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         GearboxLang.translate("gui.mirror.angle")
                 .style(ChatFormatting.WHITE)
-                .add(GearboxLang.text(": " + truncatePrecision(angle, 2)))
+                .add(GearboxLang.text(": " + truncatePrecision(angle % 360, 2)))
                 .forGoggles(tooltip);
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
         return true;

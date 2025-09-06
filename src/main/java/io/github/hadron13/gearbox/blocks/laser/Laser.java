@@ -139,6 +139,7 @@ public class Laser {
     public void enable(){
         this.enabled = true;
     }
+
     public void disable(){
         this.enabled = false;
         if(this.receiver != null) this.receiver.endReceiveLaser(this);
