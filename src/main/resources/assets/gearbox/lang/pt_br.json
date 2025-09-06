@@ -70,6 +70,7 @@
   "create.gui.laserdrill.minimum_power": "Essa máquina requer 20 de potência de laser",
   "create.gui.pumpjack_well.efficiency": "Eficiência: ",
   "create.gui.pumpjack_well.other_wells": "Outros poços próximos reduzem a eficiência",
+  "create.gui.mirror.angle": "Ângulo",
   "block.gearbox.mirror.tooltip": "ESPELHO",
   "block.gearbox.mirror.tooltip.summary": "Reflete lasers",
   "block.gearbox.spectrometer.tooltip": "ESPECTROMETRO",

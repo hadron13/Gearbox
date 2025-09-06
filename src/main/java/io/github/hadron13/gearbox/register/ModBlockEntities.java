@@ -34,6 +34,7 @@ import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetInstance;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetRenderer;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorRenderer;
+import io.github.hadron13.gearbox.blocks.prism.PrismBlockEntity;
 import io.github.hadron13.gearbox.blocks.pumpjack.*;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SapperVisual;
@@ -87,6 +88,13 @@ public class ModBlockEntities {
             .blockEntity("mirror", MirrorBlockEntity::new)
             .validBlocks(ModBlocks.MIRROR)
             .renderer(() -> MirrorRenderer::new)
+            .register();
+
+
+    public static final BlockEntityEntry<PrismBlockEntity> PRISM = Gearbox.registrate()
+            .blockEntity("prism", PrismBlockEntity::new)
+            .validBlocks(ModBlocks.PRISM)
+            .renderer(() -> LaserBeamRenderer::new)
             .register();
 
     public static final BlockEntityEntry<SpectrometerBlockEntity> SPECTROMETER = Gearbox.registrate()

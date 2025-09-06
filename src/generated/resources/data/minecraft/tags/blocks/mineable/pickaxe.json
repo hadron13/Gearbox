@@ -6,6 +6,7 @@
     "gearbox:brass_press",
     "gearbox:laser",
     "gearbox:mirror",
+    "gearbox:prism",
     "gearbox:spectrometer",
     "gearbox:irradiator",
     "gearbox:electrolyzer",

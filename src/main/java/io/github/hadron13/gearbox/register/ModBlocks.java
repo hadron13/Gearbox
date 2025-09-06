@@ -17,6 +17,7 @@ import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
+import io.github.hadron13.gearbox.blocks.prism.PrismBlock;
 import io.github.hadron13.gearbox.data.client.blockstates.KilnGenerator;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
@@ -113,6 +114,15 @@ public class ModBlocks {
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
             .blockstate((c, p ) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<PrismBlock> PRISM = REGISTRATE.block("prism", PrismBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
+            .blockstate(BlockStateGen.horizontalAxisBlockProvider(true))
             .item()
             .transform(customItemModel())
             .register();
