@@ -42,6 +42,14 @@ public class Laser {
         this.length = 100f;
         this.lastDirection = this.direction;
     }
+    public Laser(int color, Vec3 position, Vec3 rotation, float power) {
+        this.color = color;
+        this.position = position;
+        this.direction = rotation.normalize();//.add(0, 1f, 0);
+        this.power = power;
+        this.length = 100f;
+        this.lastDirection = this.direction;
+    }
 
     public void tick(Level level){
         if(!enabled) return;

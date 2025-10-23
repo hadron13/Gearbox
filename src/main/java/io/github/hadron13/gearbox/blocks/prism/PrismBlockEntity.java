@@ -80,15 +80,24 @@ public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver
             return;
         }
 
-
         if(!lasers.containsKey(laser)){
             Laser[] scatter = new Laser[3];
-//            Vec3 position = laser.position.add(laser.direction.scale(laser.length));
             Vec3 position = getBlockPos().getCenter();
 
-            scatter[0] = ((laser.color & 0xFF0000) > 0)?new Laser(laser.color & 0xFF0000, position, laser.direction): null;
-            scatter[1] = ((laser.color & 0x00FF00) > 0)?new Laser(laser.color & 0xFF00, position.add(0.001, 0, 0.001), laser.direction.add(0, 0.1, 0)):null;
-            scatter[2] = ((laser.color & 0x0000FF) > 0)?new Laser(laser.color & 0xFF, position.add(-0.001, 0, -0.001), laser.direction.add(0, 0.2, 0)):null;
+            float red   = (float)((laser.color & 0xFF0000) >> 16)/255.0f;
+            float green = (float)((laser.color & 0x00FF00) >> 8 )/255.0f;
+            float blue  = (float)((laser.color & 0x0000FF)      )/255.0f;
+            float total = red+green+blue;
+
+            scatter[0] = (red   > 0)?new Laser(laser.color & 0xFF0000, position, laser.direction,
+                    red/total * laser.power): null;
+            scatter[1] = (green > 0)?new Laser(laser.color & 0xFF00,   position.add(0.001, 0, 0.001), laser.direction.add(0, 0.1, 0),
+                    green/total * laser.power):null;
+            scatter[2] = (blue  > 0)?new Laser(laser.color & 0xFF,     position.add(-0.001, 0, -0.001), laser.direction.add(0, 0.2, 0),
+                    blue/total * laser.power):null;
+
+
+
             lasers.put(laser, scatter);
             changed = true;
         }
@@ -99,7 +108,8 @@ public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver
         if(!lasers.containsKey(laser))
             return;
         for(Laser l : lasers.get(laser)){
-            l.disable();
+            if(l != null)
+                l.disable();
         }
         lasers.remove(laser);
     }
