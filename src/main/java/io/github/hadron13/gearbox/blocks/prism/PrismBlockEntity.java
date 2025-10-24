@@ -96,8 +96,6 @@ public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver
             scatter[2] = (blue  > 0)?new Laser(laser.color & 0xFF,     position.add(-0.001, 0, -0.001), laser.direction.add(0, 0.2, 0),
                     blue/total * laser.power):null;
 
-
-
             lasers.put(laser, scatter);
             changed = true;
         }

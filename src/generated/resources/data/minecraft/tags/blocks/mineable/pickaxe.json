@@ -7,6 +7,7 @@
     "gearbox:laser",
     "gearbox:mirror",
     "gearbox:prism",
+    "gearbox:combiner",
     "gearbox:spectrometer",
     "gearbox:irradiator",
     "gearbox:electrolyzer",

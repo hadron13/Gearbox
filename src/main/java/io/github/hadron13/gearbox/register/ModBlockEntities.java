@@ -12,6 +12,7 @@ import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeRenderer;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorBlockEntity;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorVisual;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorRenderer;
+import io.github.hadron13.gearbox.blocks.combiner.CombinerBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorVisual;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
@@ -94,6 +95,12 @@ public class ModBlockEntities {
     public static final BlockEntityEntry<PrismBlockEntity> PRISM = Gearbox.registrate()
             .blockEntity("prism", PrismBlockEntity::new)
             .validBlocks(ModBlocks.PRISM)
+            .renderer(() -> LaserBeamRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<CombinerBlockEntity> COMBINER = Gearbox.registrate()
+            .blockEntity("combiner", CombinerBlockEntity::new)
+            .validBlocks(ModBlocks.COMBINER)
             .renderer(() -> LaserBeamRenderer::new)
             .register();
 

@@ -12,6 +12,7 @@ import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorBlock;
+import io.github.hadron13.gearbox.blocks.combiner.CombinerBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
@@ -123,6 +124,16 @@ public class ModBlocks {
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
             .blockstate(BlockStateGen.horizontalAxisBlockProvider(true))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+
+    public static final BlockEntry<CombinerBlock> COMBINER = REGISTRATE.block("combiner", CombinerBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .item()
             .transform(customItemModel())
             .register();
