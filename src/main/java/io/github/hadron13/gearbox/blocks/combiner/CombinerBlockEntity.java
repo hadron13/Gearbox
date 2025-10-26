@@ -62,6 +62,7 @@ public class CombinerBlockEntity extends SmartBlockEntity implements ILaserRecei
 
     public void updateColor(){
         int total_red = 0, total_green = 0, total_blue = 0;
+        float total_power = 0;
         for(Laser l : incomingLasers){
             int red   = (l.color >> 16) & 0xFF;
             int green = (l.color >> 8)  & 0xFF;
@@ -70,6 +71,7 @@ public class CombinerBlockEntity extends SmartBlockEntity implements ILaserRecei
             total_red   += (int) (red   * l.power);
             total_green += (int) (green * l.power);
             total_blue  += (int) (blue  * l.power);
+            total_power += l.power;
         }
         float largest_component = Math.max(Math.max(total_red, total_green), total_blue);
         if(largest_component == 0){
@@ -80,6 +82,7 @@ public class CombinerBlockEntity extends SmartBlockEntity implements ILaserRecei
         total_blue  = (int)((total_blue /largest_component) * 255.0);
 
         laserBeam.color = (total_red << 16) + (total_green << 8) + (total_blue);
+        laserBeam.power = total_power;
         laserBeam.enable();
     }
 
