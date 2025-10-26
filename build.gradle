@@ -143,6 +143,7 @@ dependencies {
     modCompileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}") { transitive = false }
     modCompileOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") { transitive = false }
     modRuntimeOnly("curse.maven:createaddition-439890:6306951") { transitive = false }
+    modRuntimeOnly("curse.maven:spark-361579:4738952")
 
     modRuntimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") { transitive = false }
 

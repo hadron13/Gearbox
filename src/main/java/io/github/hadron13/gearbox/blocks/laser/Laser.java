@@ -70,7 +70,10 @@ public class Laser {
             nextPosition = handleBlockIntersection(level, nextPosition.get(), block);
         }while (nextPosition.isPresent());
 
-
+        if(level.random.nextInt(5) != 0)
+            return;
+        if(level.isClientSide)
+            return;
 
         AABB aabb = new AABB(position, position.add(direction.scale(100f))).inflate(1.0); // Expand AABB slightly to catch entities
         List<Entity> entities = level.getEntities((Entity) null, aabb, entity -> entity.isAlive() && entity.isPickable());
