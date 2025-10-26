@@ -2,6 +2,7 @@
   "values": [
     "gearbox:brass_press",
     "gearbox:spectrometer",
-    "gearbox:kinetic_machine"
+    "gearbox:kinetic_machine",
+    "gearbox:precision_crank"
   ]
 }

@@ -1,6 +1,10 @@
 package io.github.hadron13.gearbox.register;
 
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.kinetics.crank.HandCrankBlockEntity;
+import com.simibubi.create.content.kinetics.crank.HandCrankRenderer;
+import com.simibubi.create.content.kinetics.crank.HandCrankVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
@@ -35,6 +39,9 @@ import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetInstance;
 //import io.github.hadron13.gearbox.blocks.planetary_gear.PlanetaryGearsetRenderer;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorRenderer;
+import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlockEntity;
+import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankRenderer;
+import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankVisual;
 import io.github.hadron13.gearbox.blocks.prism.PrismBlockEntity;
 import io.github.hadron13.gearbox.blocks.pumpjack.*;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
@@ -193,6 +200,13 @@ public class ModBlockEntities {
             .visual(() -> ReactorVisual::new)
             .validBlocks(ModBlocks.REACTOR)
             .renderer(() -> ReactorRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<PrecisionCrankBlockEntity> PRECISION_CRANK = Gearbox.registrate()
+            .blockEntity("precision_crank", PrecisionCrankBlockEntity::new)
+            .visual(() -> PrecisionCrankVisual::new)
+            .validBlocks(ModBlocks.PRECISION_CRANK)
+            .renderer(() -> PrecisionCrankRenderer::new)
             .register();
 
     public static void register() {}

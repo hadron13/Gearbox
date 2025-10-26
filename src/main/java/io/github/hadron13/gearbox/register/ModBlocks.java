@@ -1,12 +1,17 @@
 package io.github.hadron13.gearbox.register;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllTags;
+import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.content.kinetics.base.ShaftRenderer;
+import com.simibubi.create.content.kinetics.crank.HandCrankBlock;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
+import com.simibubi.create.foundation.block.ItemUseOverrides;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
+import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
@@ -18,6 +23,7 @@ import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
+import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
 import io.github.hadron13.gearbox.blocks.prism.PrismBlock;
 import io.github.hadron13.gearbox.data.client.blockstates.KilnGenerator;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
@@ -272,4 +278,17 @@ public class ModBlocks {
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();
+
+   public static final BlockEntry<PrecisionCrankBlock> PRECISION_CRANK = REGISTRATE.block("precision_crank", PrecisionCrankBlock::new)
+                   .initialProperties(SharedProperties::stone)
+                   .properties(p -> p.mapColor(MapColor.METAL))
+                   .transform(axeOrPickaxe())
+                   .blockstate(BlockStateGen.directionalBlockProvider(true))
+                   .transform(GearboxStress.setCapacity(8.0))
+                   .onRegister(BlockStressValues.setGeneratorSpeed(32))
+                   .tag(AllTags.AllBlockTags.BRITTLE.tag)
+                   .onRegister(ItemUseOverrides::addBlock)
+                   .item()
+                   .transform(customItemModel())
+                   .register();
 }

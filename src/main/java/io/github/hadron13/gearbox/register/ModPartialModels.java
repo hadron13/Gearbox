@@ -28,7 +28,7 @@ public class ModPartialModels {
             PUMPJACK_TRUSS = block("pumpjack/truss"),
             DIPPER_POLE = block("dipper/pole"),
             MIRROR = block("mirror/block"),
-
+            PRECISION_CRANK = block("precision_crank/block"),
             ULTIMATE_MECH_CORE = item("ultimate_mechanism/core"),
             TAU_CANNON_COIL = item("tau_cannon/coil");
 
