@@ -8,6 +8,7 @@
     "gearbox:mirror",
     "gearbox:prism",
     "gearbox:combiner",
+    "gearbox:attenuator",
     "gearbox:spectrometer",
     "gearbox:irradiator",
     "gearbox:electrolyzer",

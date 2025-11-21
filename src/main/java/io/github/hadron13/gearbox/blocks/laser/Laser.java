@@ -181,11 +181,19 @@ public class Laser {
         this.direction = direction;
     }
 
+    public float getPower(){
+        return this.power;
+    }
+    public void setPower(float power){
+        this.power = power;
+    }
+
     public CompoundTag write(CompoundTag nbt, String prefix) {
         nbt.putInt(prefix + "color", color);
         nbt.putFloat(prefix + "length", length);
         nbt.put(prefix + "position", writeVec3(position));
         nbt.put(prefix + "rotation", writeVec3(direction));
+        nbt.putBoolean(prefix + "enabled", enabled);
         return nbt;
     }
 
@@ -194,6 +202,7 @@ public class Laser {
         length = nbt.getFloat(prefix + "length");
         position = readVec3(nbt.getList(prefix + "position", Tag.TAG_INT));
         direction = readVec3(nbt.getList(prefix + "rotation", Tag.TAG_INT));
+        enabled = nbt.getBoolean(prefix + "enabled");
     }
 
 

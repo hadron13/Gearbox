@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -60,37 +61,11 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
     public static void renderLaserBeam(Laser laser, PoseStack ms, MultiBufferSource bufferSource, BlockPos blockEntityPos){
         if(!laser.enabled) return;
 
-
-        ms.pushPose();
-        float thickness = 4 / 16f ;
-        Vec3 relativeLaserPos = laser.position.subtract(Vec3.atCenterOf(blockEntityPos));
-        TransformStack.of(ms)
-                .translate(relativeLaserPos)
-                .translate(0.5f )
-                .rotateTo(new Vector3f(0, 0, 1.0f), laser.direction.toVector3f())
-                .translate(-thickness/2f, -thickness/2f, 0)
-        ;
-
-        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
-        renderBeam(ms.last().pose(), laserVertexConsumer, laser.length, thickness, laser.color);
-
-        VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
-        SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());
-
-        outerBeam
-                .translate(-1/16f)
-                .scale(1, 1, laser.length)
-                .color((laser.color >> 16) & 0xFF, (laser.color >> 8) & 0xFF, laser.color & 0xFF, 100)
-                .light(255)
-                .renderInto(ms, transluscentVertexConsumer);
-
-        ms.popPose();
-
-
+        renderLaserBeamInterpolated(laser, ms, bufferSource, blockEntityPos, 0);
     }
 
     public static void renderLaserBeamInterpolated(Laser laser, PoseStack ms, MultiBufferSource bufferSource, BlockPos blockEntityPos, float partialTicks){
-        if(!laser.enabled) return;
+        if(!laser.enabled || laser.getPower() < 0.01) return;
 
         VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
 
@@ -111,10 +86,11 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
         VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
         SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());
 
+        int alpha = Mth.clamp( (int)((Mth.sqrt(laser.getPower())/5.0 + 0.1) * 200.0), 20, 200);
         outerBeam
                 .translate(-1/16f)
                 .scale(1, 1, laser.length)
-                .color((laser.color >> 16) & 0xFF, (laser.color >> 8) & 0xFF, laser.color & 0xFF, 100)
+                .color((laser.color >> 16) & 0xFF, (laser.color >> 8) & 0xFF, laser.color & 0xFF, alpha)
                 .light(255)
                 .renderInto(ms, transluscentVertexConsumer);
 

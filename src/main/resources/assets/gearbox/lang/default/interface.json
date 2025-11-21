@@ -19,6 +19,8 @@
   "gearbox.gui.goggles.energy_stats": "Energy Stats",
   "gearbox.gui.goggles.energy_stored": "Energy Stored",
   "gearbox.gui.goggles.energy_consumption": "Consumption",
+  "gearbox.gui.mirror.angle": "Angle",
+  "gearbox.gui.attenuator.aperture_size": "Aperture Size (%)",
 
   "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
   "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s",

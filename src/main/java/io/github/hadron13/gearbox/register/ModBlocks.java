@@ -14,6 +14,7 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorBlock;
@@ -136,6 +137,16 @@ public class ModBlocks {
 
 
     public static final BlockEntry<CombinerBlock> COMBINER = REGISTRATE.block("combiner", CombinerBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+
+    public static final BlockEntry<AttenuatorBlock> ATTENUATOR = REGISTRATE.block("attenuator", AttenuatorBlock::new)
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
@@ -280,15 +291,15 @@ public class ModBlocks {
             .register();
 
    public static final BlockEntry<PrecisionCrankBlock> PRECISION_CRANK = REGISTRATE.block("precision_crank", PrecisionCrankBlock::new)
-                   .initialProperties(SharedProperties::stone)
-                   .properties(p -> p.mapColor(MapColor.METAL))
-                   .transform(axeOrPickaxe())
-                   .blockstate(BlockStateGen.directionalBlockProvider(true))
-                   .transform(GearboxStress.setCapacity(8.0))
-                   .onRegister(BlockStressValues.setGeneratorSpeed(32))
-                   .tag(AllTags.AllBlockTags.BRITTLE.tag)
-                   .onRegister(ItemUseOverrides::addBlock)
-                   .item()
-                   .transform(customItemModel())
-                   .register();
+           .initialProperties(SharedProperties::stone)
+           .properties(p -> p.mapColor(MapColor.METAL))
+           .transform(axeOrPickaxe())
+           .blockstate(BlockStateGen.directionalBlockProvider(true))
+           .transform(GearboxStress.setCapacity(8.0))
+           .onRegister(BlockStressValues.setGeneratorSpeed(32))
+           .tag(AllTags.AllBlockTags.BRITTLE.tag)
+           .onRegister(ItemUseOverrides::addBlock)
+           .item()
+           .transform(customItemModel())
+           .register();
 }
