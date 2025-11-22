@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -25,6 +26,13 @@ public class AttenuatorBlockEntity extends SmartBlockEntity implements ILaserRec
 
     public Laser laser, receivingLaser;
     public ScrollValueBehaviour apertureSize;
+
+
+    @Override
+    protected AABB createRenderBoundingBox() {
+        return new AABB(worldPosition).inflate(100);
+    }
+
 
     public AttenuatorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

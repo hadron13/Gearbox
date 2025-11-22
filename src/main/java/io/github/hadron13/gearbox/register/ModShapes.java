@@ -25,7 +25,8 @@ public class ModShapes {
         DIPPER = shape(0, -16, 0, 16, 16, 16).forDirectional(DOWN),
         COMBINER = shape(1, 0, 0, 15, 16, 14)
                     .add(2, 2, 14, 14, 14, 14+6)
-                    .add(1, 1, -3, 15, 15, 0) .forDirectional(SOUTH);
+                    .add(1, 1, -3, 15, 15, 0) .forDirectional(SOUTH),
+        ATTENUATOR = shape(2, 1, 2, 16-2, 16-2, 16-2).forDirectional(SOUTH);
 
     private static ModShapes.Builder shape(VoxelShape shape) {
         return new ModShapes.Builder(shape);
