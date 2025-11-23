@@ -94,6 +94,9 @@ public class AttenuatorBlockEntity extends SmartBlockEntity implements ILaserRec
 
     @Override
     public void receiveLaser(Laser laser) {
+        if(!laser.hasValidAngle(new Vec3(getFacing().step()), 45, 45 )){
+            return;
+        }
 
         if(receivingLaser == null){
             receivingLaser = laser;
@@ -107,7 +110,9 @@ public class AttenuatorBlockEntity extends SmartBlockEntity implements ILaserRec
 
     @Override
     public void endReceiveLaser(Laser laser) {
-        receivingLaser = null;
-        this.laser.disable();
+        if(laser == receivingLaser) {
+            receivingLaser = null;
+            this.laser.disable();
+        }
     }
 }
