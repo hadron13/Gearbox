@@ -65,6 +65,8 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
         }
         Laser reflected = lasers.get(laser);
         reflected.setDirection(reflect(laser.direction, getNormal()));
+        reflected.setPower(laser.power);
+        reflected.setColor(laser.color);
         reflected.tick(this.getLevel());
     }
 

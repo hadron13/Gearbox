@@ -45,10 +45,7 @@ public class CombinerBlockEntity extends SmartBlockEntity implements ILaserRecei
         return List.of(laserBeam);
     }
 
-//    public static double angleFromVectors(double x1, double y1, double x2, double y2) {
-//        double cosTheta = Math.max(-1.0, Math.min(1.0, x1 * x2 + y1 * y2));
-//        return Math.acos(cosTheta) * Mth.RAD_TO_DEG;
-//    }
+
     public boolean validAngle(Vec3 direction){
         Vec3 front = new Vec3(getBlockState().getValue(HORIZONTAL_FACING).step());
 

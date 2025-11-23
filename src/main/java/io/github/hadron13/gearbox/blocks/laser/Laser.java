@@ -6,6 +6,7 @@ import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ClipContext;
@@ -16,6 +17,8 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.common.Tags;
 
 import java.util.List;
+
+import static io.github.hadron13.gearbox.blocks.combiner.CombinerBlock.HORIZONTAL_FACING;
 
 public class Laser {
     public int color;
@@ -106,7 +109,8 @@ public class Laser {
 
         length += distance;
         if(blockState.is(Tags.Blocks.GLASS)){
-            return Optional.of( position.add(direction.scale(distance)) );
+            length += 0.1f;
+            return Optional.of( position.add(direction.scale(distance+0.1)) );
         }
 
         BlockEntity be = level.getBlockEntity(block.getBlockPos());
@@ -117,6 +121,14 @@ public class Laser {
                 this.receiver = receiver;
             }
             return Optional.absent();
+        }
+        if(be instanceof ILaserReader reader){
+            if(reader.receiveLaser(this)){
+                length += 0.1f;
+                return Optional.of( position.add(direction.scale(distance+0.1)) );
+            }else{
+                return Optional.absent();
+            }
         }
 
         if(this.receiver != null){
@@ -216,5 +228,21 @@ public class Laser {
 
     public static Vec3 readVec3(ListTag tag) {
         return new Vec3(tag.getDouble(0), tag.getDouble(1), tag.getDouble(2));
+    }
+
+    /**
+     * Checks if a laser comes into a valid angle
+     * @param front vector with the ideal laser direction
+     * @param max_horizontal max horizontal deviation in degrees
+     * @param max_vertical max vertical deviation in degrees
+     * @return whether the laser can be accepted
+     */
+    public boolean hasValidAngle(Vec3 front, float max_horizontal, float max_vertical){
+        double cosTheta = Mth.clamp( direction.x * front.x + direction.z * front.z, -1.0, 1.0);
+        double horizontal_angle = Math.acos(cosTheta) * Mth.RAD_TO_DEG;
+
+        double vertical_angle = Math.acos(direction.y) * Mth.RAD_TO_DEG - 90;
+
+        return horizontal_angle < max_horizontal && Math.abs(vertical_angle) < max_vertical;
     }
 }

@@ -3,6 +3,7 @@ package io.github.hadron13.gearbox.blocks.spectrometer;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReader;
+import io.github.hadron13.gearbox.blocks.laser.Laser;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -21,36 +22,49 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
     public SpectrometerBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
     }
-    public Color currentColor = Color.BLACK;
-    public float currentPower = 0;
-    public int timeout = 0;
+
+    public Laser passingLaser;
+
+//    public Color currentColor = Color.BLACK;
+//    public float currentPower = 0;
 
     @Override
     public void tick(){
         super.tick();
-        if(timeout != 0) {
-            timeout--;
-        }else{
-            currentColor = Color.BLACK;
-            currentPower = 0;
+        if(passingLaser != null && (!passingLaser.enabled || passingLaser.power < 0.01) ){
+            passingLaser = null;
         }
     }
+//
+//    public boolean receiveLaser(Direction face, Color color, float power) {
+//
+//        if(face.getAxis() == getRotationAxis(getBlockState()) ){
+//            currentColor = color;
+//            currentPower = power;
+//            float r = color.getRed()/255f;
+//            float g = color.getGreen()/255f;
+//            float b = color.getBlue()/255f;
+//
+//            dialTarget = Mth.clamp( Mth.lerp( Mth.clamp(g - (b+r)/2, 0 , 1),b - r, 0.5f) , 0, 1 );
+//            return  true;
+//        }
+//        return false;
+//    }
+//
 
     @Override
-    public boolean receiveLaser(Direction face, Color color, float power) {
-
-        if(face.getAxis() == getRotationAxis(getBlockState()) ){
-            currentColor = color;
-            currentPower = power;
-            float r = color.getRed()/255f;
-            float g = color.getGreen()/255f;
-            float b = color.getBlue()/255f;
-
-            dialTarget = Mth.clamp( Mth.lerp( Mth.clamp(g - (b+r)/2, 0 , 1),b - r, 0.5f) , 0, 1 );
-            timeout = 3;
-            return  true;
+    public boolean receiveLaser(Laser laser) {
+        if(passingLaser == null){
+            passingLaser = laser;
         }
-        return false;
+
+        float red   = ((passingLaser.color >> 16) & 0xFF) / 255.0f;
+        float green = ((passingLaser.color >> 8)  & 0xFF) / 255.0f;
+        float blue  = ((passingLaser.color)       & 0xFF) / 255.0f;
+
+        dialTarget = Mth.clamp( Mth.lerp( Mth.clamp(green - (blue+red)/2, 0 , 1),blue - red, 0.5f) , 0, 1 );
+
+        return true;
     }
 
     public static String truncatePrecision(float number, int decimals){
@@ -61,31 +75,35 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
 
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
-        if(currentPower == 0 || currentColor == Color.BLACK){
+        if(passingLaser == null){
             GearboxLang.translate("gui.spectrometer.nolaser")
                     .style(ChatFormatting.DARK_GRAY)
                     .forGoggles(tooltip);
             return true;
         }
 
+        float red   = ((passingLaser.color >> 16) & 0xFF) / 255.0f;
+        float green = ((passingLaser.color >> 8)  & 0xFF) / 255.0f;
+        float blue  = ((passingLaser.color)       & 0xFF) / 255.0f;
+
         GearboxLang.translate("gui.spectrometer.title")
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
         GearboxLang.text("\u2592 ").color(0xffffff)
                 .add(GearboxLang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
-                .add(GearboxLang.text(" " + truncatePrecision(currentPower, 2) ))
+                .add(GearboxLang.text(" " + truncatePrecision(passingLaser.power, 2) ))
                 .forGoggles(tooltip);
         GearboxLang.text("\u2588 ").color(0xbd5252)
                 .add(GearboxLang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
-                .add(GearboxLang.text(" " + truncatePrecision(currentColor.getRed()/255f, 2) ))
+                .add(GearboxLang.text(" " + truncatePrecision(red, 2) ))
                 .forGoggles(tooltip);
         GearboxLang.text("\u2588 ").color(0x2d9636)
                 .add(GearboxLang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
-                .add(GearboxLang.text(" " + truncatePrecision(currentColor.getGreen()/255f, 2) ))
+                .add(GearboxLang.text(" " + truncatePrecision(green, 2) ))
                 .forGoggles(tooltip);
         GearboxLang.text("\u2588 ").color(0x3e3dbf)
                 .add(GearboxLang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
-                .add(GearboxLang.text(" " + truncatePrecision(currentColor.getBlue()/255f, 2) ))
+                .add(GearboxLang.text(" " + truncatePrecision(blue, 2) ))
                 .forGoggles(tooltip);
 
         return true;
@@ -104,5 +122,7 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
 
         throw new IllegalStateException("Unknown axis??");
     }
+
+
 
 }

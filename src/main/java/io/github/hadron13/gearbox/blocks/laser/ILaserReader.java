@@ -4,14 +4,14 @@ import net.createmod.catnip.theme.Color;
 import net.minecraft.core.Direction;
 
 /**
- * interface for reading laser values while passing through
+ * interface for reading laser values while letting it pass through
  */
 public interface ILaserReader {
     /**
-     * @param face  face in which the laser comes from
-     * @param color color of the laser
-     * @param power power of the laser
-     * @return whether the face can receive a laser
+     * @brief method called every frame by each passing laser
+     * @param laser laser that called this method
+     * @return whether the laser was blocked
      */
-    public boolean receiveLaser(Direction face, Color color, float power);
+    public boolean receiveLaser(Laser laser);
+
 }

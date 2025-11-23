@@ -124,14 +124,14 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
     }
 
     public void destroy() {
-        for(LaserBeam beam: beams.values()) {
-            if (beam.targetReceiver != null) {
-            }
-            for(ILaserReader reader : beam.readers){
-                if(reader != null)
-                    reader.receiveLaser(beam.facing.getOpposite(), Color.BLACK, 0);
-            }
-        }
+//        for(LaserBeam beam: beams.values()) {
+//            if (beam.targetReceiver != null) {
+//            }
+//            for(ILaserReader reader : beam.readers){
+//                if(reader != null)
+//                    reader.receiveLaser(beam.facing.getOpposite(), Color.BLACK, 0);
+//            }
+//        }
     }
     public void updateBeam(LaserBeam beam){
         if(!beam.enabled)
@@ -160,13 +160,13 @@ public class LaserBeamBehavior extends BlockEntityBehaviour {
                 break;
             }
 
-            if(blockEntityAtPos instanceof ILaserReader reader){
-                if(reader.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power)){
-                    if(!beam.readers.contains(reader))
-                        beam.readers.add(reader);
-                    continue;
-                }
-            }
+//            if(blockEntityAtPos instanceof ILaserReader reader){
+//                if(reader.receiveLaser(beam.facing.getOpposite(), beam.color, beam.power)){
+//                    if(!beam.readers.contains(reader))
+//                        beam.readers.add(reader);
+//                    continue;
+//                }
+//            }
 
             boolean catchesFire = blockState.isFlammable(level, currentPosition, beam.facing.getOpposite());
 
