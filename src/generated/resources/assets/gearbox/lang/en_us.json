@@ -1,5 +1,6 @@
 {
   "block.gearbox.ammonia": "Ammonia",
+  "block.gearbox.amplifier": "Amplifier",
   "block.gearbox.argon": "Argon",
   "block.gearbox.attenuator": "Attenuator",
   "block.gearbox.brass_press": "Brass Press",
@@ -58,6 +59,7 @@
   "fluid.gearbox.petroleum": "Petroleum",
   "fluid.gearbox.resin": "Resin",
   "fluid.gearbox.steam": "Steam",
+  "gearbox.gui.amplifier.amplification": "Amplification (%)",
   "gearbox.gui.attenuator.aperture_size": "Aperture Size (%)",
   "gearbox.gui.goggles.energy_consumption": "Consumption",
   "gearbox.gui.goggles.energy_stats": "Energy Stats",

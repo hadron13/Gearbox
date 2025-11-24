@@ -1,5 +1,6 @@
 {
   "block.gearbox.ammonia": "ɐıuoɯɯⱯ",
+  "block.gearbox.amplifier": "ɹǝıɟıןdɯⱯ",
   "block.gearbox.argon": "uobɹⱯ",
   "block.gearbox.attenuator": "ɹoʇɐnuǝʇʇⱯ",
   "block.gearbox.brass_press": "ssǝɹԀ ssɐɹᗺ",
@@ -58,6 +59,7 @@
   "fluid.gearbox.petroleum": "ɯnǝןoɹʇǝԀ",
   "fluid.gearbox.resin": "uısǝᴚ",
   "fluid.gearbox.steam": "ɯɐǝʇS",
+  "gearbox.gui.amplifier.amplification": ")%( uoıʇɐɔıɟıןdɯⱯ",
   "gearbox.gui.attenuator.aperture_size": ")%( ǝzıS ǝɹnʇɹǝdⱯ",
   "gearbox.gui.goggles.energy_consumption": "uoıʇdɯnsuoƆ",
   "gearbox.gui.goggles.energy_stats": "sʇɐʇS ʎbɹǝuƎ",

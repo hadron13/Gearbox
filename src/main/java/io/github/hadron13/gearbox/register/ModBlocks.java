@@ -1,19 +1,16 @@
 package io.github.hadron13.gearbox.register;
 
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.api.stress.BlockStressValues;
-import com.simibubi.create.content.kinetics.base.ShaftRenderer;
-import com.simibubi.create.content.kinetics.crank.HandCrankBlock;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.block.ItemUseOverrides;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
-import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlock;
 import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
@@ -147,6 +144,16 @@ public class ModBlocks {
 
 
     public static final BlockEntry<AttenuatorBlock> ATTENUATOR = REGISTRATE.block("attenuator", AttenuatorBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .transform(pickaxeOnly())
+            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+
+    public static final BlockEntry<AmplifierBlock> AMPLIFIER = REGISTRATE.block("amplifier", AmplifierBlock::new)
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())

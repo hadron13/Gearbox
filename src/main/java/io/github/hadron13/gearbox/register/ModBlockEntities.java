@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.crank.HandCrankRenderer;
 import com.simibubi.create.content.kinetics.crank.HandCrankVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlockEntity;
 import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlockEntity;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressVisual;
@@ -115,6 +116,12 @@ public class ModBlockEntities {
     public static final BlockEntityEntry<AttenuatorBlockEntity> ATTENUATOR = Gearbox.registrate()
             .blockEntity("attenuator", AttenuatorBlockEntity::new)
             .validBlocks(ModBlocks.ATTENUATOR)
+            .renderer(() -> LaserBeamRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<AmplifierBlockEntity> AMPLIFIER = Gearbox.registrate()
+            .blockEntity("amplifier", AmplifierBlockEntity::new)
+            .validBlocks(ModBlocks.AMPLIFIER)
             .renderer(() -> LaserBeamRenderer::new)
             .register();
 
