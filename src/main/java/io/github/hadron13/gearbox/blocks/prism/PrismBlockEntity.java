@@ -89,11 +89,11 @@ public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver
             float blue  = (float)((laser.color & 0x0000FF)      )/255.0f;
             float total = red+green+blue;
 
-            scatter[0] = (red   > 0)?new Laser(laser.color & 0xFF0000, position, laser.direction,
+            scatter[0] = (red   > 0)?new Laser(0xFF0000, position, laser.direction,
                     red/total * laser.power): null;
-            scatter[1] = (green > 0)?new Laser(laser.color & 0xFF00,   position.add(0.001, 0, 0.001), laser.direction.add(0, 0.1, 0),
+            scatter[1] = (green > 0)?new Laser(0xFF00,   position.add(0.001, 0, 0.001), laser.direction.add(0, 0.1, 0),
                     green/total * laser.power):null;
-            scatter[2] = (blue  > 0)?new Laser(laser.color & 0xFF,     position.add(-0.001, 0, -0.001), laser.direction.add(0, 0.2, 0),
+            scatter[2] = (blue  > 0)?new Laser(0xFF,     position.add(-0.001, 0, -0.001), laser.direction.add(0, 0.2, 0),
                     blue/total * laser.power):null;
 
             lasers.put(laser, scatter);

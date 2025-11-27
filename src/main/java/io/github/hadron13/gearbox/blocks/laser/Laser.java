@@ -200,6 +200,10 @@ public class Laser {
         this.power = power;
     }
 
+    public Vec3 getEnd(){
+        return position.add(direction.scale(length));
+    }
+
     public CompoundTag write(CompoundTag nbt, String prefix) {
         nbt.putInt(prefix + "color", color);
         nbt.putFloat(prefix + "length", length);

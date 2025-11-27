@@ -1,6 +1,8 @@
 package io.github.hadron13.gearbox.blocks.spectrometer;
 
+import com.simibubi.create.content.kinetics.gauge.GaugeBlock;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
+import com.simibubi.create.content.kinetics.gauge.SpeedGaugeBlockEntity;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReader;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
@@ -12,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -24,36 +27,33 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
     }
 
     public Laser passingLaser;
-
-//    public Color currentColor = Color.BLACK;
-//    public float currentPower = 0;
+    public float distanceToLaser;
 
     @Override
     public void tick(){
         super.tick();
-        if(passingLaser != null && (!passingLaser.enabled || passingLaser.power < 0.01) ){
+        if(passingLaser != null &&
+                (!passingLaser.enabled || passingLaser.power < 0.01 ||
+                  passingLaser.length < distanceToLaser ||
+                  passingLaser.getPosition().add(passingLaser.getDirection().scale(distanceToLaser)).distanceTo(getPosition()) > 0.5)
+        ){
             passingLaser = null;
         }
     }
-//
-//    public boolean receiveLaser(Direction face, Color color, float power) {
-//
-//        if(face.getAxis() == getRotationAxis(getBlockState()) ){
-//            currentColor = color;
-//            currentPower = power;
-//            float r = color.getRed()/255f;
-//            float g = color.getGreen()/255f;
-//            float b = color.getBlue()/255f;
-//
-//            dialTarget = Mth.clamp( Mth.lerp( Mth.clamp(g - (b+r)/2, 0 , 1),b - r, 0.5f) , 0, 1 );
-//            return  true;
-//        }
-//        return false;
-//    }
-//
+
+    public Vec3 getPosition(){
+        return getBlockPos().getCenter();
+    }
 
     @Override
     public boolean receiveLaser(Laser laser) {
+        Direction.Axis laserAxis = getRotationAxis(getBlockState());
+        Vec3 forward = new Vec3(Direction.fromAxisAndDirection(laserAxis, Direction.AxisDirection.POSITIVE).step());
+        Vec3 backward = new Vec3(Direction.fromAxisAndDirection(laserAxis, Direction.AxisDirection.NEGATIVE).step());
+
+        if(!laser.hasValidAngle(forward, 30, 30) && !laser.hasValidAngle(backward, 30, 30))
+            return false;
+
         if(passingLaser == null){
             passingLaser = laser;
         }
@@ -63,6 +63,8 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
         float blue  = ((passingLaser.color)       & 0xFF) / 255.0f;
 
         dialTarget = Mth.clamp( Mth.lerp( Mth.clamp(green - (blue+red)/2, 0 , 1),blue - red, 0.5f) , 0, 1 );
+
+        distanceToLaser = (float)laser.getPosition().distanceTo(getPosition());
 
         return true;
     }

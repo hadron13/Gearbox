@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -25,6 +26,11 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
     public Laser laser, receivingLaser;
 
     public ScrollValueBehaviour amplification;
+
+    @Override
+    protected AABB createRenderBoundingBox() {
+        return new AABB(worldPosition).inflate(100);
+    }
 
     public AmplifierBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
