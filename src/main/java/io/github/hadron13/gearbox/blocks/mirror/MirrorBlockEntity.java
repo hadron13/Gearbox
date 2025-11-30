@@ -36,8 +36,9 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
 
     @Override
     protected AABB createRenderBoundingBox() {
-        return new AABB(worldPosition).inflate(100);
+        return new AABB(worldPosition).inflate(200);
     }
+
     public MirrorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }

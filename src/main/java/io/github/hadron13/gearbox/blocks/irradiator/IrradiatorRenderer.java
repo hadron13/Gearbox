@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.register.ModPartialModels;
@@ -18,6 +19,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlockEntity> {
     public IrradiatorRenderer(BlockEntityRendererProvider.Context context) {
@@ -33,32 +35,21 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
                 be.previousLensPos,
                 be.lensPosition);
 
-        if(be.receivingLaser == null)
-            return;
+        VertexConsumer vb;
 
-        if(be.receivingLaser.getPower() < 0.1f) {
-            return;
+        if(be.receivingLaser != null && be.receivingLaser.getPower() > 0.01f){
+            vb = buffer.getBuffer(ModRenderTypes.laserBeam());
+            float thickness = lerpedLensPos;
+            float length = be.mode == PressingBehaviour.Mode.BELT? 1.70f : 2.0f;
+            if(thickness > 0.01)
+                LaserBeamRenderer.renderLaserBeamCustom(thickness, thickness + 2/16f, length, be.receivingLaser.getColor() | 0x55000000, new Vec3(0, -1, 0), new Vec3(0, 0, 0), ms, buffer, partialTicks);
         }
-
-        VertexConsumer vb = buffer.getBuffer(ModRenderTypes.laserBeam());
-
-
-        float thickness = 0.5f + (lerpedLensPos/0.4f)*1.3f;
-        SuperByteBuffer thick_beam = CachedBuffers.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
-        thick_beam
-                .translate(0.5f - thickness/2.0f, -be.mode.headOffset, 0.5f - thickness/2.0f)
-                .scale(thickness, 0.5f + be.mode.headOffset, thickness)
-                //.translate(-0.5f, 0f, -0.5f)
-                .color(be.receivingLaser.getColor())
-                .renderInto(ms, vb);
-
 
         if(VisualizationManager.supportsVisualization(be.getLevel()))
             return;
 
 
         vb = buffer.getBuffer(RenderType.solid());
-
 
         CachedBuffers.partial(ModPartialModels.IRRADIATOR_LENS, be.getBlockState())
                 .translate(0, lerpedLensPos, 0)

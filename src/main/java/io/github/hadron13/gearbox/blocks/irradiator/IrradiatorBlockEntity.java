@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.HOLD;
 import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.PASS;
 import static com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode.BASIN;
+import static io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock.HORIZONTAL_FACING;
 import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 
 public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements ILaserReceiver {
@@ -41,6 +42,9 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     public Laser receivingLaser = null;
     public int recipeTimer = 0;
+    
+    public static final float LENS_POSITION_END = 4/16f;
+    public static final float LENS_POSITION_START = 0f;
 
     public float targetLensPosition = 0;
     public float previousLensPos = 0;
@@ -112,7 +116,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(!TransmutingRecipe.match(this, getBeltRecipe(), transported.stack)) {
             recipeTimer = 0;
             currentRecipe = null;
-            targetLensPosition = 0f;
+            targetLensPosition = LENS_POSITION_START;
             sendData();
             return PASS;
         }
@@ -203,7 +207,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                     applyBasinRecipe();
                 }
                 recipeTimer = 0;
-                targetLensPosition = 0f;
+                targetLensPosition = LENS_POSITION_START;
                 sendData();
             }
         }
@@ -216,7 +220,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     }
     public void startProcessingBasin() {
         recipeTimer = getBasinRecipe().getProcessingDuration();
-        targetLensPosition = 4/16f;
+        targetLensPosition = LENS_POSITION_END;
         super.startProcessingBasin();
     }
     @Override
@@ -269,7 +273,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     @Override
     public void receiveLaser(Laser laser) {
-        if(receivingLaser == null){
+        if(receivingLaser == null && laser.hasValidAngle(new Vec3(getBlockState().getValue(HORIZONTAL_FACING).step()) , 15f, 15f)){
             receivingLaser = laser;
         }
     }

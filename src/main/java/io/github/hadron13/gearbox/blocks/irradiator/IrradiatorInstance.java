@@ -10,6 +10,7 @@ import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 
 public class IrradiatorInstance extends SingleAxisRotatingVisual<IrradiatorBlockEntity> implements SimpleDynamicVisual {
@@ -17,7 +18,7 @@ public class IrradiatorInstance extends SingleAxisRotatingVisual<IrradiatorBlock
     public OrientedInstance lens;
 
     public IrradiatorInstance(VisualizationContext context, IrradiatorBlockEntity blockEntity, float partialTicks) {
-        super(context, blockEntity, partialTicks, Models.partial(AllPartialModels.SHAFT_HALF));
+        super(context, blockEntity, partialTicks, Direction.SOUTH, Models.partial(AllPartialModels.SHAFT_HALF));
         lens = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.IRRADIATOR_LENS)).createInstance();
     }
 
@@ -25,8 +26,9 @@ public class IrradiatorInstance extends SingleAxisRotatingVisual<IrradiatorBlock
     public void beginFrame(DynamicVisual.Context ctx) {
         float lerpedLensPos =  Mth.lerp(AnimationTickHolder.getPartialTicks(), blockEntity.previousLensPos, blockEntity.lensPosition);
 
-        lens.position(getVisualPosition()).translatePosition(0, lerpedLensPos, 0);
-
+        lens.position(getVisualPosition())
+                .translatePosition(0, lerpedLensPos, 0)
+                .setChanged();
     }
 
     @Override

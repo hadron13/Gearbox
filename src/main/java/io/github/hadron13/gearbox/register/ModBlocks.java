@@ -37,6 +37,7 @@ import io.github.hadron13.gearbox.config.GearboxStress;
 import io.github.hadron13.gearbox.data.client.blockstates.PartialAxisBlockStateGen;
 import io.github.hadron13.gearbox.data.client.blockstates.PartialHorizontalBlockStateGen;
 import io.github.hadron13.gearbox.data.client.blockstates.PumpjackGenerator;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -118,7 +119,7 @@ public class ModBlocks {
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
-            .blockstate((c, p ) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+            .blockstate(BlockStateGen.axisBlockProvider(true))
             .item()
             .transform(customItemModel())
             .register();
@@ -198,21 +199,6 @@ public class ModBlocks {
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();
-/*
-    public static final BlockEntry<PlanetaryGearsetBlock> PLANETARY_GEARSET = REGISTRATE.block("planetary_gearset", PlanetaryGearsetBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .properties(p -> p
-                    .noOcclusion()
-                    .sound(SoundType.WOOD)
-                    .mapColor(MapColor.DIRT)
-            ).transform(axeOrPickaxe())
-            .transform(BlockStressDefaults.setNoImpact())
-            .item(CogwheelBlockItem::new)
-            .transform(customItemModel())
-            .register();
-
- */
-
 
     public static final BlockEntry<UselessMachineBlock> USELESS_MACHINE = REGISTRATE.block("kinetic_machine", UselessMachineBlock::new)
             .initialProperties(SharedProperties::wooden)

@@ -1,7 +1,17 @@
 {
   "variants": {
-    "": {
+    "axis=x": {
+      "model": "gearbox:block/mirror/block",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
       "model": "gearbox:block/mirror/block"
+    },
+    "axis=z": {
+      "model": "gearbox:block/mirror/block",
+      "x": 90,
+      "y": 180
     }
   }
 }
