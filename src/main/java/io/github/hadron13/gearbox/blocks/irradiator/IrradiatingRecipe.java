@@ -8,10 +8,11 @@ import io.github.hadron13.gearbox.register.ModRecipeTypes;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
 
 
 public class IrradiatingRecipe extends BasinRecipe implements LaserRecipe{
-    public Color requiredColor;
+    public int requiredColor;
     public float requiredPower;
 
     public IrradiatingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
@@ -21,33 +22,41 @@ public class IrradiatingRecipe extends BasinRecipe implements LaserRecipe{
     public static boolean match(IrradiatorBlockEntity be, IrradiatingRecipe recipe){
         if(recipe == null)
             return false;
-        if(be.totalPower < recipe.requiredPower)
+
+        if(be.receivingLaser == null)
             return false;
-        return TransmutingRecipe.matchColor(recipe.requiredColor, be.recipeColor);
+
+        if(Mth.abs(be.getSpeed()) < 1f)
+            return false;
+
+        if(!LaserRecipe.matchLaser(recipe, be.receivingLaser))
+            return false;
+
+        return LaserRecipe.matchLaser(recipe, be.receivingLaser);
     }
     public void readAdditional(JsonObject json) {
-        requiredColor = new Color(GsonHelper.getAsInt(json, "color", 0));
+        requiredColor = GsonHelper.getAsInt(json, "color", 0);
         requiredPower = GsonHelper.getAsFloat(json, "power", 1f);
     }
 
     public void readAdditional(FriendlyByteBuf buffer) {
-        requiredColor = new Color(buffer.readInt());
+        requiredColor = buffer.readInt();
         requiredPower = buffer.readFloat();
     }
 
     public void writeAdditional(JsonObject json) {
-        json.addProperty("color", requiredColor.getRGB());
+        json.addProperty("color", requiredColor);
         json.addProperty("power", requiredPower);
     }
 
     public void writeAdditional(FriendlyByteBuf buffer) {
-        buffer.writeInt(requiredColor.getRGB());
+        buffer.writeInt(requiredColor);
         buffer.writeFloat(requiredPower);
     }
 
 
     @Override
-    public Color getColor() {
+    public int getColor() {
         return requiredColor;
     }
 

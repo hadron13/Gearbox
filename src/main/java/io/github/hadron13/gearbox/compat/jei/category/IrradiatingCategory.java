@@ -101,18 +101,19 @@ public class IrradiatingCategory extends CreateRecipeCategory<IrradiatingRecipe>
         Component power = Component.literal("\u2592 " + SpectrometerBlockEntity.truncatePrecision(recipe.requiredPower, 2));
 
         Component red = Component.literal("\u2588 " +
-                SpectrometerBlockEntity.truncatePrecision(recipe.requiredColor.getRed()/255f, 2));
+                SpectrometerBlockEntity.truncatePrecision((recipe.getColor() >> 16 & 0xff)/255f, 2));
         Component green = Component.literal("\u2588 " +
-                SpectrometerBlockEntity.truncatePrecision(recipe.requiredColor.getGreen()/255f, 2));
+                SpectrometerBlockEntity.truncatePrecision((recipe.getColor() >> 8 & 0xff)/255f, 2));
         Component blue = Component.literal("\u2588 " +
-                SpectrometerBlockEntity.truncatePrecision(recipe.requiredColor.getBlue()/255f, 2));
+                SpectrometerBlockEntity.truncatePrecision((recipe.getColor() & 0xff)/255f, 2));
+
 
         graphics.drawString(Minecraft.getInstance().font, power, 20, 1, 0xffffff, true);
         graphics.drawString(Minecraft.getInstance().font, red, 20, 11, 0xbd5252, false);
         graphics.drawString(Minecraft.getInstance().font, green, 20, 21, 0x2d9636, false);
         graphics.drawString(Minecraft.getInstance().font, blue, 20, 31, 0x2e2d96, false);
 
-        irradiator.color = recipe.requiredColor.getRGB();
+        irradiator.color = recipe.getColor();
         irradiator.draw(graphics, getBackground().getWidth() / 2 - 17, 22);
 
 

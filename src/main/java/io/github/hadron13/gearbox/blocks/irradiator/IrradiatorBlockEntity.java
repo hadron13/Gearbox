@@ -38,13 +38,8 @@ import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEn
 public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements ILaserReceiver {
 
     public static final Object irradiatingRecipesKey = new Object();
-    public Map<Direction, Float> powers;
-    public Map<Direction, Color> colors;
-    public Map<Direction, Integer> timeouts;
-    public boolean colorChanged = false;
-    public Color mixedColor = Color.BLACK;
-    public Color recipeColor = Color.BLACK;
-    public float totalPower = 0f;
+
+    public Laser receivingLaser = null;
     public int recipeTimer = 0;
 
     public float targetLensPosition = 0;
@@ -56,9 +51,6 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     public IrradiatorBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-        powers = new HashMap<>();
-        colors = new HashMap<>();
-        timeouts = new HashMap<>();
     }
 
     public TransmutingRecipe getBeltRecipe(){
@@ -71,10 +63,10 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             return (IrradiatingRecipe) currentRecipe;
         return null;
     }
-    public Color getRecipeColor(){
+    public int getRecipeColor(){
         if(currentRecipe instanceof LaserRecipe laserRecipe)
             return laserRecipe.getColor();
-        return Color.BLACK;
+        return 0;
     }
     public float getRecipePower(){
         if(currentRecipe instanceof LaserRecipe laserRecipe)
@@ -178,17 +170,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         super.tick();
 
 //        updateBasin();
-        timeouts.forEach((dir, timer) -> {
-            if(timer != 0)
-                timeouts.replace(dir, --timer);
-            else{
-                powers.remove(dir);
-                colors.remove(dir);
-                colorChanged = true;
-            }
-        });
-        if(colorChanged)
-            updateColors();
+
 
         if(mode == BASIN && getBasin().isEmpty()){
             targetLensPosition = 0;
@@ -215,7 +197,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             return;
 
         if(recipeTimer > 0){
-            recipeTimer -= (int)(totalPower/getRecipePower());
+            recipeTimer -= (int)(receivingLaser.getPower()/getRecipePower());
             if(recipeTimer <= 0){
                 if(mode == BASIN) {
                     applyBasinRecipe();
@@ -225,49 +207,8 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
                 sendData();
             }
         }
-
     }
 
-    public void updateColors(){
-        totalPower = 0f;
-        for(float power : powers.values())
-            totalPower += power;
-
-        if(totalPower <= 0.1f){
-            mixedColor = Color.BLACK;
-            sendData();
-            return;
-        }
-
-        int r = 0, g = 0, b = 0;
-        for (Color color : colors.values()) {
-            r += color.getRed();
-            g += color.getGreen();
-            b += color.getBlue();
-        }
-
-        float ceil = Math.max(r, Math.max(g, b));
-        if(ceil == 0){
-            r = 0;
-            g = 0;
-            b = 0;
-        }else {
-            r = (int)(((float)r/ceil) * 255.0f);
-            g = (int)(((float)g/ceil) * 255.0f);
-            b = (int)(((float)b/ceil) * 255.0f);
-        }
-
-        mixedColor = new Color(r,g,b);
-        colorChanged = false;
-        recipeColor = mixedColor;
-        if(currentRecipe != null && mode == BASIN){
-            if(!IrradiatingRecipe.match(this, getBasinRecipe()) ) {
-                recipeTimer = 0;
-                currentRecipe = null;
-            }
-        }
-        sendData();
-    }
 
     @Override
     protected boolean isRunning() {
@@ -320,67 +261,21 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-        if(totalPower == 0 || mixedColor== Color.BLACK){
-            GearboxLang.translate("gui.spectrometer.nolaser")
-                    .style(ChatFormatting.DARK_GRAY)
-                    .forGoggles(tooltip);
-            return true;
-        }
-
-
-        GearboxLang.translate("gui.spectrometer.title")
-                .style(ChatFormatting.GRAY)
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2592 ").color(0xffffff)
-                .add(GearboxLang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
-                .add(GearboxLang.text(" " + truncatePrecision(totalPower, 2) ))
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2588 ").color(0xbd5252)
-                .add(GearboxLang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
-                .add(GearboxLang.text(" " + truncatePrecision(recipeColor.getRed()/255f, 2) ))
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2588 ").color(0x2d9636)
-                .add(GearboxLang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
-                .add(GearboxLang.text(" " + truncatePrecision(recipeColor.getGreen()/255f, 2) ))
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2588 ").color(0x3e3dbf)
-                .add(GearboxLang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
-                .add(GearboxLang.text(" " + truncatePrecision(recipeColor.getBlue()/255f, 2) ))
-                .forGoggles(tooltip);
-
-
 
         return true;
     }
 
-    public boolean receiveLaser(Direction face, Color color, float power) {
 
-        if(face.getAxis() != Direction.Axis.Y){
-
-            if(color == Color.BLACK || power <= 0.1f){
-                powers.remove(face);
-                colors.remove(face);
-                timeouts.remove(face);
-                return true;
-            }
-            if(colors.get(face) != color){
-                colors.put(face, color);
-                colorChanged = true;
-            }
-            powers.put(face, power);
-            timeouts.put(face, 3);
-        }
-
-        return false;
-    }
 
     @Override
     public void receiveLaser(Laser laser) {
-
+        if(receivingLaser == null){
+            receivingLaser = laser;
+        }
     }
 
     @Override
     public void endReceiveLaser(Laser laser) {
-
+        receivingLaser = null;
     }
 }

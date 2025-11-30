@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
 import net.createmod.catnip.animation.AnimationTickHolder;
@@ -32,11 +33,15 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
                 be.previousLensPos,
                 be.lensPosition);
 
-        if(be.totalPower < 0.1f) {
+        if(be.receivingLaser == null)
+            return;
+
+        if(be.receivingLaser.getPower() < 0.1f) {
             return;
         }
 
         VertexConsumer vb = buffer.getBuffer(ModRenderTypes.laserBeam());
+
 
         float thickness = 0.5f + (lerpedLensPos/0.4f)*1.3f;
         SuperByteBuffer thick_beam = CachedBuffers.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
@@ -44,7 +49,7 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
                 .translate(0.5f - thickness/2.0f, -be.mode.headOffset, 0.5f - thickness/2.0f)
                 .scale(thickness, 0.5f + be.mode.headOffset, thickness)
                 //.translate(-0.5f, 0f, -0.5f)
-                .color(be.mixedColor.getRGB())
+                .color(be.receivingLaser.getColor())
                 .renderInto(ms, vb);
 
 

@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "gearbox:block/irradiator/block",
+      "y": 90
+    },
+    "facing=north": {
       "model": "gearbox:block/irradiator/block"
+    },
+    "facing=south": {
+      "model": "gearbox:block/irradiator/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gearbox:block/irradiator/block",
+      "y": 270
     }
   }
 }
