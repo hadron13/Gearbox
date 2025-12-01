@@ -201,7 +201,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             return;
 
         if(recipeTimer > 0){
-            recipeTimer -= (int)(receivingLaser.getPower()/getRecipePower());
+            recipeTimer -= (int)(receivingLaser.getPower()/getRecipePower()) * 3;
             if(recipeTimer <= 0){
                 if(mode == BASIN) {
                     applyBasinRecipe();
@@ -273,7 +273,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     @Override
     public void receiveLaser(Laser laser) {
-        if(receivingLaser == null && laser.hasValidAngle(new Vec3(getBlockState().getValue(HORIZONTAL_FACING).step()) , 15f, 15f)){
+        if(receivingLaser == null && laser.hasValidAngle(new Vec3(getBlockState().getValue(HORIZONTAL_FACING).getOpposite().step()) , 15f, 15f)){
             receivingLaser = laser;
         }
     }

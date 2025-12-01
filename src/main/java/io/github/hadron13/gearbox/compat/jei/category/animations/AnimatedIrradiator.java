@@ -1,15 +1,23 @@
 package io.github.hadron13.gearbox.compat.jei.category.animations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.render.ModRenderTypes;
 import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
 
@@ -44,17 +52,18 @@ public class AnimatedIrradiator extends AnimatedKinetics {
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModPartialModels.THICK_BEAM)
-                .atLocal(0,  1 + 3/16f, 0)
-                .color(color)
-                .scale(scale)
-                .render(graphics);
+        matrixStack.pushPose();
+        TransformStack.of(matrixStack)
+                        .scale(scale, -scale, scale)
+                        .translate(0, 0, 0);
 
-        blockElement(ModPartialModels.THICK_BEAM)
-                .atLocal(0,  0.5f, 0)
-                .color(color)
-                .scale(scale)
-                .render(graphics);
+
+        MultiBufferSource.BufferSource bufferSource = graphics.bufferSource();
+
+        float thickness = 4/16f * offset;
+        float length = 2f;
+        LaserBeamRenderer.renderLaserBeamCustom(thickness, 0, length, color | 0x55000000, new Vec3(0, -1, 0), new Vec3(0, 0, 0), matrixStack, bufferSource);
+        matrixStack.popPose();
 
         if (basin) {
             blockElement(AllBlocks.BASIN.getDefaultState())
@@ -69,5 +78,7 @@ public class AnimatedIrradiator extends AnimatedKinetics {
         }
         matrixStack.popPose();
     }
+
+
 
 }

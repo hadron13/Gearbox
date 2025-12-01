@@ -97,7 +97,7 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
 
 
 
-    public static void renderLaserBeamCustom(float thickness, float outer_thickness, float length, int color, Vec3 direction, Vec3 position, PoseStack ms, MultiBufferSource bufferSource, float partialTicks){
+    public static void renderLaserBeamCustom(float thickness, float outer_thickness, float length, int color, Vec3 direction, Vec3 position, PoseStack ms, MultiBufferSource bufferSource){
 
         VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
 
@@ -111,6 +111,10 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
         ;
         renderBeam(ms.last().pose(), laserVertexConsumer, length, thickness, color);
 
+        if(outer_thickness == 0){
+            ms.popPose();
+            return;
+        }
 
         VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
         SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());

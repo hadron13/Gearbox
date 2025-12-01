@@ -42,7 +42,7 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
             float thickness = lerpedLensPos;
             float length = be.mode == PressingBehaviour.Mode.BELT? 1.70f : 2.0f;
             if(thickness > 0.01)
-                LaserBeamRenderer.renderLaserBeamCustom(thickness, thickness + 2/16f, length, be.receivingLaser.getColor() | 0x55000000, new Vec3(0, -1, 0), new Vec3(0, 0, 0), ms, buffer, partialTicks);
+                LaserBeamRenderer.renderLaserBeamCustom(thickness, thickness + 2/16f, length, be.receivingLaser.getColor() | 0x55000000, new Vec3(0, -1, 0), new Vec3(0, 0, 0), ms, buffer);
         }
 
         if(VisualizationManager.supportsVisualization(be.getLevel()))
