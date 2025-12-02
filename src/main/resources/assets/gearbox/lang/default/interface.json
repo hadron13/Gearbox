@@ -3,8 +3,10 @@
 
   "gearbox.hint.sapper.full.title": "Internal Tank Full",
   "gearbox.hint.sapper.full": "",
-  "gearbox.hint.compressor.reverse.title": "Rotation Direction",
-  "gearbox.hint.compressor.reverse": "It appears that this compressor is rotating in the _wrong direction_.",
+  "gearbox.hint.compressor.reverse.title": "Direction Requirement:",
+  "gearbox.hint.compressor.reverse": "It appears that this Compressor is rotating in the _wrong direction_.",
+  "gearbox.hint.compressor.heat.title": "Heat Requirement:",
+  "gearbox.hint.compressor.heat": "It appears that this Compressor has _not enough heat_",
   "gearbox.hint.reactor.atmosphere": "Atmosphere Stats:",
 
   "gearbox.gui.spectrometer.title": "Spectrometry",
@@ -21,7 +23,7 @@
   "gearbox.gui.goggles.energy_consumption": "Consumption",
   "gearbox.gui.mirror.angle": "Angle",
   "gearbox.gui.attenuator.aperture_size": "Aperture Size (%)",
-  "gearbox.gui.amplifier.amplification": "Amplification (100 + %)",
+  "gearbox.gui.amplifier.amplification": "Amplification (+%)",
 
   "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
   "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s",

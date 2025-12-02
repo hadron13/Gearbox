@@ -33,10 +33,7 @@ public class SappingCategory extends CreateRecipeCategory<SappingRecipe> {
                 .addIngredients(recipe.getIngredients().get(0));
 
         FluidStack fluidResult = recipe.getFluidResults().get(0);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 142, yCenter + 16)
-                .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredient(ForgeTypes.FLUID_STACK, fluidResult)
-                .setFluidRenderer(fluidResult.getAmount(), false, 16, 16);
+        addFluidSlot(builder, 142, yCenter + 16, fluidResult);
 
     }
 

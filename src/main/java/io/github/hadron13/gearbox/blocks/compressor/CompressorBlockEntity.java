@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.compressor;
 
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
@@ -280,16 +281,28 @@ public class CompressorBlockEntity extends KineticBlockEntity {
 
         return super.getCapability(cap, side);
     }
-    //
+
+    @Override
+    public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        boolean hasTooltip = false;
+        if(!validSpeed() && speed != 0) {
+            GearboxLang.addHint(tooltip, "hint.compressor.reverse");
+            hasTooltip = true;
+        }
+        if(speed != 0 && getHeat() == BlazeBurnerBlock.HeatLevel.NONE){
+            if(hasTooltip){GearboxLang.text("").forGoggles(tooltip);}
+            GearboxLang.addHint(tooltip, "hint.compressor.heat");
+            hasTooltip = true;
+        }
+        return hasTooltip;
+    }
+
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         boolean kinetic_tooltip = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
         boolean fluid_tooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
-        if(!validSpeed() && speed != 0) {
-            kinetic_tooltip = true;
-            GearboxLang.addHint(tooltip, "hint.compressor.reverse");
-        }
+
         boolean item_tooltip = false;
         for (int i = 0; i < output.getSlots(); i++) {
             item_tooltip = true;

@@ -1,11 +1,13 @@
 package io.github.hadron13.gearbox.compat.jei.category;
 
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+import com.simibubi.create.compat.jei.category.SpoutCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
+import com.simibubi.create.foundation.utility.CreateLang;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.compat.jei.ModGuiTextures;
@@ -18,6 +20,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.MutableComponent;
 
 import static com.simibubi.create.content.processing.recipe.HeatCondition.NONE;
 
@@ -37,10 +40,7 @@ public class CompressingCategory extends CreateRecipeCategory<CompressingRecipe>
 
         FluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
 
-        builder
-                .addSlot(RecipeIngredientRole.INPUT, getBackground().getWidth() / 4 - 19 / 2, 23)
-                .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredients(ForgeTypes.FLUID_STACK, fluidIngredient.getMatchingFluidStacks());
+        addFluidSlot(builder, getBackground().getWidth() / 4 - 19 / 2, 23, fluidIngredient);
 
         int size = recipe.getRollableResults().size() + recipe.getFluidResults().size();
         int i = 0;
@@ -57,7 +57,6 @@ public class CompressingCategory extends CreateRecipeCategory<CompressingRecipe>
         }
 
 
-
     }
 
     public void draw(CompressingRecipe recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
@@ -70,9 +69,9 @@ public class CompressingCategory extends CreateRecipeCategory<CompressingRecipe>
 
         ModGuiTextures.JEI_SHORT_ARROW.render(graphics, getBackground().getWidth() / 2 + 20, 27);
 
-        String translationKey = (useCampfire)? "recipe.compressing.campfire_heat" : requiredHeat.getTranslationKey();
+        MutableComponent heat = (useCampfire)? GearboxLang.translateDirect("recipe.compressing.campfire_heat") : CreateLang.translateDirect(requiredHeat.getTranslationKey());
 
-        graphics.drawString(Minecraft.getInstance().font, GearboxLang.translateDirect(translationKey), 9, 58, requiredHeat.getColor());
+        graphics.drawString(Minecraft.getInstance().font, heat, 9, 58, requiredHeat.getColor());
 
         if (useCampfire){
             campfire.draw(graphics, getBackground().getWidth() / 2 + 3 - 17, 27);

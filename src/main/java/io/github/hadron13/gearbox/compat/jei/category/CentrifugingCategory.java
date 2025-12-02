@@ -26,10 +26,7 @@ public class CentrifugingCategory extends CreateRecipeCategory<CentrifugingRecip
     public void setRecipe(IRecipeLayoutBuilder builder, CentrifugingRecipe recipe, IFocusGroup focuses) {
 
         FluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
-        builder
-                .addSlot(RecipeIngredientRole.INPUT, 52, 10)
-                .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredients(ForgeTypes.FLUID_STACK, fluidIngredient.getMatchingFluidStacks());
+        addFluidSlot(builder, 52, 10, fluidIngredient);
 
         int i = 0;
 
@@ -37,11 +34,7 @@ public class CentrifugingCategory extends CreateRecipeCategory<CentrifugingRecip
         for (FluidStack fluidResult : recipe.getFluidResults()) {
             int xPosition = 110 + i%3 * 19 + (size > 3? 10:0);
             int yPosition = 68 - ((i>=3)?19:0);
-
-            builder
-                    .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addIngredient(ForgeTypes.FLUID_STACK, fluidResult);
+            addFluidSlot(builder, xPosition, yPosition, fluidResult);
             i++;
         }
     }

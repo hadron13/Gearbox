@@ -37,6 +37,7 @@ import io.github.hadron13.gearbox.config.GearboxStress;
 import io.github.hadron13.gearbox.data.client.blockstates.PartialAxisBlockStateGen;
 import io.github.hadron13.gearbox.data.client.blockstates.PartialHorizontalBlockStateGen;
 import io.github.hadron13.gearbox.data.client.blockstates.PumpjackGenerator;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
