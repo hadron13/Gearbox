@@ -1,11 +1,14 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
 import com.google.common.base.Optional;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.data.ModDamageTypes;
 import net.createmod.catnip.math.VecHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +22,7 @@ import net.minecraftforge.common.Tags;
 import java.util.List;
 
 import static io.github.hadron13.gearbox.blocks.combiner.CombinerBlock.HORIZONTAL_FACING;
+import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 
 public class Laser {
     public int color;
@@ -159,6 +163,12 @@ public class Laser {
         return Optional.absent();
     }
 
+    public void setEnabled(boolean enable){
+        this.enabled = enable;
+        if(!enable && this.receiver != null)
+            this.receiver.endReceiveLaser(this);
+    }
+
     public void enable(){
         this.enabled = true;
     }
@@ -221,6 +231,39 @@ public class Laser {
         enabled = nbt.getBoolean(prefix + "enabled");
     }
 
+    public static void spectrometryTooltip(List<Component> tooltip, boolean isPlayerSneaking, Laser laser){
+
+        if(laser == null || !laser.enabled){
+            GearboxLang.translate("gui.spectrometer.nolaser")
+                    .style(ChatFormatting.DARK_GRAY)
+                    .forGoggles(tooltip);
+            return;
+        }
+
+        float red   = ((laser.color >> 16) & 0xFF) / 255.0f;
+        float green = ((laser.color >> 8)  & 0xFF) / 255.0f;
+        float blue  = ((laser.color)       & 0xFF) / 255.0f;
+
+        GearboxLang.translate("gui.spectrometer.title")
+                .style(ChatFormatting.GRAY)
+                .forGoggles(tooltip);
+        GearboxLang.text("\u2592 ").color(0xffffff)
+                .add(GearboxLang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
+                .add(GearboxLang.text(" " + truncatePrecision(laser.getPower(), 2) ))
+                .forGoggles(tooltip);
+        GearboxLang.text("\u2588 ").color(0xbd5252)
+                .add(GearboxLang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
+                .add(GearboxLang.text(" " + truncatePrecision(red, 2) ))
+                .forGoggles(tooltip);
+        GearboxLang.text("\u2588 ").color(0x2d9636)
+                .add(GearboxLang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
+                .add(GearboxLang.text(" " + truncatePrecision(green, 2) ))
+                .forGoggles(tooltip);
+        GearboxLang.text("\u2588 ").color(0x3e3dbf)
+                .add(GearboxLang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
+                .add(GearboxLang.text(" " + truncatePrecision(blue, 2) ))
+                .forGoggles(tooltip);
+    }
 
     public static ListTag writeVec3(Vec3 vec) {
         ListTag tag = new ListTag();

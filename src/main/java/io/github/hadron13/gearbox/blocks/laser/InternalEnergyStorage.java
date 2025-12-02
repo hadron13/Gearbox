@@ -46,14 +46,18 @@ public class InternalEnergyStorage extends EnergyStorage {
         setEnergy(nbt.getInt("energy_"+name));
     }
 
+    public int getSpace() {
+        return Math.max(getMaxEnergyStored() - getEnergyStored(), 0);
+    }
+
     @Override
     public boolean canExtract() {
-        return true;
+        return maxExtract > 0;
     }
 
     @Override
     public boolean canReceive() {
-        return true;
+        return maxReceive > 0;
     }
 
     public int internalConsumeEnergy(int consume) {
@@ -70,6 +74,10 @@ public class InternalEnergyStorage extends EnergyStorage {
 
     public void setEnergy(int energy) {
         this.energy = energy;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public void storedEnergyTooltip(List<Component> tooltip){

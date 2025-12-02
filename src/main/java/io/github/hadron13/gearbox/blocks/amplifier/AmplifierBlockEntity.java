@@ -5,9 +5,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.blocks.laser.ILaserEmitter;
-import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
-import io.github.hadron13.gearbox.blocks.laser.Laser;
+import io.github.hadron13.gearbox.blocks.laser.*;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +14,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.List;
 
@@ -27,6 +29,10 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
 
     public ScrollValueBehaviour amplification;
 
+
+    public final InternalEnergyStorage energyStorage;
+    public LazyOptional<IEnergyStorage> lazyEnergy;
+
     @Override
     protected AABB createRenderBoundingBox() {
         return new AABB(worldPosition).inflate(100);
@@ -34,6 +40,10 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
 
     public AmplifierBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+
+        energyStorage = new InternalEnergyStorage(65536, 4096, 0);
+        lazyEnergy = LazyOptional.of(() -> energyStorage);
+
         laser = new Laser(0x0, getBlockPos().getCenter(), new Vec3(getFacing().step()));
         laser.disable();
     }
@@ -73,7 +83,7 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
 
     }
 
-    @Override
+        @Override
     protected void read(CompoundTag tag, boolean clientPacket) {
         super.read(tag, clientPacket);
     }
@@ -110,6 +120,14 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
             receivingLaser = null;
             this.laser.disable();
         }
+    }
+
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (cap == ForgeCapabilities.ENERGY && side == getBlockState().getValue(LaserBlock.HORIZONTAL_FACING).getCounterClockWise())// && !level.isClientSide
+            return lazyEnergy.cast();
+        return LazyOptional.empty();
     }
 
 }

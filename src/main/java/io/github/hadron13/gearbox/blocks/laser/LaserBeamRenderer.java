@@ -4,12 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
+import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import io.github.hadron13.gearbox.render.ModRenderTypes;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -27,6 +29,10 @@ import java.util.List;
 import static net.minecraft.core.Direction.NORTH;
 
 public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends SafeBlockEntityRenderer<T> {
+
+
+    //for some weird reason the first laser will never render when using Oculus/Iris
+    //to compensate for that we just render a dummy laser first
 
 
     public LaserBeamRenderer(BlockEntityRendererProvider.Context context) {
@@ -65,7 +71,6 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
     public static void renderLaserBeamInterpolated(Laser laser, PoseStack ms, MultiBufferSource bufferSource, BlockPos blockEntityPos, float partialTicks){
         if(!laser.enabled || laser.getPower() < 0.01) return;
 
-        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
 
         ms.pushPose();
         float thickness = 4 / 16f ;
@@ -78,7 +83,6 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
                 .rotateTo(new Vector3f(0, 0, 1.0f), interpolatedDirection.toVector3f())
                 .translate(-thickness/2f, -thickness/2f, 0)
         ;
-        renderBeam(ms.last().pose(), laserVertexConsumer, laser.length, thickness, laser.color);
 
 
         VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
@@ -92,6 +96,8 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
                 .light(255)
                 .renderInto(ms, transluscentVertexConsumer);
 
+        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
+        renderBeam(ms.last().pose(), laserVertexConsumer, laser.length, thickness, laser.color);
         ms.popPose();
     }
 

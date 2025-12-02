@@ -32,9 +32,11 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
 
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        energyStorage = new InternalEnergyStorage(1000, 50, 50);
+        energyStorage = new InternalEnergyStorage(65536, 256, 0);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
+
         laserBeam = new Laser(0xFFFFFF, getBlockPos().getCenter(), new Vec3(getFacing().step()));
+        laserBeam.disable();
     }
 
     public Direction getFacing(){
@@ -52,30 +54,52 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
     @Override
     public void tick(){
         super.tick();
+
         if(level != null) {
             laserBeam.tick(level);
         }
+
+
+        if(level.isClientSide)
+            return;
+
+        if(laserBeam.enabled) {
+            int consumed = energyStorage.internalConsumeEnergy(128);
+            if(consumed < 128)  laserBeam.disable();
+
+        }else{
+            if(energyStorage.getEnergyStored() > 200) laserBeam.enable();
+        }
+        sendData();
+        laserBeam.setEnabled(energyStorage.getEnergyStored() > 0);
+
     }
 
     @Override
     public void remove() {
+        lazyEnergy.invalidate();
         laserBeam.disable();
         super.remove();
     }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-//        InternalEnergyStorage.energyConsumptionTooltip(tooltip, energyStorage.getEnergyStored() > 0? 100:0);
+        energyStorage.storedEnergyTooltip(tooltip);
+        InternalEnergyStorage.energyConsumptionTooltip(tooltip, energyStorage.getEnergyStored() > 0? 128 : 0 );
         return true;
     }
 
     @Override
     public void write(CompoundTag compound, boolean clientPacket) {
+        energyStorage.write(compound);
+        compound.putBoolean("enabled", laserBeam.enabled);
         super.write(compound, clientPacket);
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
+        energyStorage.read(compound);
+        laserBeam.setEnabled(compound.getBoolean("enabled"));
         super.read(compound, clientPacket);
     }
 

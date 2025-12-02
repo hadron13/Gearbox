@@ -192,15 +192,15 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
             mode = PressingBehaviour.Mode.WORLD;
         }
 
-        if(level.isClientSide){
-            previousLensPos = lensPosition;
-            lensPosition += (targetLensPosition - lensPosition) * .1f * Math.abs(getSpeed()/64f);
-            return;
-        }
+//        if(level.isClientSide){
+        previousLensPos = lensPosition;
+        lensPosition += (targetLensPosition - lensPosition) * .1f * Math.abs(getSpeed()/64f);
+//            return;
+//        }
         if(currentRecipe == null)
             return;
 
-        if(recipeTimer > 0){
+        if(recipeTimer > 0 && lensPosition > 2/16f){
             recipeTimer -= (int)(receivingLaser.getPower()/getRecipePower()) * 3;
             if(recipeTimer <= 0){
                 if(mode == BASIN) {
@@ -265,6 +265,8 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+
+        Laser.spectrometryTooltip(tooltip, isPlayerSneaking, receivingLaser);
 
         return true;
     }

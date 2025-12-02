@@ -21,6 +21,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -33,6 +34,7 @@ public class Gearbox {
 
     public static final String MODID = "gearbox";
     public static final String DISPLAY_NAME = "Gearbox";
+    public static boolean oculusLoaded = false;
 
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -68,6 +70,8 @@ public class Gearbox {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(Gearbox::clientInit) );
 
         MinecraftForge.EVENT_BUS.register(this);
+
+        oculusLoaded = ModList.get().isLoaded("oculus");
     }
 
     public static void clientInit(final FMLClientSetupEvent event){

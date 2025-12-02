@@ -77,36 +77,7 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
 
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
-        if(passingLaser == null){
-            GearboxLang.translate("gui.spectrometer.nolaser")
-                    .style(ChatFormatting.DARK_GRAY)
-                    .forGoggles(tooltip);
-            return true;
-        }
-
-        float red   = ((passingLaser.color >> 16) & 0xFF) / 255.0f;
-        float green = ((passingLaser.color >> 8)  & 0xFF) / 255.0f;
-        float blue  = ((passingLaser.color)       & 0xFF) / 255.0f;
-
-        GearboxLang.translate("gui.spectrometer.title")
-                .style(ChatFormatting.GRAY)
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2592 ").color(0xffffff)
-                .add(GearboxLang.translate("gui.spectrometer.power").style(ChatFormatting.WHITE))
-                .add(GearboxLang.text(" " + truncatePrecision(passingLaser.power, 2) ))
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2588 ").color(0xbd5252)
-                .add(GearboxLang.translate("gui.spectrometer.red").style(ChatFormatting.DARK_RED))
-                .add(GearboxLang.text(" " + truncatePrecision(red, 2) ))
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2588 ").color(0x2d9636)
-                .add(GearboxLang.translate("gui.spectrometer.green").style(ChatFormatting.DARK_GREEN))
-                .add(GearboxLang.text(" " + truncatePrecision(green, 2) ))
-                .forGoggles(tooltip);
-        GearboxLang.text("\u2588 ").color(0x3e3dbf)
-                .add(GearboxLang.translate("gui.spectrometer.blue").style(ChatFormatting.BLUE))
-                .add(GearboxLang.text(" " + truncatePrecision(blue, 2) ))
-                .forGoggles(tooltip);
+        Laser.spectrometryTooltip(tooltip, isPlayerSneaking, passingLaser);
 
         return true;
     }
