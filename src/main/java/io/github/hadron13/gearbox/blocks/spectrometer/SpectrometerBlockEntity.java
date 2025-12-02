@@ -62,7 +62,7 @@ public class SpectrometerBlockEntity extends GaugeBlockEntity implements ILaserR
         float green = ((passingLaser.color >> 8)  & 0xFF) / 255.0f;
         float blue  = ((passingLaser.color)       & 0xFF) / 255.0f;
 
-        dialTarget = Mth.clamp( Mth.lerp( Mth.clamp(green - (blue+red)/2, 0 , 1),blue - red, 0.5f) , 0, 1 );
+        dialTarget = Mth.clamp( (0.5f * green + 1.0f * blue) / (red + green + blue) , 0, 1 );
 
         distanceToLaser = (float)laser.getPosition().distanceTo(getPosition());
 
