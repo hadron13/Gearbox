@@ -53,6 +53,7 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
 
         CachedBuffers.partial(ModPartialModels.IRRADIATOR_LENS, be.getBlockState())
                 .translate(0, lerpedLensPos, 0)
+                .light(light)
                 .renderInto(ms, vb);
     }
 

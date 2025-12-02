@@ -34,7 +34,7 @@ public class ElectrolyzerRenderer extends SafeBlockEntityRenderer<ElectrolyzerBl
         float renderedHeadOffset = be.getRenderedHeadOffset(partialTicks);
         float speed = be.getRenderedHeadRotationSpeed(partialTicks);
         float time = AnimationTickHolder.getRenderTime(be.getLevel());
-        float angle = ((time * speed * 6 / 10f) % 360) / 180 * (float) Math.PI;
+        float angle = ((time * speed * 6 / 10f) % 360) / 180 * (float) Math.PI * 0.5f;
 
         SuperByteBuffer poleRender = CachedBuffers.partial(AllPartialModels.MECHANICAL_MIXER_POLE, blockState);
         poleRender.translate(0, -renderedHeadOffset, 0)

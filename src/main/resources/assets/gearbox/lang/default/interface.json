@@ -24,6 +24,7 @@
   "gearbox.gui.mirror.angle": "Angle",
   "gearbox.gui.attenuator.aperture_size": "Aperture Size (%)",
   "gearbox.gui.amplifier.amplification": "Amplification (+%)",
+  "gearbox.gui.electrolyzer.speed": "Speed (%)",
 
   "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
   "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s",

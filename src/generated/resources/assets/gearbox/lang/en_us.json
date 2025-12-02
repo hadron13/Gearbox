@@ -61,6 +61,7 @@
   "fluid.gearbox.steam": "Steam",
   "gearbox.gui.amplifier.amplification": "Amplification (+%)",
   "gearbox.gui.attenuator.aperture_size": "Aperture Size (%)",
+  "gearbox.gui.electrolyzer.speed": "Speed (%)",
   "gearbox.gui.goggles.energy_consumption": "Consumption",
   "gearbox.gui.goggles.energy_stats": "Energy Stats",
   "gearbox.gui.goggles.energy_stored": "Energy Stored",

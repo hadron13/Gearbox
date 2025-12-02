@@ -4,10 +4,17 @@ import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlock;
+import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -20,6 +27,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -38,22 +46,49 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     public final InternalEnergyStorage energyStorage;
     public LazyOptional<IEnergyStorage> lazyEnergy;
+
+    public ScrollValueBehaviour speed;
+
     public int energy_consumption = 0;
 
 
 
     public ElectrolyzerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        energyStorage = new InternalEnergyStorage(8192, 8192, 512);
+        energyStorage = new InternalEnergyStorage(8192, 8192, 0);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        super.addBehaviours(behaviours);
+        speed = new ScrollValueBehaviour(GearboxLang.translateDirect("gui.electrolyzer.speed"), this, new SpeedValueBoxTransform())
+                .between(0, 100);
+        speed.setValue(50);
+
+        behaviours.add(speed);
+    }
+
+    private class SpeedValueBoxTransform extends ValueBoxTransform.Sided {
+        @Override
+        protected Vec3 getSouthLocation() {
+            return VecHelper.voxelSpace(8, 8, 16.0f);
+        }
+
+        @Override
+        protected boolean isSideActive(BlockState state, Direction direction) {
+            return state.getValue(AmplifierBlock.HORIZONTAL_FACING) == direction;
+        }
+    }
+    @Override
     public void tick(){
         if(level != null && !level.isClientSide) {
+            if(speed.value == 0){
+                runningTicks++;
+            }
             if (currentRecipe != null && currentRecipe instanceof ElectrolyzingRecipe electrolyzingRecipe) {
-                energy_consumption = electrolyzingRecipe.requiredEnergy;
-                if (energyStorage.internalConsumeEnergy(electrolyzingRecipe.requiredEnergy) < electrolyzingRecipe.requiredEnergy){
+                energy_consumption = (int)(electrolyzingRecipe.requiredEnergy * Math.max((speed.value*speed.value)/2500f, 0.5f));
+                if (energyStorage.internalConsumeEnergy(energy_consumption) < energy_consumption){
                     runningTicks++;
                 }
             }
@@ -70,7 +105,7 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public float getSpeed(){
         if(energyStorage.getEnergyStored() == 0)
             return 0;
-        return 32f;
+        return 128f * (speed.value/100f);
     }
 
     @Override
@@ -167,9 +202,16 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
         return electrolyzingRecipeKey;
     }
 
+
+    @Override
+    public void remove() {
+        super.remove();
+        lazyEnergy.invalidate();
+    }
+
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && side.getAxis().isHorizontal())// && !level.isClientSide
+        if (cap == ForgeCapabilities.ENERGY && side == null || (side.getAxis().isHorizontal() && side != getBlockState().getValue(HORIZONTAL_FACING)))// && !level.isClientSide
             return lazyEnergy.cast();
         return LazyOptional.empty();
     }

@@ -20,6 +20,7 @@ import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
 import io.github.hadron13.gearbox.blocks.prism.PrismBlock;
+import io.github.hadron13.gearbox.data.GearboxDatagen;
 import io.github.hadron13.gearbox.data.client.blockstates.KilnGenerator;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
@@ -192,8 +193,7 @@ public class ModBlocks {
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
-            //.addLayer(() -> RenderType::cutoutMipped)
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();

@@ -58,7 +58,7 @@ public class ElectrolyzerVisual extends KineticBlockEntityVisual<ElectrolyzerBlo
 
         head.setPosition(getVisualPosition())
                 .nudge(0, -renderedHeadOffset, 0)
-                .setRotationalSpeed(speed * 2 * RotatingInstance.SPEED_MULTIPLIER)
+                .setRotationalSpeed(speed * RotatingInstance.SPEED_MULTIPLIER)
                 .setChanged();
     }
 
