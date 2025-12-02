@@ -71,6 +71,8 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
 
         if (getSpeed() == 0)
             return;
+        if(level.getRandom().nextInt(4) != 0)
+            return;
         if (inputInv.getStackInSlot(0)
                 .isEmpty())
             return;
@@ -81,7 +83,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
 
         BlockPos pos = getBlockPos();
         getLevel().playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                SoundEvents.BLASTFURNACE_FIRE_CRACKLE, SoundSource.AMBIENT, 1.0f, pitch, false);
+                SoundEvents.BLASTFURNACE_FIRE_CRACKLE, SoundSource.AMBIENT, 0.5f, pitch, false);
     }
 
     @Override
