@@ -196,7 +196,9 @@ public class CompressorBlockEntity extends KineticBlockEntity {
     public void tickAudio() {
         super.tickAudio();
 
-        if (validSpeed())
+        if (!validSpeed())
+            return;
+        if(recipe == null)
             return;
         if(level.random.nextInt(5) != 1)
             return;

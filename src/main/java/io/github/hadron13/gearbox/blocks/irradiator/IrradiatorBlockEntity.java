@@ -128,8 +128,9 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(recipe.isEmpty())
             return PASS;
 
-        List<ItemStack> results = RecipeApplier.applyRecipeOn(getLevel(),
-                 ItemHandlerHelper.copyStackWithSize(transported.stack, 1), recipe.get());
+        List<ItemStack> results = RecipeApplier.applyRecipeOn(level, ItemHandlerHelper.copyStackWithSize(transported.stack, 1), recipe.get(), true);
+//        List<ItemStack> results = RecipeApplier.applyRecipeOn(getLevel(),
+//                 ItemHandlerHelper.copyStackWithSize(transported.stack, 1), recipe.get());
 
         List<TransportedItemStack> collect = results.stream()
                 .map(stack -> {

@@ -1,6 +1,9 @@
 package io.github.hadron13.gearbox.blocks.laser;
 
 import com.google.common.base.Optional;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.kinetics.belt.BeltBlock;
+import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.data.ModDamageTypes;
 import net.createmod.catnip.math.VecHelper;
@@ -133,6 +136,9 @@ public class Laser {
             }else{
                 return Optional.absent();
             }
+        }
+        if(blockState.getBlock() == AllBlocks.BELT.get()) {
+            hardness += 15;
         }
 
         if(this.receiver != null){

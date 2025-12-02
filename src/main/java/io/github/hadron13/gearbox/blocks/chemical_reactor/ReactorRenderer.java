@@ -3,11 +3,15 @@ package io.github.hadron13.gearbox.blocks.chemical_reactor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankRenderer;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.platform.CatnipClientServices;
+import net.createmod.catnip.platform.ForgeCatnipServices;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -42,7 +46,8 @@ public class ReactorRenderer extends KineticBlockEntityRenderer<ReactorBlockEnti
 
 
         if(VisualizationManager.supportsVisualization(be.getLevel()) && renderFluid) {
-            FluidRenderer.renderFluidBox(atmosphere.getFluid(), atmosphere.getAmount(), 0, -atm_level, 0, 1.0F, 0.0f, 1.0F, bufferSource, ms, light, true, true);
+            ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(atmosphere, 0.0f, -atm_level, 0f, 1.0f, 0f, 1.0f,
+                                    bufferSource, ms, light, true, true);
             return;
         }
 
@@ -71,7 +76,8 @@ public class ReactorRenderer extends KineticBlockEntityRenderer<ReactorBlockEnti
                 .renderInto(ms, vbCutout);
 
         if (renderFluid)
-            FluidRenderer.renderFluidBox(atmosphere.getFluid(), 0, 0, -atm_level, 0, 1.0F, 0.0f, 1.0F, bufferSource, ms, light, true, false);
+            ForgeCatnipServices.FLUID_RENDERER.renderFluidBox(atmosphere, 0.0f, -atm_level, 0f, 1.0f, 0f, 1.0f,
+                    bufferSource, ms, light, true, true);
     }
     @Override
     protected SuperByteBuffer getRotatedModel(ReactorBlockEntity be, BlockState state) {

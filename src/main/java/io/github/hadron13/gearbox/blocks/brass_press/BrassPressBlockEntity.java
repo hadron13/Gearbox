@@ -114,7 +114,9 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 //		pressingBehaviour.particleItems.add(input.stack);
 		particleItems.add(input.stack);
 
-		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(getLevel(), canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
+		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(level,
+				canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get(), true);
+//		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(getLevel(), canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
 
 		for (ItemStack created : outputs) {
 			if (!created.isEmpty()) {
@@ -139,7 +141,7 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 		if((runningTicks == CYCLE / 2 || runningTicks == (CYCLE * 3)/2) && level.isClientSide){
 			Vec3 pos = VecHelper.getCenterOf(worldPosition.below(2)).add(0, 8 / 16f, 0);
 			for (int i = 0; i < 15; i++) {
-				Vec3 motion = VecHelper.offsetRandomly(Vec3.ZERO, level.random, .125f)
+				Vec3 motion = VecHelper.offsetRandomly(Vec3.ZERO, level.random, .25f)
 						.multiply(1, 0, 1);
 				motion = motion.add(0, 0.125f / 16f, 0);
 				level.addParticle(ParticleTypes.FLAME, pos.x, pos.y - .25f, pos.z, motion.x,

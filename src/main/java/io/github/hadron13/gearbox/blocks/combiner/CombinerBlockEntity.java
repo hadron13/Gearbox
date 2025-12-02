@@ -38,6 +38,7 @@ public class CombinerBlockEntity extends SmartBlockEntity implements ILaserRecei
     public void tick() {
         super.tick();
         laserBeam.tick(getLevel());
+        updateColor();
     }
 
     @Override
@@ -70,17 +71,16 @@ public class CombinerBlockEntity extends SmartBlockEntity implements ILaserRecei
             total_blue  += (int) (blue  * l.power);
             total_power += l.power;
         }
-        float largest_component = Math.max(Math.max(total_red, total_green), total_blue);
+        float largest_component = Math.max(Math.max(total_red, total_green), total_blue) / 255.0f;
         if(largest_component == 0){
             return;
         }
-        total_red   = (int)((total_red  /largest_component) * 255.0);
-        total_green = (int)((total_green/largest_component) * 255.0);
-        total_blue  = (int)((total_blue /largest_component) * 255.0);
+        total_red   = (int)(total_red  /largest_component);
+        total_green = (int)(total_green/largest_component);
+        total_blue  = (int)(total_blue /largest_component);
 
         laserBeam.color = (total_red << 16) + (total_green << 8) + (total_blue);
         laserBeam.power = total_power;
-        laserBeam.enable();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CombinerBlockEntity extends SmartBlockEntity implements ILaserRecei
             return;
         if(validAngle(laser.direction)) {
             incomingLasers.add(laser);
-            updateColor();
+            laserBeam.enable();
         }
     }
 
