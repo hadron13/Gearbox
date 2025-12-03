@@ -27,7 +27,7 @@ public class PumpjackCategory extends CreateRecipeCategory<PumpjackRecipe>{
 
 
         FluidStack fluidResult = recipe.getFluidResults().get(0);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, xcenter + 50, ycenter+5)
+        builder.addSlot(RecipeIngredientRole.OUTPUT, xcenter + 40, ycenter+5)
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addIngredient(ForgeTypes.FLUID_STACK, fluidResult)
                 .setFluidRenderer(fluidResult.getAmount(), false, 16, 16);
@@ -40,9 +40,9 @@ public class PumpjackCategory extends CreateRecipeCategory<PumpjackRecipe>{
 
         Font font = Minecraft.getInstance().font;
         int width = font.width(biome_name);
-        graphics.drawString(Minecraft.getInstance().font, biome_name, xcenter - width/2, ycenter-20, 0xFFFFFF);
+        graphics.drawString(Minecraft.getInstance().font, biome_name, xcenter - width/2, ycenter-10, 0xFFFFFF);
 
-        AllGuiTextures.JEI_ARROW.render(graphics, xcenter-15, ycenter+10);
+        AllGuiTextures.JEI_ARROW.render(graphics, xcenter-20, ycenter+10);
         well.draw(graphics, xcenter - 60, ycenter+22);
 
     }

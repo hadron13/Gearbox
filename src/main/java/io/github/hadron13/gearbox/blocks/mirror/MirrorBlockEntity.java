@@ -31,7 +31,7 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
 
     public Map<Laser, Laser> lasers = new HashMap<>();
     public float angle = 0;
-    public static final int SPEED_DIVIDER = 32;
+    public static final int SPEED_DIVIDER = 20;
 
 
     @Override
@@ -47,6 +47,12 @@ public class MirrorBlockEntity extends KineticBlockEntity implements ILaserRecei
     public void tick() {
         super.tick();
         angle += getSpeed()/SPEED_DIVIDER;
+        if(getSpeed() == 0){
+
+            if(Mth.abs(Mth.abs(angle) % 90f - 45f) < 0.25){
+                angle = (float)Math.round(angle);
+            }
+        }
     }
 
     @Override
