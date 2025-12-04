@@ -32,7 +32,7 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
 
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        energyStorage = new InternalEnergyStorage(65536, 256, 0);
+        energyStorage = new InternalEnergyStorage(8192, 256, 0);
         lazyEnergy = LazyOptional.of(() -> energyStorage);
 
         laserBeam = new Laser(0xFFFFFF, getBlockPos().getCenter(), new Vec3(getFacing().step()));
