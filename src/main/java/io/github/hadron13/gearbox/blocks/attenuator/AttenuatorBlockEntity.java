@@ -43,6 +43,9 @@ public class AttenuatorBlockEntity extends SmartBlockEntity implements ILaserRec
     @Override
     public void tick() {
         super.tick();
+        if(apertureSize.value == 0){
+            laser.disable();
+        }
         laser.tick(level);
     }
 

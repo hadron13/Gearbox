@@ -72,12 +72,12 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
         if(!laser.enabled || laser.getPower() < 0.01) return;
 
         int color = laser.getColor() & 0xFFFFFF;
-        int alpha = Mth.clamp( (int)((Mth.sqrt(laser.getPower())/5.0 + 0.1) * 200.0), 20, 200);
+        int alpha = Mth.clamp( (int)((Mth.sqrt(laser.getPower())/5.0 + 0.1) * 200.0), 100, 250);
 
         Vec3 relativeLaserPos = laser.position.subtract(Vec3.atCenterOf(blockEntityPos));
         Vec3 interpolatedDirection = laser.lastDirection.lerp(laser.direction, partialTicks);
 
-        renderLaserBeamCustom(4/16f, 6/16f, laser.length,  color | (alpha << 24), interpolatedDirection, relativeLaserPos, ms, bufferSource);
+        renderLaserBeamCustom(2/16f, 4/16f, laser.length,  color | (alpha << 24), interpolatedDirection, relativeLaserPos, ms, bufferSource);
     }
 
 
@@ -97,11 +97,30 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
         VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
         SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());
 
+        int alpha = color >> 24 & 0xff;
         if(outer_thickness > 0) {
             outerBeam
                     .translate(-1 / 16f, -1 / 16f, 0)
                     .scale(outer_thickness / (6 / 16f), outer_thickness / (6 / 16f), length)
-                    .color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xfF)
+                    .color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, alpha/3)
+                    .light(255)
+                    .renderInto(ms, transluscentVertexConsumer);
+
+
+            outer_thickness += 1/16f;
+            outerBeam
+                    .translate(-1.5 / 16f, -1.5 / 16f, 0)
+                    .scale(outer_thickness / (6 / 16f), outer_thickness / (6 / 16f), length)
+                    .color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, alpha/3)
+                    .light(255)
+                    .renderInto(ms, transluscentVertexConsumer);
+
+
+            outer_thickness += 1/16f;
+            outerBeam
+                    .translate(-2 / 16f, -2 / 16f, 0)
+                    .scale(outer_thickness / (6 / 16f), outer_thickness / (6 / 16f), length)
+                    .color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, alpha/3)
                     .light(255)
                     .renderInto(ms, transluscentVertexConsumer);
         }

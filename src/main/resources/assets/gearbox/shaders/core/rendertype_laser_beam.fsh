@@ -21,5 +21,6 @@ out vec4 fragColor;
 
 void main() {
     float sine = (sin(texCoord0.y * 8.0 + GameTime * 30000.0f)+1.0f)/2.0f;
-    fragColor = vec4((step(0.5f, sine) + 0.75f) * vertexColor.xyz /*- step(99.0f, texCoord0.y) *  (100.0f - texCoord0.y)*/, 0.8);
+    //fragColor = vec4((sine/2) + 0.5 * vertexColor.xyz /*- step(99.0f, texCoord0.y) *  (100.0f - texCoord0.y)*/, 0.8);
+    fragColor = vec4(vertexColor.xyz, 0.8);
 }
