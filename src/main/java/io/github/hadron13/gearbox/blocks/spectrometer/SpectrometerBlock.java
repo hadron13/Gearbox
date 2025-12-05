@@ -5,17 +5,26 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
 
 import com.simibubi.create.foundation.block.IBE;
+import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.ModBlockEntities;
 
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.theme.Color;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -28,12 +37,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
 import java.util.Random;
+import java.util.function.Function;
 
 import static com.simibubi.create.content.kinetics.gauge.GaugeBlock.GAUGE;
 
@@ -46,6 +57,36 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
         super(pProperties);
     }
 
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if(!level.isClientSide)
+            return InteractionResult.PASS;
+
+        if(player.getItemInHand(hand).is(Items.GLOW_BERRIES)){
+            withBlockEntityDo(level, pos, spectrometer -> {
+                if(spectrometer.passingLaser != null){
+                    String color = "0x" + Integer.toHexString(spectrometer.passingLaser.color);
+                    player.sendSystemMessage(
+                            GearboxLang.text("color: ")
+                                    .add(
+                                            Component.literal(color)
+                                                    .withStyle(style -> style
+                                                            .withColor(spectrometer.passingLaser.getColor())
+                                                            .withUnderlined(true)
+                                                            .withClickEvent(new ClickEvent(
+                                                                    ClickEvent.Action.COPY_TO_CLIPBOARD,
+                                                                    color
+                                                            ))
+                                                    )
+                                    )
+                                    .component()
+                    );
+                }
+            });
+            return InteractionResult.SUCCESS;
+        }
+        return super.use(state, level, pos, player, hand, hit);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
