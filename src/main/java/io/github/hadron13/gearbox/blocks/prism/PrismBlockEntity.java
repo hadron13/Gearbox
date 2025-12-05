@@ -100,12 +100,18 @@ public class PrismBlockEntity extends SmartBlockEntity implements ILaserReceiver
             changed = true;
         }else{
             Laser[] scatter = lasers.get(laser);
-            scatter[0].setDirection(laser.direction.normalize());
-            scatter[0].setPower(red/total * laser.power);
-            scatter[1].setDirection(laser.direction.add(0, 0.1, 0).normalize());
-            scatter[1].setPower(green/total * laser.power);
-            scatter[2].setDirection(laser.direction.add(0, 0.2, 0).normalize());
-            scatter[2].setPower(blue/total * laser.power);
+            if(scatter.length > 0 && scatter[0] != null) {
+                scatter[0].setDirection(laser.direction.normalize());
+                scatter[0].setPower(red / total * laser.power);
+            }
+            if(scatter.length > 1 && scatter[1] != null) {
+                scatter[1].setDirection(laser.direction.add(0, 0.1, 0).normalize());
+                scatter[1].setPower(green / total * laser.power);
+            }
+            if(scatter.length > 2 && scatter[2] != null) {
+                scatter[2].setDirection(laser.direction.add(0, 0.2, 0).normalize());
+                scatter[2].setPower(blue / total * laser.power);
+            }
         }
     }
 
