@@ -20,6 +20,9 @@ import io.github.hadron13.gearbox.blocks.combiner.CombinerBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorVisual;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
+import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlockEntity;
+import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillRenderer;
+import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillVisual;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerVisual;
@@ -147,13 +150,6 @@ public class ModBlockEntities {
             .validBlocks(ModBlocks.ELECTROLYZER)
             .renderer(() -> ElectrolyzerRenderer::new)
             .register();
-//
-//    public static final BlockEntityEntry<PlanetaryGearsetBlockEntity> PLANETARY_GEARSET = Gearbox.registrate()
-//            .blockEntity("planetary_gearset", PlanetaryGearsetBlockEntity::new)
-//            .instance(() -> PlanetaryGearsetInstance::new, false)
-//            .validBlocks(ModBlocks.PLANETARY_GEARSET)
-//            .renderer(() -> PlanetaryGearsetRenderer::new)
-//            .register();
 
     public static final BlockEntityEntry<UselessMachineBlockEntity> USELESS_MACHINE = Gearbox.registrate()
             .blockEntity("kinetic_machine", UselessMachineBlockEntity::new)
@@ -215,6 +211,14 @@ public class ModBlockEntities {
             .visual(() -> PrecisionCrankVisual::new)
             .validBlocks(ModBlocks.PRECISION_CRANK)
             .renderer(() -> HandCrankRenderer::new)
+            .register();
+
+
+    public static final BlockEntityEntry<CoreDrillBlockEntity> CORE_DRILL = Gearbox.registrate()
+            .blockEntity("core_drill", CoreDrillBlockEntity::new)
+//            .visual(() -> CoreDrillVisual::new)
+            .validBlocks(ModBlocks.CORE_DRILL)
+            .renderer(() -> CoreDrillRenderer::new)
             .register();
 
     public static void register() {}

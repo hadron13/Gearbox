@@ -30,7 +30,8 @@ public class ModPartialModels {
             MIRROR = block("mirror/mirror"),
             PRECISION_CRANK = block("precision_crank/block"),
             ULTIMATE_MECH_CORE = item("ultimate_mechanism/core"),
-            TAU_CANNON_COIL = item("tau_cannon/coil");
+            TAU_CANNON_COIL = item("tau_cannon/coil"),
+            CORE_DRILL_TUBE = item("core_tube");
 
 
     private static PartialModel block(String path) {

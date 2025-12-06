@@ -21,6 +21,7 @@
     "gearbox:pumpjack_well",
     "gearbox:dipper",
     "gearbox:chemical_reactor",
-    "gearbox:precision_crank"
+    "gearbox:precision_crank",
+    "gearbox:core_drill"
   ]
 }

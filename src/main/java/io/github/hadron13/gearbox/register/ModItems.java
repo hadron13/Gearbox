@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
+import com.simibubi.create.content.equipment.TreeFertilizerItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -16,6 +17,13 @@ public class ModItems {
     public static void register() {}
     public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot");
 
+
+    public static final ItemEntry<Item> CORE_TUBE=
+            REGISTRATE.item("core_tube", Item::new)
+                    .lang("Core Drill Tube")
+                    .model(AssetLookup.itemModel("core_tube"))
+                    .register();
+
     public static final ItemEntry<TauCannonItem> TAU_CANNON =
             REGISTRATE.item("tau_cannon", TauCannonItem::new)
                     .model(AssetLookup.itemModelWithPartials())
@@ -26,6 +34,12 @@ public class ModItems {
                     .model(AssetLookup.itemModelWithPartials())
                     .properties((p)->p.rarity(Rarity.EPIC))
                     .register();
+
+    private static ItemEntry<Item> oreCore(String name){
+        return REGISTRATE.item(name + "_core", Item::new)
+//                .model((c, p) -> {p.withExistingParent("ore_core")})
+                .register();
+    }
 
     private static ItemEntry<Item> ingredient(String name) {
         return REGISTRATE.item(name, Item::new)

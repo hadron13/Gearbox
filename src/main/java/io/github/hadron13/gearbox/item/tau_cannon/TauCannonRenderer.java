@@ -38,7 +38,6 @@ public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
             ms.translate(recoil, 0, 0);
         }
 
-        renderer.render(model.getOriginalModel(), light);
 
         LocalPlayer player = Minecraft.getInstance().player;
         boolean mainHand = player.getMainHandItem() == stack;
@@ -58,6 +57,7 @@ public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
         angle %= 360;
 
         ms.pushPose();
+        renderer.render(model.getOriginalModel(), light);
         ms.translate(0, offset, 0);
         ms.mulPose(Axis.ZP.rotationDegrees(angle));
         ms.translate(0, -offset, 0);

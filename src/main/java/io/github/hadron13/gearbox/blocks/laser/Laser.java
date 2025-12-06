@@ -38,6 +38,8 @@ public class Laser {
     public boolean enabled = true;
     public ILaserReceiver receiver = null;
 
+    public final static int MAX_LENGTH = 100;
+
     public Laser(){
         color = 0;
         position = Vec3.ZERO;

@@ -31,12 +31,14 @@ public class TauCannonItem extends Item implements CustomArmPoseItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
 
-        return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
+        return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
     }
+
 
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
         TauCannonAnimationHolder.recoil.updateChaseTarget(0.5f);
+        TauCannonAnimationHolder.speed.updateChaseSpeed(2.0f);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
 
     @Override
     public int getViewDistance(){
-        return LaserBeamBehavior.MAX_LENGTH;
+        return Laser.MAX_LENGTH;
     }
 
     @Override

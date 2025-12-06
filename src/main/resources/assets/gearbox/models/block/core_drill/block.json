@@ -4,7 +4,7 @@
 	"textures": {
 		"0": "create:block/axis",
 		"1": "gearbox:block/core_drill",
-		"2": "create-6:block/mechanical_press_top",
+		"2": "create:block/mechanical_press_top",
 		"7": "gearbox:block/core_drill_casing",
 		"particle": "create:block/axis",
 		"2_1": "create:block/axis_top"

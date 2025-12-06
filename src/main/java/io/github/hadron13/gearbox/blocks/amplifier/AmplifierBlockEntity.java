@@ -61,7 +61,8 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 
-        amplification = new ScrollValueBehaviour(GearboxLang.translateDirect("gui.amplifier.amplification"), this, new AmplificationValueBoxTransform())
+        amplification = new ScrollValueBehaviour(GearboxLang.translateDirect("gui.amplifier.amplification"), this,
+                new AmplificationValueBoxTransform())
                 .between(0, 100);
 
         behaviours.add(amplification);

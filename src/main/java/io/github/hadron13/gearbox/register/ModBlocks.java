@@ -14,6 +14,7 @@ import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
 import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorBlock;
 import io.github.hadron13.gearbox.blocks.combiner.CombinerBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
+import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlock;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
@@ -21,7 +22,7 @@ import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
 import io.github.hadron13.gearbox.blocks.prism.PrismBlock;
 import io.github.hadron13.gearbox.data.GearboxDatagen;
-import io.github.hadron13.gearbox.data.client.blockstates.KilnGenerator;
+import io.github.hadron13.gearbox.data.client.blockstates.*;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillItem;
@@ -32,9 +33,6 @@ import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerGenerator;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.config.GearboxStress;
-import io.github.hadron13.gearbox.data.client.blockstates.PartialAxisBlockStateGen;
-import io.github.hadron13.gearbox.data.client.blockstates.PartialHorizontalBlockStateGen;
-import io.github.hadron13.gearbox.data.client.blockstates.PumpjackGenerator;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -293,4 +291,15 @@ public class ModBlocks {
            .item()
            .transform(customItemModel())
            .register();
+
+
+    public static final BlockEntry<CoreDrillBlock> CORE_DRILL = REGISTRATE.block("core_drill", CoreDrillBlock::new)
+            .initialProperties(SharedProperties::stone)
+            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
+            .transform(pickaxeOnly())
+            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+            .transform(GearboxStress.setImpact(16.0))
+            .item()
+            .transform(customItemModel())
+            .register();
 }
