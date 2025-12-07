@@ -75,10 +75,10 @@ public class PumpjackRecipe extends ProcessingRecipe<RecipeWrapper> {
     }
 
     public void writeAdditional(JsonObject json) {
-        json.addProperty("biome", biome.registry().getPath());
+        json.addProperty("biome", biome.location().toString());
     }
 
     public void writeAdditional(FriendlyByteBuf buffer) {
-        buffer.writeUtf(biome.registry().getPath());
+        buffer.writeUtf(biome.location().toString());
     }
 }
