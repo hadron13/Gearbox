@@ -29,9 +29,11 @@ public class ModPartialModels {
             DIPPER_POLE = block("dipper/pole"),
             MIRROR = block("mirror/mirror"),
             PRECISION_CRANK = block("precision_crank/block"),
+            SHAFT_DUAL_TINY = block("shaft_dual_tiny"),
             ULTIMATE_MECH_CORE = item("ultimate_mechanism/core"),
             TAU_CANNON_COIL = item("tau_cannon/coil"),
-            CORE_DRILL_TUBE = item("core_tube");
+            CORE_DRILL_TUBE = item("core_tube"),
+            ORE_CORE = item("ore_core");
 
 
     private static PartialModel block(String path) {

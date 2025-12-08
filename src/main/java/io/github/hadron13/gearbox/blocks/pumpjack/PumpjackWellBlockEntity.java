@@ -192,6 +192,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         }
         if(!isPipingValid){
             GearboxLang.addHint(tooltip, "hint.pumpjack_well.pipes");
+            GearboxLang.text("").forGoggles(tooltip);
         }
 
         return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());

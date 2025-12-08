@@ -8,6 +8,8 @@
   "gearbox.hint.compressor.heat.title": "Heat Requirement:",
   "gearbox.hint.compressor.heat": "It appears that this Compressor has _not enough heat_",
   "gearbox.hint.reactor.atmosphere": "Atmosphere Stats:",
+  "gearbox.hint.pumpjack_well.pipes.title": "Missing Pipes:",
+  "gearbox.hint.pumpjack_well.pipes": "The well must be connected to bedrock by _Fluid Pipes_",
 
   "gearbox.gui.spectrometer.title": "Spectrometry",
   "gearbox.gui.spectrometer.power": "Laser Power",

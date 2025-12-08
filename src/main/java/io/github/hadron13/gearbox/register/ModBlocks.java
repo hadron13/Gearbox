@@ -92,6 +92,7 @@ public class ModBlocks {
             .transform(customItemModel())
             .register();
     public static final BlockEntry<BrassPressBlock> BRASS_PRESS = REGISTRATE.block("brass_press", BrassPressBlock::new)
+            .lang("Mechanizing Press")
             .initialProperties(SharedProperties::stone)
             .properties(p -> p.mapColor(MapColor.METAL))
             .properties(BlockBehaviour.Properties::noOcclusion)

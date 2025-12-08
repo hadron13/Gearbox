@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 public class KilnScenes {
     public static void kiln(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
-        scene.title("kiln", "Processing items with a Kinetic Oven");
+        scene.title("kiln", "Processing items with a Kiln");
         scene.configureBasePlate(0, 0, 5);
 
         BlockPos kiln = util.grid().at(2, 1, 2);
