@@ -1,20 +1,15 @@
 package io.github.hadron13.gearbox.blocks.core_drill;
 
-import com.google.common.cache.Cache;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.waterwheel.WaterWheelRenderer;
-import com.simibubi.create.content.kinetics.waterwheel.WaterWheelVisual;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.register.ModPartialModels;
-import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperBufferFactory;
 import net.createmod.catnip.render.SuperByteBuffer;
-import net.createmod.catnip.render.SuperByteBufferCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -46,7 +41,7 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
 
     @Override
     protected SuperByteBuffer getRotatedModel(CoreDrillBlockEntity be, BlockState state) {
-        return CachedBuffers.partial(ModPartialModels.SHAFT_DUAL_TINY, state);
+        return CachedBuffers.partialFacing(ModPartialModels.SHAFT_DUAL_TINY, state, state.getValue(HORIZONTAL_FACING).getClockWise());
     }
 
     public static SuperByteBuffer getOreCoreModel(Block ore){
@@ -92,12 +87,17 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
     protected void renderSafe(CoreDrillBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
 
+
+        BlockState state = getRenderedBlockState(be);
+        RenderType type = getRenderType(be, state);
+        renderRotatingBuffer(be, getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
+
         VertexConsumer solid = buffer.getBuffer(RenderType.solid());
         Direction facing = be.getBlockState().getValue(HORIZONTAL_FACING);
 
         SuperByteBuffer pole = CachedBuffers.partialFacing(AllPartialModels.MECHANICAL_MIXER_POLE, be.getBlockState(), facing);
         SuperByteBuffer tube = CachedBuffers.partial(ModPartialModels.CORE_DRILL_TUBE, be.getBlockState());
-        SuperByteBuffer core = getOreCoreModel((be.minedBlock == null)?Blocks.DIAMOND_ORE : be.minedBlock);
+        SuperByteBuffer core = getOreCoreModel((be.minedBlock == null)?Blocks.AIR: be.minedBlock);
 
 
         ms.pushPose();
@@ -110,40 +110,46 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
         float tube_y_offset = 0;
         float pole_y_offset = 0;
 
+        pole_y_offset = be.poleOffset.getValue(partialTicks);
+
         switch (be.drillState){
             case CoreDrillBlockEntity.IDLE -> {
                 tube_y_offset = 0;
             }
             case CoreDrillBlockEntity.PUSHING ->{
-                tube_y_offset = be.tubeOffset.getValue(partialTicks) * 20/16f;
-                pole_y_offset = be.poleOffset.getValue(partialTicks) * 20/16f;
+                tube_y_offset = be.payloadOffset.getValue(partialTicks) * 20/16f;
 
                 tube.light(light)
+                    .translate(0, 4/16f, 0)
                     .translate(0, -tube_y_offset, 0)
                     .renderInto(ms, solid);
             }
             case CoreDrillBlockEntity.PULLING -> {
 
+                core.light(light)
+                    .translate(0, 3/16f - be.payloadOffset.getValue(partialTicks) * (20/16f), 0)
+                    .renderInto(ms, solid);
             }
             case CoreDrillBlockEntity.STORING -> {
 
+                float offset = Mth.clamp((be.payloadOffset.getValue(partialTicks) * 4)-0.75f, 0.0f, 1.0f);
+
+                core.light(light)
+                        .translate(0, 3/16f, 0)
+                        .translate(facing.step().mul(offset * -7/16f))
+                        .renderInto(ms, solid);
             }
         }
 
-
-        core.light(light)
-            .translate(0, -2/16f, 0)
-            .renderInto(ms, solid);
-
-
         pole.light(light)
             .translate(0, -pole_y_offset, 0)
-            .translate(0, 11/16f, 0)
+            .translate(0, 16/16f, 0)
             .renderInto(ms, solid);
 
 
         for(int i = 0; i < be.tubes; i++){
             tube.light(light)
+                .translate(0, 4/16f, 0)
                 .translate(0, (i + 1)*-20/16f -tube_y_offset, 0)
                 .renderInto(ms, solid);
         }

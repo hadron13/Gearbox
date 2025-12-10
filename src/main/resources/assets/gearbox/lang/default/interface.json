@@ -9,7 +9,9 @@
   "gearbox.hint.compressor.heat": "It appears that this Compressor has _not enough heat_",
   "gearbox.hint.reactor.atmosphere": "Atmosphere Stats:",
   "gearbox.hint.pumpjack_well.pipes.title": "Missing Pipes:",
-  "gearbox.hint.pumpjack_well.pipes": "The well must be connected to bedrock by _Fluid Pipes_",
+  "gearbox.hint.pumpjack_well.pipes": "It appears this oil is _not_ connected to _bedrock by _Fluid Pipes_.",
+  "gearbox.hint.core_drill.tubes.title": "Missing Tubes:",
+  "gearbox.hint.core_drill.tubes": "It appears this Core Drill does _not_ have enough tubes to reach _bedrock_.",
 
   "gearbox.gui.spectrometer.title": "Spectrometry",
   "gearbox.gui.spectrometer.power": "Laser Power",
@@ -27,6 +29,9 @@
   "gearbox.gui.attenuator.aperture_size": "Aperture Size (%)",
   "gearbox.gui.amplifier.amplification": "Amplification (+%)",
   "gearbox.gui.electrolyzer.speed": "Speed (%)",
+  "gearbox.gui.core_drill.deposit_info": "Ore Deposit Info:",
+  "gearbox.gui.core_drill.no_deposit": "No deposit found",
+  "gearbox.gui.core_drill.deposit_found": "Ore deposit found: ",
 
   "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
   "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s",
