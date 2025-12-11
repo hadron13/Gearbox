@@ -64,7 +64,7 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
 
     public CoreDrillBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-        payloadOffset.chase(1f, 1 / 16f, LerpedFloat.Chaser.LINEAR);
+        payloadOffset.chase(0f, 1 / 16f, LerpedFloat.Chaser.LINEAR);
         poleOffset.chase(0f, 1 / 16f, LerpedFloat.Chaser.LINEAR);
         outputInv = new ItemStackHandler(1);
         itemCapability = LazyOptional.of(()->outputInv);
@@ -79,7 +79,7 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
 
         if(drillState == IDLE){
             if(enoughTubes() && Mth.abs(getSpeed()) > 0 && !isFull()){
-                payloadOffset.setValue(1.0f);
+                payloadOffset.setValueNoUpdate(1.0f);
 
                 payloadOffset.updateChaseTarget(1.0f);
                 poleOffset.updateChaseTarget(20/16f);
@@ -136,7 +136,7 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         }
     }
     public boolean enoughTubes(){
-        return tubes > 40;
+        return tubes >= ((worldPosition.getY() + 64)/1.2f)/Mth.cos(22.5f * Mth.DEG_TO_RAD);
     }
 
     public boolean isFull(){

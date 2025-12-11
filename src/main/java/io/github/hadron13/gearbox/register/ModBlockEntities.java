@@ -216,7 +216,7 @@ public class ModBlockEntities {
 
     public static final BlockEntityEntry<CoreDrillBlockEntity> CORE_DRILL = Gearbox.registrate()
             .blockEntity("core_drill", CoreDrillBlockEntity::new)
-//            .visual(() -> CoreDrillVisual::new)
+            .visual(() -> CoreDrillVisual::new)
             .validBlocks(ModBlocks.CORE_DRILL)
             .renderer(() -> CoreDrillRenderer::new)
             .register();

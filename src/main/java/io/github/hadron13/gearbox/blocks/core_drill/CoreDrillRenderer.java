@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.model.BakedModelHelper;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.register.ModPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
@@ -87,11 +88,6 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
     protected void renderSafe(CoreDrillBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, partialTicks, ms, buffer, light, overlay);
 
-
-        BlockState state = getRenderedBlockState(be);
-        RenderType type = getRenderType(be, state);
-        renderRotatingBuffer(be, getRotatedModel(be, state), ms, buffer.getBuffer(type), light);
-
         VertexConsumer solid = buffer.getBuffer(RenderType.solid());
         Direction facing = be.getBlockState().getValue(HORIZONTAL_FACING);
 
@@ -108,9 +104,7 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
         ;
 
         float tube_y_offset = 0;
-        float pole_y_offset = 0;
-
-        pole_y_offset = be.poleOffset.getValue(partialTicks);
+        float pole_y_offset = be.poleOffset.getValue(partialTicks);
 
         switch (be.drillState){
             case CoreDrillBlockEntity.IDLE -> {
@@ -146,6 +140,11 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
             .translate(0, 16/16f, 0)
             .renderInto(ms, solid);
 
+
+        if (VisualizationManager.supportsVisualization(be.getLevel())){
+            ms.popPose();
+            return;
+        }
 
         for(int i = 0; i < be.tubes; i++){
             tube.light(light)
