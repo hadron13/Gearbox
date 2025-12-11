@@ -125,8 +125,15 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
                     .renderInto(ms, transluscentVertexConsumer);
         }
 
-        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
-        renderBeam(ms.last().pose(), laserVertexConsumer, length, thickness, color);
+        outerBeam
+//                .translate(-2 / 16f, -2 / 16f, 0)
+                .scale(thickness/ (6 / 16f), thickness/ (6 / 16f), length)
+                .color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, 240)
+                .light(255)
+                .renderInto(ms, transluscentVertexConsumer);
+
+//        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
+//        renderBeam(ms.last().pose(), laserVertexConsumer, length, thickness, color);
         ms.popPose();
     }
 

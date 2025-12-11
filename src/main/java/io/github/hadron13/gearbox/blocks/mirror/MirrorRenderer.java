@@ -28,6 +28,15 @@ public class MirrorRenderer extends KineticBlockEntityRenderer<MirrorBlockEntity
         super(context);
     }
 
+    @Override
+    public boolean shouldRenderOffScreen(MirrorBlockEntity pBlockEntity) {
+        return true;
+    }
+
+    @Override
+    public int getViewDistance(){
+        return Laser.MAX_LENGTH;
+    }
 
     @Override
     protected BlockState getRenderedBlockState(MirrorBlockEntity be) {

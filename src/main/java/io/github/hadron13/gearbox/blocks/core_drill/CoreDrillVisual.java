@@ -26,7 +26,7 @@ public class CoreDrillVisual extends SingleAxisRotatingVisual<CoreDrillBlockEnti
     public List<TransformedInstance> tubes = new ArrayList<>();
 
     public CoreDrillVisual(VisualizationContext context, CoreDrillBlockEntity blockEntity, float partialTick) {
-        super(context, blockEntity, partialTick, Models.partial(ModPartialModels.SHAFT_DUAL_TINY));
+        super(context, blockEntity, partialTick, Models.partial(ModPartialModels.SHAFT_DUAL_TINY, Direction.UP));
     }
 
 
