@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.ponder.scenes.lasers;
 
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
+import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlockEntity;
 import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
@@ -362,5 +363,60 @@ public class LaserScenes {
         scene.world().modifyBlockEntity(attenuator, AttenuatorBlockEntity.class, be ->be.apertureSize.setValue(50));
         scene.idle(70);
         scene.rotateCameraY(120);
+    }
+
+
+    public static void amplifier(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("amplifier", "Amplifying lasers with the amplifier");
+        scene.configureBasePlate(0, 0, 5);
+
+        BlockPos amplifier = util.grid().at(2, 1, 2);
+        BlockPos laser = util.grid().at(2, 1, 4);
+
+        scene.world().showSection(util.select().fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(amplifier), Direction.DOWN);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(laser), Direction.DOWN);
+
+
+        scene.idle(20);
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The Amplifier can increase the power level of a passing laser by a percentage")
+                .pointAt(Vec3.atCenterOf(amplifier));
+
+        scene.idle(20);
+        scene.world().modifyBlockEntity(laser, LaserBlockEntity.class, LaserBlockEntity::ponderEnableLaser);
+        scene.idle(60);
+
+
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("It requires energy input from the side for any amplification")
+                .pointAt(util.vector().blockSurface(amplifier, Direction.WEST));
+
+        scene.idle(60);
+        scene.rotateCameraY(120);
+        scene.idle(10);
+
+
+        Vec3 blockSurface = util.vector().blockSurface(amplifier, Direction.EAST)
+                .add(0, 0, 0);
+        scene.overlay().showFilterSlotInput(blockSurface, Direction.EAST, 80);
+        scene.overlay().showControls(blockSurface, Pointing.DOWN, 60).rightClick();
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The amplification percentage can be tuned on its input panel")
+                .pointAt(blockSurface);
+
+        scene.world().modifyBlockEntity(amplifier, AmplifierBlockEntity.class, be ->be.amplification.setValue(100));
+        scene.idle(70);
+        scene.rotateCameraY(-120);
     }
 }
