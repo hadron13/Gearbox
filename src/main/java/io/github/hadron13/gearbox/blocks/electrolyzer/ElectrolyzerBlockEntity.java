@@ -211,7 +211,7 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && side == null || (side.getAxis().isHorizontal() && side != getBlockState().getValue(HORIZONTAL_FACING)))// && !level.isClientSide
+        if (cap == ForgeCapabilities.ENERGY && (side == null || (side.getAxis().isHorizontal() && side != getBlockState().getValue(HORIZONTAL_FACING))) )// && !level.isClientSide
             return lazyEnergy.cast();
         return LazyOptional.empty();
     }

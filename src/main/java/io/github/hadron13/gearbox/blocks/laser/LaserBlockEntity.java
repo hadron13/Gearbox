@@ -63,14 +63,16 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
         if(level.isClientSide)
             return;
 
-        if(laserBeam.enabled) {
+        if(laserBeam.enabled && !isVirtual()) {
             int consumed = energyStorage.internalConsumeEnergy(128);
             if(consumed < 128)  laserBeam.disable();
-
+            sendData();
         }else{
-            if(energyStorage.getEnergyStored() > 200) laserBeam.enable();
+            if(energyStorage.getEnergyStored() > 200) {
+                laserBeam.enable();
+                sendData();
+            }
         }
-        sendData();
         laserBeam.setEnabled(energyStorage.getEnergyStored() > 0);
 
     }
@@ -105,7 +107,7 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && side == getBlockState().getValue(HORIZONTAL_FACING).getOpposite())// && !level.isClientSide
+        if (cap == ForgeCapabilities.ENERGY && (side == null || side == getBlockState().getValue(HORIZONTAL_FACING).getOpposite()))// && !level.isClientSide
             return lazyEnergy.cast();
         return LazyOptional.empty();
     }

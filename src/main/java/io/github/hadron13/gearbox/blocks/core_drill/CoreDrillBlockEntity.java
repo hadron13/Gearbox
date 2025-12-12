@@ -136,7 +136,7 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         }
     }
     public boolean enoughTubes(){
-        return tubes >= ((worldPosition.getY() + 64)/1.2f)/Mth.cos(22.5f * Mth.DEG_TO_RAD);
+        return tubes >= ((worldPosition.getY() + 64)/1.25f)/Mth.cos(22.5f * Mth.DEG_TO_RAD);
     }
 
     public boolean isFull(){
@@ -211,8 +211,8 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         super.write(compound, clientPacket);
         compound.putInt("tubes", tubes);
         compound.putInt("state", drillState);
-        compound.put("pole_offset", poleOffset.writeNBT());
-        compound.put("payload_offset", payloadOffset.writeNBT());
+//        compound.put("pole_offset", poleOffset.writeNBT());
+//        compound.put("payload_offset", payloadOffset.writeNBT());
         if(minedBlock != null)
             compound.put("minedBlock", NbtUtils.writeBlockState(minedBlock.defaultBlockState()));
     }
@@ -222,8 +222,8 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         super.read(compound, clientPacket);
         tubes = compound.getInt("tubes");
         drillState = compound.getInt("state");
-        poleOffset.readNBT(compound.getCompound("pole_offset"), clientPacket);
-        payloadOffset.readNBT(compound.getCompound("payload_offset"), clientPacket);
+//        poleOffset.readNBT(compound.getCompound("pole_offset"), clientPacket);
+//        payloadOffset.readNBT(compound.getCompound("payload_offset"), clientPacket);
         if(compound.contains("minedBlock"))
             minedBlock = NbtUtils.readBlockState(blockHolderGetter(), compound.getCompound("minedBlock")).getBlock();
     }

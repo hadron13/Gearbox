@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.laser;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.Gearbox;
@@ -31,8 +32,6 @@ import static net.minecraft.core.Direction.NORTH;
 public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends SafeBlockEntityRenderer<T> {
 
 
-    //for some weird reason the first laser will never render when using Oculus/Iris
-    //to compensate for that we just render a dummy laser first
 
 
     public LaserBeamRenderer(BlockEntityRendererProvider.Context context) {
@@ -58,7 +57,20 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
         List<Laser> lasers = be.getLasers();
         BlockPos blockPos = be.getBlockPos();
 
+
+
         for(Laser l : lasers) {
+
+
+//            if(be instanceof SmartBlockEntity smartBlockEntity && smartBlockEntity.isVirtual()){
+//                if(!l.enabled || l.getPower() < 0.01) return;
+//                int color = l.getColor() & 0xFFFFFF;
+//                Vec3 relativeLaserPos = l.position.subtract(Vec3.atCenterOf(be.getBlockPos()));
+//                Vec3 interpolatedDirection = l.lastDirection.lerp(l.direction, partialTicks);
+//                renderLaserBeamCustom(2/16f, 0/16f, l.length,  color | (255 << 24), interpolatedDirection, relativeLaserPos, ms, bufferSource);
+//                continue;
+//            }
+
             renderLaserBeam(l, ms, bufferSource, blockPos);
         }
     }
@@ -97,6 +109,12 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
         VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
         SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());
 
+
+        outerBeam
+                .scale(thickness/ (6 / 16f), thickness/ (6 / 16f), length)
+                .color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, 240)
+                .light(255)
+                .renderInto(ms, transluscentVertexConsumer);
         int alpha = color >> 24 & 0xff;
         if(outer_thickness > 0) {
             outerBeam
@@ -125,12 +143,7 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
                     .renderInto(ms, transluscentVertexConsumer);
         }
 
-        outerBeam
-//                .translate(-2 / 16f, -2 / 16f, 0)
-                .scale(thickness/ (6 / 16f), thickness/ (6 / 16f), length)
-                .color((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, 240)
-                .light(255)
-                .renderInto(ms, transluscentVertexConsumer);
+
 
 //        VertexConsumer laserVertexConsumer = bufferSource.getBuffer(ModRenderTypes.laserBeam());
 //        renderBeam(ms.last().pose(), laserVertexConsumer, length, thickness, color);
