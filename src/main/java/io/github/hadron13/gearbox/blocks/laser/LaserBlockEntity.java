@@ -77,6 +77,10 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
 
     }
 
+    public void ponderEnableLaser(){
+        laserBeam.enable();
+    }
+
     @Override
     public void remove() {
         lazyEnergy.invalidate();

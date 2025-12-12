@@ -41,6 +41,8 @@ public class ModPonderScenes {
         HELPER.forComponents(ModBlocks.PRISM)
                 .addStoryBoard("prism", LaserScenes::prism, LASER_STUFF);
 
+        HELPER.forComponents(ModBlocks.COMBINER)
+                .addStoryBoard("combiner", LaserScenes::combiner, LASER_STUFF);
     }
 
 }

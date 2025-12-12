@@ -239,7 +239,7 @@ public class LaserScenes {
 
         scene.idle(40);
 
-        scene.world().modifyBlockEntity(laserPos, LaserBlockEntity.class, be -> be.laserBeam.enable());
+        scene.world().modifyBlockEntity(laserPos, LaserBlockEntity.class, LaserBlockEntity::ponderEnableLaser);
 
         scene.idle(30);
         scene.rotateCameraY(120);
@@ -266,6 +266,57 @@ public class LaserScenes {
                 .pointAt(Vec3.atCenterOf(prismPos.north(5)).add(0, 1, 0));
 
         scene.idle(60);
+    }
+
+
+    public static void combiner(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("combiner", "Combining lasers with a combiner");
+        scene.configureBasePlate(0, 0, 5);
+
+        BlockPos combiner = util.grid().at(2, 1, 1);
+        BlockPos laser1 = util.grid().at(0, 1, 2);
+        BlockPos laser2 = util.grid().at(4, 1, 2);
+        BlockPos laser3 = util.grid().at(2, 1, 4);
+        BlockPos mirror1 = util.grid().at(0, 1, 4);
+        BlockPos mirror2 = util.grid().at(4, 1, 4);
+
+        scene.world().showSection(util.select().fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(combiner), Direction.DOWN);
+
+        scene.idle(20);
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The Combiner can combine multiple lasers into one")
+                .pointAt(Vec3.atCenterOf(combiner));
+
+        scene.idle(30);
+        scene.world().showSection(util.select().position(laser3), Direction.DOWN);
+        scene.idle(10);
+        scene.world().modifyBlockEntity(laser3, LaserBlockEntity.class, LaserBlockEntity::ponderEnableLaser);
+
+        scene.idle(10);
+        scene.world().showSection(util.select().position(laser1), Direction.DOWN);
+        scene.world().showSection(util.select().position(mirror1), Direction.DOWN);
+        scene.idle(10);
+        scene.world().modifyBlockEntity(laser1, LaserBlockEntity.class, LaserBlockEntity::ponderEnableLaser);
+
+        scene.idle(10);
+        scene.world().showSection(util.select().position(laser2), Direction.DOWN);
+        scene.world().showSection(util.select().position(mirror2), Direction.DOWN);
+        scene.idle(10);
+        scene.world().modifyBlockEntity(laser2, LaserBlockEntity.class, LaserBlockEntity::ponderEnableLaser);
+
+        scene.idle(10);
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The resulting laser has combined power and color of all the inputs")
+                .pointAt(Vec3.atCenterOf(combiner));
+        scene.idle(70);
+
+        scene.rotateCameraY(120);
 
     }
 }
