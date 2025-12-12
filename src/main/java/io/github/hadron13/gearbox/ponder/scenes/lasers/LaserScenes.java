@@ -1,14 +1,18 @@
 package io.github.hadron13.gearbox.ponder.scenes.lasers;
 
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
+import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.data.ModDamageTypes;
+import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.EntityElement;
+import net.createmod.ponder.api.element.WorldSectionElement;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.core.BlockPos;
@@ -147,5 +151,69 @@ public class LaserScenes {
 
 
         scene.idle(30);
+    }
+
+    public static void mirror(SceneBuilder builder, SceneBuildingUtil util){
+        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+
+        scene.title("mirror", "Reflecting lasers with a mirror");
+        scene.configureBasePlate(0, 0, 4);
+
+
+        BlockPos mirror = util.grid().at(2, 1, 3);
+        BlockPos laser = util.grid().at(2, 1, 0);
+        BlockPos valvePos = util.grid().at(2, 2, 3);
+
+        scene.world().showSection(util.select().fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(mirror), Direction.DOWN);
+
+
+        scene.idle(20);
+
+        scene.overlay().showText(40)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("Mirrors are blocks that reflect lasers")
+                .pointAt(Vec3.atCenterOf(mirror));
+
+        scene.idle(60);
+
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("You can use a valve handle to adjust the mirror angle")
+                .pointAt(Vec3.atCenterOf(valvePos));
+
+        scene.idle(5);
+        ElementLink<WorldSectionElement> valve = scene.world().showIndependentSection(util.select().position(valvePos), Direction.DOWN);
+        scene.idle(30);
+        scene.overlay().showControls(valvePos.getCenter(), Pointing.DOWN, 40).rightClick();
+        scene.world().setKineticSpeed(util.select().fromTo(mirror, valvePos), 32);
+        scene.world().rotateSection(valve, 0, 180, 0, 20);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(laser), Direction.DOWN);
+        scene.idle(10);
+        scene.world().setKineticSpeed(util.select().fromTo(mirror, valvePos), 0);
+
+        scene.world().modifyBlockEntity(laser, LaserBlockEntity.class, be -> be.laserBeam.enable());
+
+        scene.idle(30);
+
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("or a precision crank for fine tuning")
+                .pointAt(Vec3.atCenterOf(valvePos));
+
+        scene.world().replaceBlocks(util.select().position(valvePos), ModBlocks.PRECISION_CRANK.getDefaultState().setValue(PrecisionCrankBlock.FACING, Direction.UP), true);
+        scene.idle(10);
+        scene.overlay().showControls(valvePos.getCenter(), Pointing.DOWN, 60).rightClick();
+        scene.world().setKineticSpeed(util.select().fromTo(mirror, valvePos), 1);
+        scene.idle(60);
+
+
+
+
     }
 }

@@ -34,6 +34,9 @@ public class ModPonderScenes {
 
         HELPER.forComponents(ModBlocks.LASER)
                 .addStoryBoard("laser", LaserScenes::laser, LASER_STUFF);
+
+        HELPER.forComponents(ModBlocks.MIRROR)
+                .addStoryBoard("mirror", LaserScenes::mirror, LASER_STUFF);
     }
 
 }
