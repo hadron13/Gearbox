@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.ponder.scenes.lasers;
 
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
+import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
@@ -318,5 +319,48 @@ public class LaserScenes {
 
         scene.rotateCameraY(120);
 
+    }
+
+
+    public static void attenuator(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("attenuator", "Attenuating lasers with the attenuator");
+        scene.configureBasePlate(0, 0, 5);
+
+        BlockPos attenuator = util.grid().at(2, 1, 2);
+        BlockPos laser = util.grid().at(2, 1, 4);
+
+        scene.world().showSection(util.select().fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(attenuator), Direction.DOWN);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(laser), Direction.DOWN);
+
+
+        scene.idle(20);
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The Attenuator can reduce the power level of a passing laser")
+                .pointAt(Vec3.atCenterOf(attenuator));
+
+        scene.idle(20);
+        scene.world().modifyBlockEntity(laser, LaserBlockEntity.class, LaserBlockEntity::ponderEnableLaser);
+        scene.idle(60);
+
+        Vec3 blockSurface = util.vector().blockSurface(attenuator, Direction.WEST)
+                .add(0, 0, 0);
+        scene.overlay().showFilterSlotInput(blockSurface, Direction.WEST, 80);
+        scene.overlay().showControls(blockSurface, Pointing.DOWN, 60).rightClick();
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The attenuation percentage can be tuned on its input panel")
+                .pointAt(blockSurface);
+
+        scene.world().modifyBlockEntity(attenuator, AttenuatorBlockEntity.class, be ->be.apertureSize.setValue(50));
+        scene.idle(70);
+        scene.rotateCameraY(120);
     }
 }

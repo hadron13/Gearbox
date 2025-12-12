@@ -79,6 +79,7 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
 
     public void ponderEnableLaser(){
         laserBeam.enable();
+        laserBeam.tick(getLevel());
     }
 
     @Override

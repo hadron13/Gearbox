@@ -43,6 +43,9 @@ public class ModPonderScenes {
 
         HELPER.forComponents(ModBlocks.COMBINER)
                 .addStoryBoard("combiner", LaserScenes::combiner, LASER_STUFF);
+
+        HELPER.forComponents(ModBlocks.ATTENUATOR)
+                .addStoryBoard("attenuator", LaserScenes::attenuator, LASER_STUFF);
     }
 
 }
