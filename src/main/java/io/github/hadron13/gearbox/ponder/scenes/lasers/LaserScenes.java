@@ -10,6 +10,7 @@ import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.register.ModBlocks;
 import io.github.hadron13.gearbox.register.data.ModDamageTypes;
 import net.createmod.catnip.math.Pointing;
+import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.EntityElement;
 import net.createmod.ponder.api.element.WorldSectionElement;
@@ -33,6 +34,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import static io.github.hadron13.gearbox.register.data.ModDamageTypes.laser;
 
 public class LaserScenes {
     public static void laser(SceneBuilder scene, SceneBuildingUtil util) {
@@ -157,7 +160,7 @@ public class LaserScenes {
         CreateSceneBuilder scene = new CreateSceneBuilder(builder);
 
         scene.title("mirror", "Reflecting lasers with a mirror");
-        scene.configureBasePlate(0, 0, 4);
+        scene.configureBasePlate(0, 0, 5);
 
 
         BlockPos mirror = util.grid().at(2, 1, 3);
@@ -171,13 +174,13 @@ public class LaserScenes {
 
         scene.idle(20);
 
-        scene.overlay().showText(40)
+        scene.overlay().showText(60)
                 .placeNearTarget()
                 .attachKeyFrame()
                 .text("Mirrors are blocks that reflect lasers")
                 .pointAt(Vec3.atCenterOf(mirror));
 
-        scene.idle(60);
+        scene.idle(80);
 
         scene.overlay().showText(60)
                 .placeNearTarget()
@@ -211,9 +214,58 @@ public class LaserScenes {
         scene.overlay().showControls(valvePos.getCenter(), Pointing.DOWN, 60).rightClick();
         scene.world().setKineticSpeed(util.select().fromTo(mirror, valvePos), 1);
         scene.idle(60);
+    }
 
 
+    public static void prism(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("prism", "Decomposing lasers with a prism");
+        scene.configureBasePlate(0, 0, 5);
 
+        BlockPos prismPos = util.grid().at(2, 1, 2);
+        BlockPos laserPos = util.grid().at(2, 1, 4);
+
+        scene.world().showSection(util.select().fromTo(0, 0, 0, 4, 0, 4), Direction.UP);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(prismPos), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(laserPos), Direction.DOWN);
+
+        scene.idle(20);
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("A Prism can decompose a laser into it's RGB components")
+                .pointAt(Vec3.atCenterOf(prismPos));
+
+        scene.idle(40);
+
+        scene.world().modifyBlockEntity(laserPos, LaserBlockEntity.class, be -> be.laserBeam.enable());
+
+        scene.idle(30);
+        scene.rotateCameraY(120);
+
+        scene.idle(10);
+
+        scene.addKeyframe();
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .text("Red")
+                .colored(PonderPalette.RED)
+                .pointAt(Vec3.atCenterOf(prismPos.north(3)));
+
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .text("Green")
+                .colored(PonderPalette.GREEN)
+                .pointAt(Vec3.atCenterOf(prismPos.north(4)).add(0, 0.4, 0));
+
+        scene.overlay().showText(60)
+                .placeNearTarget()
+                .text("Blue")
+                .colored(PonderPalette.BLUE)
+                .pointAt(Vec3.atCenterOf(prismPos.north(5)).add(0, 1, 0));
+
+        scene.idle(60);
 
     }
 }

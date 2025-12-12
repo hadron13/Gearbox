@@ -37,6 +37,10 @@ public class ModPonderScenes {
 
         HELPER.forComponents(ModBlocks.MIRROR)
                 .addStoryBoard("mirror", LaserScenes::mirror, LASER_STUFF);
+
+        HELPER.forComponents(ModBlocks.PRISM)
+                .addStoryBoard("prism", LaserScenes::prism, LASER_STUFF);
+
     }
 
 }
