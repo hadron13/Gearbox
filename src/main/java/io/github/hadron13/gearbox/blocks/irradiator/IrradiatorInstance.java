@@ -8,7 +8,7 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.OrientedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -19,7 +19,7 @@ public class IrradiatorInstance extends SingleAxisRotatingVisual<IrradiatorBlock
 
     public IrradiatorInstance(VisualizationContext context, IrradiatorBlockEntity blockEntity, float partialTicks) {
         super(context, blockEntity, partialTicks, Direction.SOUTH, Models.partial(AllPartialModels.SHAFT_HALF));
-        lens = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.IRRADIATOR_LENS)).createInstance();
+        lens = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(GearboxPartialModels.IRRADIATOR_LENS)).createInstance();
     }
 
     @Override

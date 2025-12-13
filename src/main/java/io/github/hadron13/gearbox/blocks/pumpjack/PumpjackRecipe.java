@@ -3,9 +3,8 @@ package io.github.hadron13.gearbox.blocks.pumpjack;
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -16,15 +15,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
-
 public class PumpjackRecipe extends ProcessingRecipe<RecipeWrapper> {
 
     public ResourceKey<Biome> biome;
     public float density;
 
     public PumpjackRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-        super(ModRecipeTypes.PUMPJACK, params);
+        super(GearboxRecipeTypes.PUMPJACK, params);
     }
 
     public static boolean match(PumpjackWellBlockEntity be, PumpjackRecipe recipe){

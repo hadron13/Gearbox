@@ -1,11 +1,10 @@
 package io.github.hadron13.gearbox.blocks.chemical_reactor;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModShapes;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -45,7 +44,7 @@ public class ReactorBlock extends HorizontalKineticBlock implements IBE<ReactorB
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return ModShapes.DIPPER.get(Direction.DOWN);
+        return GearboxShapes.DIPPER.get(Direction.DOWN);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class ReactorBlock extends HorizontalKineticBlock implements IBE<ReactorB
 
     @Override
     public BlockEntityType<? extends ReactorBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.REACTOR.get();
+        return GearboxBlockEntities.REACTOR.get();
     }
 
 

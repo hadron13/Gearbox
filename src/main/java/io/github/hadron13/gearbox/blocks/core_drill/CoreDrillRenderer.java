@@ -7,7 +7,7 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperBufferFactory;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -42,7 +42,7 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
 
     @Override
     protected SuperByteBuffer getRotatedModel(CoreDrillBlockEntity be, BlockState state) {
-        return CachedBuffers.partialFacing(ModPartialModels.SHAFT_DUAL_TINY, state, state.getValue(HORIZONTAL_FACING).getClockWise());
+        return CachedBuffers.partialFacing(GearboxPartialModels.SHAFT_DUAL_TINY, state, state.getValue(HORIZONTAL_FACING).getClockWise());
     }
 
     public static SuperByteBuffer getOreCoreModel(Block ore){
@@ -50,7 +50,7 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
             return oreCoreModels.get(ore);
         }
         BlockState baseBlockState = ore.defaultBlockState();
-        BakedModel model = BakedModelHelper.generateModel(ModPartialModels.ORE_CORE.get(), (s) -> getSpriteOnSide(baseBlockState, Direction.NORTH));
+        BakedModel model = BakedModelHelper.generateModel(GearboxPartialModels.ORE_CORE.get(), (s) -> getSpriteOnSide(baseBlockState, Direction.NORTH));
 
         SuperByteBuffer byteBuffer = SuperBufferFactory.getInstance().createForBlock(model, baseBlockState);
 
@@ -92,7 +92,7 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
         Direction facing = be.getBlockState().getValue(HORIZONTAL_FACING);
 
         SuperByteBuffer pole = CachedBuffers.partialFacing(AllPartialModels.MECHANICAL_MIXER_POLE, be.getBlockState(), facing);
-        SuperByteBuffer tube = CachedBuffers.partial(ModPartialModels.CORE_DRILL_TUBE, be.getBlockState());
+        SuperByteBuffer tube = CachedBuffers.partial(GearboxPartialModels.CORE_DRILL_TUBE, be.getBlockState());
         SuperByteBuffer core = getOreCoreModel((be.minedBlock == null)?Blocks.AIR: be.minedBlock);
 
 

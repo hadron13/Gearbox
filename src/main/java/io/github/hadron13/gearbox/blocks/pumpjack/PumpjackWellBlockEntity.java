@@ -6,8 +6,8 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.register.ModFluids;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxFluids;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -90,7 +90,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
 
     public void updateRecipe(){
         if(currentRecipe == null || !PumpjackRecipe.match(this, currentRecipe)){
-            Optional<PumpjackRecipe> match = ModRecipeTypes.PUMPJACK.find(this, getLevel());
+            Optional<PumpjackRecipe> match = GearboxRecipeTypes.PUMPJACK.find(this, getLevel());
             if(match.isEmpty())
                 return;
             currentRecipe = match.get();
@@ -140,7 +140,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         isPipingValid = validatePiping();
         if(isVirtual()){
             tank.allowInsertion();
-            tank.getPrimaryHandler().fill(new FluidStack(ModFluids.PETROLEUM.get(), 2000), EXECUTE);
+            tank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.PETROLEUM.get(), 2000), EXECUTE);
         }
     }
 

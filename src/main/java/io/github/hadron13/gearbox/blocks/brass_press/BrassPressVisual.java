@@ -1,21 +1,17 @@
 package io.github.hadron13.gearbox.blocks.brass_press;
 
 import com.mojang.math.Axis;
-import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.ShaftVisual;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlock;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
-import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.OrientedInstance;
-import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import io.github.hadron13.gearbox.blocks.sapper.SapperBlockEntity;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.math.AngleHelper;
 import org.joml.Quaternionf;
@@ -33,9 +29,9 @@ public class BrassPressVisual extends ShaftVisual<BrassPressBlockEntity> impleme
         super(context, blockEntity, partialTick);
         this.brassPress = blockEntity;
 
-        pressHead = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.BRASS_PRESS_HEAD)).createInstance();
+        pressHead = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(GearboxPartialModels.BRASS_PRESS_HEAD)).createInstance();
 
-        pressPole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.BRASS_PRESS_POLE)).createInstance();
+        pressPole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(GearboxPartialModels.BRASS_PRESS_POLE)).createInstance();
 
         Quaternionf q = Axis.YP.rotationDegrees(AngleHelper.horizontalAngle(blockState.getValue(MechanicalPressBlock.HORIZONTAL_FACING)));
 

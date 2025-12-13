@@ -1,22 +1,18 @@
 package io.github.hadron13.gearbox.blocks.dipper;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
-import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModShapes;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 
@@ -32,7 +28,7 @@ public class DipperBlock extends HorizontalKineticBlock implements IBE<DipperBlo
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return ModShapes.DIPPER.get(Direction.DOWN);
+        return GearboxShapes.DIPPER.get(Direction.DOWN);
     }
 
     @Override
@@ -63,7 +59,7 @@ public class DipperBlock extends HorizontalKineticBlock implements IBE<DipperBlo
 
     @Override
     public BlockEntityType<? extends DipperBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.DIPPER.get();
+        return GearboxBlockEntities.DIPPER.get();
     }
 
     @Override

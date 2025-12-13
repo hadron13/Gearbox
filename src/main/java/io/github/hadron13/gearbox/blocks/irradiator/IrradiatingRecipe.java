@@ -4,8 +4,7 @@ package io.github.hadron13.gearbox.blocks.irradiator;
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
-import net.createmod.catnip.theme.Color;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
@@ -16,7 +15,7 @@ public class IrradiatingRecipe extends BasinRecipe implements LaserRecipe{
     public float requiredPower;
 
     public IrradiatingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-        super(ModRecipeTypes.IRRADIATING, params);
+        super(GearboxRecipeTypes.IRRADIATING, params);
     }
 
     public static boolean match(IrradiatorBlockEntity be, IrradiatingRecipe recipe){

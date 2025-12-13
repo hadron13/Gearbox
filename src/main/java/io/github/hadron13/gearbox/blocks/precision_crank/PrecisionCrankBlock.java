@@ -1,10 +1,8 @@
 package io.github.hadron13.gearbox.blocks.precision_crank;
 
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.crank.HandCrankBlock;
 import com.simibubi.create.content.kinetics.crank.HandCrankBlockEntity;
-import com.simibubi.create.content.kinetics.crank.ValveHandleBlock;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class PrecisionCrankBlock extends HandCrankBlock {
@@ -19,6 +17,6 @@ public class PrecisionCrankBlock extends HandCrankBlock {
 
     @Override
     public BlockEntityType<? extends HandCrankBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.PRECISION_CRANK.get();
+        return GearboxBlockEntities.PRECISION_CRANK.get();
     }
 }

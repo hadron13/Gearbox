@@ -1,19 +1,16 @@
 package io.github.hadron13.gearbox.ponder.scenes.lasers;
 
 import com.simibubi.create.AllItems;
-import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlockEntity;
 import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
-import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.data.ModDamageTypes;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
 import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.element.ElementLink;
@@ -23,25 +20,12 @@ import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.WalkAnimationState;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.entity.monster.warden.Warden;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LadderBlock;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-
-import static io.github.hadron13.gearbox.register.data.ModDamageTypes.laser;
 
 public class LaserScenes {
     public static void laser(SceneBuilder scene, SceneBuildingUtil util) {
@@ -148,8 +132,8 @@ public class LaserScenes {
                 .pointAt(Vec3.atCenterOf(laserPos.north()));
         scene.idle(5);
 
-        scene.world().setBlock(util.grid().at(2, 1, 2), ModBlocks.SPECTROMETER.getDefaultState().setValue(SpectrometerBlock.AXIS_ALONG_FIRST_COORDINATE, false).setValue(SpectrometerBlock.FACING, Direction.UP), false);
-        scene.world().setBlock(util.grid().at(2, 1, 0), ModBlocks.MIRROR.getDefaultState().setValue(MirrorBlock.AXIS, Direction.Axis.Y), false);
+        scene.world().setBlock(util.grid().at(2, 1, 2), GearboxBlocks.SPECTROMETER.getDefaultState().setValue(SpectrometerBlock.AXIS_ALONG_FIRST_COORDINATE, false).setValue(SpectrometerBlock.FACING, Direction.UP), false);
+        scene.world().setBlock(util.grid().at(2, 1, 0), GearboxBlocks.MIRROR.getDefaultState().setValue(MirrorBlock.AXIS, Direction.Axis.Y), false);
         scene.world().modifyBlockEntity(util.grid().at(2, 1, 0), MirrorBlockEntity.class, mirror -> {
             mirror.angle = 45f + 90f;
         });
@@ -215,7 +199,7 @@ public class LaserScenes {
                 .text("or a precision crank for fine tuning")
                 .pointAt(Vec3.atCenterOf(valvePos));
 
-        scene.world().replaceBlocks(util.select().position(valvePos), ModBlocks.PRECISION_CRANK.getDefaultState().setValue(PrecisionCrankBlock.FACING, Direction.UP), true);
+        scene.world().replaceBlocks(util.select().position(valvePos), GearboxBlocks.PRECISION_CRANK.getDefaultState().setValue(PrecisionCrankBlock.FACING, Direction.UP), true);
         scene.idle(10);
         scene.overlay().showControls(valvePos.getCenter(), Pointing.DOWN, 60).rightClick();
         scene.world().setKineticSpeed(util.select().fromTo(mirror, valvePos), 1);

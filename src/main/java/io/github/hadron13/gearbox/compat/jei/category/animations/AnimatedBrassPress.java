@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
@@ -28,16 +28,16 @@ public class AnimatedBrassPress extends AnimatedKinetics {
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModBlocks.BRASS_PRESS.getDefaultState())
+        blockElement(GearboxBlocks.BRASS_PRESS.getDefaultState())
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModPartialModels.BRASS_PRESS_POLE)
+        blockElement(GearboxPartialModels.BRASS_PRESS_POLE)
                 .atLocal(0, -getAnimatedHeadOffset()  * (1f + 3/16f), 0)
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModPartialModels.BRASS_PRESS_HEAD)
+        blockElement(GearboxPartialModels.BRASS_PRESS_HEAD)
                 .rotateBlock(0, getAnimatedHeadRotation(), 0)
                 .atLocal(0, -getAnimatedHeadOffset()  * (1f + 3/16f), 0)
                 .scale(scale)

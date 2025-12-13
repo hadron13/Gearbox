@@ -7,7 +7,7 @@ import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -62,7 +62,7 @@ public class SapperRenderer extends KineticBlockEntityRenderer<SapperBlockEntity
         int x_multiplier = (facing==WEST)?  1 : (facing==EAST)?  -1 : 0;
         int z_multiplier = (facing==NORTH)? 1 : (facing==SOUTH)? -1 : 0;
 
-        SuperByteBuffer poleRender = CachedBuffers.partialDirectional(ModPartialModels.SAPPER_POLE, blockState, facing, () -> {
+        SuperByteBuffer poleRender = CachedBuffers.partialDirectional(GearboxPartialModels.SAPPER_POLE, blockState, facing, () -> {
             PoseStack poseStack = new PoseStack();
             TransformStack.of(poseStack)
                     .center()
@@ -75,7 +75,7 @@ public class SapperRenderer extends KineticBlockEntityRenderer<SapperBlockEntity
                 .renderInto(ms, vb);
 
         VertexConsumer vbCutout = buffer.getBuffer(RenderType.cutoutMipped());
-        SuperByteBuffer headRender = CachedBuffers.partialDirectional(ModPartialModels.SAPPER_HEAD, blockState, facing, () -> {
+        SuperByteBuffer headRender = CachedBuffers.partialDirectional(GearboxPartialModels.SAPPER_HEAD, blockState, facing, () -> {
             PoseStack poseStack = new PoseStack();
             TransformStack.of(poseStack)
                     .center()

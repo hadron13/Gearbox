@@ -2,14 +2,14 @@ package io.github.hadron13.gearbox.ponder;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.register.ModBlocks;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.simibubi.create.infrastructure.ponder.AllCreatePonderTags.FLUIDS;
 import static com.simibubi.create.infrastructure.ponder.AllCreatePonderTags.KINETIC_APPLIANCES;
 
-public class ModPonderTags {
+public class GearboxPonderTags {
 
     public static final ResourceLocation
             LASER_STUFF = Gearbox.asResource("laser_stuff")
@@ -20,35 +20,35 @@ public class ModPonderTags {
 
         helper.registerTag(LASER_STUFF)
                 .addToIndex()
-                .item(ModBlocks.LASER.get(), true, false)
+                .item(GearboxBlocks.LASER.get(), true, false)
                 .title("Lasers")
                 .description("Machines that emmit or interact with lasers")
                 .register();
 
         HELPER.addToTag(FLUIDS)
-                .add(ModBlocks.SAPPER)
-                .add(ModBlocks.COMPRESSOR)
-                .add(ModBlocks.CENTRIFUGE)
-                .add(ModBlocks.ELECTROLYZER)
-                .add(ModBlocks.PUMPJACK_WELL)
-                .add(ModBlocks.DIPPER);
+                .add(GearboxBlocks.SAPPER)
+                .add(GearboxBlocks.COMPRESSOR)
+                .add(GearboxBlocks.CENTRIFUGE)
+                .add(GearboxBlocks.ELECTROLYZER)
+                .add(GearboxBlocks.PUMPJACK_WELL)
+                .add(GearboxBlocks.DIPPER);
 
         HELPER.addToTag(KINETIC_APPLIANCES)
-                .add(ModBlocks.SAPPER)
-                .add(ModBlocks.COMPRESSOR)
-                .add(ModBlocks.CENTRIFUGE)
-                .add(ModBlocks.KILN)
-                .add(ModBlocks.PUMPJACK_CRANK);
+                .add(GearboxBlocks.SAPPER)
+                .add(GearboxBlocks.COMPRESSOR)
+                .add(GearboxBlocks.CENTRIFUGE)
+                .add(GearboxBlocks.KILN)
+                .add(GearboxBlocks.PUMPJACK_CRANK);
 
         HELPER.addToTag(LASER_STUFF)
-                .add(ModBlocks.LASER)
-                .add(ModBlocks.AMPLIFIER)
-                .add(ModBlocks.ATTENUATOR)
-                .add(ModBlocks.MIRROR)
-                .add(ModBlocks.PRECISION_CRANK)
-                .add(ModBlocks.COMBINER)
-                .add(ModBlocks.IRRADIATOR)
-                .add(ModBlocks.LASER_DRILL)
-                .add(ModBlocks.SPECTROMETER);
+                .add(GearboxBlocks.LASER)
+                .add(GearboxBlocks.AMPLIFIER)
+                .add(GearboxBlocks.ATTENUATOR)
+                .add(GearboxBlocks.MIRROR)
+                .add(GearboxBlocks.PRECISION_CRANK)
+                .add(GearboxBlocks.COMBINER)
+                .add(GearboxBlocks.IRRADIATOR)
+                .add(GearboxBlocks.LASER_DRILL)
+                .add(GearboxBlocks.SPECTROMETER);
     }
 }

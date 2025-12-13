@@ -2,10 +2,8 @@ package io.github.hadron13.gearbox.blocks.laser;
 
 import com.google.common.base.Optional;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.kinetics.belt.BeltBlock;
-import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.register.data.ModDamageTypes;
+import io.github.hadron13.gearbox.register.data.GearboxDamageTypes;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,7 +22,6 @@ import net.minecraftforge.common.Tags;
 
 import java.util.List;
 
-import static io.github.hadron13.gearbox.blocks.combiner.CombinerBlock.HORIZONTAL_FACING;
 import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 
 public class Laser {
@@ -93,7 +90,7 @@ public class Laser {
         for (Entity entity : entities) {
             AABB entityAABB = entity.getBoundingBox().inflate(entity.getPickRadius());
             if (entityAABB.clip(position, position.add(direction.scale(length))).isPresent()) {
-                entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ModDamageTypes.laser)), power * 4);
+                entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(GearboxDamageTypes.laser)), power * 4);
                 entity.setSecondsOnFire(3);
             }
         }

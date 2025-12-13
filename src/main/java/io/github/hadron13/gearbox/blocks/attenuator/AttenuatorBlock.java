@@ -1,8 +1,8 @@
 package io.github.hadron13.gearbox.blocks.attenuator;
 
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModShapes;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -40,7 +40,7 @@ public class AttenuatorBlock extends Block implements IBE<AttenuatorBlockEntity>
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn,
                                BlockPos pos, CollisionContext context) {
-        return ModShapes.ATTENUATOR.get(state.getValue(HORIZONTAL_FACING));
+        return GearboxShapes.ATTENUATOR.get(state.getValue(HORIZONTAL_FACING));
     }
 
         @Override
@@ -50,6 +50,6 @@ public class AttenuatorBlock extends Block implements IBE<AttenuatorBlockEntity>
 
     @Override
     public BlockEntityType<? extends AttenuatorBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.ATTENUATOR.get();
+        return GearboxBlockEntities.ATTENUATOR.get();
     }
 }

@@ -2,7 +2,6 @@ package io.github.hadron13.gearbox.blocks.compressor;
 
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
@@ -12,10 +11,9 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipulationBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.sound.SoundScapes;
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.data.IntAttached;
 import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.ChatFormatting;
@@ -159,7 +157,7 @@ public class CompressorBlockEntity extends KineticBlockEntity {
             return;
 
         if (!CompressingRecipe.match(this, recipe)) {
-            Optional<CompressingRecipe> newRecipe = ModRecipeTypes.COMPRESSING.find(this, level);
+            Optional<CompressingRecipe> newRecipe = GearboxRecipeTypes.COMPRESSING.find(this, level);
             if (newRecipe.isEmpty()) {
                 timer = 100;
                 sendData();
@@ -219,7 +217,7 @@ public class CompressorBlockEntity extends KineticBlockEntity {
     private void process() {
 
         if (!CompressingRecipe.match(this, recipe)) {
-            Optional<CompressingRecipe> newRecipe = ModRecipeTypes.COMPRESSING.find(this, level);
+            Optional<CompressingRecipe> newRecipe = GearboxRecipeTypes.COMPRESSING.find(this, level);
             if (newRecipe.isEmpty())
                 return;
             recipe = newRecipe.get();

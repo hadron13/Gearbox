@@ -9,14 +9,10 @@ import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
-import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
-import net.createmod.catnip.theme.Color;
-import net.minecraft.ChatFormatting;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -34,7 +30,6 @@ import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessing
 import static com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehaviour.ProcessingResult.PASS;
 import static com.simibubi.create.content.kinetics.press.PressingBehaviour.Mode.BASIN;
 import static io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock.HORIZONTAL_FACING;
-import static io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity.truncatePrecision;
 
 public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements ILaserReceiver {
 
@@ -98,7 +93,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(getSpeed() == 0)
             return PASS;
 
-        Optional<TransmutingRecipe> recipe = ModRecipeTypes.TRANSMUTING.find(this, level, transported.stack);
+        Optional<TransmutingRecipe> recipe = GearboxRecipeTypes.TRANSMUTING.find(this, level, transported.stack);
         if(recipe.isEmpty())
             return PASS;
         currentRecipe = recipe.get();
@@ -124,7 +119,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(recipeTimer > 0)
             return HOLD;
 
-        Optional<TransmutingRecipe> recipe = ModRecipeTypes.TRANSMUTING.find(this, level, transported.stack);
+        Optional<TransmutingRecipe> recipe = GearboxRecipeTypes.TRANSMUTING.find(this, level, transported.stack);
         if(recipe.isEmpty())
             return PASS;
 
@@ -240,7 +235,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
     @Override
     protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
-        return recipe.getType() == ModRecipeTypes.IRRADIATING.getType();
+        return recipe.getType() == GearboxRecipeTypes.IRRADIATING.getType();
     }
 
     @Override

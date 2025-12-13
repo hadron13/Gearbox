@@ -2,7 +2,6 @@ package io.github.hadron13.gearbox.blocks.spectrometer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.content.kinetics.gauge.GaugeVisual;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.instance.Instancer;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
@@ -14,7 +13,7 @@ import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import dev.engine_room.flywheel.lib.visual.AbstractBlockEntityVisual;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.data.Couple;
 import net.createmod.catnip.data.Iterate;
@@ -37,7 +36,7 @@ public class SpectrometerVisual extends AbstractBlockEntityVisual<SpectrometerBl
         SpectrometerBlock gaugeBlock = (SpectrometerBlock) blockState.getBlock();
 
         Instancer<TransformedInstance> dialModel = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(AllPartialModels.GAUGE_DIAL));
-        Instancer<TransformedInstance> headModel = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(ModPartialModels.SPECTROGAUGE));
+        Instancer<TransformedInstance> headModel = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(GearboxPartialModels.SPECTROGAUGE));
 
         ms = new PoseStack();
         TransformStack msr = TransformStack.of(ms);

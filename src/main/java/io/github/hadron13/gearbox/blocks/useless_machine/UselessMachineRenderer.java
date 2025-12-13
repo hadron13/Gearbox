@@ -2,7 +2,7 @@ package io.github.hadron13.gearbox.blocks.useless_machine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,6 +22,6 @@ public class UselessMachineRenderer extends KineticBlockEntityRenderer<UselessMa
 
     @Override
     protected SuperByteBuffer getRotatedModel(UselessMachineBlockEntity  be, BlockState state) {
-        return CachedBuffers.partial(ModPartialModels.USELESS_COG, state);
+        return CachedBuffers.partial(GearboxPartialModels.USELESS_COG, state);
     }
 }

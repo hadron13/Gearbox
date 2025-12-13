@@ -2,17 +2,12 @@ package io.github.hadron13.gearbox.blocks.laser;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModPartialModels;
-import io.github.hadron13.gearbox.render.ModRenderTypes;
-import net.createmod.catnip.math.VecHelper;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -107,7 +102,7 @@ public class LaserBeamRenderer<T extends BlockEntity & ILaserEmitter> extends Sa
 
 
         VertexConsumer transluscentVertexConsumer = bufferSource.getBuffer(RenderType.translucent());
-        SuperByteBuffer outerBeam = CachedBuffers.partial(ModPartialModels.OUTER_LASER_BEAM, ModBlocks.LASER.getDefaultState());
+        SuperByteBuffer outerBeam = CachedBuffers.partial(GearboxPartialModels.OUTER_LASER_BEAM, GearboxBlocks.LASER.getDefaultState());
 
 
         outerBeam

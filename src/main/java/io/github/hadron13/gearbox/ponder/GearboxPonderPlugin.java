@@ -14,12 +14,12 @@ public class GearboxPonderPlugin implements PonderPlugin {
 
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
-        ModPonderScenes.register(helper);
+        GearboxPonderScenes.register(helper);
     }
 
     @Override
     public void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
-        ModPonderTags.register(helper);
+        GearboxPonderTags.register(helper);
     }
 
     @Override

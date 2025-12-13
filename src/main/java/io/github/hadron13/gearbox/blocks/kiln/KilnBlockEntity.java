@@ -14,7 +14,7 @@ import com.simibubi.create.foundation.sound.SoundScapes;
 import com.simibubi.create.foundation.sound.SoundScapes.AmbienceGroup;
 
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -126,7 +126,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
 
         RecipeWrapper inventoryIn = new RecipeWrapper(inputInv);
         if (lastRecipe == null || !lastRecipe.matches(inventoryIn, level)) {
-            Optional<PyroprocessingRecipe> recipe = ModRecipeTypes.PYROPROCESSING.find(inventoryIn, level);
+            Optional<PyroprocessingRecipe> recipe = GearboxRecipeTypes.PYROPROCESSING.find(inventoryIn, level);
             if (!recipe.isPresent()) {
                 timer = 100;
                 sendData();
@@ -159,7 +159,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
         RecipeWrapper inventoryIn = new RecipeWrapper(inputInv);
 
         if (lastRecipe == null || !lastRecipe.matches(inventoryIn, level)) {
-            Optional<PyroprocessingRecipe> recipe = ModRecipeTypes.PYROPROCESSING.find(inventoryIn, level);
+            Optional<PyroprocessingRecipe> recipe = GearboxRecipeTypes.PYROPROCESSING.find(inventoryIn, level);
             if (!recipe.isPresent())
                 return;
             lastRecipe = recipe.get();
@@ -218,7 +218,7 @@ public class KilnBlockEntity extends KineticBlockEntity implements IHaveHovering
 
         if (lastRecipe != null && lastRecipe.matches(inventoryIn, level))
             return true;
-        return ModRecipeTypes.PYROPROCESSING.find(inventoryIn, level)
+        return GearboxRecipeTypes.PYROPROCESSING.find(inventoryIn, level)
                 .isPresent();
     }
 

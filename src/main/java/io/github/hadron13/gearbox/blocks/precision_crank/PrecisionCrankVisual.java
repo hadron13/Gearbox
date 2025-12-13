@@ -1,6 +1,5 @@
 package io.github.hadron13.gearbox.blocks.precision_crank;
 
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual;
 import com.simibubi.create.content.kinetics.crank.HandCrankBlockEntity;
 import dev.engine_room.flywheel.api.instance.Instance;
@@ -9,7 +8,7 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Quaternionf;
@@ -23,7 +22,7 @@ public class PrecisionCrankVisual extends KineticBlockEntityVisual<HandCrankBloc
 		super(modelManager, blockEntity, partialTick);
 
 		crank = instancerProvider()
-			.instancer(InstanceTypes.TRANSFORMED, Models.partial(ModPartialModels.PRECISION_CRANK))
+			.instancer(InstanceTypes.TRANSFORMED, Models.partial(GearboxPartialModels.PRECISION_CRANK))
 			.createInstance();
 
 		rotateCrank(partialTick);

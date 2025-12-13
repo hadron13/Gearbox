@@ -1,12 +1,11 @@
 package io.github.hadron13.gearbox.blocks.sapper;
 
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModShapes;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -41,7 +40,7 @@ public class SapperBlock extends HorizontalKineticBlock
   @Override
   public VoxelShape getShape(BlockState state, BlockGetter worldIn,
                              BlockPos pos, CollisionContext context) {
-    return ModShapes.SAPPER.get(state.getValue(HORIZONTAL_FACING));
+    return GearboxShapes.SAPPER.get(state.getValue(HORIZONTAL_FACING));
   }
 
   @Override
@@ -92,7 +91,7 @@ public class SapperBlock extends HorizontalKineticBlock
   }
   @Override
   public BlockEntityType<? extends SapperBlockEntity> getBlockEntityType() {
-    return ModBlockEntities.SAPPER.get();
+    return GearboxBlockEntities.SAPPER.get();
   }
 
   @Override

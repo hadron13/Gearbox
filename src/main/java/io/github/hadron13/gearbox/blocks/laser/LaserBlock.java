@@ -2,13 +2,12 @@ package io.github.hadron13.gearbox.blocks.laser;
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModShapes;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -36,7 +35,7 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity>, IWrencha
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn,
                                BlockPos pos, CollisionContext context) {
-        return ModShapes.SMALL_LASER.get(state.getValue(HORIZONTAL_FACING));
+        return GearboxShapes.SMALL_LASER.get(state.getValue(HORIZONTAL_FACING));
     }
 
     @Override
@@ -55,7 +54,7 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity>, IWrencha
 
     @Override
     public BlockEntityType<? extends LaserBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.LASER.get();
+        return GearboxBlockEntities.LASER.get();
     }
 
     @Override

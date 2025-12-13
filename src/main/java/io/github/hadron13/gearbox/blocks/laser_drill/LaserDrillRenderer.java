@@ -3,8 +3,8 @@ package io.github.hadron13.gearbox.blocks.laser_drill;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import io.github.hadron13.gearbox.register.ModPartialModels;
-import io.github.hadron13.gearbox.render.ModRenderTypes;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
+import io.github.hadron13.gearbox.render.GearboxRenderTypes;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -34,7 +34,7 @@ public class LaserDrillRenderer extends SafeBlockEntityRenderer<LaserDrillBlockE
 
         VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
 
-        SuperByteBuffer head = CachedBuffers.partial(ModPartialModels.LASER_DRILL_HEAD, be.getBlockState());
+        SuperByteBuffer head = CachedBuffers.partial(GearboxPartialModels.LASER_DRILL_HEAD, be.getBlockState());
 
 
         head.rotateCentered(angle * Mth.DEG_TO_RAD, Direction.UP)
@@ -44,10 +44,10 @@ public class LaserDrillRenderer extends SafeBlockEntityRenderer<LaserDrillBlockE
             return;
         }
 
-        vb = bufferSource.getBuffer(ModRenderTypes.laserBeam());
+        vb = bufferSource.getBuffer(GearboxRenderTypes.laserBeam());
 
         float thickness = 1.0f;
-        SuperByteBuffer thick_beam = CachedBuffers.partial(ModPartialModels.THICK_BEAM, be.getBlockState());
+        SuperByteBuffer thick_beam = CachedBuffers.partial(GearboxPartialModels.THICK_BEAM, be.getBlockState());
         thick_beam
                 .translate(0.5f - thickness/2.0f, 1.0, 0.5f - thickness/2.0f)
                 .scale(thickness, -be.laserLength, thickness)

@@ -6,7 +6,7 @@ import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.model.Models;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
@@ -25,7 +25,7 @@ public class CompressorVisual extends KineticBlockEntityVisual<CompressorBlockEn
         direction = blockState.getValue(HORIZONTAL_FACING);
         opposite = direction.getOpposite();
 
-        roll = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(ModPartialModels.COMPRESSOR_ROLL))
+        roll = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(GearboxPartialModels.COMPRESSOR_ROLL))
                 .createInstance();
 
         roll.setPosition(getVisualPosition())

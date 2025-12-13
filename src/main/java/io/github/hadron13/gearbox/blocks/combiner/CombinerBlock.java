@@ -1,10 +1,9 @@
 package io.github.hadron13.gearbox.blocks.combiner;
 
-import com.google.common.collect.ImmutableMap;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModShapes;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -17,8 +16,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.function.Function;
 
 public class CombinerBlock extends Block implements IWrenchable, IBE<CombinerBlockEntity> {
     public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -37,7 +34,7 @@ public class CombinerBlock extends Block implements IWrenchable, IBE<CombinerBlo
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn,
                                BlockPos pos, CollisionContext context) {
-        return ModShapes.COMBINER.get(state.getValue(HORIZONTAL_FACING));
+        return GearboxShapes.COMBINER.get(state.getValue(HORIZONTAL_FACING));
     }
 
     @Override
@@ -52,6 +49,6 @@ public class CombinerBlock extends Block implements IWrenchable, IBE<CombinerBlo
 
     @Override
     public BlockEntityType<? extends CombinerBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.COMBINER.get();
+        return GearboxBlockEntities.COMBINER.get();
     }
 }

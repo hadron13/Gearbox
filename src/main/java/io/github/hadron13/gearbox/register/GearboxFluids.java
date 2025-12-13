@@ -3,7 +3,6 @@ package io.github.hadron13.gearbox.register;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.FluidEntry;
 import io.github.hadron13.gearbox.Gearbox;
@@ -22,8 +21,8 @@ import org.joml.Vector3f;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ModFluids {
-    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(ModCreativeTabs.MAIN_TAB);
+public class GearboxFluids {
+    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
 
 //    public static final FluidEntry<ForgeFlowingFluid.Flowing> PETROLEUM = REGISTRATE
 //            .fluid("petroleum",
@@ -45,8 +44,8 @@ public class ModFluids {
                             SolidRenderedPlaceableFluidType.create(0x444444,
                                     () -> 1f / 32f ))
                     .lang("Petroleum")
-                    .properties(b -> b.viscosity(2000)
-                            .density(1400))
+                    .properties(b -> b.viscosity(20000)
+                            .density(2000).canSwim(false).canPushEntity(false))
                     .fluidProperties(p -> p.levelDecreasePerBlock(2)
                             .tickRate(25)
                             .slopeFindDistance(3)

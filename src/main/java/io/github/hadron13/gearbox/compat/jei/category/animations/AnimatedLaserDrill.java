@@ -3,8 +3,8 @@ package io.github.hadron13.gearbox.compat.jei.category.animations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.block.Blocks;
@@ -24,18 +24,18 @@ public class AnimatedLaserDrill extends AnimatedKinetics {
         int scale = 24;
 
 
-        blockElement(ModBlocks.LASER_DRILL.getDefaultState())
+        blockElement(GearboxBlocks.LASER_DRILL.getDefaultState())
                 .scale(scale)
                 .render(graphics);
 
 
-        blockElement(ModPartialModels.LASER_DRILL_HEAD)
+        blockElement(GearboxPartialModels.LASER_DRILL_HEAD)
                 .rotateBlock(0, AnimationTickHolder.getRenderTime()*10f, 0)
                 .atLocal(0, -offset * 4/16f, 0)
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModPartialModels.THICK_BEAM)
+        blockElement(GearboxPartialModels.THICK_BEAM)
                 .rotateBlock(0, AnimationTickHolder.getRenderTime()*10f, 0)
                 .atLocal(0,  1 + 3/16f, 0)
                 .color(color)

@@ -2,8 +2,8 @@ package io.github.hadron13.gearbox.blocks.laser_drill;
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModShapes;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -30,7 +30,7 @@ public class LaserDrillBlock extends Block implements IBE<LaserDrillBlockEntity>
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn,
                                BlockPos pos, CollisionContext context) {
-        return ModShapes.LASER_DRILL.get(Direction.Axis.Y);
+        return GearboxShapes.LASER_DRILL.get(Direction.Axis.Y);
     }
     public LaserDrillBlock(Properties pProperties) {
         super(pProperties);
@@ -48,6 +48,6 @@ public class LaserDrillBlock extends Block implements IBE<LaserDrillBlockEntity>
 
     @Override
     public BlockEntityType<? extends LaserDrillBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.LASER_DRILL.get();
+        return GearboxBlockEntities.LASER_DRILL.get();
     }
 }

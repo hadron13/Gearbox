@@ -1,12 +1,10 @@
 package io.github.hadron13.gearbox.blocks.brass_press;
 
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModBlocks;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -68,7 +66,7 @@ public class BrassPressBlock extends HorizontalKineticBlock implements IBE<Brass
 
 	@Override
 	public BlockEntityType<? extends BrassPressBlockEntity> getBlockEntityType() {
-		return ModBlockEntities.BRASS_PRESS.get();
+		return GearboxBlockEntities.BRASS_PRESS.get();
 	}
 
 	@Override

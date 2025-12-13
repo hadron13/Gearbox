@@ -8,7 +8,7 @@ import com.simibubi.create.foundation.item.SmartInventory;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
@@ -189,7 +188,7 @@ public class LaserDrillBlockEntity extends SmartBlockEntity implements ILaserRec
 
         if(bedrockContact){
             if(currentRecipe == null){
-                Optional<LaserDrillingRecipe> newRecipe = ModRecipeTypes.LASER_DRILLING.find(this, level);
+                Optional<LaserDrillingRecipe> newRecipe = GearboxRecipeTypes.LASER_DRILLING.find(this, level);
                 if(newRecipe.isPresent()) {
                     currentRecipe = newRecipe.get();
                     recipeTimer = currentRecipe.getProcessingDuration();

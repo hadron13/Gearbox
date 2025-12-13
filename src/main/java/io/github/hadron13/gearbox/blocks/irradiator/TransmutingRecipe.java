@@ -9,8 +9,8 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyTransmuting;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
@@ -31,7 +31,7 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
     public float requiredPower;
 
     public TransmutingRecipe(ProcessingRecipeParams params){
-        super(ModRecipeTypes.TRANSMUTING, params);
+        super(GearboxRecipeTypes.TRANSMUTING, params);
     }
 
 
@@ -104,7 +104,7 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
 
     @Override
     public void addRequiredMachines(Set<ItemLike> set) {
-        set.add(ModBlocks.IRRADIATOR.get());
+        set.add(GearboxBlocks.IRRADIATOR.get());
     }
 
     @Override

@@ -11,7 +11,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
@@ -175,12 +175,12 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 
 	public Optional<MechanizingRecipe> getRecipe(ItemStack item) {
 		Optional<MechanizingRecipe> assemblyRecipe =
-			SequencedAssemblyRecipe.getRecipe(level, item, ModRecipeTypes.MECHANIZING.getType(), MechanizingRecipe.class);
+			SequencedAssemblyRecipe.getRecipe(level, item, GearboxRecipeTypes.MECHANIZING.getType(), MechanizingRecipe.class);
 		if (assemblyRecipe.isPresent())
 			return assemblyRecipe;
 
 		pressingInv.setItem(0, item);
-		return ModRecipeTypes.MECHANIZING.find(pressingInv, level);
+		return GearboxRecipeTypes.MECHANIZING.find(pressingInv, level);
 	}
 
 	public static <C extends Container> boolean canCompress(Recipe<C> recipe) {

@@ -2,7 +2,7 @@ package io.github.hadron13.gearbox.blocks.prism;
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -38,6 +38,6 @@ public class PrismBlock extends Block implements IWrenchable, IBE<PrismBlockEnti
 
     @Override
     public BlockEntityType<? extends PrismBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.PRISM.get();
+        return GearboxBlockEntities.PRISM.get();
     }
 }

@@ -5,7 +5,7 @@ import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -22,7 +22,7 @@ import static com.simibubi.create.content.processing.recipe.HeatCondition.NONE;
 
 public class CompressingRecipe extends ProcessingRecipe<RecipeWrapper> {
     public CompressingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-        super(ModRecipeTypes.COMPRESSING, params);
+        super(GearboxRecipeTypes.COMPRESSING, params);
     }
     public static boolean match(CompressorBlockEntity blockEntity, CompressingRecipe recipe) {
         if(recipe == null || blockEntity == null || blockEntity.getLevel() == null || blockEntity.getLevel().isClientSide)

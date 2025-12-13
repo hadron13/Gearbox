@@ -3,7 +3,7 @@ package io.github.hadron13.gearbox.blocks.irradiator;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -57,6 +57,6 @@ public class IrradiatorBlock extends KineticBlock implements IBE<IrradiatorBlock
 
     @Override
     public BlockEntityType<? extends IrradiatorBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.IRRADIATOR.get();
+        return GearboxBlockEntities.IRRADIATOR.get();
     }
 }

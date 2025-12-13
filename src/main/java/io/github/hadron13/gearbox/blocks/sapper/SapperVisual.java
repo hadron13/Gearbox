@@ -1,12 +1,8 @@
 package io.github.hadron13.gearbox.blocks.sapper;
 
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
-import com.simibubi.create.content.kinetics.mixer.MechanicalMixerRenderer;
-import com.simibubi.create.content.kinetics.mixer.MixerVisual;
-import com.simibubi.create.content.kinetics.simpleRelays.encased.EncasedCogVisual;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
@@ -15,8 +11,7 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.OrientedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import io.github.hadron13.gearbox.register.ModPartialModels;
-import net.createmod.catnip.animation.AnimationTickHolder;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
@@ -42,11 +37,11 @@ public class SapperVisual extends SingleAxisRotatingVisual<SapperBlockEntity> im
 
         direction = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
-        drillHead = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(ModPartialModels.SAPPER_HEAD)).createInstance();
+        drillHead = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(GearboxPartialModels.SAPPER_HEAD)).createInstance();
 
         drillHead.setRotationAxis(direction.getAxis());
 
-        drillPole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.SAPPER_POLE)).createInstance();
+        drillPole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(GearboxPartialModels.SAPPER_POLE)).createInstance();
 
         drillHead.rotateToFace(direction);
         drillPole.rotateToFace(direction);

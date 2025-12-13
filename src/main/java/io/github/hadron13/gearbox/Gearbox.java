@@ -53,13 +53,13 @@ public class Gearbox {
 
         REGISTRATE.registerEventListeners(modEventBus);
 
-        ModCreativeTabs.register(modEventBus);
-        ModBlocks.register();
-        ModItems.register();
-        ModBlockEntities.register();
-        ModFluids.register();
-        ModPartialModels.init();
-        ModRecipeTypes.register(modEventBus);
+        GearboxCreativeTabs.register(modEventBus);
+        GearboxBlocks.register();
+        GearboxItems.register();
+        GearboxBlockEntities.register();
+        GearboxFluids.register();
+        GearboxPartialModels.init();
+        GearboxRecipeTypes.register(modEventBus);
 
 
         GearboxConfig.register(modLoadingContext);

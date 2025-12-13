@@ -2,12 +2,10 @@ package io.github.hadron13.gearbox.blocks.compressor;
 
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModBlocks;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -36,7 +34,7 @@ public class CompressorBlock extends HorizontalKineticBlock implements IBE<Compr
     }
     @Override
     public BlockEntityType<? extends CompressorBlockEntity> getBlockEntityType(){
-        return ModBlockEntities.COMPRESSOR.get();
+        return GearboxBlockEntities.COMPRESSOR.get();
     }
 
 

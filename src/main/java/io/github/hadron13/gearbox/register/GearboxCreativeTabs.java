@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModCreativeTabs {
+public class GearboxCreativeTabs {
     private static final DeferredRegister<CreativeModeTab> TAB_REGISTER =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Gearbox.MODID);
 
@@ -34,7 +34,7 @@ public class ModCreativeTabs {
                     .title(Component.translatable("itemGroup.gearbox.main"))
                     .withTabsBefore(AllCreativeModeTabs.PALETTES_CREATIVE_TAB.getId())
                     .icon(AllBlocks.GEARBOX::asStack)
-                    .displayItems(new RegistrateDisplayItemsGenerator(ModCreativeTabs.MAIN_TAB))
+                    .displayItems(new RegistrateDisplayItemsGenerator(GearboxCreativeTabs.MAIN_TAB))
                     .build());
 
     public static void register(IEventBus modEventBus) {

@@ -1,25 +1,19 @@
 package io.github.hadron13.gearbox.compat.jei.category.animations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModPartialModels;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
-import io.github.hadron13.gearbox.render.ModRenderTypes;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
-import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-
-import java.awt.*;
 
 public class AnimatedIrradiator extends AnimatedKinetics {
     public boolean basin;
@@ -37,7 +31,7 @@ public class AnimatedIrradiator extends AnimatedKinetics {
         int scale = 24;
 
 
-        blockElement(ModBlocks.IRRADIATOR.getDefaultState())
+        blockElement(GearboxBlocks.IRRADIATOR.getDefaultState())
                 .scale(scale)
                 .render(graphics);
 
@@ -47,7 +41,7 @@ public class AnimatedIrradiator extends AnimatedKinetics {
                 .render(graphics);
 
         float offset = Mth.clamp(Mth.sin(AnimationTickHolder.getRenderTime() / 10f), 0, 1f);
-        blockElement(ModPartialModels.IRRADIATOR_LENS)
+        blockElement(GearboxPartialModels.IRRADIATOR_LENS)
                 .atLocal(0, -offset * 4/16f, 0)
                 .scale(scale)
                 .render(graphics);

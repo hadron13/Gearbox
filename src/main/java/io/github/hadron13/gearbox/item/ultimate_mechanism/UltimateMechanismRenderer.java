@@ -5,10 +5,9 @@ import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
@@ -28,7 +27,7 @@ public class UltimateMechanismRenderer extends CustomRenderedItemModelRenderer {
                 .translate(-0.5f, -0.5f, -0.5f)
                 .rotateCentered(new Quaternionf((float) Math.sin(worldTime), (float) Math.cos(worldTime), 0.0f, 1))
                 .translate(0.5f, 0.5f, 0.5f);
-        renderer.render(ModPartialModels.ULTIMATE_MECH_CORE.get(), light);
+        renderer.render(GearboxPartialModels.ULTIMATE_MECH_CORE.get(), light);
 
 
     }

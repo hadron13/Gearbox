@@ -4,11 +4,9 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import io.github.hadron13.gearbox.blocks.irradiator.LaserRecipe;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
-import net.createmod.catnip.theme.Color;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -18,7 +16,7 @@ public class LaserDrillingRecipe extends ProcessingRecipe<RecipeWrapper> impleme
     public float requiredPower;
 
     public LaserDrillingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params){
-        super(ModRecipeTypes.LASER_DRILLING, params);
+        super(GearboxRecipeTypes.LASER_DRILLING, params);
     }
 
 

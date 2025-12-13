@@ -3,8 +3,8 @@ package io.github.hadron13.gearbox.compat.jei.category.animations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.block.Block;
 
@@ -33,18 +33,18 @@ public class AnimatedSapper extends AnimatedKinetics {
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModBlocks.SAPPER.getDefaultState().setValue(HORIZONTAL_FACING, WEST))
+        blockElement(GearboxBlocks.SAPPER.getDefaultState().setValue(HORIZONTAL_FACING, WEST))
                 .atLocal(0, blockSize * 3, 0)
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModPartialModels.SAPPER_HEAD)
+        blockElement(GearboxPartialModels.SAPPER_HEAD)
                 .rotateBlock(0, getCurrentAngle() * -4,90 )
                 .atLocal(blockSize + pixelSize * 4, blockSize * 3, 0)
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModPartialModels.SAPPER_POLE)
+        blockElement(GearboxPartialModels.SAPPER_POLE)
                 .rotateBlock(0, 90,0 )
                 .atLocal(blockSize + pixelSize * 4, blockSize * 3, 0)
                 .scale(scale)

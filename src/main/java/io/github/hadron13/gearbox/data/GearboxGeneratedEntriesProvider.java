@@ -1,7 +1,7 @@
 package io.github.hadron13.gearbox.data;
 
 import io.github.hadron13.gearbox.Gearbox;
-import io.github.hadron13.gearbox.register.data.ModDamageTypes;
+import io.github.hadron13.gearbox.register.data.GearboxDamageTypes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class GearboxGeneratedEntriesProvider extends DatapackBuiltinEntriesProvider {
     private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-            .add(Registries.DAMAGE_TYPE, ModDamageTypes::bootstrap);
+            .add(Registries.DAMAGE_TYPE, GearboxDamageTypes::bootstrap);
 
     public GearboxGeneratedEntriesProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BUILDER, Set.of(Gearbox.MODID));

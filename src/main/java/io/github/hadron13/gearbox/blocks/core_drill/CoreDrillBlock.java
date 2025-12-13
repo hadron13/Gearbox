@@ -2,8 +2,8 @@ package io.github.hadron13.gearbox.blocks.core_drill;
 
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
-import io.github.hadron13.gearbox.register.ModItems;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -46,7 +46,7 @@ public class CoreDrillBlock extends KineticBlock implements IBE<CoreDrillBlockEn
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack itemInHand = player.getItemInHand(hand);
-        if(itemInHand.getItem() == ModItems.CORE_TUBE.get() ){
+        if(itemInHand.getItem() == GearboxItems.CORE_TUBE.get() ){
             withBlockEntityDo(level, pos, (be) ->{
                 if(be.drillState != CoreDrillBlockEntity.IDLE)
                     return;
@@ -80,6 +80,6 @@ public class CoreDrillBlock extends KineticBlock implements IBE<CoreDrillBlockEn
 
     @Override
     public BlockEntityType<? extends CoreDrillBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.CORE_DRILL.get();
+        return GearboxBlockEntities.CORE_DRILL.get();
     }
 }

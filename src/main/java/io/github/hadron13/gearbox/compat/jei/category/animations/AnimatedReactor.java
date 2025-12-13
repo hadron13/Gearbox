@@ -5,8 +5,8 @@ import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 
@@ -26,13 +26,13 @@ public class AnimatedReactor extends AnimatedKinetics {
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModBlocks.REACTOR.getDefaultState())
+        blockElement(GearboxBlocks.REACTOR.getDefaultState())
                 .rotateBlock(0, 90f, 0)
                 .atLocal(0, 0, 0)
                 .scale(scale)
                 .render(graphics);
 
-        blockElement(ModPartialModels.DIPPER_POLE)
+        blockElement(GearboxPartialModels.DIPPER_POLE)
                 .atLocal(0, 17/16f, 0)
                 .scale(scale)
                 .render(graphics);

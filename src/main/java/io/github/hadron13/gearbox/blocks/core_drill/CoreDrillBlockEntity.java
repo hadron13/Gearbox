@@ -1,18 +1,11 @@
 package io.github.hadron13.gearbox.blocks.core_drill;
 
-import com.simibubi.create.AllBlockEntityTypes;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.item.SmartInventory;
-import dev.latvian.mods.kubejs.server.tag.TagEventFilter;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.compat.adlods.AdlodDepositDetector;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModItems;
+import io.github.hadron13.gearbox.register.GearboxItems;
 import net.createmod.catnip.animation.LerpedFloat;
-import net.createmod.catnip.data.IntAttached;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -152,7 +145,7 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
     @Override
     public void destroy() {
         super.destroy();
-        Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), new ItemStack(ModItems.CORE_TUBE, tubes + (drillState==PUSHING?1:0)));
+        Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), new ItemStack(GearboxItems.CORE_TUBE, tubes + (drillState==PUSHING?1:0)));
         ItemHelper.dropContents(level, worldPosition, outputInv);
     }
 

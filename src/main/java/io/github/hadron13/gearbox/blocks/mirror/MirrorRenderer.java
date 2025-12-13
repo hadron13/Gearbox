@@ -2,15 +2,10 @@ package io.github.hadron13.gearbox.blocks.mirror;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.content.kinetics.base.ShaftRenderer;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
-import io.github.hadron13.gearbox.register.ModPartialModels;
-import io.github.hadron13.gearbox.render.ModRenderTypes;
-import net.createmod.catnip.animation.AnimationTickHolder;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -51,7 +46,7 @@ public class MirrorRenderer extends KineticBlockEntityRenderer<MirrorBlockEntity
         VertexConsumer solid = buffer.getBuffer(RenderType.solid());
         renderRotatingBuffer(be, getRotatedModel(be, state), ms, solid, light);
 
-        SuperByteBuffer mirror = CachedBuffers.partial(ModPartialModels.MIRROR, state);
+        SuperByteBuffer mirror = CachedBuffers.partial(GearboxPartialModels.MIRROR, state);
 
         ms.pushPose();
         mirror

@@ -3,7 +3,6 @@ package io.github.hadron13.gearbox.blocks.chemical_reactor;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
-import com.simibubi.create.content.kinetics.mixer.MixerVisual;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
@@ -11,10 +10,9 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.OrientedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class ReactorVisual extends SingleAxisRotatingVisual<ReactorBlockEntity> implements SimpleDynamicVisual {
 
@@ -28,7 +26,7 @@ public class ReactorVisual extends SingleAxisRotatingVisual<ReactorBlockEntity> 
 
         head.setRotationAxis(Direction.Axis.Y);
 
-        pole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(ModPartialModels.DIPPER_POLE)).createInstance();
+        pole = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(GearboxPartialModels.DIPPER_POLE)).createInstance();
 
 
         transformInstances(partialTicks);

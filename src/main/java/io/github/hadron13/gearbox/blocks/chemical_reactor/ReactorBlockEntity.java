@@ -8,7 +8,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -111,7 +111,7 @@ public class ReactorBlockEntity extends MechanicalMixerBlockEntity {
                 .orElse(true))
             return new ArrayList<>();
 
-        List<ReactingRecipe> list= level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.REACTING.getType());
+        List<ReactingRecipe> list= level.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.REACTING.getType());
 
         return list.stream()
                 .filter(this::matchBasinRecipe)

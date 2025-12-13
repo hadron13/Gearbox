@@ -3,8 +3,7 @@ package io.github.hadron13.gearbox.blocks.dipper;
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -17,7 +16,7 @@ public class DippingRecipe extends BasinRecipe  {
     Item []layers = new Item[16];
 
     public DippingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-        super(ModRecipeTypes.DIPPING, params);
+        super(GearboxRecipeTypes.DIPPING, params);
     }
 
     public static boolean match(DipperBlockEntity dipper, DippingRecipe recipe){

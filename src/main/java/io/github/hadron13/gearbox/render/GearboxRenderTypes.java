@@ -3,7 +3,6 @@ package io.github.hadron13.gearbox.render;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import io.github.hadron13.gearbox.Gearbox;
-import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -14,9 +13,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.io.IOException;
-import java.util.function.Function;
 
-public class ModRenderTypes {
+public class GearboxRenderTypes {
 
 
     // Accessor functon, ensures that you don't use the raw methods below unintentionally.

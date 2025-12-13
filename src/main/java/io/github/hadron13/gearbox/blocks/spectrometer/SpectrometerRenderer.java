@@ -7,7 +7,7 @@ import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -30,7 +30,7 @@ public class SpectrometerRenderer extends SafeBlockEntityRenderer<SpectrometerBl
         BlockState gaugeState = be.getBlockState();
         SpectrometerBlockEntity gaugeBE = be;
 
-        PartialModel partialModel = ModPartialModels.SPECTROGAUGE;
+        PartialModel partialModel = GearboxPartialModels.SPECTROGAUGE;
         SuperByteBuffer headBuffer =
                 CachedBuffers.partial(partialModel, gaugeState);
         SuperByteBuffer dialBuffer = CachedBuffers.partial(AllPartialModels.GAUGE_DIAL, gaugeState);

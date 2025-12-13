@@ -1,11 +1,10 @@
 package io.github.hadron13.gearbox.blocks.chemical_reactor;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 
@@ -14,7 +13,7 @@ public class ReactingRecipe extends BasinRecipe {
     public FluidIngredient atmosphere = FluidIngredient.EMPTY;
 
     public ReactingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-        super(ModRecipeTypes.REACTING, params);
+        super(GearboxRecipeTypes.REACTING, params);
     }
 
     public static boolean match(ReactorBlockEntity be, ReactingRecipe recipe){

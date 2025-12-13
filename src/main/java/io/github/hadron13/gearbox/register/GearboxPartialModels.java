@@ -3,7 +3,7 @@ package io.github.hadron13.gearbox.register;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import io.github.hadron13.gearbox.Gearbox;
 
-public class ModPartialModels {
+public class GearboxPartialModels {
     public static final PartialModel
             SAPPER_HEAD = block("sapper/head"),
             SAPPER_POLE = block("sapper/pole"),

@@ -1,6 +1,5 @@
 package io.github.hadron13.gearbox.register;
 
-import com.simibubi.create.content.equipment.TreeFertilizerItem;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -10,8 +9,8 @@ import io.github.hadron13.gearbox.item.ultimate_mechanism.UltimateMechanismItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
-public class ModItems {
-    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(ModCreativeTabs.MAIN_TAB);
+public class GearboxItems {
+    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
 
 
     public static void register() {}

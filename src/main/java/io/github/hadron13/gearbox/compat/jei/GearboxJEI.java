@@ -14,8 +14,8 @@ import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import io.github.hadron13.gearbox.compat.jei.category.*;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
-import io.github.hadron13.gearbox.register.ModBlocks;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import com.simibubi.create.compat.jei.*;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
@@ -60,98 +60,98 @@ public class GearboxJEI implements IModPlugin {
         this.modCategories.clear();
         CreateRecipeCategory<?>
                 pyroprocessing = builder(PyroprocessingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.PYROPROCESSING)
-                .catalyst(ModBlocks.KILN::get)
-                .itemIcon(ModBlocks.KILN.get())
+                .addTypedRecipes(GearboxRecipeTypes.PYROPROCESSING)
+                .catalyst(GearboxBlocks.KILN::get)
+                .itemIcon(GearboxBlocks.KILN.get())
                 .emptyBackground(177, 75)
                 .build("pyroprocessing", PyroprocessingCategory::new);
 
         CreateRecipeCategory<?>
                 sapping = builder(SappingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.SAPPING)
-                .catalyst(ModBlocks.SAPPER::get)
-                .itemIcon(ModBlocks.SAPPER.get())
+                .addTypedRecipes(GearboxRecipeTypes.SAPPING)
+                .catalyst(GearboxBlocks.SAPPER::get)
+                .itemIcon(GearboxBlocks.SAPPER.get())
                 .emptyBackground(177, 103)
                 .build("sapping", SappingCategory::new);
 
         CreateRecipeCategory<?>
                 compressing = builder(CompressingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.COMPRESSING)
-                .catalyst(ModBlocks.COMPRESSOR::get)
+                .addTypedRecipes(GearboxRecipeTypes.COMPRESSING)
+                .catalyst(GearboxBlocks.COMPRESSOR::get)
                 .catalyst(AllBlocks.BLAZE_BURNER::get)
-                .itemIcon(ModBlocks.COMPRESSOR.get())
+                .itemIcon(GearboxBlocks.COMPRESSOR.get())
                 .emptyBackground(177,75)
                 .build("compressing", CompressingCategory::new);
 
         CreateRecipeCategory<?>
                 mechanizing = builder(MechanizingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.MECHANIZING)
-                .catalyst(ModBlocks.BRASS_PRESS::get)
-                .itemIcon(ModBlocks.BRASS_PRESS.get())
+                .addTypedRecipes(GearboxRecipeTypes.MECHANIZING)
+                .catalyst(GearboxBlocks.BRASS_PRESS::get)
+                .itemIcon(GearboxBlocks.BRASS_PRESS.get())
                 .emptyBackground(177, 75)
                 .build("mechanizing", MechanizingCategory::new);
 
         CreateRecipeCategory<?>
                 transmuting = builder(TransmutingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.TRANSMUTING)
-                .catalyst(ModBlocks.IRRADIATOR::get)
+                .addTypedRecipes(GearboxRecipeTypes.TRANSMUTING)
+                .catalyst(GearboxBlocks.IRRADIATOR::get)
                 .catalyst(AllBlocks.DEPOT::get)
                 .catalyst(AllBlocks.BELT::get)
-                .doubleItemIcon(ModBlocks.IRRADIATOR.get(), AllBlocks.DEPOT.get())
+                .doubleItemIcon(GearboxBlocks.IRRADIATOR.get(), AllBlocks.DEPOT.get())
                 .emptyBackground(177, 75)
                 .build("transmuting", TransmutingCategory::new);
 
         CreateRecipeCategory<?>
                 irradiating = builder(IrradiatingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.IRRADIATING)
-                .catalyst(ModBlocks.IRRADIATOR::get)
+                .addTypedRecipes(GearboxRecipeTypes.IRRADIATING)
+                .catalyst(GearboxBlocks.IRRADIATOR::get)
                 .catalyst(AllBlocks.BASIN::get)
-                .doubleItemIcon(ModBlocks.IRRADIATOR.get(), AllBlocks.BASIN.get())
+                .doubleItemIcon(GearboxBlocks.IRRADIATOR.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 75)
                 .build("irradiating", IrradiatingCategory::new);
 
         CreateRecipeCategory<?>
                 electrolyzing = builder(BasinRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.ELECTROLYZING)
-                .catalyst(ModBlocks.ELECTROLYZER::get)
+                .addTypedRecipes(GearboxRecipeTypes.ELECTROLYZING)
+                .catalyst(GearboxBlocks.ELECTROLYZER::get)
                 .catalyst(AllBlocks.BASIN::get)
-                .doubleItemIcon(ModBlocks.ELECTROLYZER.get(), AllBlocks.BASIN.get())
+                .doubleItemIcon(GearboxBlocks.ELECTROLYZER.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 103)
                 .build("electrolyzing", ElectrolyzingCategory::new);
 
 
         CreateRecipeCategory<?>
                 centrifuging = builder(CentrifugingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.CENTRIFUGING)
-                .catalyst(ModBlocks.CENTRIFUGE::get)
-                .itemIcon(ModBlocks.CENTRIFUGE.get())
+                .addTypedRecipes(GearboxRecipeTypes.CENTRIFUGING)
+                .catalyst(GearboxBlocks.CENTRIFUGE::get)
+                .itemIcon(GearboxBlocks.CENTRIFUGE.get())
                 .emptyBackground(177, 93)
                 .build("centrifuging", CentrifugingCategory::new);
 
         CreateRecipeCategory<?>
                 pumpjack = builder(PumpjackRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.PUMPJACK)
-                .catalyst(ModBlocks.PUMPJACK_WELL::get)
-                .catalyst(ModBlocks.PUMPJACK_ARM::get)
-                .catalyst(ModBlocks.PUMPJACK_CRANK::get)
-                .itemIcon(ModBlocks.PUMPJACK_WELL.get())
+                .addTypedRecipes(GearboxRecipeTypes.PUMPJACK)
+                .catalyst(GearboxBlocks.PUMPJACK_WELL::get)
+                .catalyst(GearboxBlocks.PUMPJACK_ARM::get)
+                .catalyst(GearboxBlocks.PUMPJACK_CRANK::get)
+                .itemIcon(GearboxBlocks.PUMPJACK_WELL.get())
                 .emptyBackground(177, 65)
                 .build("pumpjack", PumpjackCategory::new);
 
         CreateRecipeCategory<?>
                 laser_drilling = builder(LaserDrillingRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.LASER_DRILLING)
-                .catalyst(ModBlocks.LASER_DRILL::get)
-                .itemIcon(ModBlocks.LASER_DRILL.get())
+                .addTypedRecipes(GearboxRecipeTypes.LASER_DRILLING)
+                .catalyst(GearboxBlocks.LASER_DRILL::get)
+                .itemIcon(GearboxBlocks.LASER_DRILL.get())
                 .emptyBackground(177, 75)
                 .build("laser_drilling", LaserDrillingCategory::new);
 
         CreateRecipeCategory<?>
                 reacting= builder(BasinRecipe.class)
-                .addTypedRecipes(ModRecipeTypes.REACTING)
-                .catalyst(ModBlocks.REACTOR::get)
+                .addTypedRecipes(GearboxRecipeTypes.REACTING)
+                .catalyst(GearboxBlocks.REACTOR::get)
                 .catalyst(AllBlocks.BASIN::get)
-                .doubleItemIcon(ModBlocks.REACTOR.get(), AllBlocks.BASIN.get())
+                .doubleItemIcon(GearboxBlocks.REACTOR.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 103)
                 .build("reacting", ReactingCategory::new);
     }

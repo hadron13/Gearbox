@@ -4,7 +4,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.data.Iterate;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
     public CentrifugingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-        super(ModRecipeTypes.CENTRIFUGING, params);
+        super(GearboxRecipeTypes.CENTRIFUGING, params);
     }
 
     public static boolean match(CentrifugeBlockEntity centrifuge, CentrifugingRecipe recipe) {

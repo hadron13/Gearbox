@@ -1,7 +1,7 @@
 package io.github.hadron13.gearbox.blocks.amplifier;
 
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -39,6 +39,6 @@ public class AmplifierBlock extends Block implements IBE<AmplifierBlockEntity> {
 
     @Override
     public BlockEntityType<? extends AmplifierBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.AMPLIFIER.get();
+        return GearboxBlockEntities.AMPLIFIER.get();
     }
 }

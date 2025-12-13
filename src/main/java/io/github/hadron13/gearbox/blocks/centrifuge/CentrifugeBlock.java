@@ -8,7 +8,7 @@ import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.content.kinetics.speedController.SpeedControllerBlock;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -96,6 +96,6 @@ public class CentrifugeBlock extends RotatedPillarKineticBlock implements ICogWh
 
     @Override
     public BlockEntityType<? extends CentrifugeBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.CENTRIFUGE.get();
+        return GearboxBlockEntities.CENTRIFUGE.get();
     }
 }

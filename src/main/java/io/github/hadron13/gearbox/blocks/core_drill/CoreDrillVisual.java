@@ -9,7 +9,7 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ public class CoreDrillVisual extends SingleAxisRotatingVisual<CoreDrillBlockEnti
     public List<TransformedInstance> tubes = new ArrayList<>();
 
     public CoreDrillVisual(VisualizationContext context, CoreDrillBlockEntity blockEntity, float partialTick) {
-        super(context, blockEntity, partialTick, Models.partial(ModPartialModels.SHAFT_DUAL_TINY, Direction.UP));
+        super(context, blockEntity, partialTick, Models.partial(GearboxPartialModels.SHAFT_DUAL_TINY, Direction.UP));
     }
 
 
@@ -48,7 +48,7 @@ public class CoreDrillVisual extends SingleAxisRotatingVisual<CoreDrillBlockEnti
         if(tubes.size() < blockEntity.tubes){
             for(int i = 0; i < blockEntity.tubes - tubes.size(); i++) {
                 TransformedInstance tube = instancerProvider()
-                        .instancer(InstanceTypes.TRANSFORMED, Models.partial(ModPartialModels.CORE_DRILL_TUBE))
+                        .instancer(InstanceTypes.TRANSFORMED, Models.partial(GearboxPartialModels.CORE_DRILL_TUBE))
                         .createInstance();
 
                 tube.setIdentityTransform()

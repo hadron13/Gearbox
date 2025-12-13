@@ -3,7 +3,7 @@ package io.github.hadron13.gearbox.blocks.useless_machine;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -34,6 +34,6 @@ public class UselessMachineBlock extends HorizontalKineticBlock implements IBE<U
 
     @Override
     public BlockEntityType<? extends UselessMachineBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.USELESS_MACHINE.get();
+        return GearboxBlockEntities.USELESS_MACHINE.get();
     }
 }

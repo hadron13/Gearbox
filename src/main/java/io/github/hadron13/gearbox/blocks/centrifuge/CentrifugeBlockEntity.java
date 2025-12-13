@@ -8,7 +8,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.lang.FontHelper;
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
@@ -68,7 +68,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
 
 
         if (lastRecipe == null || !CentrifugingRecipe.match(this, lastRecipe)) {
-            Optional<CentrifugingRecipe> recipe = ModRecipeTypes.CENTRIFUGING.find(this, level);
+            Optional<CentrifugingRecipe> recipe = GearboxRecipeTypes.CENTRIFUGING.find(this, level);
             if (!recipe.isPresent()) {
                 recipeTimer = 100;
                 sendData();

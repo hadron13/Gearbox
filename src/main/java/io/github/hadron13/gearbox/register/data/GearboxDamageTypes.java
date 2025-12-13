@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageType;
 
-public class ModDamageTypes {
+public class GearboxDamageTypes {
     public static final ResourceKey<DamageType>
         laser = key("laserdeath");
 

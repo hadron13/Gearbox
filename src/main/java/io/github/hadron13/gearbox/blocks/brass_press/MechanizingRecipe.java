@@ -6,8 +6,8 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyMechanizing;
-import io.github.hadron13.gearbox.register.ModBlocks;
-import io.github.hadron13.gearbox.register.ModRecipeTypes;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 public class MechanizingRecipe extends ProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
 
 	public MechanizingRecipe(ProcessingRecipeParams params) {
-		super(ModRecipeTypes.MECHANIZING, params);
+		super(GearboxRecipeTypes.MECHANIZING, params);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class MechanizingRecipe extends ProcessingRecipe<RecipeWrapper> implement
 	
 	@Override
 	public void addRequiredMachines(Set<ItemLike> list) {
-		list.add(ModBlocks.BRASS_PRESS.get());
+		list.add(GearboxBlocks.BRASS_PRESS.get());
 	}
 	
 	@Override

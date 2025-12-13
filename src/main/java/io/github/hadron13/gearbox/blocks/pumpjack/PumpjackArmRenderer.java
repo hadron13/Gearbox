@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.hadron13.gearbox.register.ModPartialModels;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -36,11 +36,11 @@ public class PumpjackArmRenderer extends SafeBlockEntityRenderer<PumpjackArmBloc
         BlockState blockstate = be.getBlockState();
         Direction facing = blockstate.getValue(HORIZONTAL_FACING);
 
-        SuperByteBuffer head = CachedBuffers.partialFacing(ModPartialModels.PUMPJACK_HEAD, blockstate, facing);
-        SuperByteBuffer body = CachedBuffers.partialFacing(ModPartialModels.PUMPJACK_ARM, blockstate, facing);
-        SuperByteBuffer tail = CachedBuffers.partialFacing(ModPartialModels.PUMPJACK_CONNECTOR, blockstate, facing);
-        SuperByteBuffer pitman = CachedBuffers.partialFacing(ModPartialModels.PUMPJACK_PITMAN, blockstate, facing);
-        SuperByteBuffer smooth_rod = CachedBuffers.partialFacing(ModPartialModels.PUMPJACK_SMOOTHROD, blockstate, facing);
+        SuperByteBuffer head = CachedBuffers.partialFacing(GearboxPartialModels.PUMPJACK_HEAD, blockstate, facing);
+        SuperByteBuffer body = CachedBuffers.partialFacing(GearboxPartialModels.PUMPJACK_ARM, blockstate, facing);
+        SuperByteBuffer tail = CachedBuffers.partialFacing(GearboxPartialModels.PUMPJACK_CONNECTOR, blockstate, facing);
+        SuperByteBuffer pitman = CachedBuffers.partialFacing(GearboxPartialModels.PUMPJACK_PITMAN, blockstate, facing);
+        SuperByteBuffer smooth_rod = CachedBuffers.partialFacing(GearboxPartialModels.PUMPJACK_SMOOTHROD, blockstate, facing);
 
 
 

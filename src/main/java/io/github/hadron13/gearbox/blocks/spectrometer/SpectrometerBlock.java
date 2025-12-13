@@ -6,19 +6,17 @@ import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
 
 import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.GearboxLang;
-import io.github.hadron13.gearbox.register.ModBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.theme.Color;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -42,9 +40,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
-
-import java.util.Random;
-import java.util.function.Function;
 
 import static com.simibubi.create.content.kinetics.gauge.GaugeBlock.GAUGE;
 
@@ -205,7 +200,7 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
 
     @Override
     public BlockEntityType<? extends SpectrometerBlockEntity> getBlockEntityType() {
-        return ModBlockEntities.SPECTROMETER.get();
+        return GearboxBlockEntities.SPECTROMETER.get();
     }
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {

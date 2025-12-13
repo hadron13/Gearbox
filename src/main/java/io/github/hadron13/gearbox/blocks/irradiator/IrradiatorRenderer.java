@@ -7,8 +7,8 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
-import io.github.hadron13.gearbox.register.ModPartialModels;
-import io.github.hadron13.gearbox.render.ModRenderTypes;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
+import io.github.hadron13.gearbox.render.GearboxRenderTypes;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -38,7 +37,7 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
         VertexConsumer vb;
 
         if(be.receivingLaser != null && be.receivingLaser.getPower() > 0.01f){
-            vb = buffer.getBuffer(ModRenderTypes.laserBeam());
+            vb = buffer.getBuffer(GearboxRenderTypes.laserBeam());
             float thickness = lerpedLensPos;
             float length = be.mode == PressingBehaviour.Mode.BELT? 1.70f : 2.0f;
             if(thickness > 0.01)
@@ -51,7 +50,7 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
 
         vb = buffer.getBuffer(RenderType.solid());
 
-        CachedBuffers.partial(ModPartialModels.IRRADIATOR_LENS, be.getBlockState())
+        CachedBuffers.partial(GearboxPartialModels.IRRADIATOR_LENS, be.getBlockState())
                 .translate(0, lerpedLensPos, 0)
                 .light(light)
                 .renderInto(ms, vb);

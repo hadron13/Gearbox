@@ -7,50 +7,50 @@ import io.github.hadron13.gearbox.ponder.scenes.fluids.PumpjackScenes;
 import io.github.hadron13.gearbox.ponder.scenes.fluids.SapperScenes;
 import io.github.hadron13.gearbox.ponder.scenes.kinetics.KilnScenes;
 import io.github.hadron13.gearbox.ponder.scenes.lasers.LaserScenes;
-import io.github.hadron13.gearbox.register.ModBlocks;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.simibubi.create.infrastructure.ponder.AllCreatePonderTags.FLUIDS;
 import static com.simibubi.create.infrastructure.ponder.AllCreatePonderTags.KINETIC_APPLIANCES;
-import static io.github.hadron13.gearbox.ponder.ModPonderTags.LASER_STUFF;
+import static io.github.hadron13.gearbox.ponder.GearboxPonderTags.LASER_STUFF;
 
-public class ModPonderScenes {
+public class GearboxPonderScenes {
 
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         PonderSceneRegistrationHelper<ItemProviderEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 
-        HELPER.forComponents(ModBlocks.COMPRESSOR)
+        HELPER.forComponents(GearboxBlocks.COMPRESSOR)
                 .addStoryBoard("compressor", CompressorScenes::compressor, KINETIC_APPLIANCES, FLUIDS);
 
-        HELPER.forComponents(ModBlocks.SAPPER)
+        HELPER.forComponents(GearboxBlocks.SAPPER)
                 .addStoryBoard("sapper", SapperScenes::sapper, KINETIC_APPLIANCES, FLUIDS);
 
-        HELPER.forComponents(ModBlocks.PUMPJACK_WELL, ModBlocks.PUMPJACK_CRANK, ModBlocks.PUMPJACK_ARM)
+        HELPER.forComponents(GearboxBlocks.PUMPJACK_WELL, GearboxBlocks.PUMPJACK_CRANK, GearboxBlocks.PUMPJACK_ARM)
                 .addStoryBoard("pumpjack", PumpjackScenes::pumpjack, FLUIDS);
 
-        HELPER.forComponents(ModBlocks.KILN)
+        HELPER.forComponents(GearboxBlocks.KILN)
                 .addStoryBoard("kiln", KilnScenes::kiln, KINETIC_APPLIANCES);
 
-        HELPER.forComponents(ModBlocks.LASER)
+        HELPER.forComponents(GearboxBlocks.LASER)
                 .addStoryBoard("laser", LaserScenes::laser, LASER_STUFF);
 
-        HELPER.forComponents(ModBlocks.MIRROR)
+        HELPER.forComponents(GearboxBlocks.MIRROR)
                 .addStoryBoard("mirror", LaserScenes::mirror, LASER_STUFF);
 
-        HELPER.forComponents(ModBlocks.PRISM)
+        HELPER.forComponents(GearboxBlocks.PRISM)
                 .addStoryBoard("prism", LaserScenes::prism, LASER_STUFF);
 
-        HELPER.forComponents(ModBlocks.COMBINER)
+        HELPER.forComponents(GearboxBlocks.COMBINER)
                 .addStoryBoard("combiner", LaserScenes::combiner, LASER_STUFF);
 
-        HELPER.forComponents(ModBlocks.ATTENUATOR)
+        HELPER.forComponents(GearboxBlocks.ATTENUATOR)
                 .addStoryBoard("attenuator", LaserScenes::attenuator, LASER_STUFF);
 
-        HELPER.forComponents(ModBlocks.AMPLIFIER)
+        HELPER.forComponents(GearboxBlocks.AMPLIFIER)
                 .addStoryBoard("amplifier", LaserScenes::amplifier, LASER_STUFF);
 
-        HELPER.forComponents(ModBlocks.SPECTROMETER)
+        HELPER.forComponents(GearboxBlocks.SPECTROMETER)
                 .addStoryBoard("spectrometer", LaserScenes::spectrometer, LASER_STUFF);
     }
 

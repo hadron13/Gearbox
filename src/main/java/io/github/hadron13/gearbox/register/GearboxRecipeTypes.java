@@ -1,7 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
 import com.google.common.collect.ImmutableSet;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
@@ -25,7 +24,6 @@ import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.createmod.catnip.lang.Lang;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -36,7 +34,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -49,7 +46,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public enum ModRecipeTypes implements IRecipeTypeInfo {
+public enum GearboxRecipeTypes implements IRecipeTypeInfo {
     PYROPROCESSING(PyroprocessingRecipe::new),
     SAPPING(SappingRecipe::new),
     COMPRESSING(CompressingRecipe::new),
@@ -74,14 +71,14 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
             .endsWith("_manual_only");
 
 
-    ModRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
+    GearboxRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
         id = Gearbox.asResource(name);
         serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
         typeObject = Registers.TYPE_REGISTER.register(name, () -> simpleType(id));
         type = typeObject;
     }
-    ModRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
+    GearboxRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
         this(() -> new ProcessingRecipeSerializer<>(processingFactory));
     }
 
@@ -131,7 +128,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
 
         if(world.isClientSide())
             return Optional.empty();
-        List<CompressingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.COMPRESSING.getType());
+        List<CompressingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.COMPRESSING.getType());
 
 
         Stream<CompressingRecipe> matchingRecipes =
@@ -143,7 +140,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     public Optional<TransmutingRecipe> find(IrradiatorBlockEntity blockEntity, Level world, ItemStack ingredient){
         if(world.isClientSide())
             return Optional.empty();
-        List<TransmutingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.TRANSMUTING.getType());
+        List<TransmutingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.TRANSMUTING.getType());
 
         Stream<TransmutingRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> TransmutingRecipe.match(blockEntity, recipe, ingredient) );
@@ -153,7 +150,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     public Optional<CentrifugingRecipe> find(CentrifugeBlockEntity blockEntity, Level world){
         if(world.isClientSide())
             return Optional.empty();
-        List<CentrifugingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.CENTRIFUGING.getType());
+        List<CentrifugingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.CENTRIFUGING.getType());
 
         Stream<CentrifugingRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> CentrifugingRecipe.match(blockEntity, recipe) );
@@ -163,7 +160,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     public Optional<LaserDrillingRecipe> find(LaserDrillBlockEntity blockEntity, Level world){
         if(world.isClientSide())
             return Optional.empty();
-        List<LaserDrillingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.LASER_DRILLING.getType());
+        List<LaserDrillingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.LASER_DRILLING.getType());
 
         Stream<LaserDrillingRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> LaserDrillingRecipe.match(blockEntity, recipe) );
@@ -174,7 +171,7 @@ public enum ModRecipeTypes implements IRecipeTypeInfo {
     public Optional<PumpjackRecipe> find(PumpjackWellBlockEntity blockEntity, Level world){
         if(world.isClientSide())
             return Optional.empty();
-        List<PumpjackRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.PUMPJACK.getType());
+        List<PumpjackRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.PUMPJACK.getType());
 
         Stream<PumpjackRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> PumpjackRecipe.match(blockEntity, recipe) );
