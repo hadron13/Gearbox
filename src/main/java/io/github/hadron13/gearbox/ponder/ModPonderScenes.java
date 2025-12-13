@@ -49,6 +49,9 @@ public class ModPonderScenes {
 
         HELPER.forComponents(ModBlocks.AMPLIFIER)
                 .addStoryBoard("amplifier", LaserScenes::amplifier, LASER_STUFF);
+
+        HELPER.forComponents(ModBlocks.SPECTROMETER)
+                .addStoryBoard("spectrometer", LaserScenes::spectrometer, LASER_STUFF);
     }
 
 }

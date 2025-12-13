@@ -1,9 +1,12 @@
 package io.github.hadron13.gearbox.ponder.scenes.lasers;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlockEntity;
 import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlockEntity;
+import io.github.hadron13.gearbox.blocks.laser.Laser;
+import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
@@ -32,6 +35,7 @@ import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
@@ -418,5 +422,82 @@ public class LaserScenes {
         scene.world().modifyBlockEntity(amplifier, AmplifierBlockEntity.class, be ->be.amplification.setValue(100));
         scene.idle(70);
         scene.rotateCameraY(-120);
+    }
+
+
+    public static void spectrometer(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("spectrometer", "Measuring lasers with a spectrometer");
+        scene.setSceneOffsetY(-2);
+        scene.configureBasePlate(0, 0, 5);
+
+        BlockPos spectrometer = util.grid().at(1, 2, 3);
+        BlockPos laser = util.grid().at(3, 2, 1);
+        BlockPos mirror = util.grid().at(3, 2, 3);
+
+        scene.world().showSection(util.select().fromTo(0, 1, 0, 4, 1, 4), Direction.UP);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(spectrometer), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(laser), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(mirror), Direction.DOWN);
+        scene.idle(20);
+
+        scene.world().modifyBlockEntity(laser, LaserBlockEntity.class, LaserBlockEntity::ponderEnableLaser);
+
+
+        scene.idle(20);
+        scene.overlay().showText(80)
+                .placeNearTarget()
+                .attachKeyFrame()
+                .text("The spectrometer displays a passing laser's color and power level")
+                .pointAt(util.vector().topOf(spectrometer));
+
+        scene.idle(90);
+        scene.addKeyframe();
+        Laser laser1 = new Laser(0xFF0000, util.vector().centerOf(15, 2, 3), new Vec3(-1, 0, 0), 2.0F);
+        Laser laser2 = new Laser(0xFF00, util.vector().centerOf(15, 2, 3), new Vec3(-1, 0, 0), 2.0F);
+        Laser laser3 = new Laser(0xFF, util.vector().centerOf(15, 2, 3), new Vec3(-1, 0, 0), 2.0F);
+        scene.world().modifyBlockEntity(util.grid().at(4, 0, 4), LaserBlockEntity.class, be ->{
+            be.laserBeam = laser1;
+            be.ponderEnableLaser();
+        });
+        scene.world().showSection(util.select().position(4, 0, 4), Direction.DOWN);
+        scene.idle(15);
+
+        scene.world().hideSection(util.select().position(mirror), Direction.UP);
+        scene.idle(10);
+        scene.world().setBlock(mirror, Blocks.AIR.defaultBlockState(), false);
+        scene.effects().indicateRedstone(spectrometer);
+        scene.idle(20);
+
+        scene.world().modifyBlockEntity(util.grid().at(4, 0, 4), LaserBlockEntity.class, be ->{
+            be.laserBeam.disable();
+            be.laserBeam = laser2;
+            be.ponderEnableLaser();
+        });
+
+        scene.effects().indicateRedstone(spectrometer);
+        scene.idle(30);
+        scene.world().modifyBlockEntity(util.grid().at(4, 0, 4), LaserBlockEntity.class, be ->{
+            be.laserBeam.disable();
+            be.laserBeam = laser3;
+            be.ponderEnableLaser();
+        });
+        scene.effects().indicateRedstone(spectrometer);
+
+        scene.idle(40);
+
+        Vec3 blockSurface = util.vector().blockSurface(spectrometer, Direction.NORTH);
+        scene.overlay().showControls(blockSurface, Pointing.RIGHT, 80).withItem(AllItems.GOGGLES.asStack());
+        scene.idle(7);
+        scene.overlay().showText(80)
+                .text("When wearing Engineers' Goggles, the player can get more detailed information from the Gauge")
+                .attachKeyFrame()
+                .colored(PonderPalette.MEDIUM)
+                .pointAt(blockSurface)
+                .placeNearTarget();
+        scene.idle(100);
+
     }
 }
