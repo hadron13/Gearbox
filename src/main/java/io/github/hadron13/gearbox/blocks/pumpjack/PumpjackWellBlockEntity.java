@@ -147,7 +147,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
     public void pump(){
         if(currentRecipe == null)
             return;
-        if(isPipingValid)
+        if(!isPipingValid)
             return;
 
         updateEfficiency();
