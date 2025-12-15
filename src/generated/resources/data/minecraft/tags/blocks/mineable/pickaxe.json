@@ -22,6 +22,7 @@
     "gearbox:dipper",
     "gearbox:chemical_reactor",
     "gearbox:precision_crank",
-    "gearbox:core_drill"
+    "gearbox:core_drill",
+    "gearbox:steel_fluid_tank"
   ]
 }

@@ -48,6 +48,8 @@ import io.github.hadron13.gearbox.blocks.sapper.SapperRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerRenderer;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerVisual;
+import io.github.hadron13.gearbox.blocks.steel_tank.SteelFluidTankRenderer;
+import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlockEntity;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlockEntity;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineInstance;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineRenderer;
@@ -218,6 +220,12 @@ public class GearboxBlockEntities {
             .visual(() -> CoreDrillVisual::new)
             .validBlocks(GearboxBlocks.CORE_DRILL)
             .renderer(() -> CoreDrillRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<SteelTankBlockEntity> STEEL_FLUID_TANK = Gearbox.registrate()
+            .blockEntity("steel_fluid_tank", SteelTankBlockEntity::new)
+            .validBlocks(GearboxBlocks.STEEL_FLUID_TANK)
+            .renderer(() -> SteelFluidTankRenderer::new)
             .register();
 
     public static void register() {}

@@ -1,7 +1,12 @@
 package io.github.hadron13.gearbox.register;
 
+import com.simibubi.create.AllDisplaySources;
+import com.simibubi.create.AllMountedStorageTypes;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.api.stress.BlockStressValues;
+import com.simibubi.create.content.fluids.tank.*;
+import com.simibubi.create.content.kinetics.base.KineticBlock;
+import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.block.ItemUseOverrides;
 import com.simibubi.create.foundation.data.*;
@@ -16,11 +21,15 @@ import io.github.hadron13.gearbox.blocks.combiner.CombinerBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlock;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationTankBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
 import io.github.hadron13.gearbox.blocks.prism.PrismBlock;
+import io.github.hadron13.gearbox.blocks.steel_tank.SteelFluidTankModel;
+import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlock;
+import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankItem;
 import io.github.hadron13.gearbox.data.client.blockstates.*;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
 import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
@@ -32,10 +41,16 @@ import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerGenerator;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.config.GearboxStress;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
+import static com.simibubi.create.api.behaviour.display.DisplaySource.displaySource;
+import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
+import static com.simibubi.create.api.contraption.storage.fluid.MountedFluidStorageType.mountedFluidStorage;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -45,8 +60,8 @@ public class GearboxBlocks {
 
     private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
 
-
     public static void register() {}
+
 //    public static final BlockEntry<ExchangerBlock> EXCHANGER = REGISTRATE.block("exchanger", ExchangerBlock::new)
 //            .initialProperties(SharedProperties::stone)
 //            .properties(p -> p.mapColor(MapColor.METAL))
@@ -56,6 +71,8 @@ public class GearboxBlocks {
 //            .item()
 //            .transform(customItemModel())
 //            .register();
+
+    public static final BlockEntry<ShaftBlock> SOLAR = REGISTRATE.block("solar", ShaftBlock::new).register();
 
     public static final BlockEntry<KilnBlock> KILN = REGISTRATE.block("kiln", KilnBlock::new)
             .initialProperties(SharedProperties::stone)
@@ -300,4 +317,30 @@ public class GearboxBlocks {
             .item()
             .transform(customItemModel())
             .register();
+
+//    public static final BlockEntry<DistillationTankBlock> DISTILLATION_TANK = REGISTRATE.block("distillation_tank", DistillationTankBlock::new)
+//            .initialProperties(SharedProperties::copperMetal)
+//            .properties(p -> p.noOcclusion()
+//                    .isRedstoneConductor((p1, p2, p3) -> true))
+//            .transform(pickaxeOnly())
+//            .blockstate(new FluidTankGenerator()::generate)
+//            .onRegister(CreateRegistrate.blockModel(() -> FluidTankModel::standard))
+//            .item(FluidTankItem::new)
+//            .model(AssetLookup.customBlockItemModel("_", "block_single_window"))
+//            .build()
+//            .register();
+
+    public static final BlockEntry<SteelTankBlock> STEEL_FLUID_TANK = REGISTRATE.block("steel_fluid_tank", SteelTankBlock::new)
+                    .initialProperties(SharedProperties::copperMetal)
+                    .properties(p -> p.noOcclusion().sound(SoundType.METAL))
+                    .transform(pickaxeOnly())
+                    .blockstate(new FluidTankGenerator()::generate)
+//                    .transform(mountedFluidStorage(CreateMountedStorageTypes.FLUID_TANK))
+                    .onRegister(movementBehaviour(new FluidTankMovementBehavior()))
+                    .onRegister(CreateRegistrate.blockModel(() -> SteelFluidTankModel::new))
+                    .addLayer(() -> RenderType::cutoutMipped)
+                    .item(SteelTankItem::new)
+                    .model(AssetLookup.customBlockItemModel("_", "block_single_window"))
+                    .build()
+                    .register();
 }

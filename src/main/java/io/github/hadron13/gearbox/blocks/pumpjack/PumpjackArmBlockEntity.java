@@ -85,7 +85,7 @@ public class PumpjackArmBlockEntity extends SmartBlockEntity  {
                     BlockPos pos = getBlockPos();
 
                     level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                            AllSoundEvents.TRAIN.getMainEvent(), SoundSource.AMBIENT,0.05f, pitch, false);
+                            AllSoundEvents.TRAIN.getMainEvent(), SoundSource.AMBIENT,0.015f, pitch, false);
                     return;
                 }
                 well.updateRecipe();

@@ -47,6 +47,7 @@
   "block.gearbox.spectrometer.tooltip": "SPECTROMETER",
   "block.gearbox.spectrometer.tooltip.summary": "Measures passing laser's _power level_ and _color_",
   "block.gearbox.steam": "Steam",
+  "block.gearbox.steel_fluid_tank": "Steel Fluid Tank",
   "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
   "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s",
   "fluid.gearbox.ammonia": "Ammonia",
