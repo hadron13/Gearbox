@@ -12,4 +12,11 @@ public interface ILaserReceiver {
      * @param laser laser that called this method
      */
     public void endReceiveLaser(Laser laser);
+
+
+    public enum LaserInteraction{
+        BLOCK,
+        PASS
+    }
+
 }

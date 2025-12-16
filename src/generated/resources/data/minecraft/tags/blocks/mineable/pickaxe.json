@@ -23,6 +23,9 @@
     "gearbox:chemical_reactor",
     "gearbox:precision_crank",
     "gearbox:core_drill",
-    "gearbox:steel_fluid_tank"
+    "gearbox:steel_fluid_tank",
+    "gearbox:steel_fluid_pipe",
+    "gearbox:glass_fluid_pipe",
+    "gearbox:straight_steel_fluid_pipe"
   ]
 }

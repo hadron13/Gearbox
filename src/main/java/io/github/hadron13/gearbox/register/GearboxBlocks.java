@@ -4,6 +4,9 @@ import com.simibubi.create.AllDisplaySources;
 import com.simibubi.create.AllMountedStorageTypes;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.api.stress.BlockStressValues;
+import com.simibubi.create.content.fluids.PipeAttachmentModel;
+import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
+import com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock;
 import com.simibubi.create.content.fluids.tank.*;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
@@ -27,6 +30,10 @@ import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
 import io.github.hadron13.gearbox.blocks.prism.PrismBlock;
+import io.github.hadron13.gearbox.blocks.steel_pipe.SteelGlassPipeBlock;
+import io.github.hadron13.gearbox.blocks.steel_pipe.SteelPipeAttachmentModel;
+import io.github.hadron13.gearbox.blocks.steel_pipe.SteelPipeBlock;
+import io.github.hadron13.gearbox.blocks.steel_pipe.StraightSteelPipeBlock;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelFluidTankModel;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlock;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankItem;
@@ -42,11 +49,14 @@ import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerGenerator;
 import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.config.GearboxStress;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 
 import static com.simibubi.create.api.behaviour.display.DisplaySource.displaySource;
 import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
@@ -72,7 +82,6 @@ public class GearboxBlocks {
 //            .transform(customItemModel())
 //            .register();
 
-    public static final BlockEntry<ShaftBlock> SOLAR = REGISTRATE.block("solar", ShaftBlock::new).register();
 
     public static final BlockEntry<KilnBlock> KILN = REGISTRATE.block("kiln", KilnBlock::new)
             .initialProperties(SharedProperties::stone)
@@ -343,4 +352,60 @@ public class GearboxBlocks {
                     .model(AssetLookup.customBlockItemModel("_", "block_single_window"))
                     .build()
                     .register();
+
+
+    public static final BlockEntry<SteelPipeBlock> STEEL_FLUID_PIPE = REGISTRATE.block("steel_fluid_pipe", SteelPipeBlock::new)
+            .initialProperties(SharedProperties::netheriteMetal)
+            .properties(p -> p.forceSolidOff())
+            .transform(pickaxeOnly())
+            .blockstate(BlockStateGen.pipe())
+            .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+            .item()
+            .transform(customItemModel())
+            .register();
+
+
+    public static final BlockEntry<SteelGlassPipeBlock> STEEL_GLASS_FLUID_PIPE =
+            REGISTRATE.block("glass_fluid_pipe", SteelGlassPipeBlock::new)
+                    .initialProperties(SharedProperties::netheriteMetal)
+                    .properties(p -> p.noOcclusion())
+                    .addLayer(() -> RenderType::cutoutMipped)
+                    .transform(pickaxeOnly())
+                    .blockstate((c, p) -> {
+                        p.getVariantBuilder(c.getEntry())
+                                .forAllStatesExcept(state -> {
+                                    Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+                                    return ConfiguredModel.builder()
+                                            .modelFile(p.models()
+                                                    .getExistingFile(p.modLoc("block/steel_fluid_pipe/window")))
+                                            .uvLock(false)
+                                            .rotationX(axis == Direction.Axis.Y ? 0 : 90)
+                                            .rotationY(axis == Direction.Axis.X ? 90 : 0)
+                                            .build();
+                                }, BlockStateProperties.WATERLOGGED);
+                    })
+                    .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+                    .loot((p, b) -> p.dropOther(b, STEEL_FLUID_PIPE.get()))
+                    .register();
+
+
+    public static final BlockEntry<StraightSteelPipeBlock> STRAIGHT_STEEL_FLUID_PIPE = REGISTRATE.block("straight_steel_fluid_pipe", StraightSteelPipeBlock::new)
+            .initialProperties(SharedProperties::netheriteMetal)
+            .properties(p -> p.forceSolidOff())
+            .transform(pickaxeOnly())
+            .blockstate((c, p) -> {
+                p.getVariantBuilder(c.getEntry())
+                        .forAllStatesExcept(state -> {
+                            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+                            return ConfiguredModel.builder()
+                                    .modelFile(p.models()
+                                            .getExistingFile(p.modLoc("block/steel_fluid_pipe/straight")))
+                                    .uvLock(false)
+                                    .rotationX(axis == Direction.Axis.Y ? 0 : 90)
+                                    .rotationY(axis == Direction.Axis.X ? 90 : 0)
+                                    .build();
+                        }, BlockStateProperties.WATERLOGGED);
+            })
+            .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+            .register();
 }

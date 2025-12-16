@@ -1,7 +1,15 @@
 package io.github.hadron13.gearbox.register;
 
+import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import io.github.hadron13.gearbox.Gearbox;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.lang.Lang;
+import net.minecraft.core.Direction;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GearboxPartialModels {
     public static final PartialModel
@@ -33,8 +41,26 @@ public class GearboxPartialModels {
             ULTIMATE_MECH_CORE = item("ultimate_mechanism/core"),
             TAU_CANNON_COIL = item("tau_cannon/coil"),
             CORE_DRILL_TUBE = item("core_tube"),
-            ORE_CORE = item("ore_core");
+            ORE_CORE = item("ore_core"),
+            STEEL_FLUID_PIPE_CASING = block("steel_fluid_pipe/casing");
 
+
+    public static final Map<FluidTransportBehaviour.AttachmentTypes.ComponentPartials, Map<Direction, PartialModel>> STEEL_PIPE_ATTACHMENTS =
+            new EnumMap<>(FluidTransportBehaviour.AttachmentTypes.ComponentPartials.class);
+
+
+
+    static {
+        for (FluidTransportBehaviour.AttachmentTypes.ComponentPartials type : FluidTransportBehaviour.AttachmentTypes.ComponentPartials
+                .values()) {
+            Map<Direction, PartialModel> map = new HashMap<>();
+            for (Direction d : Iterate.directions) {
+                String asId = Lang.asId(type.name());
+                map.put(d, block("steel_fluid_pipe/" + asId + "/" + Lang.asId(d.getSerializedName())));
+            }
+            STEEL_PIPE_ATTACHMENTS.put(type, map);
+        }
+    }
 
     private static PartialModel block(String path) {
         return PartialModel.of(Gearbox.asResource("block/" + path));
