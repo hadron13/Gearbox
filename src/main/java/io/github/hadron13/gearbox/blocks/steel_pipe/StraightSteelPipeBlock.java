@@ -1,8 +1,6 @@
 package io.github.hadron13.gearbox.blocks.steel_pipe;
 
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
-import com.simibubi.create.content.fluids.pipes.AxisPipeBlock;
-import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock;
 import com.simibubi.create.content.fluids.pipes.StraightPipeBlockEntity;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;

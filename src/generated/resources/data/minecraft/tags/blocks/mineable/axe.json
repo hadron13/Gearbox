@@ -3,6 +3,7 @@
     "gearbox:brass_press",
     "gearbox:spectrometer",
     "gearbox:kinetic_machine",
-    "gearbox:precision_crank"
+    "gearbox:precision_crank",
+    "gearbox:distillation_controller"
   ]
 }

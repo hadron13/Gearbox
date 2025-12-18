@@ -1,15 +1,8 @@
 package io.github.hadron13.gearbox.register;
 
-import com.simibubi.create.AllDisplaySources;
-import com.simibubi.create.AllMountedStorageTypes;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.api.stress.BlockStressValues;
-import com.simibubi.create.content.fluids.PipeAttachmentModel;
-import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
-import com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock;
 import com.simibubi.create.content.fluids.tank.*;
-import com.simibubi.create.content.kinetics.base.KineticBlock;
-import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.block.ItemUseOverrides;
 import com.simibubi.create.foundation.data.*;
@@ -24,7 +17,8 @@ import io.github.hadron13.gearbox.blocks.combiner.CombinerBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlock;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
-import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationTankBlock;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlock;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerGenerator;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
@@ -50,15 +44,12 @@ import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.config.GearboxStress;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 
-import static com.simibubi.create.api.behaviour.display.DisplaySource.displaySource;
 import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
 import static com.simibubi.create.api.contraption.storage.fluid.MountedFluidStorageType.mountedFluidStorage;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
@@ -407,5 +398,15 @@ public class GearboxBlocks {
                         }, BlockStateProperties.WATERLOGGED);
             })
             .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+            .register();
+
+
+    public static final BlockEntry<DistillationControllerBlock> DISTILLATION_CONTROLLER = REGISTRATE.block("distillation_controller", DistillationControllerBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .transform(axeOrPickaxe())
+            .properties(p -> p.mapColor(MapColor.METAL))
+            .blockstate(new DistillationControllerGenerator()::generate)
+            .item()
+            .transform(customItemModel())
             .register();
 }

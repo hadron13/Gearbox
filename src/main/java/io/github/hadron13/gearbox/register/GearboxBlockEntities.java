@@ -32,6 +32,8 @@ import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlockEntity;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillRenderer;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillVisual;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlockEntity;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerRenderer;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerVisual;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerRenderer;
@@ -254,6 +256,12 @@ public class GearboxBlockEntities {
     public static final BlockEntityEntry<StraightPipeBlockEntity> STRAIGHT_STEEL_FLUID_PIPE = REGISTRATE
             .blockEntity("straight_steel_fluid_pipe", StraightPipeBlockEntity::new)
             .validBlocks(GearboxBlocks.STRAIGHT_STEEL_FLUID_PIPE)
+            .register();
+
+    public static final BlockEntityEntry<DistillationControllerBlockEntity> DISTILLATION_CONTROLLER = REGISTRATE
+            .blockEntity("distillation_controller", DistillationControllerBlockEntity::new)
+            .validBlocks(GearboxBlocks.DISTILLATION_CONTROLLER)
+            .renderer(() -> DistillationControllerRenderer::new)
             .register();
 
     public static void register() {}

@@ -170,9 +170,7 @@ public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEnt
                         .add(mul);
                 worldIn.addParticle(new DustParticleOptions(rgb, 1), offset.x, offset.y, offset.z, mul.x, mul.y, mul.z);
             }
-
         }
-
     }
 
     @Override

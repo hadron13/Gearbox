@@ -42,7 +42,8 @@ public class GearboxPartialModels {
             TAU_CANNON_COIL = item("tau_cannon/coil"),
             CORE_DRILL_TUBE = item("core_tube"),
             ORE_CORE = item("ore_core"),
-            STEEL_FLUID_PIPE_CASING = block("steel_fluid_pipe/casing");
+            STEEL_FLUID_PIPE_CASING = block("steel_fluid_pipe/casing"),
+            DISTILLATION_SELECTOR = block("distillation_controller/head");
 
 
     public static final Map<FluidTransportBehaviour.AttachmentTypes.ComponentPartials, Map<Direction, PartialModel>> STEEL_PIPE_ATTACHMENTS =

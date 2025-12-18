@@ -7,6 +7,7 @@ import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlockEntity;
 import com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock;
+import com.simibubi.create.content.kinetics.waterwheel.WaterWheelBlockEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import io.github.hadron13.gearbox.register.GearboxBlocks;
