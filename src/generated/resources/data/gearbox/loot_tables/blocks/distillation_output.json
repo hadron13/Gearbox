@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "gearbox:steel_fluid_pipe"
+          "name": "gearbox:distillation_output"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "gearbox:blocks/straight_steel_fluid_pipe"
+  "random_sequence": "gearbox:blocks/distillation_output"
 }

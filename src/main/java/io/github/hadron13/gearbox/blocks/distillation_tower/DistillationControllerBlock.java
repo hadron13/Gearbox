@@ -73,6 +73,20 @@ public class DistillationControllerBlock extends Block implements IBE<Distillati
         return true;
     }
 
+    public static boolean shouldRenderHeadOnFaceStatic(BlockState state, Direction face) {
+        if (face.getAxis()
+                .isVertical())
+            return false;
+        if (face == state.getValue(FACING)
+                .getOpposite())
+            return false;
+        if (face.getAxis() == getAxis(state))
+            return false;
+        if (getAxis(state) == Direction.Axis.Y && face != state.getValue(FACING))
+            return false;
+        return true;
+    }
+
     public static Direction.Axis getAxis(BlockState state) {
         Direction.Axis pistonAxis = state.getValue(FACING)
                 .getAxis();

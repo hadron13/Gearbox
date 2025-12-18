@@ -13,6 +13,7 @@ import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.dipper.DippingRecipe;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
@@ -58,7 +59,8 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo {
     LASER_DRILLING(LaserDrillingRecipe::new),
     PUMPJACK(PumpjackRecipe::new),
     DIPPING(DippingRecipe::new),
-    REACTING(ReactingRecipe::new);
+    REACTING(ReactingRecipe::new),
+    DISTILLING(DistillingRecipe::new);
 
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;

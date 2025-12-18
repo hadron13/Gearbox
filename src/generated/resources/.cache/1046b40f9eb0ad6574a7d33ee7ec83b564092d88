@@ -1,4 +1,4 @@
-// 1.20.1	2025-12-12T21:25:20.839738109	Registrate Provider for gearbox [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2025-12-18T12:13:50.048773255	Registrate Provider for gearbox [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 18f6e385f6f78e24eaadd66ee398926fddb18104 assets/gearbox/blockstates/ammonia.json
 c00bec1715596d864e15208233894d8de01d6859 assets/gearbox/blockstates/amplifier.json
 d056980ae4e5ad3559b3c8b400aec657ffe58352 assets/gearbox/blockstates/argon.json
@@ -12,7 +12,10 @@ d6bc245329d31125bf246e8d4ec13d2274fe5309 assets/gearbox/blockstates/combiner.jso
 2456ea327406f0cd3a4ea7f359dac8eda01d11c4 assets/gearbox/blockstates/core_drill.json
 bf644ea8c9655e34acbd8c88510070901c3de921 assets/gearbox/blockstates/dinitrogen_tetroxide.json
 2812bbbd044b79a20cd937eb9e41193cb2c33450 assets/gearbox/blockstates/dipper.json
+ffdd870aa1f16432b0149882b3292af828dbb4b8 assets/gearbox/blockstates/distillation_controller.json
+946f5bfa9a4f177de10deaa1ab75a22e301b63c6 assets/gearbox/blockstates/distillation_output.json
 dcac427093216c9191beeabe312aebaaf33fe79a assets/gearbox/blockstates/electrolyzer.json
+b804ec15cfb51aae543e1179dadb1fe060e92ae5 assets/gearbox/blockstates/glass_fluid_pipe.json
 32b0c705a67f60be6af7b228bcc9e8946ac92fa7 assets/gearbox/blockstates/hydrogen.json
 eacc33c53ba87abaed39f3cb9d10fb790e0a00be assets/gearbox/blockstates/hydrogen_sulfide.json
 6e89d074a791bb37ee5ff6d0f1b54e7de381dc4e assets/gearbox/blockstates/irradiator.json
@@ -33,8 +36,11 @@ c7387935ef0bc2e1b2635d583d62bfdc6b55c30b assets/gearbox/blockstates/pumpjack_wel
 024b31cde5decf146e6722d7db7912cdf7e5a61c assets/gearbox/blockstates/sapper.json
 ea5bd47021045e126dd87c859dfb2fd3cbe2c120 assets/gearbox/blockstates/spectrometer.json
 f784ded59f057dfd140d5ace0808da08f2d9172e assets/gearbox/blockstates/steam.json
-ed77f2935b71c3a988387b7fba639a2f929ed2eb assets/gearbox/lang/en_ud.json
-70a09f1addee89e327e211145fba04d38c421297 assets/gearbox/lang/en_us.json
+6e0c788ed0ec8e87f186d43b6a49b1f9e96715f4 assets/gearbox/blockstates/steel_fluid_pipe.json
+593a81a22f1eb0e51510f86794fee7dc11cb6f78 assets/gearbox/blockstates/steel_fluid_tank.json
+15c2e5a574c116d0647a4733a886c8b357860490 assets/gearbox/blockstates/straight_steel_fluid_pipe.json
+4495c549b525ee66a95d2668c4ca6beef1cffbef assets/gearbox/lang/en_ud.json
+ee40185f8040cf3ef3e72473cfdbf639dfe813ef assets/gearbox/lang/en_us.json
 2c771a7d85c2a641f26549876f4187407c058bb1 assets/gearbox/models/block/ammonia.json
 a5db51fd6e13ba499c2a95db6af1721061b2e6d4 assets/gearbox/models/block/argon.json
 3cb8c89e090d0def672ba056a684b4ff0950ea3c assets/gearbox/models/block/chlorine.json
@@ -46,6 +52,36 @@ f6f135146c264a06b3f1153d4e7bb26977ba89e4 assets/gearbox/models/block/hydrogen_su
 86320a197d4ec8bcadf06a296886dcf6284177ac assets/gearbox/models/block/petroleum.json
 cafdaa3887be1e5a00f8147bb8ccb1e7dc5d1315 assets/gearbox/models/block/resin.json
 1afb8b0d335223aa42c0915724c96b4eac4932e6 assets/gearbox/models/block/steam.json
+18c01bbae99ffcc4dc9c8e072c158405bb709e83 assets/gearbox/models/block/steel_fluid_pipe/d_x.json
+cf3ad8513e2cfd0d856de0c7219f2fcb0f5585de assets/gearbox/models/block/steel_fluid_pipe/d_y.json
+d0ada8f87a73a0f78ad0b360a89ba79ff8ab164f assets/gearbox/models/block/steel_fluid_pipe/d_z.json
+b5c2fa0146336e3f159fcc6b045b37b9ed0d139c assets/gearbox/models/block/steel_fluid_pipe/l_x.json
+1180d689c2836ea194974b74ae4ec02a3a6b73e9 assets/gearbox/models/block/steel_fluid_pipe/l_y.json
+b6dfc7082d578346f73df8914a3849496ef63f15 assets/gearbox/models/block/steel_fluid_pipe/l_z.json
+7778296a80b2252c46bedfbc546c128eb4826c8e assets/gearbox/models/block/steel_fluid_pipe/ld_x.json
+a7e0b72d195685d47e336275324f07c06398c07c assets/gearbox/models/block/steel_fluid_pipe/ld_y.json
+55c2943168cffbf9b2f6a867d1cc62c5bb9282f9 assets/gearbox/models/block/steel_fluid_pipe/ld_z.json
+a87b802891aef28e546def7a6c30778a96cf02d5 assets/gearbox/models/block/steel_fluid_pipe/lr_x.json
+f1151eb99e8d34f686c1a291c9fd20eecc4c41d0 assets/gearbox/models/block/steel_fluid_pipe/lr_y.json
+c4ae55866428ae59fc7c77b5efeb20de78d64057 assets/gearbox/models/block/steel_fluid_pipe/lr_z.json
+a356680f0de4053e3882a178e0cc842d687c0504 assets/gearbox/models/block/steel_fluid_pipe/lu_x.json
+f56fb56d80625b6a144f246f2e267ad73ea01ee7 assets/gearbox/models/block/steel_fluid_pipe/lu_y.json
+2b82ca062c71539e55afcd4b95b83eadbae07aff assets/gearbox/models/block/steel_fluid_pipe/lu_z.json
+5ad99435d6c48236b4787b427863ba9c5d93066e assets/gearbox/models/block/steel_fluid_pipe/r_x.json
+4184b2d81c011d42bd7a62bd5c1b471876c09ed9 assets/gearbox/models/block/steel_fluid_pipe/r_y.json
+1b04cca2e30ad922540c80929c94934ec70dd857 assets/gearbox/models/block/steel_fluid_pipe/r_z.json
+6254ffa982e4bb8fb92e6b3b38ea813097420ff5 assets/gearbox/models/block/steel_fluid_pipe/rd_x.json
+ff78ed1c3539828fed96d8e3a5bcd88898a86a39 assets/gearbox/models/block/steel_fluid_pipe/rd_y.json
+6ace6c3fd639eea3530cc871191092e7446778b7 assets/gearbox/models/block/steel_fluid_pipe/rd_z.json
+517e34117ec588674b84787c87df4967f4139601 assets/gearbox/models/block/steel_fluid_pipe/ru_x.json
+baafe82cf6ed72d8cfeff9bd246f6851f23b394d assets/gearbox/models/block/steel_fluid_pipe/ru_y.json
+8a5eaf4b13fa99efff5066e5d4d745e0c085b3d4 assets/gearbox/models/block/steel_fluid_pipe/ru_z.json
+5ba1dad61832c974bca5ed40aa9f017bfb3e01ae assets/gearbox/models/block/steel_fluid_pipe/u_x.json
+4b7647c505a9ebd79c4cf3aa4b1b2c34aa12595f assets/gearbox/models/block/steel_fluid_pipe/u_y.json
+42650726c1aa0d93834b36f73434f44ebb72dc09 assets/gearbox/models/block/steel_fluid_pipe/u_z.json
+df92e8eaa3ec69dbc0d8db9b3b3313de4409ccdf assets/gearbox/models/block/steel_fluid_pipe/ud_x.json
+92ee8cb5f054d60680da7dd4abea3c2b4726c59f assets/gearbox/models/block/steel_fluid_pipe/ud_y.json
+97e5cb0dd55cbd69f2b4096d870f9eaba99b1737 assets/gearbox/models/block/steel_fluid_pipe/ud_z.json
 20045b3a3052e3f91ffb1babdf9859da2a83f062 assets/gearbox/models/item/ammonia_bucket.json
 205473fe3e8b658ff2803248cbc69b412e0a68ed assets/gearbox/models/item/amplifier.json
 b460af938b6e07db18c3d01cb6c34f5e96650222 assets/gearbox/models/item/argon_bucket.json
@@ -59,6 +95,8 @@ ca0c7036288eee04eca99bfabd94fc1cb07c2f46 assets/gearbox/models/item/chlorine_buc
 f19a6113e51e3f1389a45e6a4fe75dfd60cc956d assets/gearbox/models/item/core_drill.json
 ab19c659453edf02a9a3d52aedaca1ddc05ffa26 assets/gearbox/models/item/dinitrogen_tetroxide_bucket.json
 f28f302218f7cea529ebea74d66abe8fb0f169b7 assets/gearbox/models/item/dipper.json
+65d90a50e4150b1fa32eb105b13ef9b7fa633b1c assets/gearbox/models/item/distillation_controller.json
+570ec890b6708bf7512e24ce730fa2475a5ecccf assets/gearbox/models/item/distillation_output.json
 a21a7508faa4943078ae29c806a1531b23673f4a assets/gearbox/models/item/electrolyzer.json
 43c6d405dc098e95086620ed0cfd3f6ca846b181 assets/gearbox/models/item/geld_ingot.json
 c8837c32dd9406138f0fb2f0f70a1eb27b45ddf6 assets/gearbox/models/item/hydrogen_bucket.json
@@ -81,6 +119,8 @@ b41d42115a2c8d37dba99b34e75636b85b516338 assets/gearbox/models/item/pumpjack_wel
 5d0cfaccbff0f72f284af88f9e73e74fd2fdd8ba assets/gearbox/models/item/sapper.json
 33cf8527b8dceda9d40d591a5d908dcf9e7fedbf assets/gearbox/models/item/spectrometer.json
 71bc81814f23c8e51385156a7ba1dbd7deb0296d assets/gearbox/models/item/steam_bucket.json
+7b058068213e690238d75d76b5b84c9184a1e4af assets/gearbox/models/item/steel_fluid_pipe.json
+3384c49a68509fd409f40084ff901becadaeb5e7 assets/gearbox/models/item/steel_fluid_tank.json
 4ed85e0152a5ec73a16ba6b42b438119a50db004 assets/gearbox/models/item/tau_cannon.json
 ece14bcc0ff65de05fc914b5646b8cbdb503a635 assets/gearbox/models/item/ultimate_mechanism.json
 6301b02bc07075c5b06f12a13aebfae09464ef56 data/create/tags/blocks/brittle.json
@@ -95,7 +135,10 @@ e305d029817ef58dd75376bfc481dd60e822b96f data/gearbox/loot_tables/blocks/chemica
 d2ea8dc54ea284cdc4d21e6e6c33721a75737ea2 data/gearbox/loot_tables/blocks/compressor.json
 dce5aaa625ed1b491be41d59d966fc36efab408c data/gearbox/loot_tables/blocks/core_drill.json
 feae2e51cdbd76ab9d7abc6f4cee3e81f2a00d41 data/gearbox/loot_tables/blocks/dipper.json
+91cbb286d4bb9f2720417719fc81376b2a3eaff1 data/gearbox/loot_tables/blocks/distillation_controller.json
+d6eb59138e7bc32d2aa9704bcbbf577237122b12 data/gearbox/loot_tables/blocks/distillation_output.json
 2b3c4839613c6cd678575ceb045e91b7e50bf475 data/gearbox/loot_tables/blocks/electrolyzer.json
+cb9b9f2f1bfe8dd631069932b3dbcfd4a847447e data/gearbox/loot_tables/blocks/glass_fluid_pipe.json
 485300c16945db3a1229785d8f2398f95b0b0e87 data/gearbox/loot_tables/blocks/irradiator.json
 15bd14ff2a70fe7fd00a5f713f780ea8780b9945 data/gearbox/loot_tables/blocks/kiln.json
 4d4745d5c8f6876ea5f7b8df72427e7b5d9edc2e data/gearbox/loot_tables/blocks/kinetic_machine.json
@@ -109,5 +152,8 @@ b2aa0ffb62e9fef9c4f7cc54bb2981da72809853 data/gearbox/loot_tables/blocks/mirror.
 8fb38c4f9d9d0e487e199779eed8cdf76686200a data/gearbox/loot_tables/blocks/pumpjack_well.json
 73f5b9881bc17783928f9bc8a8b2997af6c26094 data/gearbox/loot_tables/blocks/sapper.json
 5f7d6e0bd5c13f171b03b3b63e6b0a1807405c49 data/gearbox/loot_tables/blocks/spectrometer.json
-00e14d5351a998706600f9dd11b25ab7f1c7b8de data/minecraft/tags/blocks/mineable/axe.json
-1282760b04f4753bee9f0821928e6513278c3c30 data/minecraft/tags/blocks/mineable/pickaxe.json
+c59a30b4fb8da49f469da313838da7e2592ebde6 data/gearbox/loot_tables/blocks/steel_fluid_pipe.json
+1bec49cc0f3363a4257d73dcf07304524f85551e data/gearbox/loot_tables/blocks/steel_fluid_tank.json
+f3cb4aa2d63e400210e31fb92478f21018df25f3 data/gearbox/loot_tables/blocks/straight_steel_fluid_pipe.json
+becf7015b26a215b65068f96ac96956e26795ad9 data/minecraft/tags/blocks/mineable/axe.json
+6f1b4ab158c0024e4eccc2601ff00880a5509a6f data/minecraft/tags/blocks/mineable/pickaxe.json

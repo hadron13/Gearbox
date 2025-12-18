@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "gearbox:block/steel_pipes_connected",
-		"particle": "block/copper_block"
+		"particle": "create:block/industrial_iron_block"
 	},
 	"elements": [
 		{

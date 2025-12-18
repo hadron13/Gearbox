@@ -4,7 +4,7 @@
   "ingredients": [],
   "results": [
     {
-      "fluid": "minecraft:lava",
+      "fluid": "gearbox:petroleum",
       "amount": 50
     }
   ]

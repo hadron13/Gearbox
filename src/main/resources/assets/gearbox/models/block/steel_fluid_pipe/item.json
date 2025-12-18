@@ -3,7 +3,7 @@
 	"parent": "block/block",
 	"textures": {
 		"1": "gearbox:block/steel_pipes",
-		"particle": "block/copper_block"
+		"particle": "create:block/industrial_iron_block"
 	},
 	"elements": [
 		{

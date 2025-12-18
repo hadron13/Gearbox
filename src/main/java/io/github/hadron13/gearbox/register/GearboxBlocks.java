@@ -19,6 +19,7 @@ import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlock;
 import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlock;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerGenerator;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
@@ -294,7 +295,7 @@ public class GearboxBlocks {
             .transform(customItemModel())
             .register();
 
-   public static final BlockEntry<PrecisionCrankBlock> PRECISION_CRANK = REGISTRATE.block("precision_crank", PrecisionCrankBlock::new)
+    public static final BlockEntry<PrecisionCrankBlock> PRECISION_CRANK = REGISTRATE.block("precision_crank", PrecisionCrankBlock::new)
            .initialProperties(SharedProperties::stone)
            .properties(p -> p.mapColor(MapColor.METAL))
            .transform(axeOrPickaxe())
@@ -398,14 +399,24 @@ public class GearboxBlocks {
                         }, BlockStateProperties.WATERLOGGED);
             })
             .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+            .loot((p, b) -> p.dropOther(b, STEEL_FLUID_PIPE.get()))
             .register();
-
 
     public static final BlockEntry<DistillationControllerBlock> DISTILLATION_CONTROLLER = REGISTRATE.block("distillation_controller", DistillationControllerBlock::new)
             .initialProperties(SharedProperties::softMetal)
             .transform(axeOrPickaxe())
             .properties(p -> p.mapColor(MapColor.METAL))
             .blockstate(new DistillationControllerGenerator()::generate)
+            .item()
+            .transform(customItemModel())
+            .register();
+
+
+    public static final BlockEntry<DistillationOutputBlock> DISTILLATION_OUTPUT = REGISTRATE.block("distillation_output", DistillationOutputBlock::new)
+            .initialProperties(SharedProperties::netheriteMetal)
+            .transform(pickaxeOnly())
+            .properties(p -> p.mapColor(MapColor.METAL))
+            .blockstate(BlockStateGen.directionalBlockProvider(true))
             .item()
             .transform(customItemModel())
             .register();

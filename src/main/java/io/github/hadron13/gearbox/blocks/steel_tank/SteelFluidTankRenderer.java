@@ -3,8 +3,11 @@ package io.github.hadron13.gearbox.blocks.steel_tank;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
+import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.render.CachedBuffers;
@@ -27,6 +30,7 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
                               int light, int overlay) {
         if (!te.isController())
             return;
+        renderAsDistiller(te, partialTicks, ms, buffer, light, overlay);
         if (!te.hasWindows()) {
             return;
         }
@@ -69,6 +73,46 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
         ms.pushPose();
         ms.translate(0, clampedLevel - totalHeight, 0);
         FLUID_RENDERER.renderFluidBox(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, buffer, ms, light, false,true);
+
+        ms.popPose();
+    }
+
+
+
+    protected void renderAsDistiller(FluidTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
+                                  int light, int overlay) {
+        BlockState blockState = be.getBlockState();
+        VertexConsumer vb = buffer.getBuffer(RenderType.cutout());
+        ms.pushPose();
+        var msr = TransformStack.of(ms);
+        msr.translate(be.getWidth()/ 2f, 0.5, be.getWidth()/ 2f);
+
+        float dialPivotY = 6f / 16;
+        float dialPivotZ = 8f / 16;
+        float progress = be.boiler.gauge.getValue(partialTicks);
+
+        for (Direction d : Iterate.horizontalDirections) {
+            if (be.boiler.occludedDirections[d.get2DDataValue()])
+                continue;
+            ms.pushPose();
+            float yRot = -d.toYRot() - 90;
+            CachedBuffers.partial(GearboxPartialModels.DISTILLATION_GAUGE, blockState)
+                    .rotateYDegrees(yRot)
+                    .uncenter()
+                    .translate(be.getWidth()/ 2f - 6 / 16f, 0, 0)
+                    .light(light)
+                    .renderInto(ms, vb);
+            CachedBuffers.partial(GearboxPartialModels.DISTILLATION_GAUGE_DIAL, blockState)
+                    .rotateYDegrees(yRot)
+                    .uncenter()
+                    .translate(be.getWidth()/ 2f - 6 / 16f, 0, 0)
+                    .translate(0, dialPivotY, dialPivotZ)
+                    .rotateXDegrees(-145 * progress + 90)
+                    .translate(0, -dialPivotY, -dialPivotZ)
+                    .light(light)
+                    .renderInto(ms, vb);
+            ms.popPose();
+        }
 
         ms.popPose();
     }

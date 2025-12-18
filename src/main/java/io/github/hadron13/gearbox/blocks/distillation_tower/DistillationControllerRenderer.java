@@ -2,12 +2,7 @@ package io.github.hadron13.gearbox.blocks.distillation_tower;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlock;
-import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
-import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.render.CachedBuffers;
@@ -16,7 +11,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class DistillationControllerRenderer extends SafeBlockEntityRenderer<DistillationControllerBlockEntity> {
