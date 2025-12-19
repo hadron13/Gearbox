@@ -1,20 +1,28 @@
 package io.github.hadron13.gearbox.blocks.steel_tank;
 
+import com.simibubi.create.api.boiler.BoilerHeater;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.fluids.tank.BoilerData;
 import com.simibubi.create.content.fluids.tank.FluidTankBlock;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
+import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlockEntity;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,6 +33,9 @@ import static java.lang.Math.abs;
 public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveGoggleInformation, IMultiBlockEntityContainer.Fluid {
 
     public boolean isDistillingColumn = false;
+    public boolean[] occludedDirections = {true, true, true, true};
+    public float heat;
+    public BlockPos distillationController;
 
     public SteelTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -41,12 +52,55 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
         ConnectivityHandler.formMulti(this);
     }
 
+    public DistillationControllerBlockEntity getDistillationControllerBE(){
+        SteelTankBlockEntity controller = getControllerBE();
+        if(controller != null && controller.distillationController != null){
+            return (DistillationControllerBlockEntity) level.getBlockEntity(controller.distillationController);
+        }
+        return null;
+    }
+
+
+    public void setDistillationMode(boolean active){
+        isDistillingColumn = active;
+        setWindows(!active);
+    }
+
+    @Override
+    public void lazyTick() {
+        if(!isController())
+            return;
+
+        if(!isDistillingColumn)
+            return;
+        for (Direction d : Iterate.horizontalDirections) {
+            AABB aabb =
+                    new AABB(getBlockPos()).move(width / 2f - .5f, 0, width / 2f - .5f)
+                            .deflate(5f / 8);
+            aabb = aabb.move(d.getStepX() * (width / 2f + 1 / 4f), 0,
+                    d.getStepZ() * (width / 2f + 1 / 4f));
+            aabb = aabb.inflate(Math.abs(d.getStepZ()) / 2f, 0.25f, Math.abs(d.getStepX()) / 2f);
+            occludedDirections[d.get2DDataValue()] = !getLevel()
+                    .noCollision(aabb);
+        }
+
+        heat = 0;
+        for (int xOffset = 0; xOffset < width; xOffset++) {
+            for (int zOffset = 0; zOffset < width; zOffset++) {
+                BlockPos pos = worldPosition.offset(xOffset, -1, zOffset);
+                BlockState blockState = level.getBlockState(pos);
+                heat += Math.max(BoilerHeater.findHeat(level, pos, blockState), 0);
+            }
+        }
+
+    }
+
     @Override
     public void tick() {
         super.tick();
     }
 
-    @SuppressWarnings("unchecked")
+     @SuppressWarnings("unchecked")
     @Override
     public SteelTankBlockEntity getControllerBE() {
         if (isController())
@@ -85,7 +139,20 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
         SteelTankBlockEntity te = getControllerBE();
         if (te == null)
             return;
+        if(te.isDistillingColumn)
+            return;
         te.setWindows(!te.window);
+    }
+
+
+    public int getOutputNumber(){
+        SteelTankBlockEntity te = getControllerBE();
+        if (te == null)
+            return -1;
+        if(!te.isDistillingColumn)
+            return -1;
+
+        return worldPosition.subtract(te.worldPosition).getY()/2 + 1;
     }
 
     public boolean hasWindows(){
@@ -127,17 +194,14 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
         }
     }
 
-    public void updateBoilerState() {
-
-        if (!isController())
-            return;
-
-    }
 
     @Override
-    public void lazyTick() {
-        super.lazyTick();
+    public void updateBoilerState() {
+        if (!isController())
+            return;
     }
+
+
     @Override
     public void setController(BlockPos controller) {
         if (level.isClientSide && !isVirtual())
@@ -168,10 +232,24 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
             return (SteelTankBlockEntity) otherTE;
         return null;
     }
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
+        if(getControllerBE().isDistillingColumn)
+            return LazyOptional.empty();
+        return super.getCapability(cap, side);
+    }
+
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         SteelTankBlockEntity controllerTE = getControllerBE();
 
+        if(controllerTE.isDistillingColumn){
+            GearboxLang.translate("gui.distil_layer")
+                    .text("#" + (getOutputNumber()+1))
+                    .forGoggles(tooltip);
+            return true;
+        }
         return containedFluidTooltip(tooltip, isPlayerSneaking,
                 controllerTE.getCapability(ForgeCapabilities.FLUID_HANDLER));
     }

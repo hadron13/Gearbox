@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlock;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
 import io.github.hadron13.gearbox.register.GearboxShapes;
 import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -83,6 +85,11 @@ public class DistillationOutputBlock extends Block implements IBE<DistillationOu
         return this.defaultBlockState()
                 .setValue(FACING, facing)
                 .setValue(TANK_FACE, tank_direction);
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        return level.getBlockState(pos.relative(state.getValue(TANK_FACE))).is(GearboxBlocks.STEEL_FLUID_TANK.get());
     }
 
     @Override

@@ -1,13 +1,17 @@
 package io.github.hadron13.gearbox.blocks.distillation_tower;
 
 import com.simibubi.create.foundation.block.IBE;
+import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlock;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;
+import io.github.hadron13.gearbox.register.GearboxBlocks;
+import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -30,7 +34,10 @@ public class DistillationControllerBlock extends Block implements IBE<Distillati
         super(properties);
     }
 
-
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        return level.getBlockState(pos.above()).is(GearboxBlocks.STEEL_FLUID_TANK.get());
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -50,6 +57,13 @@ public class DistillationControllerBlock extends Block implements IBE<Distillati
         }
         if(faceAxis == Direction.Axis.Z){
             alongFirst = true;
+        }
+        for (Direction d : Iterate.directions){
+            BlockState neighbour = context.getLevel().getBlockState(context.getClickedPos().relative(d));
+            if(neighbour.getBlock() instanceof SteelTankBlock){
+                facing = d.getOpposite();
+                break;
+            }
         }
 
         return this.defaultBlockState()

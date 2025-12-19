@@ -30,7 +30,10 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
                               int light, int overlay) {
         if (!te.isController())
             return;
-        renderAsDistiller(te, partialTicks, ms, buffer, light, overlay);
+        if(te.isDistillingColumn) {
+            renderAsDistiller(te, partialTicks, ms, buffer, light, overlay);
+            return;
+        }
         if (!te.hasWindows()) {
             return;
         }
@@ -79,7 +82,7 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
 
 
 
-    protected void renderAsDistiller(FluidTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
+    protected void renderAsDistiller(SteelTankBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                                   int light, int overlay) {
         BlockState blockState = be.getBlockState();
         VertexConsumer vb = buffer.getBuffer(RenderType.cutout());
@@ -92,7 +95,7 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
         float progress = be.boiler.gauge.getValue(partialTicks);
 
         for (Direction d : Iterate.horizontalDirections) {
-            if (be.boiler.occludedDirections[d.get2DDataValue()])
+            if (be.occludedDirections[d.get2DDataValue()])
                 continue;
             ms.pushPose();
             float yRot = -d.toYRot() - 90;

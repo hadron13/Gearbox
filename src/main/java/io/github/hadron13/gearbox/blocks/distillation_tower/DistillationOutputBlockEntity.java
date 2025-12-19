@@ -1,10 +1,17 @@
 package io.github.hadron13.gearbox.blocks.distillation_tower;
 
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlockEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -16,19 +23,113 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock.FACING;
+import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock.TANK_FACE;
 
-public class DistillationOutputBlockEntity extends SmartBlockEntity {
+public class DistillationOutputBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
     public SmartFluidTankBehaviour tankInventory;
+    public boolean duplicate = false;
 
     public DistillationOutputBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+        setLazyTickRate(10);
     }
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         tankInventory = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 4000, true)
+                .whenFluidUpdates(this::sendData)
                 .forbidInsertion();
+        behaviours.add(tankInventory);
+    }
+
+    @Override
+    public void lazyTick() {
+        super.lazyTick();
+
+        if(level.isClientSide)
+            return;
+        BlockEntity be = level.getBlockEntity(worldPosition.relative(getBlockState().getValue(TANK_FACE)));
+        if(be instanceof SteelTankBlockEntity tank){
+            DistillationControllerBlockEntity controller = tank.getDistillationControllerBE();
+            if(controller != null ){
+                int output = getOutputNumber();
+                if (!controller.outputs.containsKey(output)){
+                    controller.outputs.put(output, worldPosition);
+                }else{
+                    boolean wasDuplicate = duplicate;
+                    duplicate = controller.outputs.get(output) != worldPosition;
+                    if(wasDuplicate != duplicate)
+                        sendData();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+
+        if(level.isClientSide)
+            return;
+        BlockEntity be = level.getBlockEntity(worldPosition.relative(getBlockState().getValue(TANK_FACE)));
+        if(be instanceof SteelTankBlockEntity tank){
+            DistillationControllerBlockEntity controller = tank.getDistillationControllerBE();
+            if(controller != null){
+                controller.outputs.remove(getOutputNumber());
+            }
+        }
+    }
+
+    public int getOutputNumber(){
+        int output = -1;
+        BlockEntity be = level.getBlockEntity(worldPosition.relative(getBlockState().getValue(TANK_FACE)));
+        if(be instanceof SteelTankBlockEntity tank){
+            output = tank.getOutputNumber();
+            Direction tank_face = getBlockState().getValue(TANK_FACE);
+            if(output == -1)
+                return -1;
+
+            if(tank_face == Direction.UP) output--;
+            if(tank_face == Direction.DOWN) output++;
+        }
+        return output;
+    }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+
+
+        if(duplicate){
+            GearboxLang.translate("gui.distil_duplicate")
+                    .style(ChatFormatting.DARK_RED)
+                    .forGoggles(tooltip);
+        }
+
+        int output = getOutputNumber();
+        if(output != -1) {
+            GearboxLang.translate("gui.distil_layer")
+                    .text("#" + (output+1))
+                    .forGoggles(tooltip);
+            GearboxLang.text("").forGoggles(tooltip);
+        }
+
+        containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
+        return true;
+    }
+
+    @Override
+    protected void write(CompoundTag tag, boolean clientPacket) {
+        tag.putBoolean("dup", duplicate);
+        tankInventory.write(tag, clientPacket);
+        super.write(tag, clientPacket);
+    }
+
+    @Override
+    protected void read(CompoundTag tag, boolean clientPacket) {
+        duplicate = tag.getBoolean("dup");
+        tankInventory.read(tag, clientPacket);
+        super.read(tag, clientPacket);
     }
 
     @Override

@@ -13,6 +13,7 @@ import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.dipper.DippingRecipe;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
@@ -177,6 +178,17 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo {
 
         Stream<PumpjackRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> PumpjackRecipe.match(blockEntity, recipe) );
+
+        return matchingRecipes.findAny();
+    }
+
+    public Optional<DistillingRecipe> find(DistillationControllerBlockEntity blockEntity, Level world){
+        if(world.isClientSide())
+            return Optional.empty();
+        List<DistillingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.DISTILLING.getType());
+
+        Stream<DistillingRecipe> matchingRecipes =
+                allRecipes.stream().filter(recipe -> DistillingRecipe.match(blockEntity, recipe) );
 
         return matchingRecipes.findAny();
     }

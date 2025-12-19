@@ -3,12 +3,14 @@ package io.github.hadron13.gearbox.blocks.distillation_tower;
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
@@ -20,8 +22,21 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
     }
 
     public static  boolean match(DistillationControllerBlockEntity be, DistillingRecipe recipe){
-        return recipe.getFluidIngredients().get(0).test(be.inputTank.getPrimaryHandler().getFluidInTank(0))
-                && be.distilMode.get() == recipe.mode;
+        if(recipe == null)
+            return false;
+        FluidIngredient fluidIngredient = recipe.fluidIngredients.get(0);
+
+        boolean fluid_match = false;
+        for(int i = 0; i < be.inputTank.getPrimaryHandler().getTanks(); i++){
+            FluidStack availableFluid = be.inputTank.getPrimaryHandler().getFluidInTank(i);
+            if(fluidIngredient.test(availableFluid) &&
+               availableFluid.getAmount() >= fluidIngredient.getRequiredAmount()) {
+                fluid_match = true;
+                break;
+            }
+        }
+
+        return fluid_match && be.distilMode.get() == recipe.mode;
     }
 
     @Override
