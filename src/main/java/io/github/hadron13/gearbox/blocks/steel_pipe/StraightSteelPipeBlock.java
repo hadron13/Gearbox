@@ -1,14 +1,17 @@
 package io.github.hadron13.gearbox.blocks.steel_pipe;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.pipes.GlassFluidPipeBlock;
 import com.simibubi.create.content.fluids.pipes.StraightPipeBlockEntity;
+import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import io.github.hadron13.gearbox.register.GearboxBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -34,6 +37,12 @@ public class StraightSteelPipeBlock extends GlassFluidPipeBlock {
 
         FluidTransportBehaviour.loadFlows(world, pos);
         return InteractionResult.SUCCESS;
+    }
+
+
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state, BlockEntity be) {
+        return ItemRequirement.of(GearboxBlocks.STEEL_FLUID_PIPE.getDefaultState(), be);
     }
 
 

@@ -235,7 +235,8 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
-        if(getControllerBE().isDistillingColumn)
+        SteelTankBlockEntity controller = getControllerBE();
+        if(controller == null || controller.isDistillingColumn)
             return LazyOptional.empty();
         return super.getCapability(cap, side);
     }

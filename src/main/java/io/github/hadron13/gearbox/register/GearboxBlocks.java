@@ -347,8 +347,8 @@ public class GearboxBlocks {
 
 
     public static final BlockEntry<SteelPipeBlock> STEEL_FLUID_PIPE = REGISTRATE.block("steel_fluid_pipe", SteelPipeBlock::new)
-            .initialProperties(SharedProperties::netheriteMetal)
-            .properties(p -> p.forceSolidOff())
+            .initialProperties(SharedProperties::copperMetal)
+            .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
             .transform(pickaxeOnly())
             .blockstate(BlockStateGen.pipe())
             .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
@@ -359,8 +359,8 @@ public class GearboxBlocks {
 
     public static final BlockEntry<SteelGlassPipeBlock> STEEL_GLASS_FLUID_PIPE =
             REGISTRATE.block("glass_fluid_pipe", SteelGlassPipeBlock::new)
-                    .initialProperties(SharedProperties::netheriteMetal)
-                    .properties(p -> p.noOcclusion())
+                    .initialProperties(SharedProperties::copperMetal)
+                    .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
                     .addLayer(() -> RenderType::cutoutMipped)
                     .transform(pickaxeOnly())
                     .blockstate((c, p) -> {
@@ -382,8 +382,8 @@ public class GearboxBlocks {
 
 
     public static final BlockEntry<StraightSteelPipeBlock> STRAIGHT_STEEL_FLUID_PIPE = REGISTRATE.block("straight_steel_fluid_pipe", StraightSteelPipeBlock::new)
-            .initialProperties(SharedProperties::netheriteMetal)
-            .properties(p -> p.forceSolidOff())
+            .initialProperties(SharedProperties::copperMetal)
+            .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
             .transform(pickaxeOnly())
             .blockstate((c, p) -> {
                 p.getVariantBuilder(c.getEntry())
