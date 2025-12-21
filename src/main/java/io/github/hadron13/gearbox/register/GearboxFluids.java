@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.register;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -8,16 +9,23 @@ import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.FluidEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import net.createmod.catnip.theme.Color;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.function.Consumer;
@@ -47,7 +55,7 @@ public class GearboxFluids {
                                     () -> 1f / 32f ))
                     .lang("Petroleum")
                     .properties(b -> b.viscosity(20000)
-                            .density(2000).canSwim(false).canPushEntity(false))
+                            .density(1000))
                     .fluidProperties(p -> p.levelDecreasePerBlock(2)
                             .tickRate(25)
                             .slopeFindDistance(3)
@@ -77,6 +85,14 @@ public class GearboxFluids {
             .tag(AllTags.forgeItemTag("buckets/resin"))
             .build().register();
 
+
+    public static final FluidEntry<VirtualFluid> AIR = REGISTRATE
+            .virtualFluid("air")
+            .properties(p -> p.viscosity(0).density(-100))
+            .bucket()
+            .build()
+            .register();
+
     public static final FluidEntry<ForgeFlowingFluid.Flowing> NITROGEN = gas("nitrogen");
     public static final FluidEntry<ForgeFlowingFluid.Flowing> OXYGEN = gas("oxygen");
     public static final FluidEntry<ForgeFlowingFluid.Flowing> HYDROGEN = gas("hydrogen");
@@ -101,10 +117,16 @@ public class GearboxFluids {
             .build()
             .register();
     }
+//
+//    public static final ResourceLocation GAS_STILL = new ResourceLocation("minecraft", "block/water_still");
+//    public static final ResourceLocation GAS_FLOW = new ResourceLocation("minecraft", "block/water_flow");
+//    private static final ResourceLocation GAS_OVERLAY = new ResourceLocation("minecraft", "block/water_overlay");
+
+
 
     public static class TransparentFluidType extends FluidType {
-        private ResourceLocation stillTexture;
-        private ResourceLocation flowingTexture;
+        protected ResourceLocation stillTexture;
+        protected ResourceLocation flowingTexture;
 
         protected TransparentFluidType(FluidType.Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
             super(properties);

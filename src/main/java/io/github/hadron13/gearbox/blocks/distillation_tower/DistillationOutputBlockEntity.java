@@ -53,15 +53,11 @@ public class DistillationOutputBlockEntity extends SmartBlockEntity implements I
         if(be instanceof SteelTankBlockEntity tank){
             DistillationControllerBlockEntity controller = tank.getDistillationControllerBE();
             if(controller != null ){
-                int output = getOutputNumber();
-                if (!controller.outputs.containsKey(output)){
-                    controller.outputs.put(output, worldPosition);
-                }else{
-                    boolean wasDuplicate = duplicate;
-                    duplicate = controller.outputs.get(output) != worldPosition;
-                    if(wasDuplicate != duplicate)
-                        sendData();
-                }
+
+                boolean wasDuplicate = duplicate;
+                duplicate = controller.addOutput(getOutputNumber(), worldPosition);
+                if(wasDuplicate != duplicate)
+                    sendData();
             }
         }
     }
@@ -76,7 +72,7 @@ public class DistillationOutputBlockEntity extends SmartBlockEntity implements I
         if(be instanceof SteelTankBlockEntity tank){
             DistillationControllerBlockEntity controller = tank.getDistillationControllerBE();
             if(controller != null){
-                controller.outputs.remove(getOutputNumber());
+                controller.removeOutput(getOutputNumber());
             }
         }
     }

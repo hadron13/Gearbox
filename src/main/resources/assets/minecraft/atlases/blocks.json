@@ -87,6 +87,14 @@
     {
       "type": "single",
       "resource": "gearbox:fluid/steam_flow"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/air_still"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/air_flow"
     }
   ]
 }

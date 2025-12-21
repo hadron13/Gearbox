@@ -27,7 +27,7 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
         FluidIngredient fluidIngredient = recipe.fluidIngredients.get(0);
 
         boolean fluid_match = false;
-        for(int i = 0; i < be.inputTank.getPrimaryHandler().getTanks(); i++){
+        for(int i = 0; i < 2; i++){
             FluidStack availableFluid = be.inputTank.getPrimaryHandler().getFluidInTank(i);
             if(fluidIngredient.test(availableFluid) &&
                availableFluid.getAmount() >= fluidIngredient.getRequiredAmount()) {

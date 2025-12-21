@@ -7,6 +7,7 @@ import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.fluids.tank.FluidTankRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
 import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.data.Iterate;
@@ -92,7 +93,9 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
 
         float dialPivotY = 6f / 16;
         float dialPivotZ = 8f / 16;
-        float progress = be.boiler.gauge.getValue(partialTicks);
+        DistillationControllerBlockEntity controller = be.getDistillationControllerBE();
+
+        float progress = controller == null? 0 : controller.gaugeLevel.getValue(partialTicks);
 
         for (Direction d : Iterate.horizontalDirections) {
             if (be.occludedDirections[d.get2DDataValue()])

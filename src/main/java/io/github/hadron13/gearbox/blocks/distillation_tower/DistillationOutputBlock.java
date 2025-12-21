@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.distillation_tower;
 
 import com.google.common.collect.ImmutableMap;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.content.fluids.pipes.AxisPipeBlock;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
@@ -34,9 +35,8 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.function.Function;
 
-public class DistillationOutputBlock extends Block implements IBE<DistillationOutputBlockEntity> {
+public class DistillationOutputBlock extends Block implements IBE<DistillationOutputBlockEntity>, IWrenchable {
 
 
     public static final Property<Direction> FACING = BlockStateProperties.FACING;

@@ -75,6 +75,7 @@ public interface ProcessingRecipeSchema {
     RecipeKey<Long> PROCESSING_TIME_REQUIRED = TimeComponent.TICKS.key("processingTime").optional(100L).alwaysWrite();
 
     RecipeKey<String> BIOME = StringComponent.ID.key("biome");
+    RecipeKey<String> MODE = StringComponent.ID.key("mode").optional("distil_atmospheric").alwaysWrite();
     //RecipeKey<ResourceKey<Biome>> BIOME = new RecipeComponent<ResourceKey<Biome>>() {
     //    @Override
     //    public Class<?> componentClass() {
@@ -216,6 +217,7 @@ public interface ProcessingRecipeSchema {
     RecipeSchema REACTING_RECIPE = new RecipeSchema(ProcessingRecipeJS.class, ProcessingRecipeJS::new, RESULTS, INGREDIENTS, PROCESSING_TIME_REQUIRED, HEAT_REQUIREMENT, ATMOSPHERE, RPM_MAX, RPM_MIN);
 
     RecipeSchema PUMPJACK_RECIPE = new RecipeSchema(ProcessingRecipeJS.class, ProcessingRecipeJS::new, RESULTS, INGREDIENTS, BIOME, PROCESSING_TIME_REQUIRED);
+    RecipeSchema DISTILLING_RECIPE = new RecipeSchema(ProcessingRecipeJS.class, ProcessingRecipeJS::new, RESULTS, INGREDIENTS, PROCESSING_TIME_REQUIRED, MODE);
 
     RecipeSchema DIPPING_RECIPE = new RecipeSchema(ProcessingRecipeJS.class, ProcessingRecipeJS::new, RESULTS, INGREDIENTS, DIPS, PROCESSING_TIME, HEAT_REQUIREMENT);
 }

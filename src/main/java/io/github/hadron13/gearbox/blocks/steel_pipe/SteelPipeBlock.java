@@ -14,13 +14,17 @@ import io.github.hadron13.gearbox.register.GearboxBlocks;
 import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -28,6 +32,11 @@ import javax.annotation.Nullable;
 public class SteelPipeBlock extends FluidPipeBlock {
     public SteelPipeBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public InteractionResult tryEncase(BlockState state, Level level, BlockPos pos, ItemStack heldItem, Player player, InteractionHand hand, BlockHitResult ray) {
+        return InteractionResult.PASS;
     }
 
     @Override

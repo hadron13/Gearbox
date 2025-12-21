@@ -25,8 +25,9 @@ public class KubeJSGearboxPlugin extends KubeJSPlugin {
         recipeSchemas.put(GearboxRecipeTypes.CENTRIFUGING, ProcessingRecipeSchema.PROCESSING_WITH_TIME);
         recipeSchemas.put(GearboxRecipeTypes.PUMPJACK, ProcessingRecipeSchema.PUMPJACK_RECIPE);
         recipeSchemas.put(GearboxRecipeTypes.LASER_DRILLING, ProcessingRecipeSchema.LASER_RECIPE);
-        recipeSchemas.put(GearboxRecipeTypes.REACTING, ProcessingRecipeSchema.REACTING_RECIPE);
-        recipeSchemas.put(GearboxRecipeTypes.DIPPING, ProcessingRecipeSchema.DIPPING_RECIPE);
+        recipeSchemas.put(GearboxRecipeTypes.DISTILLING, ProcessingRecipeSchema.DISTILLING_RECIPE);
+//        recipeSchemas.put(GearboxRecipeTypes.REACTING, ProcessingRecipeSchema.REACTING_RECIPE);
+//        recipeSchemas.put(GearboxRecipeTypes.DIPPING, ProcessingRecipeSchema.DIPPING_RECIPE);
     }
 
     @Override

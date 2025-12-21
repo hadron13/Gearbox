@@ -146,14 +146,14 @@ public class GearboxJEI implements IModPlugin {
                 .emptyBackground(177, 75)
                 .build("laser_drilling", LaserDrillingCategory::new);
 
-        CreateRecipeCategory<?>
-                reacting= builder(BasinRecipe.class)
-                .addTypedRecipes(GearboxRecipeTypes.REACTING)
-                .catalyst(GearboxBlocks.REACTOR::get)
-                .catalyst(AllBlocks.BASIN::get)
-                .doubleItemIcon(GearboxBlocks.REACTOR.get(), AllBlocks.BASIN.get())
-                .emptyBackground(177, 103)
-                .build("reacting", ReactingCategory::new);
+//        CreateRecipeCategory<?>
+//                reacting= builder(BasinRecipe.class)
+//                .addTypedRecipes(GearboxRecipeTypes.REACTING)
+//                .catalyst(GearboxBlocks.REACTOR::get)
+//                .catalyst(AllBlocks.BASIN::get)
+//                .doubleItemIcon(GearboxBlocks.REACTOR.get(), AllBlocks.BASIN.get())
+//                .emptyBackground(177, 103)
+//                .build("reacting", ReactingCategory::new);
     }
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);

@@ -59,7 +59,7 @@ public class DipperBlock extends HorizontalKineticBlock implements IBE<DipperBlo
 
     @Override
     public BlockEntityType<? extends DipperBlockEntity> getBlockEntityType() {
-        return GearboxBlockEntities.DIPPER.get();
+        return null;
     }
 
     @Override

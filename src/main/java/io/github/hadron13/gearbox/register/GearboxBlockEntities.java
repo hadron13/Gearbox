@@ -209,18 +209,18 @@ public class GearboxBlockEntities {
             .validBlocks(GearboxBlocks.PUMPJACK_WELL)
             .register();
 
-    public static final BlockEntityEntry<DipperBlockEntity> DIPPER = REGISTRATE
-            .blockEntity("dipper", DipperBlockEntity::new)
-            .validBlocks(GearboxBlocks.DIPPER)
-
-            .register();
-
-    public static final BlockEntityEntry<ReactorBlockEntity> REACTOR = REGISTRATE
-            .blockEntity("chemical_reactor", ReactorBlockEntity::new)
-            .visual(() -> ReactorVisual::new)
-            .validBlocks(GearboxBlocks.REACTOR)
-            .renderer(() -> ReactorRenderer::new)
-            .register();
+//    public static final BlockEntityEntry<DipperBlockEntity> DIPPER = REGISTRATE
+//            .blockEntity("dipper", DipperBlockEntity::new)
+//            .validBlocks(GearboxBlocks.DIPPER)
+//
+//            .register();
+//
+//    public static final BlockEntityEntry<ReactorBlockEntity> REACTOR = REGISTRATE
+//            .blockEntity("chemical_reactor", ReactorBlockEntity::new)
+//            .visual(() -> ReactorVisual::new)
+//            .validBlocks(GearboxBlocks.REACTOR)
+//            .renderer(() -> ReactorRenderer::new)
+//            .register();
 
     public static final BlockEntityEntry<PrecisionCrankBlockEntity> PRECISION_CRANK = REGISTRATE
             .blockEntity("precision_crank", PrecisionCrankBlockEntity::new)

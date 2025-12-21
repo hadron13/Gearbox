@@ -26,6 +26,7 @@ public class SteelGlassPipeBlock extends GlassFluidPipeBlock {
         super(p_i48339_1_);
     }
 
+
     @Override
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
         if (tryRemoveBracket(context))

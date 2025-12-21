@@ -273,27 +273,27 @@ public class GearboxBlocks {
             .register();
 
 
-    public static final BlockEntry<DipperBlock> DIPPER = REGISTRATE.block("dipper", DipperBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
-            //.addLayer(() -> RenderType::cutoutMipped)
-            .item(AssemblyOperatorBlockItem::new)
-            .transform(customItemModel())
-            .register();
-
-
-    public static final BlockEntry<ReactorBlock> REACTOR = REGISTRATE.block("chemical_reactor", ReactorBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
-            //.addLayer(() -> RenderType::cutoutMipped)
-            .transform(GearboxStress.setImpact(4.0))
-            .item(AssemblyOperatorBlockItem::new)
-            .transform(customItemModel())
-            .register();
+//    public static final BlockEntry<DipperBlock> DIPPER = REGISTRATE.block("dipper", DipperBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+//            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+//            //.addLayer(() -> RenderType::cutoutMipped)
+//            .item(AssemblyOperatorBlockItem::new)
+//            .transform(customItemModel())
+//            .register();
+//
+//
+//    public static final BlockEntry<ReactorBlock> REACTOR = REGISTRATE.block("chemical_reactor", ReactorBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+//            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+//            //.addLayer(() -> RenderType::cutoutMipped)
+//            .transform(GearboxStress.setImpact(4.0))
+//            .item(AssemblyOperatorBlockItem::new)
+//            .transform(customItemModel())
+//            .register();
 
     public static final BlockEntry<PrecisionCrankBlock> PRECISION_CRANK = REGISTRATE.block("precision_crank", PrecisionCrankBlock::new)
            .initialProperties(SharedProperties::stone)
