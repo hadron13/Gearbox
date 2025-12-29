@@ -10,7 +10,9 @@ import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
@@ -26,17 +28,21 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
             return false;
         FluidIngredient fluidIngredient = recipe.fluidIngredients.get(0);
 
-        boolean fluid_match = false;
-        for(int i = 0; i < 2; i++){
-            FluidStack availableFluid = be.inputTank.getPrimaryHandler().getFluidInTank(i);
-            if(fluidIngredient.test(availableFluid) &&
-               availableFluid.getAmount() >= fluidIngredient.getRequiredAmount()) {
-                fluid_match = true;
-                break;
+        IFluidHandler availableFluids = be.getCapability(ForgeCapabilities.FLUID_HANDLER)
+                .orElse(null);
+        if(availableFluids == null)
+            return false;
+        if(be.distilMode.get() != recipe.mode)
+            return false;
+
+        for(int i = 0; i < availableFluids.getTanks(); i++){
+            FluidStack fluid = availableFluids.getFluidInTank(i);
+            if(fluidIngredient.test(fluid) &&
+                fluid.getAmount() >= fluidIngredient.getRequiredAmount()) {
+                return true;
             }
         }
-
-        return fluid_match && be.distilMode.get() == recipe.mode;
+        return false;
     }
 
     @Override

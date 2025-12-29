@@ -53,6 +53,7 @@
   "block.gearbox.straight_steel_fluid_pipe": "Straight Steel Fluid Pipe",
   "death.attack.gearbox.laserdeath": "%1$s received too much radiation",
   "death.attack.gearbox.laserdeath.player": "%1$s was enlightened by %2$s",
+  "fluid.gearbox.air": "Air",
   "fluid.gearbox.ammonia": "Ammonia",
   "fluid.gearbox.argon": "Argon",
   "fluid.gearbox.chlorine": "Chlorine",

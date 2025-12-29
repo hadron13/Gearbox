@@ -111,10 +111,14 @@ public class DistillationOutputBlockEntity extends SmartBlockEntity implements I
             GearboxLang.text("").forGoggles(tooltip);
         }
 
-        if(getBlockState().getValue(POWERED))
-            GearboxLang.addHint(tooltip, "hint.distil.discard");
 
         containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
+
+
+        if(getBlockState().getValue(POWERED)) {
+            GearboxLang.text("").forGoggles(tooltip);
+            GearboxLang.addHint(tooltip, "hint.distil.discard");
+        }
         return true;
     }
 

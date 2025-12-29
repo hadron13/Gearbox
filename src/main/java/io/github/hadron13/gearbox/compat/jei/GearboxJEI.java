@@ -7,6 +7,7 @@ import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
+import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
@@ -145,6 +146,16 @@ public class GearboxJEI implements IModPlugin {
                 .itemIcon(GearboxBlocks.LASER_DRILL.get())
                 .emptyBackground(177, 75)
                 .build("laser_drilling", LaserDrillingCategory::new);
+
+        CreateRecipeCategory<?>
+                distilling = builder(DistillingRecipe.class)
+                .addTypedRecipes(GearboxRecipeTypes.DISTILLING)
+                .catalyst(GearboxBlocks.DISTILLATION_CONTROLLER::get)
+                .catalyst(GearboxBlocks.DISTILLATION_OUTPUT::get)
+                .catalyst(GearboxBlocks.STEEL_FLUID_TANK::get)
+                .itemIcon(GearboxBlocks.DISTILLATION_CONTROLLER.get())
+                .emptyBackground(177, 165)
+                .build("distilling", DistillingCategory::new);
 
 //        CreateRecipeCategory<?>
 //                reacting= builder(BasinRecipe.class)

@@ -140,7 +140,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
 
         for(int i = 0; i < availableFluids.getTanks();i++){
             FluidStack fluid = availableFluids.getFluidInTank(i);
-            if(fluid.getFluid() == GearboxFluids.STEAM.get().getSource() && fluid.getAmount() >= 1000){
+            if(fluid.getFluid() == GearboxFluids.STEAM.get().getSource()){
                 return fluid.getAmount();
             }
         }
@@ -179,7 +179,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
 
         return switch (distilMode.get()){
             case DISTIL_FLASH -> hasSteam();
-            case DISTIL_ATMOSPHERIC -> width > 3 && tankController.heat > 1;
+            case DISTIL_ATMOSPHERIC -> width == 3 && tankController.heat > 1;
             case DISTIL_VACUUM -> hasVacuum() && tankController.heat > 1;
         };
     }
@@ -187,8 +187,8 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
     public float getGaugeTarget(){
         return switch (distilMode.get()){
             case DISTIL_FLASH -> getSteam()/4000f;
-            case DISTIL_ATMOSPHERIC -> getTankControllerBE().map(tank-> tank.heat / 6f).orElse(0F);
-            case DISTIL_VACUUM -> 1.0f - (getAir() / 4000f);
+            case DISTIL_ATMOSPHERIC -> getTankControllerBE().map(tank-> (float)Math.min(1.0, tank.heat / 6f) ).orElse(0F);
+            case DISTIL_VACUUM -> 1.0f - (getAir() / 8000f);
         };
     }
 
@@ -210,9 +210,9 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         }
 
         if(distilMode.get() == DistilMode.DISTIL_VACUUM){
-            outputTank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.AIR.get(), tankController.getHeight()), IFluidHandler.FluidAction.EXECUTE);
-            if(outputTank.getPrimaryHandler().getFluidInTank(0).getAmount() < 4000)
+            if(outputTank.getPrimaryHandler().getFluidInTank(0).getAmount() < 8000)
                 sendData();
+            outputTank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.AIR.get(), tankController.getHeight()*15), IFluidHandler.FluidAction.EXECUTE);
         }
 
         if(!DistillingRecipe.match(this, currentRecipe)){
@@ -243,7 +243,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
 
                     outBE.tankInventory.allowInsertion();
                     int filled = outBE.tankInventory.getPrimaryHandler().fill(result, simulate? SIMULATE : EXECUTE);
-                    
+
                     if(simulate && filled < result.getAmount()){
                         timer += 50;
                         return;
@@ -307,10 +307,6 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         if(be instanceof SteelTankBlockEntity tank){
             tank.distillationController = worldPosition;
             tank.setDistillationMode(true);
-            if(!level.isClientSide) {
-                requiredOutputs = ((tank.getHeight()+1) / 2) - outputs.size();
-                sendData();
-            }
         }
 
         if(level.isClientSide)
@@ -357,7 +353,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
 
         GearboxLang.translate("gui.distil_mode").text(":").forGoggles(tooltip);
-        GearboxLang.translate("gui.distil_mode." + distilMode.get().toString().toLowerCase())
+        GearboxLang.translate(distilMode.get().getRawTranslationKey())
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip, 1);
 
@@ -433,7 +429,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
 
         private DistilMode(GearboxIcons icon) {
             this.icon = icon;
-            translationKey = "gearbox.gui.distil_mode." + Lang.asId(name());
+            translationKey = "gui.distil_mode." + Lang.asId(name());
         }
 
         @Override
@@ -443,6 +439,10 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
 
         @Override
         public String getTranslationKey() {
+            return "gearbox." + translationKey;
+        }
+
+        public String getRawTranslationKey(){
             return translationKey;
         }
     }

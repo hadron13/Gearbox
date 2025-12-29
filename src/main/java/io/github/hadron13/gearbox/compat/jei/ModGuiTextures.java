@@ -13,7 +13,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public enum ModGuiTextures implements ScreenElement, TextureSheetSegment {
     JEI_HEAT_BAR_CENTERED("jei/widgets", 0, 16, 169, 19),
     JEI_SHORT_ARROW("jei/widgets", 0, 0, 20, 9),
-    JEI_BACK_ARROW("jei/widgets", 0, 48, 14, 18);
+    JEI_BACK_ARROW("jei/widgets", 0, 48, 14, 18),
+    JEI_DISTILLING_COLUMN("jei/widgets", 0, 80, 32, 32),
+    JEI_DISTILLING_COLUMN_BOTTOM("jei/widgets", 0, 112, 32, 32),
+    JEI_DISTILLING_FIRE("jei/widgets", 0, 144, 32, 16);
 
     public static final int FONT_COLOR = 0x575F7A;
     public final ResourceLocation location;

@@ -89,6 +89,7 @@ public class GearboxFluids {
     public static final FluidEntry<VirtualFluid> AIR = REGISTRATE
             .virtualFluid("air")
             .properties(p -> p.viscosity(0).density(-100))
+            .lang("Air")
             .bucket()
             .build()
             .register();
