@@ -18,6 +18,12 @@
   "gearbox.hint.distil.flash": "It appears this Distillation Column needs pressure control via _steam_",
   "gearbox.hint.distil.missing.title": "Missing Outputs:",
   "gearbox.hint.distil.missing": "It appears this Distillation Column has _not_ enough outputs",
+  "gearbox.hint.distil.heat.title": "Heat Requirement:",
+  "gearbox.hint.distil.heat": "It appears this Distillation Column has _not_ enough heat",
+  "gearbox.hint.distil.width.title": "Width Requirement:",
+  "gearbox.hint.distil.width": "It appears this Distillation Column is _not_ wide enough for this mode",
+  "gearbox.hint.distil.discard.title": "Discard Mode:",
+  "gearbox.hint.distil.discard": "Outputs will be automatically voided",
 
   "gearbox.gui.spectrometer.title": "Spectrometry",
   "gearbox.gui.spectrometer.power": "Laser Power",

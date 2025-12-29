@@ -41,6 +41,7 @@ public class DistillationOutputBlock extends Block implements IBE<DistillationOu
 
     public static final Property<Direction> FACING = BlockStateProperties.FACING;
     public static final Property<Direction> TANK_FACE = DirectionProperty.create("tank_face");
+    public static final Property<Boolean> POWERED = BlockStateProperties.POWERED;
 
     public DistillationOutputBlock(Properties properties) {
         super(properties);
@@ -49,7 +50,7 @@ public class DistillationOutputBlock extends Block implements IBE<DistillationOu
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, TANK_FACE);
+        builder.add(FACING, TANK_FACE, POWERED);
         super.createBlockStateDefinition(builder);
     }
 
@@ -84,8 +85,21 @@ public class DistillationOutputBlock extends Block implements IBE<DistillationOu
 
         return this.defaultBlockState()
                 .setValue(FACING, facing)
-                .setValue(TANK_FACE, tank_direction);
+                .setValue(TANK_FACE, tank_direction)
+                .setValue(POWERED, l.hasNeighborSignal(context.getClickedPos()));
     }
+
+    @Override
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos,
+                                boolean isMoving) {
+        if (worldIn.isClientSide)
+            return;
+        boolean previouslyPowered = state.getValue(POWERED);
+        if (previouslyPowered != worldIn.hasNeighborSignal(pos))
+            worldIn.setBlock(pos, state.cycle(POWERED), 2);
+    }
+
+
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {

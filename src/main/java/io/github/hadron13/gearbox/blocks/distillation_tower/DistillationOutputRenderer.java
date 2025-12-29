@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.distillation_tower;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -10,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock.POWERED;
 import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock.TANK_FACE;
 
 public class DistillationOutputRenderer extends SafeBlockEntityRenderer<DistillationOutputBlockEntity> {
@@ -18,7 +20,9 @@ public class DistillationOutputRenderer extends SafeBlockEntityRenderer<Distilla
     protected void renderSafe(DistillationOutputBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
 
         BlockState state = be.getBlockState();
-        SuperByteBuffer baseBuffer = CachedBuffers.partialFacing(GearboxPartialModels.DISTILLATION_OUTPUT_BASE_UNPOWERED, state, state.getValue(TANK_FACE));
+        PartialModel model = state.getValue(POWERED)?   GearboxPartialModels.DISTILLATION_OUTPUT_BASE_POWERED:
+                                                        GearboxPartialModels.DISTILLATION_OUTPUT_BASE_UNPOWERED;
+        SuperByteBuffer baseBuffer = CachedBuffers.partialFacing(model, state, state.getValue(TANK_FACE));
 
         baseBuffer.light(light)
                 .renderInto(ms, bufferSource.getBuffer(RenderType.solid()));

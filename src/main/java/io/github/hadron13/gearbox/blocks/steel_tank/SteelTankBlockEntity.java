@@ -152,7 +152,7 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
         if(!te.isDistillingColumn)
             return -1;
 
-        return worldPosition.subtract(te.worldPosition).getY()/2 + 1;
+        return (worldPosition.subtract(te.worldPosition).getY()+1)/2 + 1;
     }
 
     public boolean hasWindows(){
@@ -247,7 +247,7 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
 
         if(controllerTE.isDistillingColumn){
             GearboxLang.translate("gui.distil_layer")
-                    .text("#" + (getOutputNumber()+1))
+                    .text("#" + (getOutputNumber()))
                     .forGoggles(tooltip);
             return true;
         }

@@ -17,13 +17,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock.FACING;
-import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock.TANK_FACE;
+import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock.*;
 
 public class DistillationOutputBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
@@ -49,6 +49,13 @@ public class DistillationOutputBlockEntity extends SmartBlockEntity implements I
 
         if(level.isClientSide)
             return;
+
+
+        if(getBlockState().getValue(POWERED)){
+            tankInventory.getPrimaryHandler().drain(500, IFluidHandler.FluidAction.EXECUTE);
+            sendData();
+        }
+
         BlockEntity be = level.getBlockEntity(worldPosition.relative(getBlockState().getValue(TANK_FACE)));
         if(be instanceof SteelTankBlockEntity tank){
             DistillationControllerBlockEntity controller = tank.getDistillationControllerBE();
@@ -82,12 +89,6 @@ public class DistillationOutputBlockEntity extends SmartBlockEntity implements I
         BlockEntity be = level.getBlockEntity(worldPosition.relative(getBlockState().getValue(TANK_FACE)));
         if(be instanceof SteelTankBlockEntity tank){
             output = tank.getOutputNumber();
-            Direction tank_face = getBlockState().getValue(TANK_FACE);
-            if(output == -1)
-                return -1;
-
-            if(tank_face == Direction.UP) output--;
-            if(tank_face == Direction.DOWN) output++;
         }
         return output;
     }
@@ -105,10 +106,13 @@ public class DistillationOutputBlockEntity extends SmartBlockEntity implements I
         int output = getOutputNumber();
         if(output != -1) {
             GearboxLang.translate("gui.distil_layer")
-                    .text("#" + (output+1))
+                    .text("#" + output)
                     .forGoggles(tooltip);
             GearboxLang.text("").forGoggles(tooltip);
         }
+
+        if(getBlockState().getValue(POWERED))
+            GearboxLang.addHint(tooltip, "hint.distil.discard");
 
         containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
         return true;

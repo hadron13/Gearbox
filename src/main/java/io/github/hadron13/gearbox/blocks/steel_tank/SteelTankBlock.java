@@ -231,6 +231,10 @@ public class SteelTankBlock extends Block implements IWrenchable, IBE<SteelTankB
             if (!(te instanceof SteelTankBlockEntity))
                 return;
             SteelTankBlockEntity tankTE = (SteelTankBlockEntity) te;
+            SteelTankBlockEntity controller = tankTE.getControllerBE();
+            if(controller != null)
+                controller.setDistillationMode(false);
+
             world.removeBlockEntity(pos);
             ConnectivityHandler.splitMulti(tankTE);
 

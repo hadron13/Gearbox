@@ -1,6 +1,6 @@
 {
   "type": "gearbox:distilling",
-  "mode": "distil_flash",
+  "mode": "distil_atmospheric",
   "ingredients": [
     {
       "fluid": "gearbox:petroleum",

@@ -42,6 +42,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
+
 
 public class DistillationControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
@@ -73,7 +76,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         distilMode.withCallback(i -> {
             switch (DistilMode.class.getEnumConstants()[i]){
                 case DISTIL_VACUUM -> {
-                    outputTank.getPrimaryHandler().setFluid(new FluidStack(GearboxFluids.AIR.get(), 4000));
+                    outputTank.getPrimaryHandler().setFluid(new FluidStack(GearboxFluids.AIR.get(), 8000));
                 }
                 case DISTIL_FLASH, DISTIL_ATMOSPHERIC -> {
                     outputTank.getPrimaryHandler().setFluid(FluidStack.EMPTY);
@@ -85,7 +88,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
 
         inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 2, 4000, true)
                 .whenFluidUpdates(this::sendData);
-        outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 4000, true)
+        outputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, 8000, true)
                 .whenFluidUpdates(this::sendData)
                 .forbidInsertion();
         behaviours.add(inputTank);
@@ -98,14 +101,16 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         });
     }
 
-    public SteelTankBlockEntity getTankControllerBE(){
+    public Optional<SteelTankBlockEntity> getTankControllerBE(){
         if(tankController == null)
-            return null;
+            return Optional.empty();
         BlockEntity be = level.getBlockEntity(tankController);
         if(be instanceof SteelTankBlockEntity tank){
-            return tank.getControllerBE();
+            SteelTankBlockEntity controller = tank.getControllerBE();
+            if(controller != null)
+                return Optional.of(controller);
         }
-        return null;
+        return Optional.empty();
     }
 
     public boolean addOutput(int level, BlockPos pos){
@@ -120,7 +125,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
     }
 
     public void removeOutput(int level){
-        SteelTankBlockEntity tankController = getTankControllerBE();
+        SteelTankBlockEntity tankController = getTankControllerBE().orElse(null);
         outputs.remove(level);
         if(this.level.isClientSide)
             return;
@@ -142,72 +147,111 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         return 0;
     }
 
+    public int getAir(){
+        return outputTank.getPrimaryHandler().getFluidInTank(0).getAmount();
+    }
+
     public boolean hasSteam(){
         return getSteam() >= 1000;
+    }
+
+    public boolean hasVacuum(){
+        return  getAir() < 500;
+    }
+
+    public boolean canProcess(){
+
+        if(currentRecipe == null)
+            return false;
+
+        if(outputs.size() < currentRecipe.getFluidResults().size())
+            return false;
+
+        if(inputTank.isEmpty())
+            return false;
+
+        SteelTankBlockEntity tankController = getTankControllerBE().orElse(null);
+        if(tankController == null)
+            return false;
+
+        int width = tankController.getWidth();
+        if(width < 2) return false;
+
+        return switch (distilMode.get()){
+            case DISTIL_FLASH -> hasSteam();
+            case DISTIL_ATMOSPHERIC -> width > 3 && tankController.heat > 1;
+            case DISTIL_VACUUM -> hasVacuum() && tankController.heat > 1;
+        };
+    }
+
+    public float getGaugeTarget(){
+        return switch (distilMode.get()){
+            case DISTIL_FLASH -> getSteam()/4000f;
+            case DISTIL_ATMOSPHERIC -> getTankControllerBE().map(tank-> tank.heat / 6f).orElse(0F);
+            case DISTIL_VACUUM -> 1.0f - (getAir() / 4000f);
+        };
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        SteelTankBlockEntity tankController = getTankControllerBE();
-        if(tankController == null)
+        Optional<SteelTankBlockEntity> tankControllerOptional = getTankControllerBE();
+
+        if(tankControllerOptional.isEmpty())
             return;
 
+        SteelTankBlockEntity tankController = tankControllerOptional.get();
+
         if(level.isClientSide){
-            switch (distilMode.get()){
-                case DISTIL_FLASH -> {
-                    gaugeLevel.updateChaseTarget(getSteam()/4000f);
-                }
-                case DISTIL_ATMOSPHERIC -> {
-                    gaugeLevel.updateChaseTarget(tankController.heat/6f);
-                }
-                case DISTIL_VACUUM -> {
-                    gaugeLevel.updateChaseTarget(1.0f - (outputTank.getPrimaryHandler().getFluidInTank(0).getAmount() / 4000f));
-                }
-            }
+            gaugeLevel.updateChaseTarget(getGaugeTarget());
             gaugeLevel.tickChaser();
             return;
         }
 
-        if(tankController.getWidth() < 2)
-            return;
-
-
         if(distilMode.get() == DistilMode.DISTIL_VACUUM){
             outputTank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.AIR.get(), tankController.getHeight()), IFluidHandler.FluidAction.EXECUTE);
-
             if(outputTank.getPrimaryHandler().getFluidInTank(0).getAmount() < 4000)
                 sendData();
-            if(outputTank.getPrimaryHandler().getFluidInTank(0).getAmount() > 500)
-                return;
-        }
-
-        if(inputTank.isEmpty())
-            return;
-
-        if(distilMode.get() != DistilMode.DISTIL_ATMOSPHERIC){
-            if(tankController.heat < 2)
-                return;
         }
 
         if(!DistillingRecipe.match(this, currentRecipe)){
             currentRecipe = null;
         }
-        if(currentRecipe == null) return;
 
-        if(outputs.size() < currentRecipe.getFluidResults().size()){
+        if(!canProcess())
             return;
-        }
-
-        if(distilMode.get() == DistilMode.DISTIL_FLASH && !hasSteam()){
-            return;
-        }
 
         if(timer > 0) {
             timer -= distilMode.get() == DistilMode.DISTIL_FLASH? 2 : (int)tankController.heat;
         }else {
             //apply time!
+
+            for(boolean simulate : Iterate.trueAndFalse) {
+                int output = 0;
+                for (FluidStack result : currentRecipe.getFluidResults()) {
+                    output++;
+
+                    BlockPos pos = outputs.get(output);
+                    if (pos == null)
+                        continue;
+                    BlockEntity be = level.getBlockEntity(pos);
+                    if (!(be instanceof DistillationOutputBlockEntity))
+                        continue;
+
+                    DistillationOutputBlockEntity outBE = (DistillationOutputBlockEntity) be;
+
+                    outBE.tankInventory.allowInsertion();
+                    int filled = outBE.tankInventory.getPrimaryHandler().fill(result, simulate? SIMULATE : EXECUTE);
+                    
+                    if(simulate && filled < result.getAmount()){
+                        timer += 50;
+                        return;
+                    }
+                    outBE.tankInventory.forbidInsertion();
+                }
+            }
+
 
             FluidIngredient fluidIngredient = currentRecipe.getFluidIngredients().get(0);
             int amountRequired = fluidIngredient.getRequiredAmount();
@@ -229,23 +273,8 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
                 fluidStack.shrink(drainedAmount);
             }
 
-            int output = -1;
-            for (FluidStack result : currentRecipe.getFluidResults()) {
-                output++;
 
-                BlockPos pos = outputs.get(output);
-                if (pos == null)
-                    continue;
-                BlockEntity be = level.getBlockEntity(pos);
-                if (!(be instanceof DistillationOutputBlockEntity))
-                    continue;
 
-                DistillationOutputBlockEntity outBE = (DistillationOutputBlockEntity) be;
-
-                outBE.tankInventory.allowInsertion();
-                outBE.tankInventory.getPrimaryHandler().fill(result, IFluidHandler.FluidAction.EXECUTE);
-                outBE.tankInventory.forbidInsertion();
-            }
             if(DistillingRecipe.match(this, currentRecipe)){
                 timer = currentRecipe.getProcessingDuration();
             }else{
@@ -279,7 +308,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
             tank.distillationController = worldPosition;
             tank.setDistillationMode(true);
             if(!level.isClientSide) {
-                requiredOutputs = (tank.getHeight() / 2) + 2 - outputs.size();
+                requiredOutputs = ((tank.getHeight()+1) / 2) - outputs.size();
                 sendData();
             }
         }
@@ -335,9 +364,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
 
 
-
-
-        if(distilMode.get() == DistilMode.DISTIL_VACUUM && outputTank.getPrimaryHandler().getFluidInTank(0).getAmount() > 500){
+        if(distilMode.get() == DistilMode.DISTIL_VACUUM && !hasVacuum()){
             GearboxLang.text("")
                     .forGoggles(tooltip);
             GearboxLang.addHint(tooltip, "hint.distil.vacuum");
@@ -354,6 +381,21 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
             GearboxLang.addHint(tooltip, "hint.distil.missing");
         }
 
+        SteelTankBlockEntity tank= getTankControllerBE().orElse(null);
+        if(tank == null)
+            return true;
+
+        if(distilMode.get() != DistilMode.DISTIL_FLASH && tank.heat < 2) {
+            GearboxLang.text("")
+                    .forGoggles(tooltip);
+            GearboxLang.addHint(tooltip, "hint.distil.heat");
+        }
+
+        if(tank.getWidth() < 2 || ( distilMode.get() == DistilMode.DISTIL_ATMOSPHERIC && tank.getWidth() < 3)){
+            GearboxLang.text("")
+                    .forGoggles(tooltip);
+            GearboxLang.addHint(tooltip, "hint.distil.width");
+        }
 
         return true;
     }
