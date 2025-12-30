@@ -2,10 +2,13 @@ package io.github.hadron13.gearbox.register;
 
 import com.simibubi.create.AllTags;
 import com.simibubi.create.api.stress.BlockStressValues;
+import com.simibubi.create.content.fluids.PipeAttachmentModel;
+import com.simibubi.create.content.fluids.pump.PumpBlock;
 import com.simibubi.create.content.fluids.tank.*;
 import com.simibubi.create.content.processing.AssemblyOperatorBlockItem;
 import com.simibubi.create.foundation.block.ItemUseOverrides;
 import com.simibubi.create.foundation.data.*;
+import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlock;
@@ -29,6 +32,7 @@ import io.github.hadron13.gearbox.blocks.steel_pipe.SteelGlassPipeBlock;
 import io.github.hadron13.gearbox.blocks.steel_pipe.SteelPipeAttachmentModel;
 import io.github.hadron13.gearbox.blocks.steel_pipe.SteelPipeBlock;
 import io.github.hadron13.gearbox.blocks.steel_pipe.StraightSteelPipeBlock;
+import io.github.hadron13.gearbox.blocks.steel_pump.SteelPumpBlock;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelFluidTankModel;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlock;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankItem;
@@ -410,6 +414,18 @@ public class GearboxBlocks {
             .item()
             .transform(customItemModel())
             .register();
+
+    public static final BlockEntry<SteelPumpBlock> STEEL_PUMP = REGISTRATE.block("steel_pump", SteelPumpBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(p -> p.mapColor(MapColor.METAL))
+            .transform(pickaxeOnly())
+            .blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(true))
+            .onRegister(CreateRegistrate.blockModel(() -> PipeAttachmentModel::withAO))
+            .transform(GearboxStress.setImpact(3.0))
+            .item()
+            .transform(customItemModel())
+            .register();
+
 
 
     public static final BlockEntry<DistillationOutputBlock> DISTILLATION_OUTPUT = REGISTRATE.block("distillation_output", DistillationOutputBlock::new)

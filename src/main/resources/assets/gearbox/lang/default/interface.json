@@ -70,5 +70,6 @@
   "gearbox.recipe.centrifuging": "Centrifuging",
   "gearbox.recipe.pumpjack": "Pumping",
   "gearbox.recipe.laser_drilling": "Laser Drilling",
-  "gearbox.recipe.reacting": "Chemical Reaction"
+  "gearbox.recipe.reacting": "Chemical Reaction",
+  "gearbox.recipe.distilling": "Fractional Distillation"
 }

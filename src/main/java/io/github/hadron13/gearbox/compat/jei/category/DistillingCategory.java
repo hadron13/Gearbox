@@ -62,7 +62,7 @@ public class DistillingCategory extends CreateRecipeCategory<DistillingRecipe> {
     @Override
     public void getTooltip(ITooltipBuilder tooltip, DistillingRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
 
-        if(mouseX > (177/2)-74 && mouseX < (177/2)-56 && mouseY >= 143 && mouseY <= 161){
+        if(mouseX > (177/2)-74 && mouseX < (177/2)-56 && mouseY >= 133 && mouseY <= 151){
             tooltip.add(GearboxLang.translate(recipe.mode.getRawTranslationKey()).component() );
         }
 

@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.register;
 
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.fluids.FluidNetwork;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlockEntity;
@@ -9,6 +10,8 @@ import com.simibubi.create.content.fluids.pipes.GlassPipeVisual;
 import com.simibubi.create.content.fluids.pipes.StraightPipeBlockEntity;
 import com.simibubi.create.content.fluids.pipes.TransparentStraightPipeRenderer;
 import com.simibubi.create.content.fluids.pump.PumpBlockEntity;
+import com.simibubi.create.content.fluids.pump.PumpRenderer;
+import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.simibubi.create.content.kinetics.crank.HandCrankRenderer;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -258,6 +261,13 @@ public class GearboxBlockEntities {
     public static final BlockEntityEntry<StraightPipeBlockEntity> STRAIGHT_STEEL_FLUID_PIPE = REGISTRATE
             .blockEntity("straight_steel_fluid_pipe", StraightPipeBlockEntity::new)
             .validBlocks(GearboxBlocks.STRAIGHT_STEEL_FLUID_PIPE)
+            .register();
+
+    public static final BlockEntityEntry<PumpBlockEntity> STEEL_FLUID_PUMP = REGISTRATE
+            .blockEntity("steel_fluid_pump", PumpBlockEntity::new)
+            .visual(() -> SingleAxisRotatingVisual.ofZ(GearboxPartialModels.STEEL_PUMP_COG))
+            .validBlocks(GearboxBlocks.STEEL_PUMP)
+            .renderer(() -> PumpRenderer::new)
             .register();
 
     public static final BlockEntityEntry<DistillationControllerBlockEntity> DISTILLATION_CONTROLLER = REGISTRATE

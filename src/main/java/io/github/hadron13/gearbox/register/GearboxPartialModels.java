@@ -43,11 +43,12 @@ public class GearboxPartialModels {
             CORE_DRILL_TUBE = item("core_tube"),
             ORE_CORE = item("ore_core"),
             STEEL_FLUID_PIPE_CASING = block("steel_fluid_pipe/casing"),
+            STEEL_PUMP_COG = block("steel_pump/cog"),
             DISTILLATION_SELECTOR = block("distillation_controller/head"),
             DISTILLATION_GAUGE = block("distillation_controller/gauge"),
             DISTILLATION_GAUGE_DIAL = block("distillation_controller/gauge_dial"),
             DISTILLATION_OUTPUT_BASE_UNPOWERED = block("distillation_output/base_unpowered"),
-            DISTILLATION_OUTPUT_BASE_POWERED = block("distillation_output/base_powered")
+            DISTILLATION_OUTPUT_BASE_POWERED = block("distillation_output/base_powered");
     ;
 
 

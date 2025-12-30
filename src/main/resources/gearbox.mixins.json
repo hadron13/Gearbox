@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "gearbox.refmap.json",
   "mixins": [
+    "FluidPropagatorMixin"
   ],
   "client": [],
   "injectors": {

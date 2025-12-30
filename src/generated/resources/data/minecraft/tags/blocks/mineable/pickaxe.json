@@ -26,6 +26,7 @@
     "gearbox:glass_fluid_pipe",
     "gearbox:straight_steel_fluid_pipe",
     "gearbox:distillation_controller",
+    "gearbox:steel_pump",
     "gearbox:distillation_output"
   ]
 }
