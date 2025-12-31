@@ -21,7 +21,7 @@ public class FluidPropagatorMixin {
         )
     )
     private static boolean pumpWrapper(BlockEntry instance, BlockState state, Operation<Boolean> original){
-        return state.getBlock() instanceof PumpBlock;
+        return original.call(instance, state) || state.getBlock() instanceof PumpBlock;
     }
 
 
@@ -33,6 +33,6 @@ public class FluidPropagatorMixin {
         )
     )
     private static boolean encasedPipeWrapper(BlockEntry instance, BlockState state, Operation<Boolean> original){
-        return state.getBlock() instanceof EncasedPipeBlock;
+        return original.call(instance, state) || state.getBlock() instanceof EncasedPipeBlock;
     }
 }

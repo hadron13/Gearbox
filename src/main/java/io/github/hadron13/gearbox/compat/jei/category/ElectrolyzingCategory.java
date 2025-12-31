@@ -32,7 +32,7 @@ public class ElectrolyzingCategory extends BasinCategory {
 
         Component power = Component.literal("\u2592 " + powerString);
 
-        graphics.drawString(Minecraft.getInstance().font, power, 20, 20, 0xffffff);
+        graphics.drawString(Minecraft.getInstance().font, power, 10, 20, 0xffffff);
 
         HeatCondition requiredHeat = recipe.getRequiredHeat();
         if (requiredHeat != HeatCondition.NONE)

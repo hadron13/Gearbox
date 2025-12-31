@@ -2,6 +2,8 @@ package io.github.hadron13.gearbox.blocks.pumpjack;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.fluids.pipes.AxisPipeBlock;
+import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
@@ -16,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -122,10 +125,8 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
                     AllBlocks.GLASS_FLUID_PIPE.get(),
                     AllBlocks.ENCASED_FLUID_PIPE.get()
             };
-            BlockState finalBlock = block;
-            if(Arrays.stream(validBlocks).noneMatch(n -> n == finalBlock.getBlock())) {
+            if(!(block.getBlock() instanceof FluidPipeBlock) && !(block.getBlock() instanceof AxisPipeBlock))
                 return false;
-            }
 
             position = position.below();
             block = level.getBlockState(position);

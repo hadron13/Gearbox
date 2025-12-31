@@ -12,9 +12,11 @@ import net.minecraft.world.item.Rarity;
 public class GearboxItems {
     private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
 
-
     public static void register() {}
-    public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot");
+    public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot"),
+        SULFUR_DUST = ingredient("sulfur_dust"),
+        SALT_DUST = ingredient("salt_dust"),
+        PET_COKE = ingredient("petroleum_coke");
 
 
     public static final ItemEntry<Item> CORE_TUBE=

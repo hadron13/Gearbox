@@ -1,4 +1,4 @@
-// 1.20.1	2025-12-29T21:49:39.988724494	Registrate Provider for gearbox [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2025-12-30T16:44:16.54280005	Registrate Provider for gearbox [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 18f6e385f6f78e24eaadd66ee398926fddb18104 assets/gearbox/blockstates/ammonia.json
 c00bec1715596d864e15208233894d8de01d6859 assets/gearbox/blockstates/amplifier.json
 d056980ae4e5ad3559b3c8b400aec657ffe58352 assets/gearbox/blockstates/argon.json
@@ -38,8 +38,9 @@ f784ded59f057dfd140d5ace0808da08f2d9172e assets/gearbox/blockstates/steam.json
 593a81a22f1eb0e51510f86794fee7dc11cb6f78 assets/gearbox/blockstates/steel_fluid_tank.json
 d3d2891e11586eb286a357d922ae47e0ad589746 assets/gearbox/blockstates/steel_pump.json
 15c2e5a574c116d0647a4733a886c8b357860490 assets/gearbox/blockstates/straight_steel_fluid_pipe.json
-839998f5906b65880fde428498af3d3f393323dc assets/gearbox/lang/en_ud.json
-0a15a0d04dc311b76e85dab2d8a93209dbdab37f assets/gearbox/lang/en_us.json
+28ea45c0ebd761a2616ca0d3b43533b453184316 assets/gearbox/blockstates/volatile_gas.json
+d341a2be03b4d692c0145c0addff520055ff8f27 assets/gearbox/lang/en_ud.json
+dbc22b3500697ad1ec2b0a32e6cddf0a3b8262c3 assets/gearbox/lang/en_us.json
 2c771a7d85c2a641f26549876f4187407c058bb1 assets/gearbox/models/block/ammonia.json
 a5db51fd6e13ba499c2a95db6af1721061b2e6d4 assets/gearbox/models/block/argon.json
 3cb8c89e090d0def672ba056a684b4ff0950ea3c assets/gearbox/models/block/chlorine.json
@@ -81,6 +82,7 @@ baafe82cf6ed72d8cfeff9bd246f6851f23b394d assets/gearbox/models/block/steel_fluid
 df92e8eaa3ec69dbc0d8db9b3b3313de4409ccdf assets/gearbox/models/block/steel_fluid_pipe/ud_x.json
 92ee8cb5f054d60680da7dd4abea3c2b4726c59f assets/gearbox/models/block/steel_fluid_pipe/ud_y.json
 97e5cb0dd55cbd69f2b4096d870f9eaba99b1737 assets/gearbox/models/block/steel_fluid_pipe/ud_z.json
+3df3bba6f07e119128f5de46f35e0b2e3f9aa075 assets/gearbox/models/block/volatile_gas.json
 f2a6246b1e633ff30442327b953144b110fd7ac5 assets/gearbox/models/item/air_bucket.json
 20045b3a3052e3f91ffb1babdf9859da2a83f062 assets/gearbox/models/item/ammonia_bucket.json
 205473fe3e8b658ff2803248cbc69b412e0a68ed assets/gearbox/models/item/amplifier.json
@@ -108,20 +110,24 @@ ae8b756d2f0c709190e47e7ea445b06139adfe19 assets/gearbox/models/item/mirror.json
 c33b1e7606c12e7ecffbda57645ef7cbea5016c4 assets/gearbox/models/item/nitrogen_bucket.json
 201ead9e052e44c440051b6602377627c4ced20a assets/gearbox/models/item/oxygen_bucket.json
 6382128df1f5356e62e81d5d6ac212a47458ef46 assets/gearbox/models/item/petroleum_bucket.json
+b6db2f071018ba5b1554f02661db2b99272838ca assets/gearbox/models/item/petroleum_coke.json
 a497e95dd7e78e6c7af8bd60600ad09f39c69ab7 assets/gearbox/models/item/precision_crank.json
 aa28f9eac4a2e3660ca0fbfd07bd6e8fc5a21ded assets/gearbox/models/item/prism.json
 588ff83360a71eb33d4de885033118a8d7b8c5f6 assets/gearbox/models/item/pumpjack_arm.json
 47b33da5bec59b5540ad0bab82b61587d81b2a81 assets/gearbox/models/item/pumpjack_crank.json
 b41d42115a2c8d37dba99b34e75636b85b516338 assets/gearbox/models/item/pumpjack_well.json
 07c27d2439623359a1c236dd9dfc61e1aab6af97 assets/gearbox/models/item/resin_bucket.json
+f19153a140ca91c632bcceb8d3166a6b2861107f assets/gearbox/models/item/salt_dust.json
 5d0cfaccbff0f72f284af88f9e73e74fd2fdd8ba assets/gearbox/models/item/sapper.json
 33cf8527b8dceda9d40d591a5d908dcf9e7fedbf assets/gearbox/models/item/spectrometer.json
 71bc81814f23c8e51385156a7ba1dbd7deb0296d assets/gearbox/models/item/steam_bucket.json
 7b058068213e690238d75d76b5b84c9184a1e4af assets/gearbox/models/item/steel_fluid_pipe.json
 3384c49a68509fd409f40084ff901becadaeb5e7 assets/gearbox/models/item/steel_fluid_tank.json
 22188d0ea97b986720d462c9adddcb858924eff8 assets/gearbox/models/item/steel_pump.json
+2fc7b17bff1381f145f37b28ebb68a20b0277805 assets/gearbox/models/item/sulfur_dust.json
 4ed85e0152a5ec73a16ba6b42b438119a50db004 assets/gearbox/models/item/tau_cannon.json
 ece14bcc0ff65de05fc914b5646b8cbdb503a635 assets/gearbox/models/item/ultimate_mechanism.json
+35090e70d99c401902971dd2f59ab964b46200f6 assets/gearbox/models/item/volatile_gas_bucket.json
 6301b02bc07075c5b06f12a13aebfae09464ef56 data/create/tags/blocks/brittle.json
 9cc8808b379dbbddc6a901655fdc54e6ecbe6205 data/forge/tags/items/buckets/petroleum.json
 307319ce09a9882179d47f20734d41540666f414 data/forge/tags/items/buckets/resin.json

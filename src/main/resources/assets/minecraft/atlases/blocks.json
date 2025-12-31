@@ -95,6 +95,14 @@
     {
       "type": "single",
       "resource": "gearbox:fluid/air_flow"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/volatile_gas_still"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/volatile_gas_flow"
     }
   ]
 }
