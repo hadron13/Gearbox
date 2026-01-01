@@ -103,6 +103,38 @@
     {
       "type": "single",
       "resource": "gearbox:fluid/volatile_gas_flow"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/butane_still"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/butane_flow"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/propane_still"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/propane_flow"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/lpg_still"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/lpg_flow"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/ethylene_still"
+    },
+    {
+      "type": "single",
+      "resource": "gearbox:fluid/ethylene_flow"
     }
   ]
 }

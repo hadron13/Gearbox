@@ -51,7 +51,7 @@ public class GearboxFluids {
 
     public static final FluidEntry<ForgeFlowingFluid.Flowing> PETROLEUM =
             REGISTRATE.standardFluid("petroleum",
-                            SolidRenderedPlaceableFluidType.create(0x444444,
+                            SolidRenderedPlaceableFluidType.create(0x352228,
                                     () -> 1f / 32f ))
                     .lang("Petroleum")
                     .properties(b -> b.viscosity(20000)
@@ -105,6 +105,10 @@ public class GearboxFluids {
     public static final FluidEntry<ForgeFlowingFluid.Flowing> DINITROGEN_TETROXIDE = gas("dinitrogen_tetroxide");
     public static final FluidEntry<ForgeFlowingFluid.Flowing> HYDROGEN_SULFIDE = gas("hydrogen_sulfide");
     public static final FluidEntry<ForgeFlowingFluid.Flowing> VOLATILE_GAS = gas("volatile_gas");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> BUTANE = gas("butane");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> PROPANE = gas("propane");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> LPG = gas("lpg");
+    public static final FluidEntry<ForgeFlowingFluid.Flowing> ETHYLENE = gas("ethylene");
 
     public static FluidEntry<ForgeFlowingFluid.Flowing> gas(String name){
         return REGISTRATE

@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.register;
 
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.item.CombustibleItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.item.tau_cannon.TauCannonItem;
@@ -16,8 +17,11 @@ public class GearboxItems {
     public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot"),
         SULFUR_DUST = ingredient("sulfur_dust"),
         SALT_DUST = ingredient("salt_dust"),
-        PET_COKE = ingredient("petroleum_coke");
+        CAUSTIC_SODA = ingredient("caustic_soda");
 
+    public static final ItemEntry<CombustibleItem> PET_COKE = REGISTRATE.item("petroleum_coke", CombustibleItem::new)
+            .onRegister(i -> i.setBurnTime(4800))
+            .register();
 
     public static final ItemEntry<Item> CORE_TUBE=
             REGISTRATE.item("core_tube", Item::new)
@@ -36,11 +40,6 @@ public class GearboxItems {
                     .properties((p)->p.rarity(Rarity.EPIC))
                     .register();
 
-    private static ItemEntry<Item> oreCore(String name){
-        return REGISTRATE.item(name + "_core", Item::new)
-//                .model((c, p) -> {p.withExistingParent("ore_core")})
-                .register();
-    }
 
     private static ItemEntry<Item> ingredient(String name) {
         return REGISTRATE.item(name, Item::new)
