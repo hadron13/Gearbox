@@ -5,7 +5,6 @@ import com.simibubi.create.compat.jei.category.SpoutCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.utility.CreateLang;
 import io.github.hadron13.gearbox.GearboxLang;
@@ -13,7 +12,6 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.compat.jei.ModGuiTextures;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedCampfire;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedCompressor;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -21,6 +19,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import static com.simibubi.create.content.processing.recipe.HeatCondition.NONE;
 
@@ -38,7 +37,7 @@ public class CompressingCategory extends CreateRecipeCategory<CompressingRecipe>
     public void setRecipe(IRecipeLayoutBuilder builder, CompressingRecipe recipe, IFocusGroup focuses) {
         int yCenter = 75/2;
 
-        FluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
+        SizedFluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
 
         addFluidSlot(builder, getBackground().getWidth() / 4 - 19 / 2, 23, fluidIngredient);
 

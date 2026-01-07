@@ -13,15 +13,17 @@ import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -123,7 +125,7 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         if(recipe.isEmpty())
             return PASS;
 
-        List<ItemStack> results = RecipeApplier.applyRecipeOn(level, ItemHandlerHelper.copyStackWithSize(transported.stack, 1), recipe.get(), true);
+        List<ItemStack> results = RecipeApplier.applyRecipeOn(level, new ItemStack(transported.stack.getItem(), 1), recipe.get(), true);
 //        List<ItemStack> results = RecipeApplier.applyRecipeOn(getLevel(),
 //                 ItemHandlerHelper.copyStackWithSize(transported.stack, 1), recipe.get());
 
@@ -227,36 +229,35 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         sendData();
     }
 
-    protected <C extends Container> boolean matchBasinRecipe(Recipe<C> recipe) {
+    @Override
+    protected boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipe) {
+        return recipe.value() instanceof IrradiatingRecipe;
+    }
+
+    @Override
+    protected <I extends RecipeInput> boolean matchBasinRecipe(Recipe<I> recipe) {
         if(!(recipe instanceof IrradiatingRecipe))
             return false;
         return super.matchBasinRecipe(recipe) && IrradiatingRecipe.match(this, (IrradiatingRecipe)recipe);
     }
 
-    @Override
-    protected <C extends Container> boolean matchStaticFilters(Recipe<C> recipe) {
-        return recipe.getType() == GearboxRecipeTypes.IRRADIATING.getType();
-    }
 
     @Override
     protected Object getRecipeCacheKey() {
         return irradiatingRecipesKey;
     }
+
     @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         compound.putFloat("lens", targetLensPosition);
-//        compound.putInt("recipeColor", recipeColor.getRGB());
-        super.write(compound, clientPacket);
+        super.write(compound, registries, clientPacket);
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         targetLensPosition = compound.getFloat("lens");
-//        recipeColor.setValue(compound.getInt("recipeColor"));
-        super.read(compound, clientPacket);
+        super.read(compound, registries, clientPacket);
     }
-
-
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {

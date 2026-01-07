@@ -13,12 +13,15 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.sound.SoundScapes;
 import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.data.IntAttached;
 import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -28,25 +31,27 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.*;
-import net.minecraftforge.items.wrapper.InvWrapper;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 import java.util.*;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class CompressorBlockEntity extends KineticBlockEntity {
 
     public SmartFluidTankBehaviour tank;
     public SmartInventory output;
 
-    protected LazyOptional<IItemHandlerModifiable> itemCapability;
+    protected IItemHandlerModifiable itemCapability;
 
     public int timer;
     public static final int OUTPUT_SLOTS = 3;
@@ -63,11 +68,36 @@ public class CompressorBlockEntity extends KineticBlockEntity {
                 .forbidInsertion()
                 .withMaxStackSize(64);
 
-        itemCapability = LazyOptional.of(() -> new InvWrapper(output));
+        itemCapability = new InvWrapper(output);
         spoutputIndex = new ArrayList<>();
         visualizedOutputItems = Collections.synchronizedList(new ArrayList<>());
         timer = -1;
         recipe = null;
+    }
+
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GearboxBlockEntities.COMPRESSOR.get(),
+                (be, context) -> {
+                    if (context == null || CompressorBlock.hasPipeTowards(be.level, be.worldPosition, be.getBlockState(), context) ){
+                        return be.tank.getCapability();
+                    }
+                    return null;
+                }
+        );
+
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                GearboxBlockEntities.COMPRESSOR.get(),
+                (be, context) -> {
+                    if (context == null || !CompressorBlock.hasPipeTowards(be.level, be.worldPosition, be.getBlockState(), context)){
+                        return be.itemCapability;
+                    }
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -113,7 +143,7 @@ public class CompressorBlockEntity extends KineticBlockEntity {
                 }
 
                 IItemHandler targetInv = be == null ? null
-                        : be.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite())
+                        : Optional.ofNullable(level.getCapability(Capabilities.ItemHandler.BLOCK, be.getBlockPos(), dir.getOpposite()))
                         .orElse(inserter == null ? null : inserter.getInventory());
 
                 if (targetInv == null)
@@ -222,11 +252,11 @@ public class CompressorBlockEntity extends KineticBlockEntity {
                 return;
             recipe = newRecipe.get();
         }
-        int usedAmmount = recipe.getFluidIngredients().get(0).getRequiredAmount();
+        int usedAmmount = recipe.getFluidIngredients().get(0).amount();
         tank.getPrimaryHandler().drain(usedAmmount, EXECUTE);
 
         output.allowInsertion();
-        recipe.rollResults()
+        recipe.rollResults(level.getRandom())
                 .forEach(stack -> ItemHandlerHelper.insertItemStacked(output, stack, false));
         output.forbidInsertion();
         for(int i = 0; i < output.getSlots(); i++) {
@@ -238,23 +268,21 @@ public class CompressorBlockEntity extends KineticBlockEntity {
     }
 
     @Override
-    public void write(CompoundTag compound, boolean clientPacket){
-        super.write(compound, clientPacket);
-        compound.put("OutputItems", output.serializeNBT());
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound, registries, clientPacket);
+        compound.put("OutputItems", output.serializeNBT(registries));
         compound.putIntArray("Overflow",spoutputIndex);
 
         if (!clientPacket)
             return;
-        compound.put("VisualizedItems", NBTHelper.writeCompoundList(visualizedOutputItems, ia -> ia.getValue()
-                .serializeNBT()));
+        compound.put("VisualizedItems", NBTHelper.writeCompoundList(visualizedOutputItems, ia -> (CompoundTag) ia.getValue().saveOptional(registries)));
         visualizedOutputItems.clear();
     }
 
     @Override
-    public void read(CompoundTag compound, boolean clientPacket){
-        super.read(compound, clientPacket);
-
-        output.deserializeNBT(compound.getCompound("OutputItems"));
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
+        output.deserializeNBT(registries, compound.getCompound("OutputItems"));
 
         int[] spoutput = compound.getIntArray("Overflow");
         spoutputIndex.clear();
@@ -264,21 +292,9 @@ public class CompressorBlockEntity extends KineticBlockEntity {
             return;
 
         NBTHelper.iterateCompoundList(compound.getList("VisualizedItems", Tag.TAG_COMPOUND),
-                c -> visualizedOutputItems.add(IntAttached.with(OUTPUT_ANIMATION_TIME, ItemStack.of(c))));
+                c -> visualizedOutputItems.add(IntAttached.with(OUTPUT_ANIMATION_TIME, ItemStack.parseOptional(registries, c))));
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (isFluidHandlerCap(cap)
-                && (side == null || CompressorBlock.hasPipeTowards(level, worldPosition, getBlockState(), side)))
-            return tank.getCapability().cast();
-
-        if (isItemHandlerCap(cap) &&
-                (side == null || !CompressorBlock.hasPipeTowards(level, worldPosition, getBlockState(), side)))
-            return itemCapability.cast();
-
-        return super.getCapability(cap, side);
-    }
 
     @Override
     public boolean addToTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -299,7 +315,7 @@ public class CompressorBlockEntity extends KineticBlockEntity {
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         boolean kinetic_tooltip = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
-        boolean fluid_tooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+        boolean fluid_tooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability());
 
         boolean item_tooltip = false;
         for (int i = 0; i < output.getSlots(); i++) {

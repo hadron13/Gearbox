@@ -1,7 +1,5 @@
 package io.github.hadron13.gearbox.compat.jei.category;
 
-//import io.github.hadron13.gearbox.content.contraptions.components.sifter.PyroprocessingRecipe;
-//import io.github.hadron13.gearbox.foundation.gui.ModGUITextures;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;

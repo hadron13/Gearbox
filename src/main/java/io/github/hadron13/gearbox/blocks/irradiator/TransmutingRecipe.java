@@ -4,8 +4,9 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyTransmuting;
@@ -17,16 +18,17 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
 
-public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implements LaserRecipe, IAssemblyRecipe {
+public class TransmutingRecipe extends StandardProcessingRecipe<SingleRecipeInput> implements LaserRecipe, IAssemblyRecipe {
     public int requiredColor;
     public float requiredPower;
 
@@ -82,10 +84,6 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
         buffer.writeInt(requiredColor);
         buffer.writeFloat(requiredPower);
     }
-    @Override
-    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
-        return false;
-    }
 
     @Override
     public int getColor() {
@@ -115,5 +113,10 @@ public class TransmutingRecipe extends ProcessingRecipe<RecipeWrapper> implement
     @Override
     public Supplier<Supplier<SequencedAssemblySubCategory>> getJEISubCategory() {
         return () -> AssemblyTransmuting::new;
+    }
+
+    @Override
+    public boolean matches(SingleRecipeInput singleRecipeInput, Level level) {
+        return false;
     }
 }

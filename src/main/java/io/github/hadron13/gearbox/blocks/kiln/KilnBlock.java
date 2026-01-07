@@ -5,6 +5,7 @@ import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.createmod.catnip.data.Iterate;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -29,11 +29,10 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+
 
 public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEntity> {
 
@@ -73,15 +72,13 @@ public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEn
 
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
-                                 BlockHitResult hit) {
-        if (!player.getItemInHand(handIn)
-                .isEmpty())
-            return InteractionResult.PASS;
-        if (worldIn.isClientSide)
-            return InteractionResult.SUCCESS;
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!stack.isEmpty())
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (level.isClientSide)
+            return ItemInteractionResult.SUCCESS;
 
-        withBlockEntityDo(worldIn, pos, kiln -> {
+        withBlockEntityDo(level, pos, kiln -> {
             boolean emptyOutput = true;
             IItemHandlerModifiable inv = kiln.outputInv;
             for (int slot = 0; slot < inv.getSlots(); slot++) {
@@ -99,7 +96,6 @@ public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEn
                     player.getInventory()
                             .placeItemBackInInventory(inv.getStackInSlot(slot));
                     inv.setStackInSlot(slot, ItemStack.EMPTY);
-                    worldIn.setBlock(pos, state.setValue(KilnBlock.POWERED, false), 3);
                 }
             }
 
@@ -107,16 +103,15 @@ public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEn
             kiln.sendData();
         });
 
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
-
     @Override
     public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entityIn) {
         super.updateEntityAfterFallOn(worldIn, entityIn);
 
         if (entityIn.level().isClientSide)
             return;
-        if (!(entityIn instanceof ItemEntity))
+        if (!(entityIn instanceof ItemEntity itemEntity))
             return;
         if (!entityIn.isAlive())
             return;
@@ -129,12 +124,11 @@ public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEn
         if (kiln == null)
             return;
 
-        ItemEntity itemEntity = (ItemEntity) entityIn;
-        LazyOptional<IItemHandler> capability = kiln.getCapability(ForgeCapabilities.ITEM_HANDLER);
-        if (!capability.isPresent())
+        IItemHandler capability = kiln.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, kiln.getBlockPos(), null);
+        if (capability == null)
             return;
 
-        ItemStack remainder = capability.orElse(new ItemStackHandler())
+        ItemStack remainder = capability
                 .insertItem(0, itemEntity.getItem(), false);
         if (remainder.isEmpty())
             itemEntity.discard();
@@ -153,8 +147,4 @@ public class KilnBlock extends HorizontalKineticBlock implements IBE<KilnBlockEn
         return GearboxBlockEntities.KILN.get();
     }
 
-    @Override
-    public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
-        return false;
-    }
 }

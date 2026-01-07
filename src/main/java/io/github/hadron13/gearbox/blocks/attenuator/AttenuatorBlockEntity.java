@@ -81,16 +81,6 @@ public class AttenuatorBlockEntity extends SmartBlockEntity implements ILaserRec
     }
 
     @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
-        super.read(tag, clientPacket);
-    }
-
-    @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
-        super.write(tag, clientPacket);
-    }
-
-    @Override
     public List<Laser> getLasers() {
         return List.of(laser);
     }

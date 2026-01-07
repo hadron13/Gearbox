@@ -18,10 +18,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -214,9 +212,8 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
         sendData();
     }
     public void refreshCapability() {
-        LazyOptional<IFluidHandler> oldCap = fluidCapability;
-        fluidCapability = LazyOptional.of(() -> handlerForCapability());
-        oldCap.invalidate();
+        fluidCapability = handlerForCapability();
+        invalidateCapabilities();
     }
 
     private IFluidHandler handlerForCapability() {
@@ -233,26 +230,21 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
         return null;
     }
 
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
-        SteelTankBlockEntity controller = getControllerBE();
-        if(controller == null || controller.isDistillingColumn)
-            return LazyOptional.empty();
-        return super.getCapability(cap, side);
-    }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        SteelTankBlockEntity controllerTE = getControllerBE();
+        SteelTankBlockEntity controllerBE = getControllerBE();
+        if(controllerBE == null)
+            return false;
 
-        if(controllerTE.isDistillingColumn){
+        if(controllerBE.isDistillingColumn){
             GearboxLang.translate("gui.distil_layer")
                     .text("#" + (getOutputNumber()))
                     .forGoggles(tooltip);
             return true;
         }
         return containedFluidTooltip(tooltip, isPlayerSneaking,
-                controllerTE.getCapability(ForgeCapabilities.FLUID_HANDLER));
+                level.getCapability(Capabilities.FluidHandler.BLOCK, controllerBE.getBlockPos(), null));
     }
 
     @Override

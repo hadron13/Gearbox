@@ -12,13 +12,14 @@ import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 public class CompressorScenes {
     public static void compressor(SceneBuilder builder, SceneBuildingUtil util) {
@@ -110,8 +111,7 @@ public class CompressorScenes {
         scene.world().modifyBlockEntityNBT(util.select().position(compressor), CompressorBlockEntity.class, nbt -> {
             nbt.put("VisualizedItems",
                     NBTHelper.writeCompoundList(ImmutableList.of(IntAttached.with(1, new ItemStack(Blocks.OBSIDIAN))),
-                            ia -> ia.getValue()
-                                    .serializeNBT()));
+                            ia ->  (CompoundTag) ia.getValue().saveOptional(scene.world().getHolderLookupProvider())));
         });
         scene.world().createItemOnBeltLike(compressor.below().west(), Direction.UP, new ItemStack(Items.OBSIDIAN));
         scene.idle(10);

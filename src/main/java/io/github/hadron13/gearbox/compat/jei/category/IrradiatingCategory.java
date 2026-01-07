@@ -2,13 +2,11 @@ package io.github.hadron13.gearbox.compat.jei.category;
 
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.spectrometer.SpectrometerBlockEntity;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedIrradiator;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -19,7 +17,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
@@ -56,12 +55,8 @@ public class IrradiatingCategory extends CreateRecipeCategory<IrradiatingRecipe>
                     .addItemStacks(stacks);
             i++;
         }
-        for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
-            builder
-                    .addSlot(RecipeIngredientRole.INPUT, 7 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addIngredients(ForgeTypes.FLUID_STACK, fluidIngredient.getMatchingFluidStacks())
-                    .setFluidRenderer(fluidIngredient.getRequiredAmount(), false, 16, 16);
+        for (SizedFluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
+            addFluidSlot(builder, 7 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19, fluidIngredient);
             i++;
         }
 
@@ -82,11 +77,7 @@ public class IrradiatingCategory extends CreateRecipeCategory<IrradiatingRecipe>
         for (FluidStack fluidResult : recipe.getFluidResults()) {
             int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
             int yPosition = -19 * (i / 2) + 51;
-            builder
-                    .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addIngredient(ForgeTypes.FLUID_STACK, fluidResult)
-                    .setFluidRenderer(fluidResult.getAmount(), false, 16, 16);
+            addFluidSlot(builder, xPosition, yPosition, fluidResult);
             i++;
         }
     }

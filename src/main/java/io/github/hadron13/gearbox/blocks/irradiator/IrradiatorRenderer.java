@@ -37,7 +37,6 @@ public class IrradiatorRenderer extends KineticBlockEntityRenderer<IrradiatorBlo
         VertexConsumer vb;
 
         if(be.receivingLaser != null && be.receivingLaser.getPower() > 0.01f){
-            vb = buffer.getBuffer(GearboxRenderTypes.laserBeam());
             float thickness = lerpedLensPos;
             float length = be.mode == PressingBehaviour.Mode.BELT? 1.70f : 2.0f;
             if(thickness > 0.01)

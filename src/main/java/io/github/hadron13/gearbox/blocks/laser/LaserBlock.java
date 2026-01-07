@@ -62,8 +62,4 @@ public class LaserBlock extends Block implements IBE<LaserBlockEntity>, IWrencha
         return state.setValue(HORIZONTAL_FACING, rot.rotate(state.getValue(HORIZONTAL_FACING)));
     }
 
-    @Override
-    public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
-        return false;
-    }
 }

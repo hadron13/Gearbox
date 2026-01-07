@@ -18,7 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.common.Tags;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class Laser {
         Optional<Vec3> nextPosition = Optional.of(position.add(getDirection()));
         length = 1;
         do{
-            block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(100f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+            block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(100f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.of(null)));
             if(block.getType() == HitResult.Type.MISS) {
                 length = 100f;
                 if(this.receiver != null){
@@ -91,7 +92,7 @@ public class Laser {
             AABB entityAABB = entity.getBoundingBox().inflate(entity.getPickRadius());
             if (entityAABB.clip(position, position.add(direction.scale(length))).isPresent()) {
                 entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(GearboxDamageTypes.laser)), power * 4);
-                entity.setSecondsOnFire(3);
+                entity.igniteForSeconds(3);
             }
         }
 
@@ -114,7 +115,7 @@ public class Laser {
         boolean canBreak = hardness > -1 && hardness < power;
 
         length += distance;
-        if(blockState.is(Tags.Blocks.GLASS)){
+        if(blockState.is(Tags.Blocks.GLASS_BLOCKS)){
             length += 0.1f;
             return Optional.of( position.add(direction.scale(distance+0.1)) );
         }

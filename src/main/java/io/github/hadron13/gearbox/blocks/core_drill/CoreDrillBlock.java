@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -44,24 +45,25 @@ public class CoreDrillBlock extends KineticBlock implements IBE<CoreDrillBlockEn
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack itemInHand = player.getItemInHand(hand);
-        if(itemInHand.getItem() == GearboxItems.CORE_TUBE.get() ){
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if(stack.getItem() == GearboxItems.CORE_TUBE.get() ){
             withBlockEntityDo(level, pos, (be) ->{
                 if(be.drillState != CoreDrillBlockEntity.IDLE)
                     return;
                 if(!player.isCreative())
-                    itemInHand.shrink(1);
+                    stack.shrink(1);
 
                 be.drillState = CoreDrillBlockEntity.PUSHING;
                 be.payloadOffset.updateChaseTarget(1.0f);
                 be.poleOffset.updateChaseTarget(20/16f);
                 be.sendData();
             });
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, level, pos, player, hand, hit);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
+
+
 
     @Override
     public Direction.Axis getRotationAxis(BlockState state) {

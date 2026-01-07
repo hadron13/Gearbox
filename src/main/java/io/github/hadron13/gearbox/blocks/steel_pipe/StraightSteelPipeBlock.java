@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,12 +49,11 @@ public class StraightSteelPipeBlock extends GlassFluidPipeBlock {
     public ItemRequirement getRequiredItems(BlockState state, BlockEntity be) {
         return ItemRequirement.of(GearboxBlocks.STEEL_FLUID_PIPE.getDefaultState(), be);
     }
+
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos,
-                                       Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         return GearboxBlocks.STEEL_FLUID_PIPE.asStack();
     }
-
 
     @Override
     public BlockEntityType<? extends StraightPipeBlockEntity> getBlockEntityType() {

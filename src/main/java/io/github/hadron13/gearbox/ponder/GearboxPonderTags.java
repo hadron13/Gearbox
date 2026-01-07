@@ -16,7 +16,7 @@ public class GearboxPonderTags {
                     ;
 
     public static void register(PonderTagRegistrationHelper<ResourceLocation> helper) {
-        PonderTagRegistrationHelper<RegistryEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+        PonderTagRegistrationHelper<RegistryEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 
         helper.registerTag(LASER_STUFF)
                 .addToIndex()
@@ -53,7 +53,6 @@ public class GearboxPonderTags {
                 .add(GearboxBlocks.PRECISION_CRANK)
                 .add(GearboxBlocks.COMBINER)
                 .add(GearboxBlocks.IRRADIATOR)
-                .add(GearboxBlocks.LASER_DRILL)
                 .add(GearboxBlocks.SPECTROMETER);
     }
 }

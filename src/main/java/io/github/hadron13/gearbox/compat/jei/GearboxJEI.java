@@ -11,7 +11,6 @@ import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import io.github.hadron13.gearbox.compat.jei.category.*;
@@ -31,9 +30,12 @@ import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 
@@ -44,6 +46,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import static mezz.jei.api.recipe.RecipeType.createRecipeHolderType;
 
 @JeiPlugin
 @SuppressWarnings("unused")
@@ -139,13 +143,13 @@ public class GearboxJEI implements IModPlugin {
                 .emptyBackground(177, 65)
                 .build("pumpjack", PumpjackCategory::new);
 
-        CreateRecipeCategory<?>
-                laser_drilling = builder(LaserDrillingRecipe.class)
-                .addTypedRecipes(GearboxRecipeTypes.LASER_DRILLING)
-                .catalyst(GearboxBlocks.LASER_DRILL::get)
-                .itemIcon(GearboxBlocks.LASER_DRILL.get())
-                .emptyBackground(177, 75)
-                .build("laser_drilling", LaserDrillingCategory::new);
+//        CreateRecipeCategory<?>
+//                laser_drilling = builder(LaserDrillingRecipe.class)
+//                .addTypedRecipes(GearboxRecipeTypes.LASER_DRILLING)
+//                .catalyst(GearboxBlocks.LASER_DRILL::get)
+//                .itemIcon(GearboxBlocks.LASER_DRILL.get())
+//                .emptyBackground(177, 75)
+//                .build("laser_drilling", LaserDrillingCategory::new);
 
         CreateRecipeCategory<?>
                 distilling = builder(DistillingRecipe.class)
@@ -201,103 +205,34 @@ public class GearboxJEI implements IModPlugin {
     }
 
 
-
     private class CategoryBuilder<T extends Recipe<?>> {
         private final Class<? extends T> recipeClass;
-        private Predicate<CRecipes> predicate = cRecipes -> true;
 
         private IDrawable background;
         private IDrawable icon;
 
-        private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
+        private final List<Consumer<List<RecipeHolder<T>>>> recipeListConsumers = new ArrayList<>();
         private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
 
         public CategoryBuilder(Class<? extends T> recipeClass) {
             this.recipeClass = recipeClass;
         }
 
-        public CategoryBuilder<T> enableIf(Predicate<CRecipes> predicate) {
-            this.predicate = predicate;
-            return this;
-        }
-
-        public CategoryBuilder<T> enableWhen(Function<CRecipes, ConfigBase.ConfigBool> configValue) {
-            predicate = c -> configValue.apply(c).get();
-            return this;
-        }
-
-        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<T>> consumer) {
+        public CategoryBuilder<T> addRecipeListConsumer(Consumer<List<RecipeHolder<T>>> consumer) {
             recipeListConsumers.add(consumer);
             return this;
-        }
-
-        public CategoryBuilder<T> addRecipes(Supplier<Collection<? extends T>> collection) {
-            return addRecipeListConsumer(recipes -> recipes.addAll(collection.get()));
-        }
-
-        public CategoryBuilder<T> addAllRecipesIf(Predicate<Recipe<?>> pred) {
-            return addRecipeListConsumer(recipes -> consumeAllRecipes(recipe -> {
-                if (pred.test(recipe)) {
-                    recipes.add((T) recipe);
-                }
-            }));
-        }
-
-        public CategoryBuilder<T> addAllRecipesIf(Predicate<Recipe<?>> pred, Function<Recipe<?>, T> converter) {
-            return addRecipeListConsumer(recipes -> consumeAllRecipes(recipe -> {
-                if (pred.test(recipe)) {
-                    recipes.add(converter.apply(recipe));
-                }
-            }));
         }
 
         public CategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
             return addTypedRecipes(recipeTypeEntry::getType);
         }
 
-        public CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<? extends T>> recipeType) {
-            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipes::add, recipeType.get()));
-        }
-
-        public CategoryBuilder<T> addTypedRecipes(Supplier<RecipeType<? extends T>> recipeType, Function<Recipe<?>, T> converter) {
-            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipe -> recipes.add(converter.apply(recipe)), recipeType.get()));
-        }
-
-        public CategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<? extends T>> recipeType, Predicate<Recipe<?>> pred) {
-            return addRecipeListConsumer(recipes -> CreateJEI.<T>consumeTypedRecipes(recipe -> {
-                if (pred.test(recipe)) {
-                    recipes.add(recipe);
-                }
+        public <I extends RecipeInput, R extends Recipe<I>> CategoryBuilder<T> addTypedRecipes(Supplier<net.minecraft.world.item.crafting.RecipeType<R>> recipeType) {
+            return addRecipeListConsumer(recipes -> GearboxJEI.<T>consumeTypedRecipes(recipe -> {
+                if (recipeClass.isInstance(recipe.value()))
+                    //noinspection unchecked - checked by if statement above
+                    recipes.add((RecipeHolder<T>) recipe);
             }, recipeType.get()));
-        }
-
-        public CategoryBuilder<T> addTypedRecipesExcluding(Supplier<RecipeType<? extends T>> recipeType,
-                                                           Supplier<RecipeType<? extends T>> excluded) {
-            return addRecipeListConsumer(recipes -> {
-                List<Recipe<?>> excludedRecipes = CreateJEI.getTypedRecipes(excluded.get());
-                CreateJEI.<T>consumeTypedRecipes(recipe -> {
-                    for (Recipe<?> excludedRecipe : excludedRecipes) {
-                        if (CreateJEI.doInputsMatch(recipe, excludedRecipe)) {
-                            return;
-                        }
-                    }
-                    recipes.add(recipe);
-                }, recipeType.get());
-            });
-        }
-
-        public CategoryBuilder<T> removeRecipes(Supplier<RecipeType<? extends T>> recipeType) {
-            return addRecipeListConsumer(recipes -> {
-                List<Recipe<?>> excludedRecipes = CreateJEI.getTypedRecipes(recipeType.get());
-                recipes.removeIf(recipe -> {
-                    for (Recipe<?> excludedRecipe : excludedRecipes) {
-                        if (CreateJEI.doInputsMatch(recipe, excludedRecipe)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-            });
         }
 
         public CategoryBuilder<T> catalystStack(Supplier<ItemStack> supplier) {
@@ -335,29 +270,27 @@ public class GearboxJEI implements IModPlugin {
             return this;
         }
 
-        public CreateRecipeCategory<T> build(String name, CreateRecipeCategory.Factory<T> factory) {
-            Supplier<List<T>> recipesSupplier;
-            if (predicate.test(AllConfigs.server().recipes)) {
-                recipesSupplier = () -> {
-                    List<T> recipes = new ArrayList<>();
-                    for (Consumer<List<T>> consumer : recipeListConsumers)
-                        consumer.accept(recipes);
-                    return recipes;
-                };
-            } else {
-                recipesSupplier = () -> Collections.emptyList();
-            }
-
+        public CreateRecipeCategory<T> build(String id, CreateRecipeCategory.Factory<T> factory) {
+            Supplier<List<RecipeHolder<T>>> recipesSupplier;
+            recipesSupplier = () -> {
+                List<RecipeHolder<T>> recipes = new ArrayList<>();
+                for (Consumer<List<RecipeHolder<T>>> consumer : recipeListConsumers) {consumer.accept(recipes);}
+                return recipes;
+            };
             CreateRecipeCategory.Info<T> info = new CreateRecipeCategory.Info<>(
-                    new mezz.jei.api.recipe.RecipeType<>(Gearbox.asResource(name), recipeClass),
-                    GearboxLang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
-            CreateRecipeCategory<T> category = factory.create(info);
-            modCategories.add(category);
-            return category;
+                    createRecipeHolderType(Gearbox.asResource(id)),
+                    Component.translatable( "gearbox.recipe." + id),
+                    background,
+                    icon,
+                    recipesSupplier,
+                    catalysts
+            );
+            return factory.create(info);
         }
+
     }
 
-    public static void consumeAllRecipes(Consumer<Recipe<?>> consumer) {
+    public static void consumeAllRecipes(Consumer<? super RecipeHolder<?>> consumer) {
         Minecraft.getInstance()
                 .getConnection()
                 .getRecipeManager()
@@ -366,6 +299,14 @@ public class GearboxJEI implements IModPlugin {
     }
 
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static <T extends Recipe<?>> void consumeTypedRecipes(Consumer<RecipeHolder<?>> consumer, RecipeType<?> type) {
+        List<? extends RecipeHolder<?>> map = Minecraft.getInstance()
+                .getConnection()
+                .getRecipeManager().getAllRecipesFor((RecipeType) type);
+        if (!map.isEmpty())
+            map.forEach(consumer);
+    }
 
 
 

@@ -18,7 +18,7 @@ import static io.github.hadron13.gearbox.ponder.GearboxPonderTags.LASER_STUFF;
 public class GearboxPonderScenes {
 
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
-        PonderSceneRegistrationHelper<ItemProviderEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+        PonderSceneRegistrationHelper<ItemProviderEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 
         HELPER.forComponents(GearboxBlocks.COMPRESSOR)
                 .addStoryBoard("compressor", CompressorScenes::compressor, KINETIC_APPLIANCES, FLUIDS);

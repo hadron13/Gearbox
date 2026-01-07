@@ -94,9 +94,4 @@ public class SapperBlock extends HorizontalKineticBlock
     return GearboxBlockEntities.SAPPER.get();
   }
 
-  @Override
-  public boolean isPathfindable(BlockState state, BlockGetter reader,
-                                BlockPos pos, PathComputationType type) {
-    return false;
-  }
 }

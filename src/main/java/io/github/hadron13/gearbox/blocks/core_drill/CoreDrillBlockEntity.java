@@ -3,12 +3,15 @@ package io.github.hadron13.gearbox.blocks.core_drill;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.item.ItemHelper;
 import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.compat.adlods.AdlodDepositDetector;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import io.github.hadron13.gearbox.register.GearboxItems;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -21,11 +24,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +49,6 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
 
     public Block minedBlock;
     public ItemStackHandler outputInv;
-    protected LazyOptional<IItemHandlerModifiable> itemCapability;
 
 
     @Override
@@ -60,7 +61,6 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         payloadOffset.chase(0f, 1 / 16f, LerpedFloat.Chaser.LINEAR);
         poleOffset.chase(0f, 1 / 16f, LerpedFloat.Chaser.LINEAR);
         outputInv = new ItemStackHandler(1);
-        itemCapability = LazyOptional.of(()->outputInv);
 
         minedBlock = null;
         setLazyTickRate(10);
@@ -136,25 +136,26 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         return outputInv.getStackInSlot(0).getCount() >= outputInv.getSlotLimit(0);
     }
 
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        itemCapability.invalidate();
-    }
 
     @Override
     public void destroy() {
         super.destroy();
-        Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), new ItemStack(GearboxItems.CORE_TUBE, tubes + (drillState==PUSHING?1:0)));
+        Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), new ItemStack(GearboxItems.CORE_TUBE.getDelegate(), tubes + (drillState==PUSHING?1:0)));
         ItemHelper.dropContents(level, worldPosition, outputInv);
     }
 
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.ITEM_HANDLER && (side == null || side == getBlockState().getValue(HORIZONTAL_FACING).getOpposite())){
-            return itemCapability.cast();
-        }
-        return super.getCapability(cap, side);
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                GearboxBlockEntities.CORE_DRILL.get(),
+                (be, context) -> {
+                    if (context == null || context == be.getBlockState().getValue(HORIZONTAL_FACING).getOpposite()){
+                        return be.outputInv;
+                    }
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -200,8 +201,8 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
     }
 
     @Override
-    protected void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound, registries, clientPacket);
         compound.putInt("tubes", tubes);
         compound.putInt("state", drillState);
 //        compound.put("pole_offset", poleOffset.writeNBT());
@@ -211,8 +212,8 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
         tubes = compound.getInt("tubes");
         drillState = compound.getInt("state");
 //        poleOffset.readNBT(compound.getCompound("pole_offset"), clientPacket);

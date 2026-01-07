@@ -13,10 +13,14 @@ import com.simibubi.create.foundation.recipe.RecipeFinder;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlock;
 import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlockEntity;
+import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.laser.InternalEnergyStorage;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -24,14 +28,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +48,6 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public static final Object electrolyzingRecipeKey = new Object();
 
     public final InternalEnergyStorage energyStorage;
-    public LazyOptional<IEnergyStorage> lazyEnergy;
 
     public ScrollValueBehaviour speed;
 
@@ -56,7 +58,6 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     public ElectrolyzerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         energyStorage = new InternalEnergyStorage(8192, 8192, 0);
-        lazyEnergy = LazyOptional.of(() -> energyStorage);
     }
 
     @Override
@@ -150,18 +151,19 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     }
     @Override
     protected List<Recipe<?>> getMatchingRecipes() {
-        if (getBasin().map(BasinBlockEntity::isEmpty)
-                .orElse(true))
-            return new ArrayList<>();
-
-        List<Recipe<?>> list = RecipeFinder.get(getRecipeCacheKey(), level, this::matchStaticFilters);
-        return list.stream()
-                .filter(this::matchBasinRecipe)
-                .sorted((r1, r2) -> r2.getIngredients()
-                        .size()
-                        - r1.getIngredients()
-                        .size())
-                .collect(Collectors.toList());
+        return super.getMatchingRecipes();
+//        if (getBasin().map(BasinBlockEntity::isEmpty)
+//                .orElse(true))
+//            return new ArrayList<>();
+//
+//        List<RecipeHolder<? extends Recipe<?>>> list = RecipeFinder.get(getRecipeCacheKey(), level, this::matchStaticFilters);
+//        return list.stream()
+//                .filter(this::matchBasinRecipe)
+//                .sorted((r1, r2) -> r2.getIngredients()
+//                        .size()
+//                        - r1.getIngredients()
+//                        .size())
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -173,8 +175,8 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
         if(clientPacket) {
             energy_consumption = compound.getInt("consumption");
             energyStorage.read(compound);
@@ -182,8 +184,8 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     }
 
     @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound, registries, clientPacket);
         compound.putInt("consumption", energy_consumption);
         energyStorage.write(compound);
     }
@@ -192,12 +194,12 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     protected Optional<CreateAdvancement> getProcessedRecipeTrigger(){
         return Optional.empty();
     }
-    @Override
-    protected <C extends Container> boolean matchStaticFilters(Recipe<C> r) {
-        return r instanceof ElectrolyzingRecipe;
-    }
 
     @Override
+    protected boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipe) {
+        return recipe.value() instanceof ElectrolyzingRecipe;
+    }
+
     public Object getRecipeCacheKey(){
         return electrolyzingRecipeKey;
     }
@@ -206,14 +208,20 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
     @Override
     public void remove() {
         super.remove();
-        lazyEnergy.invalidate();
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && (side == null || (side.getAxis().isHorizontal() && side != getBlockState().getValue(HORIZONTAL_FACING))) )// && !level.isClientSide
-            return lazyEnergy.cast();
-        return LazyOptional.empty();
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                GearboxBlockEntities.ELECTROLYZER.get(),
+                (be, context) -> {
+                    if (context == null || (context.getAxis().isHorizontal() && context!= be.getBlockState().getValue(HORIZONTAL_FACING)) ){
+                        return be.energyStorage;
+                    }
+                    return null;
+                }
+        );
     }
 
 }

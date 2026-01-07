@@ -1,11 +1,13 @@
 package io.github.hadron13.gearbox.blocks.brass_press;
 
 
+import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour.PressingBehaviourSpecifics;
+import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
@@ -15,6 +17,7 @@ import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -23,17 +26,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,23 +79,23 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 	}
 
 	@Override
-	protected void write(CompoundTag compound, boolean clientPacket) {
-		super.write(compound, clientPacket);
+	protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+		super.write(compound, registries, clientPacket);
 		compound.putInt("stage", pressingStage);
-		if (clientPacket) {
-			compound.put("ParticleItems", NBTHelper.writeCompoundList(particleItems, ItemStack::serializeNBT));
-			particleItems.clear();
-		}
+//		if (clientPacket) {
+//			compound.put("ParticleItems", NBTHelper.writeCompoundList(particleItems, ItemStack::serializeNBT));
+//			particleItems.clear();
+//		}
 	}
 
 	@Override
-	protected void read(CompoundTag compound, boolean clientPacket) {
-		super.read(compound, clientPacket);
+	protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+		super.read(compound, registries, clientPacket);
 		pressingStage = compound.getInt("stage");
-		if (clientPacket) {
-			NBTHelper.iterateCompoundList(compound.getList("ParticleItems", Tag.TAG_COMPOUND),
-					c -> particleItems.add(ItemStack.of(c)));
-		}
+//		if (clientPacket) {
+//			NBTHelper.iterateCompoundList(compound.getList("ParticleItems", Tag.TAG_COMPOUND),
+//					c -> particleItems.add(ItemStack.of(c)));
+//		}
 	}
 
 	@Override
@@ -106,8 +105,8 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 
 	@Override
 	public boolean tryProcessOnBelt(TransportedItemStack input, List<ItemStack> outputList, boolean simulate) {
-		Optional<MechanizingRecipe> recipe = getRecipe(input.stack);
-		if (!recipe.isPresent())
+		Optional<RecipeHolder<MechanizingRecipe>> recipe = getRecipe(input.stack);
+		if (recipe.isEmpty())
 			return false;
 		if (simulate)
 			return true;
@@ -115,7 +114,7 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 		particleItems.add(input.stack);
 
 		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(level,
-				canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get(), true);
+				canProcessInBulk() ? input.stack : new ItemStack(input.stack.getItem(), 1), recipe.get().value(), true);
 //		List<ItemStack> outputs = RecipeApplier.applyRecipeOn(getLevel(), canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), recipe.get());
 
 		for (ItemStack created : outputs) {
@@ -171,24 +170,17 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 
 	}
 
-	private static final RecipeWrapper pressingInv = new RecipeWrapper(new ItemStackHandler(1));
 
-	public Optional<MechanizingRecipe> getRecipe(ItemStack item) {
-		Optional<MechanizingRecipe> assemblyRecipe =
-			SequencedAssemblyRecipe.getRecipe(level, item, GearboxRecipeTypes.MECHANIZING.getType(), MechanizingRecipe.class);
+
+	public Optional<RecipeHolder<MechanizingRecipe>> getRecipe(ItemStack item) {
+		Optional<RecipeHolder<MechanizingRecipe>> assemblyRecipe =
+				SequencedAssemblyRecipe.getRecipe(level, item, GearboxRecipeTypes.MECHANIZING.getType(), MechanizingRecipe.class);
 		if (assemblyRecipe.isPresent())
 			return assemblyRecipe;
 
-		pressingInv.setItem(0, item);
-		return GearboxRecipeTypes.MECHANIZING.find(pressingInv, level);
+		return GearboxRecipeTypes.MECHANIZING.find(new SingleRecipeInput(item), level);
 	}
 
-	public static <C extends Container> boolean canCompress(Recipe<C> recipe) {
-		if (!(recipe instanceof CraftingRecipe) || !AllConfigs.server().recipes.allowShapedSquareInPress.get())
-			return false;
-		NonNullList<Ingredient> ingredients = recipe.getIngredients();
-		return (ingredients.size() == 4 || ingredients.size() == 9) && ItemHelper.matchAllIngredients(ingredients);
-	}
 	@Override
 	public float getKineticSpeed() {
 		return Mth.clamp(getSpeed(), -96, 96);

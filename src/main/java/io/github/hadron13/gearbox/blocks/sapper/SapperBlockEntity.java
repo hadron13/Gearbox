@@ -1,18 +1,20 @@
 package io.github.hadron13.gearbox.blocks.sapper;
 
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import com.simibubi.create.foundation.item.TooltipHelper;
 
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.createmod.catnip.data.Couple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -22,18 +24,18 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveringInformation {
 
@@ -47,7 +49,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
     private boolean cached = false;
     //registers a few leaves to keep track of
     public BlockPos[] leafPos = new BlockPos[NUM_LEAVES];
-    private SmartFluidTankBehaviour tank;
+    public SmartFluidTankBehaviour tank;
 
     private FluidStack outputFluid;
 
@@ -61,6 +63,21 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
         extendedTicks = 0;
         sapTimer = 0f;
         sapperState = RETRACTED;
+    }
+
+
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GearboxBlockEntities.SAPPER.get(),
+                (be, context) -> {
+                    if (context == null || SapperBlock.hasPipeTowards(be.getLevel(), be.getBlockPos(), be.getBlockState(), context)){
+                        return be.tank.getCapability();
+                    }
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -137,7 +154,7 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         boolean kineticTooltip = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-        boolean fluidTooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+        boolean fluidTooltip = containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability());
         if(isTankFull())
             GearboxLang.addHint(tooltip,"hint.sapper.full");
 
@@ -262,31 +279,24 @@ public class SapperBlockEntity extends KineticBlockEntity implements IHaveHoveri
     }
 
     @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
 
         compound.putFloat("sapTime", sapTimer);
         compound.putInt("sapState", sapperState);
         compound.putInt("exTime", extendedTicks);
         compound.putBoolean("val", valid);
-        super.write(compound, clientPacket);
+        super.write(compound, registries, clientPacket);
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         sapTimer = compound.getFloat("sapTime");
         sapperState = compound.getInt("sapState");
         extendedTicks = compound.getInt("exTime");
         valid = compound.getBoolean("val");
-        super.read(compound, clientPacket);
+        super.read(compound, registries, clientPacket);
     }
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (isFluidHandlerCap(cap)
-                && (side == null || SapperBlock.hasPipeTowards(level, worldPosition, getBlockState(), side)))
-            return tank.getCapability().cast();
 
-        return super.getCapability(cap, side);
-    }
     public static class TreeType{
         public static List<Block> logTypes = new ArrayList<>();
         public static HashMap<Couple<Block>, FluidStack> treeFluids = new HashMap<>();

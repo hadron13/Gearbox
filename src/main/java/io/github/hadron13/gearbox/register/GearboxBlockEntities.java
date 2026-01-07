@@ -24,9 +24,6 @@ import io.github.hadron13.gearbox.blocks.brass_press.BrassPressRenderer;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeVisual;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeRenderer;
-import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorBlockEntity;
-import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorVisual;
-import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorRenderer;
 import io.github.hadron13.gearbox.blocks.combiner.CombinerBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorVisual;
@@ -34,7 +31,6 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressorRenderer;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlockEntity;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillRenderer;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillVisual;
-import io.github.hadron13.gearbox.blocks.dipper.DipperBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerRenderer;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlockEntity;
@@ -50,8 +46,6 @@ import io.github.hadron13.gearbox.blocks.kiln.KilnRenderer;
 import io.github.hadron13.gearbox.blocks.kiln.KilnVisual;
 import io.github.hadron13.gearbox.blocks.laser.LaserBeamRenderer;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlockEntity;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlockEntity;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillRenderer;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlockEntity;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorRenderer;
 import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlockEntity;
@@ -184,13 +178,13 @@ public class GearboxBlockEntities {
             .renderer(() -> CentrifugeRenderer::new)
             .register();
 
-    public static final BlockEntityEntry<LaserDrillBlockEntity> LASER_DRILL = REGISTRATE
-            .blockEntity("laser_drill", LaserDrillBlockEntity::new)
-//            .instance(() -> LargeLaserVisual::new)
-            .validBlocks(GearboxBlocks.LASER_DRILL)
-            .renderer(() -> LaserDrillRenderer::new)
-            .register();
-
+//    public static final BlockEntityEntry<LaserDrillBlockEntity> LASER_DRILL = REGISTRATE
+//            .blockEntity("laser_drill", LaserDrillBlockEntity::new)
+////            .instance(() -> LargeLaserVisual::new)
+//            .validBlocks(GearboxBlocks.LASER_DRILL)
+//            .renderer(() -> LaserDrillRenderer::new)
+//            .register();
+//
 
     public static final BlockEntityEntry<PumpjackArmBlockEntity> PUMPJACK_ARM = REGISTRATE
             .blockEntity("pumpjack_arm", PumpjackArmBlockEntity::new)

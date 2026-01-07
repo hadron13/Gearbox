@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class PumpjackArmBlockEntity extends SmartBlockEntity  {
     }
 
 
-    public AABB renderBoundingBox = new AABB(worldPosition.offset(-2, -2, -2), worldPosition.offset(2, 1, 2));
+    public AABB renderBoundingBox = new AABB(worldPosition.offset(-2, -2, -2).getCenter(), worldPosition.offset(2, 1, 2).getCenter());
 
     @Override
     @OnlyIn(Dist.CLIENT)

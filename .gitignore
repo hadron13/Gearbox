@@ -1,10 +1,26 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
 # gradle
 build
 .gradle
-logs
+
+# other
+eclipse
 run
-.idea
-/.idea/
-.idea/*
-out/
-mcmodsrepo/
+runs
+run-data
+
+repo

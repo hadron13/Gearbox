@@ -16,14 +16,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -32,7 +33,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GearboxFluids {
-    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
+    private static final CreateRegistrate REGISTRATE = Gearbox.registrate();
 
 //    public static final FluidEntry<ForgeFlowingFluid.Flowing> PETROLEUM = REGISTRATE
 //            .fluid("petroleum",
@@ -49,7 +50,7 @@ public class GearboxFluids {
 //            .tag(AllTags.forgeItemTag("buckets/petroleum"))
 //            .build().register();
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> PETROLEUM =
+    public static final FluidEntry<BaseFlowingFluid.Flowing> PETROLEUM =
             REGISTRATE.standardFluid("petroleum",
                             SolidRenderedPlaceableFluidType.create(0x352228,
                                     () -> 1f / 32f ))
@@ -60,17 +61,15 @@ public class GearboxFluids {
                             .tickRate(25)
                             .slopeFindDistance(3)
                             .explosionResistance(100f))
-                    .source(ForgeFlowingFluid.Source::new)
+                    .source(BaseFlowingFluid.Source::new)
                     .block()
                     .properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW))
                     .build()
                     .bucket()
-//                    .onRegister(AllFluids::registerFluidDispenseBehavior)
-                    .tag(AllTags.forgeItemTag("buckets/petroleum")) //TODO: remove this
                     .build()
                     .register();
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> RESIN = REGISTRATE
+    public static final FluidEntry<BaseFlowingFluid.Flowing> RESIN = REGISTRATE
             .fluid("resin",
                     Gearbox.asResource("fluid/resin_still"),
                     Gearbox.asResource("fluid/resin_flow"))
@@ -80,9 +79,8 @@ public class GearboxFluids {
                     .tickRate(25)
                     .slopeFindDistance(3)
                     .explosionResistance(100f))
-            .source(ForgeFlowingFluid.Source::new)
+            .source(BaseFlowingFluid.Source::new)
             .bucket()
-            .tag(AllTags.forgeItemTag("buckets/resin"))
             .build().register();
 
 
@@ -93,24 +91,23 @@ public class GearboxFluids {
             .bucket()
             .build()
             .register();
+    public static final FluidEntry<BaseFlowingFluid.Flowing> NITROGEN = gas("nitrogen");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> OXYGEN = gas("oxygen");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> HYDROGEN = gas("hydrogen");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> ARGON = gas("argon");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> STEAM = gas("steam");
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> NITROGEN = gas("nitrogen");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> OXYGEN = gas("oxygen");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> HYDROGEN = gas("hydrogen");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> ARGON = gas("argon");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> AMMONIA = gas("ammonia");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> CHLORINE = gas("chlorine");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> DINITROGEN_TETROXIDE = gas("dinitrogen_tetroxide");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> HYDROGEN_SULFIDE = gas("hydrogen_sulfide");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> VOLATILE_GAS = gas("volatile_gas");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> BUTANE = gas("butane");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> PROPANE = gas("propane");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> LPG = gas("lpg");
+    public static final FluidEntry<BaseFlowingFluid.Flowing> ETHYLENE = gas("ethylene");
 
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> STEAM = gas("steam");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> AMMONIA = gas("ammonia");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> CHLORINE = gas("chlorine");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> DINITROGEN_TETROXIDE = gas("dinitrogen_tetroxide");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> HYDROGEN_SULFIDE = gas("hydrogen_sulfide");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> VOLATILE_GAS = gas("volatile_gas");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> BUTANE = gas("butane");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> PROPANE = gas("propane");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> LPG = gas("lpg");
-    public static final FluidEntry<ForgeFlowingFluid.Flowing> ETHYLENE = gas("ethylene");
-
-    public static FluidEntry<ForgeFlowingFluid.Flowing> gas(String name){
+    public static FluidEntry<BaseFlowingFluid.Flowing> gas(String name){
         return REGISTRATE
             .fluid(name, Gearbox.asResource("fluid/" + name + "_still"), Gearbox.asResource("fluid/" + name + "_flow"), TransparentFluidType::new)
             .properties(p -> p.viscosity(0).density(-100))
@@ -118,7 +115,7 @@ public class GearboxFluids {
                     .tickRate(1)
                     .slopeFindDistance(3)
                     .explosionResistance(100f))
-            .source(ForgeFlowingFluid.Source::new)
+            .source(BaseFlowingFluid.Source::new)
             .bucket()
             .build()
             .register();
@@ -130,32 +127,22 @@ public class GearboxFluids {
 
 
 
-    public static class TransparentFluidType extends FluidType {
-        protected ResourceLocation stillTexture;
-        protected ResourceLocation flowingTexture;
-
+    public static class TransparentFluidType extends AllFluids.TintedFluidType{
         protected TransparentFluidType(FluidType.Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture) {
-            super(properties);
-            this.stillTexture = stillTexture;
-            this.flowingTexture = flowingTexture;
+            super(properties, stillTexture, flowingTexture);
         }
 
-        public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
-            consumer.accept(new IClientFluidTypeExtensions() {
-                public ResourceLocation getStillTexture() {
-                    return TransparentFluidType.this.stillTexture;
-                }
-
-                public ResourceLocation getFlowingTexture() {
-                    return TransparentFluidType.this.flowingTexture;
-                }
-
-                @Override
-                public int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
-                    return 0x00ffffff;
-                }
-            });
+        @Override
+        protected int getTintColor(FluidStack stack) {
+            return NO_TINT;
         }
+
+        @Override
+        protected int getTintColor(FluidState state, BlockAndTintGetter getter, BlockPos pos) {
+            return NO_TINT;
+        }
+
+
     }
 
 

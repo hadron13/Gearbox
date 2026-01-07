@@ -2,20 +2,25 @@ package io.github.hadron13.gearbox.blocks.steel_tank;
 
 
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
+import com.simibubi.create.content.equipment.symmetryWand.SymmetryWandItem;
+import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public class SteelTankItem extends BlockItem {
 
@@ -35,29 +40,31 @@ public class SteelTankItem extends BlockItem {
     @Override
     protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, Player player,
                                                  ItemStack itemStack, BlockState state) {
-        MinecraftServer minecraftserver = player.getServer();
+        MinecraftServer minecraftserver = level.getServer();
         if (minecraftserver == null)
             return false;
-        CompoundTag nbt = itemStack.getTagElement("BlockEntityTag");
-        if (nbt != null) {
+        CustomData blockEntityData = itemStack.get(DataComponents.BLOCK_ENTITY_DATA);
+        if (blockEntityData != null) {
+            CompoundTag nbt = blockEntityData.copyTag();
             nbt.remove("Luminosity");
             nbt.remove("Size");
             nbt.remove("Height");
             nbt.remove("Controller");
             nbt.remove("LastKnownPos");
             if (nbt.contains("TankContent")) {
-                FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt.getCompound("TankContent"));
+                FluidStack fluid = FluidStack.parseOptional(minecraftserver.registryAccess(), nbt.getCompound("TankContent"));
                 if (!fluid.isEmpty()) {
                     fluid.setAmount(Math.min(SteelTankBlockEntity.getCapacityMultiplier(), fluid.getAmount()));
-                    nbt.put("TankContent", fluid.writeToNBT(new CompoundTag()));
+                    nbt.put("TankContent", fluid.saveOptional(minecraftserver.registryAccess()));
                 }
             }
+            BlockEntity.addEntityType(nbt, ((IBE<?>) this.getBlock()).getBlockEntityType());
+            itemStack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(nbt));
         }
         return super.updateCustomBlockEntityTag(pos, level, player, itemStack, state);
     }
 
     private void tryMultiPlace(BlockPlaceContext ctx) {
-
         Player player = ctx.getPlayer();
         if (player == null)
             return;
@@ -75,25 +82,26 @@ public class SteelTankItem extends BlockItem {
 
         if (!SteelTankBlock.isTank(placedOnState))
             return;
-
+        if (SymmetryWandItem.presentInHotbar(player))
+            return;
         SteelTankBlockEntity tankAt = ConnectivityHandler.partAt(
                 GearboxBlockEntities.STEEL_FLUID_TANK.get(), world, placedOnPos
         );
         if (tankAt == null)
             return;
-        SteelTankBlockEntity controllerTE = tankAt.getControllerBE();
-        if (controllerTE == null)
+        SteelTankBlockEntity controllerBE = tankAt.getControllerBE();
+        if (controllerBE == null)
             return;
 
-        int width = controllerTE.getWidth();
+        int width = controllerBE.getWidth();
         if (width == 1)
             return;
 
         int tanksToPlace = 0;
-        BlockPos startPos = face == Direction.DOWN ? controllerTE.getBlockPos()
+        BlockPos startPos = face == Direction.DOWN ? controllerBE.getBlockPos()
                 .below()
-                : controllerTE.getBlockPos()
-                .above(controllerTE.getHeight());
+                : controllerBE.getBlockPos()
+                .above(controllerBE.getHeight());
 
         if (startPos.getY() != pos.getY())
             return;

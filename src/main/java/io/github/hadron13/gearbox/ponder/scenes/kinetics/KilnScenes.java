@@ -72,7 +72,7 @@ public class KilnScenes {
         scene.idle(18);
         scene.world().modifyEntity(entity1, Entity::discard);
         scene.world().modifyBlockEntity(kiln, KilnBlockEntity.class,
-                ms -> ms.inputInv.setStackInSlot(0, itemStack));
+                ms -> ms.inputInv.insertItem(0, itemStack, false));
         scene.world().toggleRedstonePower(util.select().position(kiln));
         scene.idle(10);
         scene.overlay().showControls(kiln_top, Pointing.DOWN, 30).withItem(itemStack);

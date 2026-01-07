@@ -14,7 +14,8 @@ import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import static io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity.DistilMode.DISTIL_FLASH;
 
@@ -27,7 +28,7 @@ public class DistillingCategory extends CreateRecipeCategory<DistillingRecipe> {
     public void setRecipe(IRecipeLayoutBuilder builder, DistillingRecipe recipe, IFocusGroup focuses) {
 
         if(recipe.mode == DISTIL_FLASH){
-            addFluidSlot(builder, (177/2) - 54, 130+4 - 19, new FluidStack(GearboxFluids.STEAM.getSource(), 500));
+            addFluidSlot(builder, (177/2) - 54, 130+4 - 19, new FluidStack(GearboxFluids.STEAM, 500));
         }
         addFluidSlot(builder, (177/2) - 54, 130+4, recipe.getFluidIngredients().get(0));
 
@@ -64,10 +65,10 @@ public class DistillingCategory extends CreateRecipeCategory<DistillingRecipe> {
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, DistillingRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public void getTooltip(ITooltipBuilder tooltip, RecipeHolder<DistillingRecipe> recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
 
         if(mouseX > (177/2)-74 && mouseX < (177/2)-56 && mouseY >= 133 && mouseY <= 151){
-            tooltip.add(GearboxLang.translate(recipe.mode.getRawTranslationKey()).component() );
+            tooltip.add(GearboxLang.translate(recipe.value().mode.getRawTranslationKey()).component() );
         }
 
         super.getTooltip(tooltip, recipe, recipeSlotsView, mouseX, mouseY);

@@ -8,25 +8,21 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.lang.FontHelper;
-import net.createmod.catnip.lang.LangBuilder;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -39,12 +35,26 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
 
     public SmartFluidTankBehaviour inputTank;
     public SmartFluidTankBehaviour outputTank;
-    public LazyOptional<IFluidHandler> fluidCapability;
+    protected IFluidHandler fluidCapability;
     public CentrifugingRecipe lastRecipe = null;
     int recipeTimer = 0;
 
     public CentrifugeBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
+    }
+
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GearboxBlockEntities.CENTRIFUGE.get(),
+                (be, context) -> {
+                    if (context == null || context.getAxis() == be.getBlockState().getValue(AXIS)){
+                        return be.fluidCapability;
+                    }
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -116,18 +126,12 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
         behaviours.add(inputTank);
         behaviours.add(outputTank);
 
-        fluidCapability = LazyOptional.of(() -> {
-            LazyOptional<? extends IFluidHandler> inputCap = inputTank.getCapability();
-            LazyOptional<? extends IFluidHandler> outputCap = outputTank.getCapability();
-            return new CombinedTankWrapper(outputCap.orElse(null), inputCap.orElse(null));
-        });
+        fluidCapability = new CombinedTankWrapper(outputTank.getCapability(), inputTank.getCapability());
     }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         boolean isEmpty = !super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-
-        IFluidHandler fluids = fluidCapability.orElse(new FluidTank(0));
 
 
         if (Math.abs(getSpeed()) < 64.0f) {
@@ -146,38 +150,12 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
             isEmpty = false;
         }
 
-        LangBuilder mb = GearboxLang.translate("generic.unit.millibuckets");
-        for (int i = 0; i < fluids.getTanks(); i++) {
-            FluidStack fluidStack = fluids.getFluidInTank(i);
-            if (fluidStack.isEmpty())
-                continue;
-            GearboxLang.text("")
-                    .add(GearboxLang.fluidName(fluidStack)
-                            .add(GearboxLang.text(" "))
-                            .style(ChatFormatting.GRAY)
-                            .add(GearboxLang.number(fluidStack.getAmount())
-                                    .add(mb)
-                                    .style(ChatFormatting.BLUE)))
-                    .forGoggles(tooltip, 1);
-            isEmpty = false;
-        }
-
+        containedFluidTooltip(tooltip, isPlayerSneaking, fluidCapability);
 
         return !isEmpty;
     }
 
 
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        fluidCapability.invalidate();
-    }
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER && (side == null || side.getAxis() == getBlockState().getValue(AXIS)) )
-            return fluidCapability.cast();
-        return super.getCapability(cap, side);
-    }
+
 
 }

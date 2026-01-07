@@ -1,21 +1,22 @@
 package io.github.hadron13.gearbox.blocks.centrifuge;
 
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.createmod.catnip.data.Iterate;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
-import java.util.List;
 
-public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
-    public CentrifugingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+public class CentrifugingRecipe extends StandardProcessingRecipe<RecipeInput> {
+    public CentrifugingRecipe(ProcessingRecipeParams params) {
         super(GearboxRecipeTypes.CENTRIFUGING, params);
     }
 
@@ -24,11 +25,9 @@ public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
     }
 
     public static boolean apply(CentrifugeBlockEntity centrifuge, CentrifugingRecipe recipe, boolean test){
-        List<FluidIngredient> fluidIngredients = recipe.getFluidIngredients();
+        NonNullList<SizedFluidIngredient> fluidIngredients = recipe.getFluidIngredients();
 
-        IFluidHandler availableFluids = centrifuge.getCapability(ForgeCapabilities.FLUID_HANDLER)
-                .orElse(null);
-
+        IFluidHandler availableFluids = centrifuge.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, centrifuge.getBlockPos(), null);
         int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];
 
         for (boolean simulate : Iterate.trueAndFalse) {
@@ -40,8 +39,8 @@ public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
             boolean fluidsAffected = false;
             FluidIngredients:
             for (int i = 0; i < fluidIngredients.size(); i++) {
-                FluidIngredient fluidIngredient = fluidIngredients.get(i);
-                int amountRequired = fluidIngredient.getRequiredAmount();
+                FluidIngredient fluidIngredient = fluidIngredients.get(i).ingredient();
+                int amountRequired = fluidIngredients.get(i).amount();
 
                 for (int tank = 0; tank < availableFluids.getTanks(); tank++) {
                     FluidStack fluidStack = availableFluids.getFluidInTank(tank);
@@ -73,8 +72,7 @@ public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
             }
 
 
-            IFluidHandler targetTank = centrifuge.outputTank.getCapability()
-                    .orElse(null);
+            IFluidHandler targetTank = centrifuge.outputTank.getCapability();
 
             for (FluidStack fluidStack : recipe.getFluidResults()) {
                 IFluidHandler.FluidAction action = simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE;
@@ -111,7 +109,7 @@ public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
 
 
     @Override
-    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
+    public boolean matches(RecipeInput recipeInput, Level level) {
         return false;
     }
 }

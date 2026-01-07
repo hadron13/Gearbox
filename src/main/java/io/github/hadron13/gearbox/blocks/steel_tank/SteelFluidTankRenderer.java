@@ -11,6 +11,7 @@ import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControll
 import io.github.hadron13.gearbox.register.GearboxPartialModels;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.platform.NeoForgeCatnipServices;
 import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,10 +19,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-import static net.createmod.catnip.platform.ForgeCatnipServices.FLUID_RENDERER;
+import static net.createmod.catnip.platform.CatnipServices.FLUID_RENDERER;
+
 
 public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlockEntity> {
 
@@ -31,11 +33,11 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
                               int light, int overlay) {
         if (!te.isController())
             return;
-        if(te.isDistillingColumn) {
-            renderAsDistiller(te, partialTicks, ms, buffer, light, overlay);
-            return;
-        }
-        if (!te.hasWindows()) {
+
+        if(!te.hasWindows()){
+            if(te.isDistillingColumn) {
+                renderAsDistiller(te, partialTicks, ms, buffer, light, overlay);
+            }
             return;
         }
         LerpedFloat fluidLevel = te.getFluidLevel();
@@ -76,7 +78,8 @@ public class SteelFluidTankRenderer extends SafeBlockEntityRenderer<SteelTankBlo
 
         ms.pushPose();
         ms.translate(0, clampedLevel - totalHeight, 0);
-        FLUID_RENDERER.renderFluidBox(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, buffer, ms, light, false,true);
+        NeoForgeCatnipServices.FLUID_RENDERER.renderFluidBox(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, buffer,
+                ms, light, false, true);
 
         ms.popPose();
     }

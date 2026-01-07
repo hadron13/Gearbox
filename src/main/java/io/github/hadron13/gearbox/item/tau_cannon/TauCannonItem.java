@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.item.tau_cannon;
 
 import com.simibubi.create.foundation.item.CustomArmPoseItem;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
+import io.github.hadron13.gearbox.blocks.laser.Laser;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
@@ -12,9 +13,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,16 +23,21 @@ import java.util.function.Consumer;
 
 public class TauCannonItem extends Item implements CustomArmPoseItem {
 
+    public Laser laser;
 
     public TauCannonItem(Properties pProperties) {
         super(pProperties);
+        laser = new Laser();
         TauCannonAnimationHolder.init();
     }
 
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-
-        return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
+        laser.setPosition(pPlayer.getEyePosition());
+        laser.setDirection(pPlayer.getForward());
+        laser.setEnabled(true);
+        return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand));
     }
 
 

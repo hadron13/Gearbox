@@ -8,25 +8,25 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import io.github.hadron13.gearbox.register.GearboxFluids;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlock.HORIZONTAL_FACING;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
 
@@ -51,7 +51,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
     @OnlyIn(Dist.CLIENT)
     public AABB getRenderBoundingBox() {
         if (renderBoundingBox == null) {
-            renderBoundingBox = new AABB(worldPosition.offset(-2, -2, -2), worldPosition.offset(2, 2, 2));
+            renderBoundingBox = new AABB(worldPosition.offset(-2, -2, -2).getCenter(), worldPosition.offset(2, 2, 2).getCenter());
         }
         return renderBoundingBox;
     }
@@ -141,7 +141,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         isPipingValid = validatePiping();
         if(isVirtual()){
             tank.allowInsertion();
-            tank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.PETROLEUM.get(), 2000), EXECUTE);
+            tank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.PETROLEUM, 2000), EXECUTE);
         }
     }
 
@@ -156,7 +156,7 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         if(isTankFull())
             return;
 
-        FluidStack result = currentRecipe.getFluidResult().copy();
+        FluidStack result = currentRecipe.getFluidResult();
         result.setAmount((int) ((float)result.getAmount() * efficiency));
         tank.allowInsertion();
         tank.getPrimaryHandler().fill(result, EXECUTE);
@@ -170,13 +170,19 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
         return tank.getPrimaryHandler().getFluidAmount() == 2000;
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (isFluidHandlerCap(cap)
-                && (side == null || getBlockState().getValue(HORIZONTAL_FACING) == side))
-            return tank.getCapability().cast();
 
-        return super.getCapability(cap, side);
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GearboxBlockEntities.PUMPJACK_WELL.get(),
+                (be, context) -> {
+                    if (context == null || be.getBlockState().getValue(HORIZONTAL_FACING) == context){
+                        return be.tank.getCapability();
+                    }
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -196,18 +202,18 @@ public class PumpjackWellBlockEntity extends SmartBlockEntity implements IHaveGo
             GearboxLang.text("").forGoggles(tooltip);
         }
 
-        return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability().cast());
+        return containedFluidTooltip(tooltip, isPlayerSneaking, tank.getCapability());
     }
 
     @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
-        super.write(tag, clientPacket);
+    protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(tag, registries, clientPacket);
         tag.putFloat("efficiency", efficiency);
     }
 
     @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
-        super.read(tag, clientPacket);
+    protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(tag, registries, clientPacket);
         efficiency = tag.getFloat("efficiency");
     }
 }

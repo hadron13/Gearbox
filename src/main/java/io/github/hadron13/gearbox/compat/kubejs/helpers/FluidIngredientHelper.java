@@ -2,16 +2,14 @@ package io.github.hadron13.gearbox.compat.kubejs.helpers;
 
 import com.simibubi.create.content.fluids.FlowSource;
 import com.simibubi.create.content.fluids.OpenEndedPipe;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
-import dev.architectury.hooks.fluid.forge.FluidStackHooksForge;
-import dev.latvian.mods.kubejs.fluid.FluidStackJS;
-import net.minecraftforge.fluids.FluidStack;
+import dev.latvian.mods.kubejs.core.FluidStackKJS;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.function.BiConsumer;
 
 public class FluidIngredientHelper {
-    public static FluidIngredient toFluidIngredient(FluidStackJS fluidStack) {
-        return FluidIngredient.fromFluidStack(FluidStackHooksForge.toForge(fluidStack.getFluidStack()));
+    public static SizedFluidIngredient toFluidIngredient(FluidStackKJS fluidStack) {
+        return SizedFluidIngredient.of(fluidStack.kjs$self());
     }
 
     // Commented out because it is unused and needs reformatting

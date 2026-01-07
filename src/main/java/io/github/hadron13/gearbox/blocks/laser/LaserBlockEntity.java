@@ -4,19 +4,18 @@ import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 
 import java.util.ArrayList;
@@ -28,12 +27,10 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
     public Laser laserBeam;
 
     public final InternalEnergyStorage energyStorage;
-    public LazyOptional<IEnergyStorage> lazyEnergy;
 
     public LaserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         energyStorage = new InternalEnergyStorage(8192, 256, 0);
-        lazyEnergy = LazyOptional.of(() -> energyStorage);
 
         laserBeam = new Laser(0xFFFFFF, getBlockPos().getCenter(), new Vec3(getFacing().step()));
         laserBeam.disable();
@@ -84,7 +81,6 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
 
     @Override
     public void remove() {
-        lazyEnergy.invalidate();
         laserBeam.disable();
         super.remove();
     }
@@ -97,24 +93,31 @@ public class LaserBlockEntity extends SmartBlockEntity implements ILaserEmitter,
     }
 
     @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
-        energyStorage.write(compound);
-        compound.putBoolean("enabled", laserBeam.enabled);
-        super.write(compound, clientPacket);
+    protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        energyStorage.write(tag);
+        tag.putBoolean("enabled", laserBeam.enabled);
+        super.write(tag, registries, clientPacket);
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        energyStorage.read(compound);
-        laserBeam.setEnabled(compound.getBoolean("enabled"));
-        super.read(compound, clientPacket);
+    protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        energyStorage.read(tag);
+        laserBeam.setEnabled(tag.getBoolean("enabled"));
+        super.read(tag, registries, clientPacket);
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && (side == null || side == getBlockState().getValue(HORIZONTAL_FACING).getOpposite()))// && !level.isClientSide
-            return lazyEnergy.cast();
-        return LazyOptional.empty();
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                GearboxBlockEntities.LASER.get(),
+                (be, context) -> {
+                    if (context == null || context == be.getBlockState().getValue(HORIZONTAL_FACING).getOpposite()){
+                        return be.energyStorage;
+                    }
+                    return null;
+                }
+        );
     }
 
     @Override

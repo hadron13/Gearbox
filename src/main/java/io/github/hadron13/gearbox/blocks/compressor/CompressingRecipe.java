@@ -1,17 +1,16 @@
 package io.github.hadron13.gearbox.blocks.compressor;
 
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
+import com.simibubi.create.content.processing.recipe.*;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import javax.annotation.Nonnull;
 
@@ -20,8 +19,8 @@ import static com.simibubi.create.content.processing.burner.BlazeBurnerBlock.Hea
 import static com.simibubi.create.content.processing.recipe.HeatCondition.HEATED;
 import static com.simibubi.create.content.processing.recipe.HeatCondition.NONE;
 
-public class CompressingRecipe extends ProcessingRecipe<RecipeWrapper> {
-    public CompressingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+public class CompressingRecipe extends StandardProcessingRecipe<SingleRecipeInput> {
+    public CompressingRecipe(ProcessingRecipeParams params) {
         super(GearboxRecipeTypes.COMPRESSING, params);
     }
     public static boolean match(CompressorBlockEntity blockEntity, CompressingRecipe recipe) {
@@ -38,18 +37,17 @@ public class CompressingRecipe extends ProcessingRecipe<RecipeWrapper> {
         if(heatRequirement == NONE && heatProvided != SMOULDERING)
             return false;
 
-        IFluidHandler fluidCapability = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER)
-                .orElse(null);
+        IFluidHandler fluidCapability = blockEntity.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, blockEntity.getBlockPos(), null);
 
         if (fluidCapability == null)
             return false;
 
-        FluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
+        SizedFluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
 
         FluidStack available = fluidCapability.getFluidInTank(0);
 
         boolean ingredientMatch = fluidIngredient.test(available);
-        boolean enoughFluid = available.getAmount() >= fluidIngredient.getRequiredAmount();
+        boolean enoughFluid = available.getAmount() >= fluidIngredient.amount();
 
         return ingredientMatch && enoughFluid;
     }
@@ -68,10 +66,6 @@ public class CompressingRecipe extends ProcessingRecipe<RecipeWrapper> {
     }
 
     @Override
-    public boolean matches(RecipeWrapper inv, @Nonnull Level worldIn) {
-        return false;
-    }
-    @Override
     public int getMaxInputCount(){
         return 0;
     }
@@ -88,4 +82,8 @@ public class CompressingRecipe extends ProcessingRecipe<RecipeWrapper> {
     public boolean canRequireHeat() {return true;}
 
 
+    @Override
+    public boolean matches(SingleRecipeInput singleRecipeInput, Level level) {
+        return false;
+    }
 }

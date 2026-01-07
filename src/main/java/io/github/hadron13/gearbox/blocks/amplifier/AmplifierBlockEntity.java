@@ -6,18 +6,16 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.laser.*;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import java.util.List;
 
@@ -31,7 +29,6 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
 
 
     public final InternalEnergyStorage energyStorage;
-    public LazyOptional<IEnergyStorage> lazyEnergy;
 
     @Override
     protected AABB createRenderBoundingBox() {
@@ -42,10 +39,22 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
         super(type, pos, state);
 
         energyStorage = new InternalEnergyStorage(65536, 4096, 0);
-        lazyEnergy = LazyOptional.of(() -> energyStorage);
 
         laser = new Laser(0x0, getBlockPos().getCenter(), new Vec3(getFacing().step()));
         laser.disable();
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                GearboxBlockEntities.AMPLIFIER.get(),
+                (be, context) -> {
+                    if (context == null || context == be.getBlockState().getValue(LaserBlock.HORIZONTAL_FACING).getCounterClockWise()){
+                        return be.energyStorage;
+                    }
+                    return null;
+                }
+        );
     }
 
     @Override
@@ -84,16 +93,6 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
 
     }
 
-        @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
-        super.read(tag, clientPacket);
-    }
-
-    @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
-        super.write(tag, clientPacket);
-    }
-
     @Override
     public List<Laser> getLasers() {
         return List.of(laser);
@@ -123,12 +122,5 @@ public class AmplifierBlockEntity extends SmartBlockEntity implements ILaserRece
         }
     }
 
-
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && side == getBlockState().getValue(LaserBlock.HORIZONTAL_FACING).getCounterClockWise())// && !level.isClientSide
-            return lazyEnergy.cast();
-        return LazyOptional.empty();
-    }
 
 }

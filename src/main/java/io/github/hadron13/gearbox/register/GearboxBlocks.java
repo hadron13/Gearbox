@@ -16,11 +16,9 @@ import io.github.hadron13.gearbox.blocks.amplifier.AmplifierBlock;
 import io.github.hadron13.gearbox.blocks.attenuator.AttenuatorBlock;
 import io.github.hadron13.gearbox.blocks.brass_press.BrassPressBlock;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlock;
-import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactorBlock;
 import io.github.hadron13.gearbox.blocks.combiner.CombinerBlock;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlock;
 import io.github.hadron13.gearbox.blocks.core_drill.CoreDrillBlock;
-import io.github.hadron13.gearbox.blocks.dipper.DipperBlock;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlock;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerGenerator;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock;
@@ -39,8 +37,6 @@ import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlock;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankItem;
 import io.github.hadron13.gearbox.data.client.blockstates.*;
 import io.github.hadron13.gearbox.blocks.laser.LaserBlock;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlock;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillItem;
 import io.github.hadron13.gearbox.blocks.mirror.MirrorBlock;
 import io.github.hadron13.gearbox.blocks.pumpjack.*;
 import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
@@ -50,20 +46,14 @@ import io.github.hadron13.gearbox.blocks.useless_machine.UselessMachineBlock;
 import io.github.hadron13.gearbox.config.GearboxStress;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.util.ForgeSoundType;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
 import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
-import static com.simibubi.create.api.contraption.storage.fluid.MountedFluidStorageType.mountedFluidStorage;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
@@ -71,7 +61,7 @@ import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 public class GearboxBlocks {
 
 
-    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
+    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeModeTabs.MAIN_TAB);
 
     public static void register() {}
 
@@ -244,14 +234,15 @@ public class GearboxBlocks {
             .transform(customItemModel())
             .register();
 
-    public static final BlockEntry<LaserDrillBlock> LASER_DRILL = REGISTRATE.block("laser_drill", LaserDrillBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
-            .item(LaserDrillItem::new)
-            .transform(customItemModel())
-            .register();
+//    public static final BlockEntry<LaserDrillBlock> LASER_DRILL = REGISTRATE.block("laser_drill", LaserDrillBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
+//            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
+//            .item(LaserDrillItem::new)
+//            .transform(customItemModel())
+//            .register();
+
     public static final BlockEntry<PumpjackArmBlock> PUMPJACK_ARM = REGISTRATE.block("pumpjack_arm", PumpjackArmBlock::new)
             .initialProperties(SharedProperties::stone)
             .transform(pickaxeOnly())

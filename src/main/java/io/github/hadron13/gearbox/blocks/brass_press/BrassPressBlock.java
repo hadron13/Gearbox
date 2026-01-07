@@ -68,10 +68,4 @@ public class BrassPressBlock extends HorizontalKineticBlock implements IBE<Brass
 	public BlockEntityType<? extends BrassPressBlockEntity> getBlockEntityType() {
 		return GearboxBlockEntities.BRASS_PRESS.get();
 	}
-
-	@Override
-	public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
-		return false;
-	}
-
 }

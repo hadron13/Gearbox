@@ -1,35 +1,33 @@
 package io.github.hadron13.gearbox.blocks.distillation_tower;
 
 import com.google.gson.JsonObject;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
-public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
+public class DistillingRecipe extends StandardProcessingRecipe<RecipeInput> {
 
     public DistillationControllerBlockEntity.DistilMode mode;
 
-    public DistillingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+    public DistillingRecipe(ProcessingRecipeParams params) {
         super(GearboxRecipeTypes.DISTILLING, params);
     }
 
     public static  boolean match(DistillationControllerBlockEntity be, DistillingRecipe recipe){
         if(recipe == null)
             return false;
-        FluidIngredient fluidIngredient = recipe.fluidIngredients.get(0);
+        SizedFluidIngredient fluidIngredient = recipe.fluidIngredients.get(0);
 
-        IFluidHandler availableFluids = be.getCapability(ForgeCapabilities.FLUID_HANDLER)
-                .orElse(null);
+        IFluidHandler availableFluids = be.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, be.getBlockPos(), null);
         if(availableFluids == null)
             return false;
         if(be.distilMode.get() != recipe.mode)
@@ -38,7 +36,7 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
         for(int i = 0; i < availableFluids.getTanks(); i++){
             FluidStack fluid = availableFluids.getFluidInTank(i);
             if(fluidIngredient.test(fluid) &&
-                fluid.getAmount() >= fluidIngredient.getRequiredAmount()) {
+                fluid.getAmount() >= fluidIngredient.amount()) {
                 return true;
             }
         }
@@ -68,7 +66,7 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
     public void readAdditional(JsonObject json) {
         String mode_name = GsonHelper.getAsString(json, "mode");
         if(mode_name == null){
-            Gearbox.LOGGER.warn("invalid mode in recipe " + this.getId().getPath());
+            Gearbox.LOGGER.warn("invalid mode in recipe " + this.params.toString());
             return;
         }
         switch (mode_name){
@@ -81,7 +79,7 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
     public void readAdditional(FriendlyByteBuf buffer) {
         String mode_name = buffer.readUtf();
         if(mode_name== null){
-            Gearbox.LOGGER.warn("invalid mode in recipe " + this.getId().getPath());
+            Gearbox.LOGGER.warn("invalid mode in recipe " + this.params.toString());
             return;
         }
         switch (mode_name){
@@ -100,8 +98,9 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeWrapper> {
     }
 
 
+
     @Override
-    public boolean matches(RecipeWrapper container, Level level) {
+    public boolean matches(RecipeInput recipeInput, Level level) {
         return false;
     }
 }

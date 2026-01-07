@@ -54,6 +54,7 @@ public class TauCannonRenderer extends CustomRenderedItemModelRenderer {
 
         ms.pushPose();
         renderer.render(model.getOriginalModel(), light);
+
         ms.translate(0, offset, 0);
         ms.mulPose(Axis.ZP.rotationDegrees(angle));
         ms.translate(0, -offset, 0);

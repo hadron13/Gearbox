@@ -15,8 +15,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 
 public class GearboxIcons extends AllIcons{
@@ -60,6 +60,7 @@ public class GearboxIcons extends AllIcons{
         graphics.blit(ICON_ATLAS, x, y, 0, iconX, iconY, 16, 16, 256, 256);
     }
 
+
     @OnlyIn(Dist.CLIENT)
     public void render(PoseStack ms, MultiBufferSource buffer, int color) {
         VertexConsumer builder = buffer.getBuffer(RenderType.text(ICON_ATLAS));
@@ -85,11 +86,10 @@ public class GearboxIcons extends AllIcons{
 
     @OnlyIn(Dist.CLIENT)
     private void vertex(VertexConsumer builder, Matrix4f matrix, Vec3 vec, Color rgb, float u, float v, int light) {
-        builder.vertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
-                .color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
-                .uv(u, v)
-                .uv2(light)
-                .endVertex();
+        builder.addVertex(matrix, (float) vec.x, (float) vec.y, (float) vec.z)
+                .setColor(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), 255)
+                .setUv(u, v)
+                .setLight(light);
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -8,14 +8,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllIcons;
 import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.blocks.sapper.SapperBlock;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlockEntity;
-import io.github.hadron13.gearbox.register.GearboxBlocks;
-import io.github.hadron13.gearbox.register.GearboxFluids;
-import io.github.hadron13.gearbox.register.GearboxIcons;
-import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
+import io.github.hadron13.gearbox.register.*;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.lang.Lang;
@@ -23,17 +20,18 @@ import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,8 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
 
 public class DistillationControllerBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
@@ -60,7 +58,8 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
 
     public boolean contentsChanged;
 
-    protected LazyOptional<IFluidHandler> fluidCapability;
+    public IFluidHandler fluidCapability;
+
 
     public DistillationControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -94,11 +93,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         behaviours.add(inputTank);
         behaviours.add(outputTank);
 
-        fluidCapability = LazyOptional.of(() -> {
-            LazyOptional<? extends IFluidHandler> inputCap = inputTank.getCapability();
-            LazyOptional<? extends IFluidHandler> outputCap = outputTank.getCapability();
-            return new CombinedTankWrapper(outputCap.orElse(null), inputCap.orElse(null));
-        });
+        fluidCapability = new CombinedTankWrapper(inputTank.getCapability(), outputTank.getCapability());
     }
 
     public Optional<SteelTankBlockEntity> getTankControllerBE(){
@@ -135,8 +130,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
     }
 
     public int getSteam(){
-        IFluidHandler availableFluids = getCapability(ForgeCapabilities.FLUID_HANDLER)
-                .orElse(null);
+        IFluidHandler availableFluids = level.getCapability(Capabilities.FluidHandler.BLOCK, worldPosition, null);
 
         for(int i = 0; i < availableFluids.getTanks();i++){
             FluidStack fluid = availableFluids.getFluidInTank(i);
@@ -212,7 +206,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         if(distilMode.get() == DistilMode.DISTIL_VACUUM){
             if(outputTank.getPrimaryHandler().getFluidInTank(0).getAmount() < 8000)
                 sendData();
-            outputTank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.AIR.get(), tankController.getHeight()*15), IFluidHandler.FluidAction.EXECUTE);
+            outputTank.getPrimaryHandler().fill(new FluidStack(GearboxFluids.AIR.get(), tankController.getHeight()*15), EXECUTE);
         }
 
         if(!DistillingRecipe.match(this, currentRecipe)){
@@ -253,11 +247,10 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
             }
 
 
-            FluidIngredient fluidIngredient = currentRecipe.getFluidIngredients().get(0);
-            int amountRequired = fluidIngredient.getRequiredAmount();
+            SizedFluidIngredient fluidIngredient = currentRecipe.getFluidIngredients().get(0);
+            int amountRequired = fluidIngredient.amount();
 
-            IFluidHandler availableFluids = getCapability(ForgeCapabilities.FLUID_HANDLER)
-                    .orElse(null);
+            IFluidHandler availableFluids = level.getCapability(Capabilities.FluidHandler.BLOCK, worldPosition, null);
 
             for (int tank = 0; tank < availableFluids.getTanks(); tank++) {
                 FluidStack fluidStack = availableFluids.getFluidInTank(tank);
@@ -338,16 +331,17 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
     }
 
     @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
+    protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         tag.putInt("required_outputs", requiredOutputs);
-        super.write(tag, clientPacket);
+        super.write(tag, registries, clientPacket);
     }
 
     @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
+    protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         requiredOutputs = tag.getInt("required_outputs");
-        super.read(tag, clientPacket);
+        super.read(tag, registries, clientPacket);
     }
+
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
@@ -357,7 +351,7 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip, 1);
 
-        containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER));
+        containedFluidTooltip(tooltip, isPlayerSneaking, fluidCapability);
 
 
         if(distilMode.get() == DistilMode.DISTIL_VACUUM && !hasVacuum()){
@@ -396,12 +390,18 @@ public class DistillationControllerBlockEntity extends SmartBlockEntity implemen
         return true;
     }
 
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.FLUID_HANDLER && (side == null || side.getAxis() == DistillationControllerBlock.getAxis(getBlockState()) )){
-            return fluidCapability.cast();
-        }
-        return super.getCapability(cap, side);
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GearboxBlockEntities.DISTILLATION_CONTROLLER.get(),
+                (be, context) -> {
+                    if (context == null || context.getAxis() == DistillationControllerBlock.getAxis(be.getBlockState()) ){
+                        return be.fluidCapability;
+                    }
+                    return null;
+                }
+        );
     }
 
     private class DistilModeBoxTransform extends ValueBoxTransform.Sided {

@@ -2,7 +2,6 @@ package io.github.hadron13.gearbox.register;
 
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.item.CombustibleItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.item.tau_cannon.TauCannonItem;
@@ -11,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
 public class GearboxItems {
-    private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
+    private static final CreateRegistrate REGISTRATE = Gearbox.registrate();
 
     public static void register() {}
     public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot"),
@@ -19,8 +18,8 @@ public class GearboxItems {
         SALT_DUST = ingredient("salt_dust"),
         CAUSTIC_SODA = ingredient("caustic_soda");
 
-    public static final ItemEntry<CombustibleItem> PET_COKE = REGISTRATE.item("petroleum_coke", CombustibleItem::new)
-            .onRegister(i -> i.setBurnTime(4800))
+    public static final ItemEntry<Item> PET_COKE = REGISTRATE.item("petroleum_coke", Item::new)
+            .burnTime(3200)
             .register();
 
     public static final ItemEntry<Item> CORE_TUBE=

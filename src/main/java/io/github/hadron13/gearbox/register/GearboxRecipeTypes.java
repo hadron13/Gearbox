@@ -1,18 +1,14 @@
 package io.github.hadron13.gearbox.register;
 
-import com.google.common.collect.ImmutableSet;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugeBlockEntity;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
-import io.github.hadron13.gearbox.blocks.chemical_reactor.ReactingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
-import io.github.hadron13.gearbox.blocks.dipper.DippingRecipe;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
@@ -20,35 +16,30 @@ import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillBlockEntity;
-import io.github.hadron13.gearbox.blocks.laser_drill.LaserDrillingRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.createmod.catnip.lang.Lang;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public enum GearboxRecipeTypes implements IRecipeTypeInfo {
+public enum GearboxRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
     PYROPROCESSING(PyroprocessingRecipe::new),
     SAPPING(SappingRecipe::new),
     COMPRESSING(CompressingRecipe::new),
@@ -57,36 +48,32 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo {
     TRANSMUTING(TransmutingRecipe::new),
     ELECTROLYZING(ElectrolyzingRecipe::new),
     CENTRIFUGING(CentrifugingRecipe::new),
-    LASER_DRILLING(LaserDrillingRecipe::new),
     PUMPJACK(PumpjackRecipe::new),
-    DIPPING(DippingRecipe::new),
-    REACTING(ReactingRecipe::new),
+//    LASER_DRILLING(LaserDrillingRecipe::new),
+//    DIPPING(DippingRecipe::new),
+//    REACTING(ReactingRecipe::new),
     DISTILLING(DistillingRecipe::new);
 
-    private final ResourceLocation id;
-    private final RegistryObject<RecipeSerializer<?>> serializerObject;
+    public final ResourceLocation id;
+    public final Supplier<RecipeSerializer<?>> serializerSupplier;
+    private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> serializerObject;
     @Nullable
-    private final RegistryObject<RecipeType<?>> typeObject;
+    private final DeferredHolder<RecipeType<?>, RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
-    public static final Predicate<? super Recipe<?>> CAN_BE_AUTOMATED = r -> !r.getId()
-            .getPath()
-            .endsWith("_manual_only");
 
+    GearboxRecipeTypes(StandardProcessingRecipe.Factory<?> processingFactory) {
+        this(() -> new StandardProcessingRecipe.Serializer<>(processingFactory));
+    }
 
     GearboxRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
         id = Gearbox.asResource(name);
+        this.serializerSupplier = serializerSupplier;
         serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
-        typeObject = Registers.TYPE_REGISTER.register(name, () -> simpleType(id));
+        typeObject = Registers.TYPE_REGISTER.register(name, () -> RecipeType.simple(id));
         type = typeObject;
     }
-    GearboxRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
-        this(() -> new ProcessingRecipeSerializer<>(processingFactory));
-    }
-
-
-
 
     public static <T extends Recipe<?>> RecipeType<T> simpleType(ResourceLocation id) {
         String stringId = id.toString();
@@ -99,7 +86,7 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo {
     }
 
     public static void register(IEventBus modEventBus) {
-        ShapedRecipe.setCraftingSize(9, 9);
+        ShapedRecipePattern.setCraftingSize(9, 9);
         Registers.SERIALIZER_REGISTER.register(modEventBus);
         Registers.TYPE_REGISTER.register(modEventBus);
     }
@@ -117,56 +104,59 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends RecipeType<?>> T getType() {
-        return (T) type.get();
+    public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType() {
+        return (RecipeType<R>) type.get();
     }
 
-    public <C extends Container, T extends Recipe<C>> Optional<T> find(C inv, Level world) {
+
+    public <I extends RecipeInput, R extends Recipe<I>> Optional<RecipeHolder<R>> find(I inv, Level world) {
         return world.getRecipeManager()
                 .getRecipeFor(getType(), inv, world);
     }
 
-
     public Optional<CompressingRecipe> find(CompressorBlockEntity blockEntity, Level world) {
-
         if(world.isClientSide())
             return Optional.empty();
-        List<CompressingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.COMPRESSING.getType());
-
+        List<RecipeHolder<CompressingRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.COMPRESSING.getType());
 
         Stream<CompressingRecipe> matchingRecipes =
-                allRecipes.stream().filter(compressingRecipe -> CompressingRecipe.match(blockEntity, compressingRecipe) );
+                allRecipes.stream().filter(recipe -> CompressingRecipe.match(blockEntity, recipe.value()) ).map(RecipeHolder::value);
 
         return matchingRecipes.findAny();
     }
 
-    public Optional<TransmutingRecipe> find(IrradiatorBlockEntity blockEntity, Level world, ItemStack ingredient){
+
+
+    public Optional<TransmutingRecipe> find(IrradiatorBlockEntity blockEntity, Level world, ItemStack ingredient) {
         if(world.isClientSide())
             return Optional.empty();
-        List<TransmutingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.TRANSMUTING.getType());
+        List<RecipeHolder<TransmutingRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.TRANSMUTING.getType());
 
         Stream<TransmutingRecipe> matchingRecipes =
-                allRecipes.stream().filter(recipe -> TransmutingRecipe.match(blockEntity, recipe, ingredient) );
+                allRecipes.stream().filter(recipe -> TransmutingRecipe.match(blockEntity, recipe.value(), ingredient) ).map(RecipeHolder::value);
 
         return matchingRecipes.findAny();
     }
-    public Optional<CentrifugingRecipe> find(CentrifugeBlockEntity blockEntity, Level world){
+
+    public Optional<IrradiatingRecipe> find(IrradiatorBlockEntity blockEntity, Level world) {
         if(world.isClientSide())
             return Optional.empty();
-        List<CentrifugingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.CENTRIFUGING.getType());
+        List<RecipeHolder<IrradiatingRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.TRANSMUTING.getType());
+
+        Stream<IrradiatingRecipe> matchingRecipes =
+                allRecipes.stream().filter(recipe -> IrradiatingRecipe.match(blockEntity, recipe.value()) ).map(RecipeHolder::value);
+
+        return matchingRecipes.findAny();
+    }
+
+
+    public Optional<CentrifugingRecipe> find(CentrifugeBlockEntity blockEntity, Level world) {
+        if(world.isClientSide())
+            return Optional.empty();
+        List<RecipeHolder<CentrifugingRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.CENTRIFUGING.getType());
 
         Stream<CentrifugingRecipe> matchingRecipes =
-                allRecipes.stream().filter(recipe -> CentrifugingRecipe.match(blockEntity, recipe) );
-
-        return matchingRecipes.findAny();
-    }
-    public Optional<LaserDrillingRecipe> find(LaserDrillBlockEntity blockEntity, Level world){
-        if(world.isClientSide())
-            return Optional.empty();
-        List<LaserDrillingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.LASER_DRILLING.getType());
-
-        Stream<LaserDrillingRecipe> matchingRecipes =
-                allRecipes.stream().filter(recipe -> LaserDrillingRecipe.match(blockEntity, recipe) );
+                allRecipes.stream().filter(recipe -> CentrifugingRecipe.match(blockEntity, recipe.value()) ).map(RecipeHolder::value);
 
         return matchingRecipes.findAny();
     }
@@ -174,10 +164,12 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo {
     public Optional<PumpjackRecipe> find(PumpjackWellBlockEntity blockEntity, Level world){
         if(world.isClientSide())
             return Optional.empty();
-        List<PumpjackRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.PUMPJACK.getType());
+
+
+        List<RecipeHolder<PumpjackRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.PUMPJACK.getType());
 
         Stream<PumpjackRecipe> matchingRecipes =
-                allRecipes.stream().filter(recipe -> PumpjackRecipe.match(blockEntity, recipe) );
+                allRecipes.stream().filter(recipe -> PumpjackRecipe.match(blockEntity, recipe.value()) ).map(RecipeHolder::value);
 
         return matchingRecipes.findAny();
     }
@@ -185,28 +177,24 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo {
     public Optional<DistillingRecipe> find(DistillationControllerBlockEntity blockEntity, Level world){
         if(world.isClientSide())
             return Optional.empty();
-        List<DistillingRecipe> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.DISTILLING.getType());
+
+        List<RecipeHolder<DistillingRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.PUMPJACK.getType());
 
         Stream<DistillingRecipe> matchingRecipes =
-                allRecipes.stream().filter(recipe -> DistillingRecipe.match(blockEntity, recipe) );
+                allRecipes.stream().filter(recipe -> DistillingRecipe.match(blockEntity, recipe.value()) ).map(RecipeHolder::value);
 
         return matchingRecipes.findAny();
     }
 
 
 
-    public static final Set<ResourceLocation> RECIPE_DENY_SET =
-            ImmutableSet.of(new ResourceLocation("occultism", "spirit_trade"), new ResourceLocation("occultism", "ritual"));
-
-    public static boolean shouldIgnoreInAutomation(Recipe<?> recipe) {
-        RecipeSerializer<?> serializer = recipe.getSerializer();
-        if (serializer != null && AllTags.AllRecipeSerializerTags.AUTOMATION_IGNORE.matches(serializer))
-            return true;
-        return !CAN_BE_AUTOMATED.test(recipe);
+    @Override
+    public String getSerializedName() {
+        return id.toString();
     }
 
     private static class Registers {
-        private static final DeferredRegister<RecipeSerializer<?>> SERIALIZER_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Gearbox.MODID);
+        private static final DeferredRegister<RecipeSerializer<?>> SERIALIZER_REGISTER = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, Gearbox.MODID);
         private static final DeferredRegister<RecipeType<?>> TYPE_REGISTER = DeferredRegister.create(Registries.RECIPE_TYPE, Gearbox.MODID);
     }
 

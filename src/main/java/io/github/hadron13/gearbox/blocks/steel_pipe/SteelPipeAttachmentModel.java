@@ -16,9 +16,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,6 +42,7 @@ public class SteelPipeAttachmentModel extends BakedModelWrapperWithData {
     public static SteelPipeAttachmentModel withoutAO(BakedModel template) {
         return new SteelPipeAttachmentModel(template, false);
     }
+
 
     @Override
     protected ModelData.Builder gatherModelData(ModelData.Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state,
@@ -93,15 +94,15 @@ public class SteelPipeAttachmentModel extends BakedModelWrapperWithData {
         return quads;
     }
 
-    @Override
-    public boolean useAmbientOcclusion(BlockState state, RenderType renderType) {
-        return ao;
-    }
-
-    @Override
-    public boolean useAmbientOcclusion(BlockState state) {
-        return ao;
-    }
+//    @Override
+//    public boolean useAmbientOcclusion(BlockState state, RenderType renderType) {
+//        return ao;
+//    }
+//
+//    @Override
+//    public boolean useAmbientOcclusion(BlockState state) {
+//        return ao;
+//    }
 
     @Override
     public boolean useAmbientOcclusion() {
@@ -126,6 +127,7 @@ public class SteelPipeAttachmentModel extends BakedModelWrapperWithData {
             quads.addAll(GearboxPartialModels.STEEL_FLUID_PIPE_CASING.get()
                     .getQuads(state, side, rand, data, renderType));
     }
+
 
     private static class PipeModelData {
         private FluidTransportBehaviour.AttachmentTypes[] attachments;

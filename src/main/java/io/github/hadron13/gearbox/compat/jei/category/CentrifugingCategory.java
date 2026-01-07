@@ -1,18 +1,16 @@
 package io.github.hadron13.gearbox.compat.jei.category;
 
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
 import io.github.hadron13.gearbox.compat.jei.ModGuiTextures;
 import io.github.hadron13.gearbox.compat.jei.category.animations.AnimatedCentrifuge;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 public class CentrifugingCategory extends CreateRecipeCategory<CentrifugingRecipe> {
 
@@ -25,7 +23,7 @@ public class CentrifugingCategory extends CreateRecipeCategory<CentrifugingRecip
 
     public void setRecipe(IRecipeLayoutBuilder builder, CentrifugingRecipe recipe, IFocusGroup focuses) {
 
-        FluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
+        SizedFluidIngredient fluidIngredient = recipe.getFluidIngredients().get(0);
         addFluidSlot(builder, 52, 10, fluidIngredient);
 
         int i = 0;
