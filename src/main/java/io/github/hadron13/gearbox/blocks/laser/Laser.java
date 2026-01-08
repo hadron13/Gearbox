@@ -68,7 +68,8 @@ public class Laser {
         Optional<Vec3> nextPosition = Optional.of(position.add(getDirection()));
         length = 1;
         do{
-            block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(100f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.of(null)));
+            block = level.clip(new ClipContext(nextPosition.get(), nextPosition.get().add(direction.scale(100f)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty()));
+
             if(block.getType() == HitResult.Type.MISS) {
                 length = 100f;
                 if(this.receiver != null){

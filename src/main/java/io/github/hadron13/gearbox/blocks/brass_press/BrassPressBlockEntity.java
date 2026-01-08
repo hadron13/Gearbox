@@ -43,8 +43,9 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 	public static final int CYCLE = 240;
 
 	public PressingBehaviour pressingBehaviour;
-	public ItemStack currentItem;
 	public int pressingStage;
+	public boolean firstStrike = false;
+	public boolean secondStrike = false;
 	public List<ItemStack> particleItems = new ArrayList<>();
 
 	public BrassPressBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -137,18 +138,26 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 
 		int runningTicks = Mth.abs(pressingBehaviour.runningTicks) * 3;
 
-		if((runningTicks == CYCLE / 2 || runningTicks == (CYCLE * 3)/2) && level.isClientSide){
+		boolean on_first_strike = Mth.abs(runningTicks - (CYCLE/2)) < 10;
+		boolean on_second_strike = Mth.abs(runningTicks - (CYCLE*1.5f)) < 10;
+
+		if(((on_first_strike && !firstStrike) || (on_second_strike && !secondStrike)) && level.isClientSide){
 			Vec3 pos = VecHelper.getCenterOf(worldPosition.below(2)).add(0, 8 / 16f, 0);
+
 			for (int i = 0; i < 15; i++) {
 				Vec3 motion = VecHelper.offsetRandomly(Vec3.ZERO, level.random, .25f)
 						.multiply(1, 0, 1);
-				motion = motion.add(0, 0.125f / 16f, 0);
+				motion = motion.add(0, 0.2f / 16f, 0);
 				level.addParticle(ParticleTypes.FLAME, pos.x, pos.y - .25f, pos.z, motion.x,
 						motion.y + .04f, motion.z);
 			}
 		}
+		if(on_second_strike){
+			secondStrike = true;
+		}
 
-		if(runningTicks == CYCLE / 2 ){
+		if(on_first_strike && !firstStrike){
+			firstStrike = true;
 			if(level.isClientSide) {
 				particleItems.forEach(stack -> pressingBehaviour.makePressingParticleEffect(VecHelper.getCenterOf(worldPosition.below(2))
 						.add(0, 8 / 16f, 0), stack));
@@ -163,6 +172,11 @@ public class BrassPressBlockEntity extends KineticBlockEntity implements Pressin
 						.75f + (Math.abs(getKineticSpeed()) / 1024f));
 			if (!level.isClientSide)
 				sendData();
+		}
+
+		if(runningTicks > CYCLE * 3){
+			firstStrike = false;
+			secondStrike = false;
 		}
 	}
 	@Override

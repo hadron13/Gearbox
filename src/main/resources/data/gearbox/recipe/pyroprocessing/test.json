@@ -1,0 +1,14 @@
+{
+  "type": "gearbox:pyroprocessing",
+  "ingredients": [
+    {
+      "item": "minecraft:oak_log"
+    }
+  ],
+  "processing_time": 200,
+  "results": [
+    {
+      "id": "minecraft:cobblestone"
+    }
+  ]
+}

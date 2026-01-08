@@ -85,6 +85,8 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
         };
     }
 
+
+
     public static void register(IEventBus modEventBus) {
         ShapedRecipePattern.setCraftingSize(9, 9);
         Registers.SERIALIZER_REGISTER.register(modEventBus);

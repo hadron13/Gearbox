@@ -163,6 +163,7 @@ dependencies {
 
     implementation("curse.maven:large-ore-deposits-318833:7301758")
     implementation("curse.maven:forgeendertech-244844:7070495")
+    implementation("curse.maven:createaddition-439890:7262496")
 
 
     // For more info:

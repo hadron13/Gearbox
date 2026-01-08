@@ -170,6 +170,8 @@ public class GearboxJEI implements IModPlugin {
 //                .emptyBackground(177, 103)
 //                .build("reacting", ReactingCategory::new);
     }
+
+
     private <T extends Recipe<?>> CategoryBuilder<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilder<>(recipeClass);
     }
@@ -191,7 +193,6 @@ public class GearboxJEI implements IModPlugin {
         ingredientManager = registration.getIngredientManager();
 
         modCategories.forEach(c -> c.registerRecipes(registration));
-
     }
 
     @Override
@@ -285,7 +286,10 @@ public class GearboxJEI implements IModPlugin {
                     recipesSupplier,
                     catalysts
             );
-            return factory.create(info);
+
+            CreateRecipeCategory<T> category = factory.create(info);
+            modCategories.add(category);
+            return category;
         }
 
     }

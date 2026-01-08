@@ -10,8 +10,8 @@
   ],
   "results": [
     {
-      "fluid": "minecraft:lava",
-      "amount": 50
+      "amount": 50,
+      "id": "minecraft:lava"
     }
   ]
 }

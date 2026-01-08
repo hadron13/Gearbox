@@ -4,8 +4,8 @@
   "ingredients": [],
   "results": [
     {
-      "fluid": "gearbox:petroleum",
-      "amount": 50
+      "amount": 50,
+      "id": "gearbox:petroleum"
     }
   ]
 }
