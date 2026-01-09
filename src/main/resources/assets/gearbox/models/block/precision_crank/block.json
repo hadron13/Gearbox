@@ -1,7 +1,6 @@
 {
   "parent": "block/block",
-  "loader": "forge:obj",
-  "flip-v": true,
+  "loader": "neoforge:obj",
   "model": "gearbox:models/block/precision_crank/precision_crank.obj",
   "textures": {
     "3": "gearbox:block/precision_crank",

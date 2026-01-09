@@ -1,32 +1,37 @@
 package io.github.hadron13.gearbox.blocks.electrolyzer;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class ElectrolyzingRecipe extends BasinRecipe {
     public int requiredEnergy = 0;
     public ElectrolyzingRecipe(ProcessingRecipeParams params) {
         super(GearboxRecipeTypes.ELECTROLYZING, params);
+//        requiredEnergy = params;
     }
-
-    public void readAdditional(JsonObject json) {
-        requiredEnergy = GsonHelper.getAsInt(json, "energy", 1000);
-    }
-
-    public void readAdditional(FriendlyByteBuf buffer) {
-        requiredEnergy = buffer.readInt();
-    }
-
-    public void writeAdditional(JsonObject json) {
-        json.addProperty("energy", requiredEnergy);
-    }
-
-    public void writeAdditional(FriendlyByteBuf buffer) {
-        buffer.writeInt(requiredEnergy);
-    }
+//    public static class Serializer<R extends ElectrolyzingRecipe> implements RecipeSerializer<R> {
+//        private final MapCodec<R> codec;
+//        private final StreamCodec<RegistryFriendlyByteBuf, R> streamCodec;
+//
+//        public Serializer(ProcessingRecipe.Factory<EnergyRecipeParams, R> factory) {
+//            this.codec = ProcessingRecipe.codec(factory, EnergyRecipeParams.CODEC);
+//            this.streamCodec = ProcessingRecipe.streamCodec(factory, EnergyRecipeParams.STREAM_CODEC);
+//        }
+//
+//        @Override
+//        public MapCodec<R> codec() {
+//            return codec;
+//        }
+//
+//        @Override
+//        public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
+//            return streamCodec;
+//        }
+//    }
 }

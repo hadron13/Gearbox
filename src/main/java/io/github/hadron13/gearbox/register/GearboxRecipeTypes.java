@@ -1,6 +1,9 @@
 package io.github.hadron13.gearbox.register;
 
 import com.simibubi.create.AllTags;
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipeParams;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import io.github.hadron13.gearbox.Gearbox;
@@ -17,6 +20,7 @@ import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipe;
+import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackRecipeParams;
 import io.github.hadron13.gearbox.blocks.pumpjack.PumpjackWellBlockEntity;
 import io.github.hadron13.gearbox.blocks.sapper.SappingRecipe;
 import net.createmod.catnip.lang.Lang;
@@ -64,6 +68,10 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
 
     GearboxRecipeTypes(StandardProcessingRecipe.Factory<?> processingFactory) {
         this(() -> new StandardProcessingRecipe.Serializer<>(processingFactory));
+    }
+
+    GearboxRecipeTypes(ProcessingRecipe.Factory<PumpjackRecipeParams, ? extends PumpjackRecipe> pumpjackFactory) {
+        this(() -> new PumpjackRecipe.Serializer<>(pumpjackFactory));
     }
 
     GearboxRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {

@@ -14,7 +14,7 @@ public class PumpjackRecipeParams extends ProcessingRecipeParams {
 
     public static MapCodec<PumpjackRecipeParams> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             codec(PumpjackRecipeParams::new).forGetter(Function.identity()),
-            Codec.STRING.optionalFieldOf("biome", "minecraft:plains").forGetter(PumpjackRecipeParams::biome)
+            Codec.STRING.optionalFieldOf("biome", "minecraft:void").forGetter(PumpjackRecipeParams::biome)
     ).apply(instance, (params, biome) -> {
         params.biome = biome;
         return params;
