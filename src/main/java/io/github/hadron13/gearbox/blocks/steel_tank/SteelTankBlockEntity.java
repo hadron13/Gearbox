@@ -1,15 +1,15 @@
 package io.github.hadron13.gearbox.blocks.steel_tank;
 
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.fluids.tank.BoilerData;
 import com.simibubi.create.content.fluids.tank.FluidTankBlock;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
-import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlockEntity;
+import io.github.hadron13.gearbox.register.GearboxBlockEntities;
 import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,6 +38,22 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
     public SteelTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         setLazyTickRate(10);
+    }
+
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GearboxBlockEntities.STEEL_FLUID_TANK.get(),
+                (be, context) -> {
+                    SteelTankBlockEntity controller = be.getControllerBE();
+                    if(controller.isDistillingColumn)
+                        return null;
+                    if (be.fluidCapability == null)
+                        be.refreshCapability();
+                    return be.fluidCapability;
+                }
+        );
     }
 
     public void updateConnectivity() {
@@ -194,10 +210,7 @@ public class SteelTankBlockEntity extends FluidTankBlockEntity implements IHaveG
 
 
     @Override
-    public void updateBoilerState() {
-        if (!isController())
-            return;
-    }
+    public void updateBoilerState() {}
 
 
     @Override

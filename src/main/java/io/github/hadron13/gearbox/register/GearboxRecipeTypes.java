@@ -15,7 +15,6 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
-import io.github.hadron13.gearbox.blocks.electrolyzer.EnergyRecipeParams;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
@@ -29,8 +28,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -57,7 +54,7 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
 //    LASER_DRILLING(LaserDrillingRecipe::new),
 //    DIPPING(DippingRecipe::new),
 //    REACTING(ReactingRecipe::new),
-    DISTILLING(DistillingRecipe::new);
+    DISTILLING(() -> new DistillingRecipe.Serializer<>(DistillingRecipe::new));
 
     public final ResourceLocation id;
     public final Supplier<RecipeSerializer<?>> serializerSupplier;
@@ -190,7 +187,7 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
         if(world.isClientSide())
             return Optional.empty();
 
-        List<RecipeHolder<DistillingRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.PUMPJACK.getType());
+        List<RecipeHolder<DistillingRecipe>> allRecipes = world.getRecipeManager().getAllRecipesFor(GearboxRecipeTypes.DISTILLING.getType());
 
         Stream<DistillingRecipe> matchingRecipes =
                 allRecipes.stream().filter(recipe -> DistillingRecipe.match(blockEntity, recipe.value()) ).map(RecipeHolder::value);

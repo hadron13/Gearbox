@@ -1,45 +1,46 @@
 {
   "type": "gearbox:distilling",
-  "mode": "distil_atmospheric",
+  "mode": "distil_flash",
   "ingredients": [
     {
+      "type": "neoforge:single",
       "fluid": "gearbox:petroleum",
       "amount": 500
     }
   ],
   "results": [
     {
-      "fluid": "minecraft:lava",
+      "id": "minecraft:lava",
       "amount": 500
     },
     {
-      "fluid": "minecraft:water",
+      "id": "minecraft:water",
       "amount": 500
     },
     {
-      "fluid": "create:chocolate",
+      "id": "create:chocolate",
       "amount": 500
     },
     {
-      "fluid": "create:honey",
+      "id": "create:honey",
       "amount": 500
     },
     {
-      "fluid": "gearbox:resin",
+      "id": "gearbox:resin",
       "amount": 500
     },
     {
-      "fluid": "gearbox:ammonia",
+      "id": "gearbox:ammonia",
       "amount": 500
     },
     {
-      "fluid": "gearbox:hydrogen_sulfide",
+      "id": "gearbox:hydrogen_sulfide",
       "amount": 500
     },
     {
-      "fluid": "gearbox:hydrogen",
+      "id": "gearbox:hydrogen",
       "amount": 500
     }
   ],
-  "processingTime": 250
+  "processing_time": 250
 }
