@@ -89,7 +89,7 @@ public class GearboxBlocks {
 
     public static final BlockEntry<SapperBlock> SAPPER = REGISTRATE.block("sapper", SapperBlock::new)
             .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
+            .transform(axeOrPickaxe())
             .properties(p -> p.noOcclusion().mapColor(MapColor.METAL))
             //.addLayer(() -> RenderType::cutoutMipped)
             .blockstate(new PartialHorizontalBlockStateGen()::generate)
@@ -112,7 +112,7 @@ public class GearboxBlocks {
             .initialProperties(SharedProperties::stone)
             .properties(p -> p.mapColor(MapColor.METAL))
             .properties(BlockBehaviour.Properties::noOcclusion)
-            .transform(axeOrPickaxe())
+            .transform(pickaxeOnly())
             .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .transform(GearboxStress.setImpact(16.0))
             .item(AssemblyOperatorBlockItem::new)
@@ -179,7 +179,7 @@ public class GearboxBlocks {
 
     public static final BlockEntry<SpectrometerBlock> SPECTROMETER = REGISTRATE.block("spectrometer", SpectrometerBlock::new)
             .initialProperties(SharedProperties::wooden)
-            .transform(axeOrPickaxe())
+            .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.PODZOL))
             .blockstate(new SpectrometerGenerator()::generate)
             .item()
@@ -206,7 +206,7 @@ public class GearboxBlocks {
 
     public static final BlockEntry<ElectrolyzerBlock> ELECTROLYZER = REGISTRATE.block("electrolyzer", ElectrolyzerBlock::new)
             .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
+            .transform(axeOrPickaxe())
             .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
             .blockstate(BlockStateGen.horizontalBlockProvider(true))
             .item(AssemblyOperatorBlockItem::new)
@@ -427,7 +427,7 @@ public class GearboxBlocks {
 
 
     public static final BlockEntry<DistillationOutputBlock> DISTILLATION_OUTPUT = REGISTRATE.block("distillation_output", DistillationOutputBlock::new)
-            .initialProperties(SharedProperties::netheriteMetal)
+            .initialProperties(SharedProperties::softMetal)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL))
             .blockstate(BlockStateGen.directionalBlockProvider(true))

@@ -1,5 +1,6 @@
 package io.github.hadron13.gearbox.blocks.distillation_tower;
 
+import com.simibubi.create.content.kinetics.gauge.GaugeBlock;
 import com.simibubi.create.foundation.block.IBE;
 import io.github.hadron13.gearbox.blocks.steel_tank.SteelTankBlock;
 import io.github.hadron13.gearbox.register.GearboxBlockEntities;
@@ -28,7 +29,7 @@ import static com.simibubi.create.content.kinetics.gauge.GaugeBlock.GAUGE;
 public class DistillationControllerBlock extends Block implements IBE<DistillationControllerBlockEntity> {
 
     public static final Property<Direction> FACING = BlockStateProperties.FACING;
-    public static final BooleanProperty AXIS_ALONG_FIRST_COORDINATE = BooleanProperty.create("axis_along_first");
+    public static final BooleanProperty AXIS_ALONG_FIRST_COORDINATE = GaugeBlock.AXIS_ALONG_FIRST_COORDINATE;
 
     public DistillationControllerBlock(Properties properties) {
         super(properties);

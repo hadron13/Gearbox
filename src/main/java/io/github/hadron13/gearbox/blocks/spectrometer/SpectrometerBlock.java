@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.blocks.spectrometer;
 
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.content.kinetics.gauge.GaugeBlock;
 import com.simibubi.create.content.kinetics.gauge.GaugeBlockEntity;
 
 import com.simibubi.create.foundation.block.IBE;
@@ -48,7 +49,7 @@ import static com.simibubi.create.content.kinetics.gauge.GaugeBlock.GAUGE;
 
 public class SpectrometerBlock extends Block implements IBE<SpectrometerBlockEntity>, IWrenchable {
     public static final Property<Direction> FACING = BlockStateProperties.FACING;
-    public static final BooleanProperty AXIS_ALONG_FIRST_COORDINATE = BooleanProperty.create("axis_along_first");
+    public static final BooleanProperty AXIS_ALONG_FIRST_COORDINATE = GaugeBlock.AXIS_ALONG_FIRST_COORDINATE;
 
     public SpectrometerBlock(Properties pProperties) {
         super(pProperties);

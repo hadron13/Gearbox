@@ -1,7 +1,7 @@
 {
   "values": [
-    "gearbox:brass_press",
-    "gearbox:spectrometer",
+    "gearbox:sapper",
+    "gearbox:electrolyzer",
     "gearbox:kinetic_machine",
     "gearbox:precision_crank",
     "gearbox:distillation_controller"

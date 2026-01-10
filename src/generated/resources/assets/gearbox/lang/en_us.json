@@ -33,7 +33,6 @@
   "block.gearbox.laser.tooltip.behaviour1": "Consumes _50 FE/t_",
   "block.gearbox.laser.tooltip.condition1": "",
   "block.gearbox.laser.tooltip.summary": "Emits a powerful laser when powered, _color_ can be changed with a redstone signal.",
-  "block.gearbox.laser_drill": "Laser Drill",
   "block.gearbox.lpg": "Lpg",
   "block.gearbox.mirror": "Mirror",
   "block.gearbox.mirror.tooltip": "MIRROR",

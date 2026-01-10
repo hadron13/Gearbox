@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.AllSoundEvents;
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
@@ -21,9 +22,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class GearboxDatagen {
-    public static void gatherData(GatherDataEvent event) {
-        addExtraRegistrateData();
 
+    public static void gatherDataHighPriority(GatherDataEvent event) {
+        if (event.getMods().contains(Gearbox.MODID))
+            addExtraRegistrateData();
+    }
+
+    public static void gatherData(GatherDataEvent event) {
+        if (!event.getMods().contains(Gearbox.MODID))
+            return;
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
@@ -42,9 +49,6 @@ public class GearboxDatagen {
 
             provideDefaultLang("interface", langConsumer);
             provideDefaultLang("tooltips", langConsumer);
-            //AllAdvancements.provideLang(langConsumer);
-            //AllSoundEvents.provideLang(langConsumer);
-            //AllKeys.provideLang(langConsumer);
             providePonderLang(langConsumer);
         });
     }

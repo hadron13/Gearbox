@@ -68,6 +68,7 @@ public class Gearbox {
         GearboxRecipeTypes.register(modEventBus);
         GearboxConfig.register(modLoadingContext, modContainer);
 
+        modEventBus.addListener(EventPriority.HIGHEST, GearboxDatagen::gatherDataHighPriority);
         modEventBus.addListener(EventPriority.LOWEST, GearboxDatagen::gatherData);
 
 //        NeoForge.EVENT_BUS.register(this);
