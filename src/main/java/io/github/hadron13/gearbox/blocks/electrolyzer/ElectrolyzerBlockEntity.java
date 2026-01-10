@@ -3,6 +3,7 @@ package io.github.hadron13.gearbox.blocks.electrolyzer;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -29,6 +30,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -164,6 +166,41 @@ public class ElectrolyzerBlockEntity extends MechanicalMixerBlockEntity {
 //                        - r1.getIngredients()
 //                        .size())
 //                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    protected void applyBasinRecipe() {
+        if (currentRecipe == null)
+            return;
+
+        Optional<BasinBlockEntity> optionalBasin = getBasin();
+        if (!optionalBasin.isPresent())
+            return;
+        BasinBlockEntity basin = optionalBasin.get();
+        boolean wasEmpty = basin.canContinueProcessing();
+        if (!ElectrolyzingRecipe.apply(basin, currentRecipe))
+            return;
+        getProcessedRecipeTrigger().ifPresent(this::award);
+        basin.inputTank.sendDataImmediately();
+
+        // Continue mixing
+        if (wasEmpty && matchBasinRecipe(currentRecipe)) {
+            continueWithPreviousRecipe();
+            sendData();
+        }
+
+        basin.notifyChangeOfContents();
+    }
+
+    @Override
+    protected <I extends RecipeInput> boolean matchBasinRecipe(Recipe<I> recipe) {
+        if (recipe == null)
+            return false;
+        Optional<BasinBlockEntity> basin = getBasin();
+        if (!basin.isPresent())
+            return false;
+        return ElectrolyzingRecipe.match(basin.get(), recipe);
     }
 
     @Override
