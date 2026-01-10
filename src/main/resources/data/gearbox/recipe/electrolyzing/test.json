@@ -7,10 +7,10 @@
   ],
   "results": [
     {
-      "fluid" : "minecraft:water",
+      "id" : "minecraft:water",
       "amount": 1
     }
   ],
-  "processingTime": 100,
-  "energy": 10
+  "processing_time": 100,
+  "energy": 50
 }

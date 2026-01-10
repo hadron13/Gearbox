@@ -1,6 +1,7 @@
 package io.github.hadron13.gearbox.blocks.irradiator;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
@@ -9,16 +10,21 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import io.github.hadron13.gearbox.GearboxLang;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
+import io.github.hadron13.gearbox.blocks.electrolyzer.EnergyRecipeParams;
 import io.github.hadron13.gearbox.compat.jei.category.assembly_subcategories.AssemblyTransmuting;
 import io.github.hadron13.gearbox.register.GearboxBlocks;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -28,12 +34,14 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 
-public class TransmutingRecipe extends StandardProcessingRecipe<SingleRecipeInput> implements LaserRecipe, IAssemblyRecipe {
+public class TransmutingRecipe extends ProcessingRecipe<SingleRecipeInput, LaserRecipeParams> implements LaserRecipe, IAssemblyRecipe {
     public int requiredColor;
     public float requiredPower;
 
-    public TransmutingRecipe(ProcessingRecipeParams params){
+    public TransmutingRecipe(LaserRecipeParams params){
         super(GearboxRecipeTypes.TRANSMUTING, params);
+        requiredPower = params.power;
+        requiredColor = params.color;
     }
 
 
@@ -64,25 +72,9 @@ public class TransmutingRecipe extends StandardProcessingRecipe<SingleRecipeInpu
         return 3;
     }
 
-
-    public void readAdditional(JsonObject json) {
-        requiredColor = GsonHelper.getAsInt(json, "color", 0);
-        requiredPower = GsonHelper.getAsFloat(json, "power", 1f);
-    }
-
-    public void readAdditional(FriendlyByteBuf buffer) {
-        requiredColor = buffer.readInt();
-        requiredPower = buffer.readFloat();
-    }
-
-    public void writeAdditional(JsonObject json) {
-        json.addProperty("color", requiredColor);
-        json.addProperty("power", requiredPower);
-    }
-
-    public void writeAdditional(FriendlyByteBuf buffer) {
-        buffer.writeInt(requiredColor);
-        buffer.writeFloat(requiredPower);
+    @Override
+    protected boolean canSpecifyDuration() {
+        return true;
     }
 
     @Override
@@ -118,5 +110,25 @@ public class TransmutingRecipe extends StandardProcessingRecipe<SingleRecipeInpu
     @Override
     public boolean matches(SingleRecipeInput singleRecipeInput, Level level) {
         return false;
+    }
+
+    public static class Serializer<R extends TransmutingRecipe> implements RecipeSerializer<R> {
+        private final MapCodec<R> codec;
+        private final StreamCodec<RegistryFriendlyByteBuf, R> streamCodec;
+
+        public Serializer(ProcessingRecipe.Factory<LaserRecipeParams, R> factory) {
+            this.codec = ProcessingRecipe.codec(factory, LaserRecipeParams.CODEC);
+            this.streamCodec = ProcessingRecipe.streamCodec(factory, LaserRecipeParams.STREAM_CODEC);
+        }
+
+        @Override
+        public MapCodec<R> codec() {
+            return codec;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
+            return streamCodec;
+        }
     }
 }

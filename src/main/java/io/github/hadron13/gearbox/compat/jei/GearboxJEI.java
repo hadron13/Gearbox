@@ -8,6 +8,7 @@ import io.github.hadron13.gearbox.blocks.brass_press.MechanizingRecipe;
 import io.github.hadron13.gearbox.blocks.centrifuge.CentrifugingRecipe;
 import io.github.hadron13.gearbox.blocks.compressor.CompressingRecipe;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
@@ -116,7 +117,7 @@ public class GearboxJEI implements IModPlugin {
                 .build("irradiating", IrradiatingCategory::new);
 
         CreateRecipeCategory<?>
-                electrolyzing = builder(BasinRecipe.class)
+                electrolyzing = builder(ElectrolyzingRecipe.class)
                 .addTypedRecipes(GearboxRecipeTypes.ELECTROLYZING)
                 .catalyst(GearboxBlocks.ELECTROLYZER::get)
                 .catalyst(AllBlocks.BASIN::get)

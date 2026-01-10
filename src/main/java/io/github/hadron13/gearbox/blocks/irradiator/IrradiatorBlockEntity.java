@@ -6,9 +6,11 @@ import com.simibubi.create.content.kinetics.belt.behaviour.BeltProcessingBehavio
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
+import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
 import io.github.hadron13.gearbox.blocks.laser.ILaserReceiver;
 import io.github.hadron13.gearbox.blocks.laser.Laser;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
@@ -234,11 +236,39 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
         return recipe.value() instanceof IrradiatingRecipe;
     }
 
+
+    @Override
+    protected void applyBasinRecipe() {
+        if (currentRecipe == null)
+            return;
+
+        Optional<BasinBlockEntity> optionalBasin = getBasin();
+        if (!optionalBasin.isPresent())
+            return;
+        BasinBlockEntity basin = optionalBasin.get();
+        boolean wasEmpty = basin.canContinueProcessing();
+        if (!IrradiatingRecipe.apply(basin, currentRecipe))
+            return;
+        getProcessedRecipeTrigger().ifPresent(this::award);
+        basin.inputTank.sendDataImmediately();
+
+        // Continue mixing
+        if (wasEmpty && matchBasinRecipe(currentRecipe)) {
+            continueWithPreviousRecipe();
+            sendData();
+        }
+
+        basin.notifyChangeOfContents();
+    }
+
     @Override
     protected <I extends RecipeInput> boolean matchBasinRecipe(Recipe<I> recipe) {
-        if(!(recipe instanceof IrradiatingRecipe))
+        if(!(recipe instanceof IrradiatingRecipe irradiatingRecipe))
             return false;
-        return super.matchBasinRecipe(recipe) && IrradiatingRecipe.match(this, (IrradiatingRecipe)recipe);
+        Optional<BasinBlockEntity> basin = getBasin();
+        if (!basin.isPresent())
+            return false;
+        return IrradiatingRecipe.match(this, irradiatingRecipe) && IrradiatingRecipe.matchBasin(getBasin().get(), recipe);
     }
 
 
@@ -267,8 +297,6 @@ public class IrradiatorBlockEntity extends BasinOperatingBlockEntity implements 
 
         return true;
     }
-
-
 
     @Override
     public void receiveLaser(Laser laser) {

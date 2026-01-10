@@ -3,7 +3,8 @@
   "package": "io.github.hadron13.gearbox.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "FluidPropagatorMixin"
+    "FluidPropagatorMixin",
+    "accessor.BasinBlockEntityAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

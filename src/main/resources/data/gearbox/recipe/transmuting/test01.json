@@ -7,10 +7,10 @@
   ],
   "results": [
     {
-      "item" : "minecraft:andesite"
+      "id" : "minecraft:andesite"
     }
   ],
-  "processingTime": 150,
-  "color": 4294967295,
+  "processing_time": 150,
+  "color": 4278255360,
   "power": 1.5
 }

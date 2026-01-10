@@ -15,6 +15,7 @@ import io.github.hadron13.gearbox.blocks.compressor.CompressorBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerBlockEntity;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillingRecipe;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzingRecipe;
+import io.github.hadron13.gearbox.blocks.electrolyzer.EnergyRecipeParams;
 import io.github.hadron13.gearbox.blocks.irradiator.TransmutingRecipe;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatingRecipe;
@@ -48,9 +49,9 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
     SAPPING(SappingRecipe::new),
     COMPRESSING(CompressingRecipe::new),
     MECHANIZING(MechanizingRecipe::new),
-    IRRADIATING(IrradiatingRecipe::new),
-    TRANSMUTING(TransmutingRecipe::new),
-    ELECTROLYZING(ElectrolyzingRecipe::new),
+    IRRADIATING(() -> new IrradiatingRecipe.Serializer<>(IrradiatingRecipe::new)),
+    TRANSMUTING(() -> new TransmutingRecipe.Serializer<>(TransmutingRecipe::new)),
+    ELECTROLYZING(() -> new ElectrolyzingRecipe.Serializer<>(ElectrolyzingRecipe::new)),
     CENTRIFUGING(CentrifugingRecipe::new),
     PUMPJACK(PumpjackRecipe::new),
 //    LASER_DRILLING(LaserDrillingRecipe::new),
@@ -70,9 +71,10 @@ public enum GearboxRecipeTypes implements IRecipeTypeInfo, StringRepresentable {
         this(() -> new StandardProcessingRecipe.Serializer<>(processingFactory));
     }
 
-    GearboxRecipeTypes(ProcessingRecipe.Factory<PumpjackRecipeParams, ? extends PumpjackRecipe> pumpjackFactory) {
+    GearboxRecipeTypes(ProcessingRecipe.Factory<PumpjackRecipeParams, PumpjackRecipe> pumpjackFactory) {
         this(() -> new PumpjackRecipe.Serializer<>(pumpjackFactory));
     }
+
 
     GearboxRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
