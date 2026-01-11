@@ -1,23 +1,85 @@
 package io.github.hadron13.gearbox.compat.kubejs.schemas;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
+import dev.latvian.mods.kubejs.create.recipe.CreateRecipeComponents;
+import dev.latvian.mods.kubejs.recipe.KubeRecipe;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
 import dev.latvian.mods.kubejs.recipe.component.*;
+import dev.latvian.mods.kubejs.recipe.schema.KubeRecipeFactory;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
-import io.github.hadron13.gearbox.compat.kubejs.helpers.FluidIngredientHelper;
+import dev.latvian.mods.kubejs.util.KubeResourceLocation;
+import dev.latvian.mods.kubejs.util.TickDuration;
+import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.blocks.kiln.PyroprocessingRecipe;
+import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+
+import java.util.List;
 
 public interface ProcessingRecipeSchema {
-    /*
-    RecipeKey<Either<OutputFluid, OutputItem>[]> RESULTS = FluidComponents.OUTPUT_OR_ITEM_ARRAY.key("results");
-    RecipeKey<Either<InputFluid, InputItem>[]> INGREDIENTS = FluidComponents.INPUT_OR_ITEM_ARRAY.key("ingredients");
 
+    RecipeKey<List<Either<SizedFluidIngredient, SizedIngredient>>> INGREDIENTS = CreateRecipeComponents.SIZED_FLUID_INGREDIENT.instance().or(SizedIngredientComponent.FLAT.instance()).asList().inputKey("ingredients");
+    RecipeKey<List<Either<FluidStack, ItemStack>>> RESULTS = FluidStackComponent.FLUID_STACK.instance().or(ItemStackComponent.ITEM_STACK.instance()).asList().outputKey("results");
+    RecipeKey<Long> PROCESSING_TIME = NumberComponent.LONG.otherKey("processing_time").optional(100L);
+    RecipeKey<Long> PROCESSING_TIME_REQUIRED = NumberComponent.LONG.otherKey("processing_time").optional(100L).alwaysWrite();
+    RecipeKey<HeatCondition> HEAT_REQUIREMENT = CreateRecipeComponents.HEAT_CONDITION.otherKey("heat_requirement").defaultOptional();
+
+
+    RecipeSchema PYROPROCESSING_SCHEMA = new RecipeSchema(RESULTS, INGREDIENTS, PROCESSING_TIME).factory(TimedProcessingRecipeKube.PYROPROCESSING_FACTORY);
+    RecipeSchema COMPRESSING_SCHEMA = new RecipeSchema(RESULTS, INGREDIENTS, PROCESSING_TIME, HEAT_REQUIREMENT).factory(TimedProcessingRecipeKube.COMPRESSING_FACTORY);
+
+    public class ProcessingRecipeKube extends KubeRecipe {
+
+
+        public KubeRecipe heated() {
+            this.setValue(HEAT_REQUIREMENT, HeatCondition.HEATED);
+            save();
+            return this;
+        }
+
+        public KubeRecipe superheated() {
+            this.setValue(HEAT_REQUIREMENT, HeatCondition.SUPERHEATED);
+            save();
+            return this;
+        }
+        public KubeRecipe processingTime(long time) {
+            this.setValue(PROCESSING_TIME, time);
+            save();
+            return this;
+        }
+    }
+
+    public class TimedProcessingRecipeKube extends ProcessingRecipeKube{
+
+        public static final KubeRecipeFactory PYROPROCESSING_FACTORY = new KubeRecipeFactory(
+                GearboxRecipeTypes.PYROPROCESSING.id,
+                TimedProcessingRecipeKube.class,
+                TimedProcessingRecipeKube::new
+        );
+
+        public static final KubeRecipeFactory COMPRESSING_FACTORY = new KubeRecipeFactory(
+                GearboxRecipeTypes.COMPRESSING.id,
+                TimedProcessingRecipeKube.class,
+                TimedProcessingRecipeKube::new
+        );
+
+        @Override
+        public KubeRecipe processingTime(long time) {
+            this.setValue(PROCESSING_TIME_REQUIRED, time);
+            save();
+            return this;
+        }
+
+    }
+
+//    RecipeKey<Either<ProcessingOutput, FluidStack>[]> RESULTS = ;
+
+    /*
     RecipeKey<Either<InputFluid, InputItem>[]> INGREDIENTS_UNWRAPPED = new RecipeComponentWithParent<Either<InputFluid, InputItem>[]>() {
         @Override
         public RecipeComponent<Either<InputFluid, InputItem>[]> parentComponent() {
@@ -191,7 +253,6 @@ public interface ProcessingRecipeSchema {
         }
     }
 
-    RecipeSchema PROCESSING_DEFAULT = new RecipeSchema(ProcessingRecipeJS.class, ProcessingRecipeJS::new, RESULTS, INGREDIENTS, PROCESSING_TIME, HEAT_REQUIREMENT);
 
     RecipeSchema PROCESSING_WITH_TIME = new RecipeSchema(ProcessingRecipeJS.class, ProcessingRecipeJS::new, RESULTS, INGREDIENTS, PROCESSING_TIME_REQUIRED, HEAT_REQUIREMENT);
 

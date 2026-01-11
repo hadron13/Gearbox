@@ -81,6 +81,10 @@ public class CompressingRecipe extends StandardProcessingRecipe<SingleRecipeInpu
     @Override
     public boolean canRequireHeat() {return true;}
 
+    @Override
+    protected boolean canSpecifyDuration() {
+        return true;
+    }
 
     @Override
     public boolean matches(SingleRecipeInput singleRecipeInput, Level level) {

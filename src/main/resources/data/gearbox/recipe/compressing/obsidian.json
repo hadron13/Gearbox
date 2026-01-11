@@ -11,5 +11,6 @@
     {
       "id" : "minecraft:obsidian"
     }
-  ]
+  ],
+  "heat_requirement": "heated"
 }

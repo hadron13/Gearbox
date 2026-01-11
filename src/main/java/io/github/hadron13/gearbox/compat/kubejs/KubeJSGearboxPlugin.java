@@ -1,7 +1,10 @@
 package io.github.hadron13.gearbox.compat.kubejs;
 
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
+import dev.latvian.mods.kubejs.recipe.schema.RecipeFactoryRegistry;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
+import dev.latvian.mods.kubejs.recipe.schema.RecipeSchemaRegistry;
+import io.github.hadron13.gearbox.Gearbox;
 import io.github.hadron13.gearbox.compat.kubejs.schemas.ProcessingRecipeSchema;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
 
@@ -12,29 +15,14 @@ public class KubeJSGearboxPlugin implements KubeJSPlugin {
 
     private static final Map<GearboxRecipeTypes, RecipeSchema> recipeSchemas = new HashMap<>();
 
-    static {
-//        recipeSchemas.put(GearboxRecipeTypes.PYROPROCESSING, ProcessingRecipeSchema.PROCESSING_WITH_TIME);
-//        recipeSchemas.put(GearboxRecipeTypes.SAPPING, ProcessingRecipeSchema.PROCESSING_WITH_TIME);
-//        recipeSchemas.put(GearboxRecipeTypes.COMPRESSING, ProcessingRecipeSchema.PROCESSING_WITH_TIME);
-//        recipeSchemas.put(GearboxRecipeTypes.MECHANIZING, ProcessingRecipeSchema.PROCESSING_WITH_TIME);
-//        recipeSchemas.put(GearboxRecipeTypes.TRANSMUTING, ProcessingRecipeSchema.LASER_RECIPE);
-//        recipeSchemas.put(GearboxRecipeTypes.IRRADIATING, ProcessingRecipeSchema.LASER_RECIPE);
-//        recipeSchemas.put(GearboxRecipeTypes.ELECTROLYZING, ProcessingRecipeSchema.PROCESSING_WITH_ENERGY);
-//        recipeSchemas.put(GearboxRecipeTypes.CENTRIFUGING, ProcessingRecipeSchema.PROCESSING_WITH_TIME);
-//        recipeSchemas.put(GearboxRecipeTypes.PUMPJACK, ProcessingRecipeSchema.PUMPJACK_RECIPE);
-////        recipeSchemas.put(GearboxRecipeTypes.LASER_DRILLING, ProcessingRecipeSchema.LASER_RECIPE);
-//        recipeSchemas.put(GearboxRecipeTypes.DISTILLING, ProcessingRecipeSchema.DISTILLING_RECIPE);
-////        recipeSchemas.put(GearboxRecipeTypes.REACTING, ProcessingRecipeSchema.REACTING_RECIPE);
-////        recipeSchemas.put(GearboxRecipeTypes.DIPPING, ProcessingRecipeSchema.DIPPING_RECIPE);
+    @Override
+    public void registerRecipeFactories(RecipeFactoryRegistry registry) {
+        registry.register(ProcessingRecipeSchema.TimedProcessingRecipeKube.PYROPROCESSING_FACTORY);
+        registry.register(ProcessingRecipeSchema.TimedProcessingRecipeKube.COMPRESSING_FACTORY);
     }
-
-//    @Override
-//    public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
-//        for (var createRecipeType : GearboxRecipeTypes.values()) {
-//            if (createRecipeType.getSerializer() instanceof ProcessingRecipeSerializer<?>) {
-//                var schema = recipeSchemas.getOrDefault(createRecipeType, ProcessingRecipeSchema.PROCESSING_DEFAULT);
-//                event.register(createRecipeType.getId(), schema);
-//            }
-//        }
-//    }
+    @Override
+    public void registerRecipeSchemas(RecipeSchemaRegistry registry) {
+        registry.register(GearboxRecipeTypes.PYROPROCESSING.id, ProcessingRecipeSchema.PYROPROCESSING_SCHEMA);
+        registry.register(GearboxRecipeTypes.COMPRESSING.id, ProcessingRecipeSchema.COMPRESSING_SCHEMA);
+    }
 }

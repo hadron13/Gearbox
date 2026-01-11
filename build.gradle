@@ -160,6 +160,8 @@ dependencies {
 
     api("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
     interfaceInjectionData("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+    implementation("dev.latvian.mods:kubejs-create-neoforge:$kubejs_create_version")
+
 
     implementation("curse.maven:large-ore-deposits-318833:7301758")
     implementation("curse.maven:forgeendertech-244844:7070495")
