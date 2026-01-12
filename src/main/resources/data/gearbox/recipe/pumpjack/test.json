@@ -1,7 +1,6 @@
 {
   "type": "gearbox:pumpjack",
   "biome": "minecraft:desert",
-  "ingredients": [],
   "results": [
     {
       "amount": 50,

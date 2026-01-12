@@ -15,6 +15,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
+import java.util.List;
+
 public class DistillingRecipe extends ProcessingRecipe<RecipeInput, DistillationRecipeParams> {
 
     public DistillationControllerBlockEntity.DistilMode mode;
@@ -27,9 +29,15 @@ public class DistillingRecipe extends ProcessingRecipe<RecipeInput, Distillation
             case "distil_vacuum" -> mode = DistillationControllerBlockEntity.DistilMode.DISTIL_VACUUM;
             default -> null;
         };
+    }
+
+    @Override
+    public List<String> validate() {
+        List<String> errors = super.validate();
         if(mode == null){
-            Gearbox.LOGGER.warn("invalid mode in distilling recipe");
+            errors.add("invalid distilling mode");
         }
+        return errors;
     }
 
     public static  boolean match(DistillationControllerBlockEntity be, DistillingRecipe recipe){
