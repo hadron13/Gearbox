@@ -28,6 +28,7 @@
     "gearbox:distillation_controller",
     "gearbox:steel_pump",
     "gearbox:distillation_output",
-    "gearbox:asphalt"
+    "gearbox:asphalt",
+    "gearbox:flarestack"
   ]
 }

@@ -25,6 +25,7 @@ import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControll
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationControllerGenerator;
 import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputBlock;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlock;
+import io.github.hadron13.gearbox.blocks.flarestack.FlarestackBlock;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlock;
 import io.github.hadron13.gearbox.blocks.kiln.KilnBlock;
 import io.github.hadron13.gearbox.blocks.precision_crank.PrecisionCrankBlock;
@@ -436,7 +437,7 @@ public class GearboxBlocks {
 
 
     public static final BlockEntry<DistillationOutputBlock> DISTILLATION_OUTPUT = REGISTRATE.block("distillation_output", DistillationOutputBlock::new)
-            .initialProperties(SharedProperties::netheriteMetal)
+            .initialProperties(SharedProperties::softMetal)
             .transform(pickaxeOnly())
             .properties(p -> p.mapColor(MapColor.METAL))
             .blockstate(BlockStateGen.directionalBlockProvider(true))
@@ -454,4 +455,16 @@ public class GearboxBlocks {
                     .item()
                     .build()
                     .register();
+
+    public static final BlockEntry<FlarestackBlock> FLARESTACK = REGISTRATE.block("flarestack", FlarestackBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .transform(pickaxeOnly())
+            .properties(p -> p.mapColor(MapColor.METAL))
+            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+            .lang("Flarestack")
+            .item()
+            .build()
+            .register();
+
+
 }

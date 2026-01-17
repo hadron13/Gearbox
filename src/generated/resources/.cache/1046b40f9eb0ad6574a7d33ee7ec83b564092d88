@@ -1,4 +1,4 @@
-// 1.20.1	2025-12-31T16:09:08.309822396	Registrate Provider for gearbox [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+// 1.20.1	2026-01-17T07:39:34.917193353	Registrate Provider for gearbox [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
 18f6e385f6f78e24eaadd66ee398926fddb18104 assets/gearbox/blockstates/ammonia.json
 c00bec1715596d864e15208233894d8de01d6859 assets/gearbox/blockstates/amplifier.json
 d056980ae4e5ad3559b3c8b400aec657ffe58352 assets/gearbox/blockstates/argon.json
@@ -16,6 +16,7 @@ ffdd870aa1f16432b0149882b3292af828dbb4b8 assets/gearbox/blockstates/distillation
 6443afe841fa0e6eea7df2412e22b968dd1808a7 assets/gearbox/blockstates/distillation_output.json
 dcac427093216c9191beeabe312aebaaf33fe79a assets/gearbox/blockstates/electrolyzer.json
 49629a5ce56116b42c605652353b245b1f2177b7 assets/gearbox/blockstates/ethylene.json
+66f6a283890b3e1e3413117f2958ab95c83101c4 assets/gearbox/blockstates/flarestack.json
 b804ec15cfb51aae543e1179dadb1fe060e92ae5 assets/gearbox/blockstates/glass_fluid_pipe.json
 32b0c705a67f60be6af7b228bcc9e8946ac92fa7 assets/gearbox/blockstates/hydrogen.json
 eacc33c53ba87abaed39f3cb9d10fb790e0a00be assets/gearbox/blockstates/hydrogen_sulfide.json
@@ -44,8 +45,8 @@ f784ded59f057dfd140d5ace0808da08f2d9172e assets/gearbox/blockstates/steam.json
 d3d2891e11586eb286a357d922ae47e0ad589746 assets/gearbox/blockstates/steel_pump.json
 15c2e5a574c116d0647a4733a886c8b357860490 assets/gearbox/blockstates/straight_steel_fluid_pipe.json
 28ea45c0ebd761a2616ca0d3b43533b453184316 assets/gearbox/blockstates/volatile_gas.json
-798ff3bd7fdfcea71fd4c1ee8d565110c7b2bcce assets/gearbox/lang/en_ud.json
-f16f3b7c520838ecb800265cdabc0b67d6d8e1ea assets/gearbox/lang/en_us.json
+1c029f66f41636d18750af3f9a3788f60bae17ac assets/gearbox/lang/en_ud.json
+f930db9216cf1e0e8efa876d8fb53dde8a9524a1 assets/gearbox/lang/en_us.json
 2c771a7d85c2a641f26549876f4187407c058bb1 assets/gearbox/models/block/ammonia.json
 a5db51fd6e13ba499c2a95db6af1721061b2e6d4 assets/gearbox/models/block/argon.json
 20249a60329b9c2212b96791e90fe02d54c2948a assets/gearbox/models/block/butane.json
@@ -111,6 +112,7 @@ ab19c659453edf02a9a3d52aedaca1ddc05ffa26 assets/gearbox/models/item/dinitrogen_t
 570ec890b6708bf7512e24ce730fa2475a5ecccf assets/gearbox/models/item/distillation_output.json
 a21a7508faa4943078ae29c806a1531b23673f4a assets/gearbox/models/item/electrolyzer.json
 81de65eeb3633a7b969f2b6d29dcf090e1d932c6 assets/gearbox/models/item/ethylene_bucket.json
+ba52912120d9358d18a8f36eaecb46b648e29b5d assets/gearbox/models/item/flarestack.json
 43c6d405dc098e95086620ed0cfd3f6ca846b181 assets/gearbox/models/item/geld_ingot.json
 c8837c32dd9406138f0fb2f0f70a1eb27b45ddf6 assets/gearbox/models/item/hydrogen_bucket.json
 d73562cc12a8dbc87df0e901b4136ffb4cf0d109 assets/gearbox/models/item/hydrogen_sulfide_bucket.json
@@ -157,6 +159,7 @@ dce5aaa625ed1b491be41d59d966fc36efab408c data/gearbox/loot_tables/blocks/core_dr
 91cbb286d4bb9f2720417719fc81376b2a3eaff1 data/gearbox/loot_tables/blocks/distillation_controller.json
 d6eb59138e7bc32d2aa9704bcbbf577237122b12 data/gearbox/loot_tables/blocks/distillation_output.json
 2b3c4839613c6cd678575ceb045e91b7e50bf475 data/gearbox/loot_tables/blocks/electrolyzer.json
+4775b5ec59c5805e457037dee0a33e19c01ba0de data/gearbox/loot_tables/blocks/flarestack.json
 cb9b9f2f1bfe8dd631069932b3dbcfd4a847447e data/gearbox/loot_tables/blocks/glass_fluid_pipe.json
 485300c16945db3a1229785d8f2398f95b0b0e87 data/gearbox/loot_tables/blocks/irradiator.json
 15bd14ff2a70fe7fd00a5f713f780ea8780b9945 data/gearbox/loot_tables/blocks/kiln.json
@@ -176,4 +179,4 @@ c59a30b4fb8da49f469da313838da7e2592ebde6 data/gearbox/loot_tables/blocks/steel_f
 6978355a35e8d659392dc8074734bdf962da16c8 data/gearbox/loot_tables/blocks/steel_pump.json
 f3cb4aa2d63e400210e31fb92478f21018df25f3 data/gearbox/loot_tables/blocks/straight_steel_fluid_pipe.json
 becf7015b26a215b65068f96ac96956e26795ad9 data/minecraft/tags/blocks/mineable/axe.json
-c1cc26eaf928da9832989008944ba103bc8ed52b data/minecraft/tags/blocks/mineable/pickaxe.json
+58c98fdc149f58e0a969560f93cd1e82536ecb80 data/minecraft/tags/blocks/mineable/pickaxe.json

@@ -42,6 +42,7 @@ import io.github.hadron13.gearbox.blocks.distillation_tower.DistillationOutputRe
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerBlockEntity;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerVisual;
 import io.github.hadron13.gearbox.blocks.electrolyzer.ElectrolyzerRenderer;
+import io.github.hadron13.gearbox.blocks.flarestack.FlarestackBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorBlockEntity;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorInstance;
 import io.github.hadron13.gearbox.blocks.irradiator.IrradiatorRenderer;
@@ -281,6 +282,12 @@ public class GearboxBlockEntities {
             .validBlocks(GearboxBlocks.DISTILLATION_OUTPUT)
             .renderer(() -> DistillationOutputRenderer::new)
             .register();
+
+    public static final BlockEntityEntry<FlarestackBlockEntity> FLARESTACK = REGISTRATE
+            .blockEntity("flarestack", FlarestackBlockEntity::new)
+            .validBlocks(GearboxBlocks.FLARESTACK)
+            .register();
+
 
     public static void register() {}
 }

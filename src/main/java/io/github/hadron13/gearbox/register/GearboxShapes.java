@@ -27,7 +27,9 @@ public class GearboxShapes {
                     .add(2, 2, 14, 14, 14, 14+6)
                     .add(1, 1, -3, 15, 15, 0) .forDirectional(SOUTH),
         ATTENUATOR = shape(2, 1, 2, 16-2, 16-2, 16-2).forDirectional(SOUTH),
-        DISTILLATION_OUTPUT = shape(3, 3, 3, 13, 13, 16).forDirectional(SOUTH);
+        DISTILLATION_OUTPUT = shape(3, 3, 3, 13, 13, 16).forDirectional(SOUTH),
+        FLARESTACK = shape(0, 0, 0, 16, 10, 16)
+                .add(1, 10, 1, 15, 20, 15).forDirectional();
 
     private static GearboxShapes.Builder shape(VoxelShape shape) {
         return new GearboxShapes.Builder(shape);
