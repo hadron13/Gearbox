@@ -2,6 +2,7 @@ package io.github.hadron13.gearbox.item.tau_cannon;
 
 import com.simibubi.create.foundation.item.CustomArmPoseItem;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
+import io.github.hadron13.gearbox.blocks.laser.Laser;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
@@ -22,16 +23,25 @@ import java.util.function.Consumer;
 
 public class TauCannonItem extends Item implements CustomArmPoseItem {
 
+    public Laser laser;
 
     public TauCannonItem(Properties pProperties) {
         super(pProperties);
+        laser = new Laser();
         TauCannonAnimationHolder.init();
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+    public int getUseDuration(ItemStack stack) {
+        return 10000;
+    }
 
-        return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+        laser.setPosition(pPlayer.getEyePosition());
+        laser.setDirection(pPlayer.getForward());
+        laser.setEnabled(true);
+        return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand));
     }
 
 

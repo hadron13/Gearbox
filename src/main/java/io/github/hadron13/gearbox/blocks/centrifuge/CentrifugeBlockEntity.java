@@ -3,12 +3,14 @@ package io.github.hadron13.gearbox.blocks.centrifuge;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import io.github.hadron13.gearbox.GearboxLang;
 import io.github.hadron13.gearbox.register.GearboxRecipeTypes;
+import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.lang.FontHelper;
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
@@ -18,6 +20,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -61,7 +64,28 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
             if(recipeTimer <= 0){
                 if(lastRecipe == null)
                     return;
+
+
                 CentrifugingRecipe.apply(this, lastRecipe, false);
+
+
+                IFluidHandler fluids = outputTank.getCapability().orElse(null);
+
+                for(int i = 0; i < fluids.getTanks(); i++){
+                    FluidStack output = fluids.getFluidInTank(i);
+
+                    basins:
+                    for(Direction dir : Iterate.horizontalDirections){
+                        BlockEntity be = level.getBlockEntity(worldPosition.below(2).relative(dir));
+                        if(be instanceof BasinBlockEntity basin){
+                            if(!basin.getFilter().test(output))
+                                continue basins;
+
+
+
+                        }
+                    }
+                }
             }
             return;
         }
@@ -124,45 +148,16 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
     }
 
     @Override
+    public boolean isSpeedRequirementFulfilled() {
+        return Mth.abs(getSpeed()) >= 64f;
+    }
+
+    @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         boolean isEmpty = !super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-
-        IFluidHandler fluids = fluidCapability.orElse(new FluidTank(0));
-
-
-        if (Math.abs(getSpeed()) < 64.0f) {
-            GearboxLang.translate("tooltip.speedRequirement")
-                    .style(GOLD)
-                    .forGoggles(tooltip);
-            MutableComponent hint =
-                    GearboxLang.translateDirect("gui.contraptions.not_fast_enough", I18n.get(getBlockState().getBlock()
-                            .getDescriptionId()));
-            List<Component> cutString = TooltipHelper.cutTextComponent(hint, FontHelper.Palette.GRAY_AND_WHITE);
-            for (int i = 0; i < cutString.size(); i++)
-                GearboxLang.builder()
-                        .add(cutString.get(i)
-                                .copy())
-                        .forGoggles(tooltip);
+        if(containedFluidTooltip(tooltip, isPlayerSneaking, getCapability(ForgeCapabilities.FLUID_HANDLER).cast())){
             isEmpty = false;
         }
-
-        LangBuilder mb = GearboxLang.translate("generic.unit.millibuckets");
-        for (int i = 0; i < fluids.getTanks(); i++) {
-            FluidStack fluidStack = fluids.getFluidInTank(i);
-            if (fluidStack.isEmpty())
-                continue;
-            GearboxLang.text("")
-                    .add(GearboxLang.fluidName(fluidStack)
-                            .add(GearboxLang.text(" "))
-                            .style(ChatFormatting.GRAY)
-                            .add(GearboxLang.number(fluidStack.getAmount())
-                                    .add(mb)
-                                    .style(ChatFormatting.BLUE)))
-                    .forGoggles(tooltip, 1);
-            isEmpty = false;
-        }
-
-
         return !isEmpty;
     }
 
@@ -175,7 +170,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER && (side == null || side.getAxis() == getBlockState().getValue(AXIS)) )
+        if (cap == ForgeCapabilities.FLUID_HANDLER && (side == null || side == Direction.UP))
             return fluidCapability.cast();
         return super.getCapability(cap, side);
     }

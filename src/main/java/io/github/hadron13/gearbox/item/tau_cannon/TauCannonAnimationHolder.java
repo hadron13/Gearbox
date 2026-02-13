@@ -13,7 +13,6 @@ public class TauCannonAnimationHolder {
     }
     public static void init(){
         speed.chase(1, 0.1f, LerpedFloat.Chaser.EXP);
-
         recoil.chase(0, 0.1f, LerpedFloat.Chaser.LINEAR);
     }
 

@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class CombinerBlock extends Block implements IWrenchable, IBE<CombinerBlockEntity> {
+public class CombinerBlock extends Block implements IBE<CombinerBlockEntity> {
     public static final Property<Direction> HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public CombinerBlock(Properties properties) {
