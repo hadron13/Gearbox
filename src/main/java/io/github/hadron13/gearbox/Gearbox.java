@@ -58,6 +58,7 @@ public class Gearbox {
         GearboxBlocks.register();
         GearboxItems.register();
         GearboxBlockEntities.register();
+        GearboxEntities.register();
         GearboxFluids.register();
         GearboxPartialModels.init();
         GearboxRecipeTypes.register(modEventBus);

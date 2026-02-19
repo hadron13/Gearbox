@@ -5,6 +5,7 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.CombustibleItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import io.github.hadron13.gearbox.Gearbox;
+import io.github.hadron13.gearbox.item.RadioactiveItem;
 import io.github.hadron13.gearbox.item.tau_cannon.TauCannonItem;
 import io.github.hadron13.gearbox.item.ultimate_mechanism.UltimateMechanismItem;
 import net.minecraft.world.item.Item;
@@ -14,7 +15,12 @@ public class GearboxItems {
     private static final CreateRegistrate REGISTRATE = Gearbox.registrate().setCreativeTab(GearboxCreativeTabs.MAIN_TAB);
 
     public static void register() {}
-    public static final ItemEntry<Item> GELD_INGOT = ingredient("geld_ingot"),
+    public static final ItemEntry<RadioactiveItem> GELD_INGOT = REGISTRATE
+            .item("geld_ingot", RadioactiveItem::new)
+
+            .register();
+
+    public static final ItemEntry<Item>
         SULFUR_DUST = ingredient("sulfur_dust"),
         SALT_DUST = ingredient("salt_dust"),
         CAUSTIC_SODA = ingredient("caustic_soda");
