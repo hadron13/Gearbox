@@ -30,6 +30,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -43,11 +45,18 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
     public SmartFluidTankBehaviour inputTank;
     public SmartFluidTankBehaviour outputTank;
     public LazyOptional<IFluidHandler> fluidCapability;
+
+    public ItemStackHandler inputInv;
+    public ItemStackHandler outputInv;
+    public LazyOptional<IItemHandler> itemCapability;
+
     public CentrifugingRecipe lastRecipe = null;
     int recipeTimer = 0;
 
     public CentrifugeBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
+        inputInv = new ItemStackHandler(1);
+        outputInv = new ItemStackHandler(8);
     }
 
     @Override
@@ -65,27 +74,26 @@ public class CentrifugeBlockEntity extends KineticBlockEntity {
                 if(lastRecipe == null)
                     return;
 
-
                 CentrifugingRecipe.apply(this, lastRecipe, false);
 
 
                 IFluidHandler fluids = outputTank.getCapability().orElse(null);
 
-                for(int i = 0; i < fluids.getTanks(); i++){
-                    FluidStack output = fluids.getFluidInTank(i);
-
-                    basins:
-                    for(Direction dir : Iterate.horizontalDirections){
-                        BlockEntity be = level.getBlockEntity(worldPosition.below(2).relative(dir));
-                        if(be instanceof BasinBlockEntity basin){
-                            if(!basin.getFilter().test(output))
-                                continue basins;
-
-
-
-                        }
-                    }
-                }
+//                for(int i = 0; i < fluids.getTanks(); i++){
+//                    FluidStack output = fluids.getFluidInTank(i);
+//
+//                    basins:
+//                    for(Direction dir : Iterate.horizontalDirections){
+//                        BlockEntity be = level.getBlockEntity(worldPosition.below(2).relative(dir));
+//                        if(be instanceof BasinBlockEntity basin){
+//                            if(!basin.getFilter().test(output))
+//                                continue basins;
+//
+//
+//
+//                        }
+//                    }
+//                }
             }
             return;
         }
