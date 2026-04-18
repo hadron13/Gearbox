@@ -102,6 +102,8 @@ public class CoreDrillRenderer extends KineticBlockEntityRenderer<CoreDrillBlock
             .rotateCentered(22.5f * Mth.DEG_TO_RAD, facing.getClockWise())
                 .translate(0, 0.5/16f, 0)
         ;
+        if(be.getSpeed() == 0)
+            partialTicks = 0;
 
         float tube_y_offset = 0;
         float pole_y_offset = be.poleOffset.getValue(partialTicks);

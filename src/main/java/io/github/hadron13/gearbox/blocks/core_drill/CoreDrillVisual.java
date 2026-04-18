@@ -39,6 +39,9 @@ public class CoreDrillVisual extends SingleAxisRotatingVisual<CoreDrillBlockEnti
     void transformTubes(float partialTick){
         Direction facing = blockEntity.getBlockState().getValue(HORIZONTAL_FACING);
 
+        if(blockEntity.getSpeed() == 0)
+            partialTick = 0;
+
         float tube_y_offset = 0;
         if(blockEntity.drillState == PUSHING){
             tube_y_offset = blockEntity.payloadOffset.getValue(partialTick) * 20/16f;
