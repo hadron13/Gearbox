@@ -48,14 +48,14 @@ public class CoreDrillBlock extends KineticBlock implements IBE<CoreDrillBlockEn
         ItemStack itemInHand = player.getItemInHand(hand);
         if(itemInHand.getItem() == GearboxItems.CORE_TUBE.get() ){
             withBlockEntityDo(level, pos, (be) ->{
-                if(be.drillState != CoreDrillBlockEntity.IDLE)
+                if(level.isClientSide)
+                    return;
+                if(be.drillState != CoreDrillBlockEntity.IDLE || !be.poleOffset.settled())
                     return;
                 if(!player.isCreative())
                     itemInHand.shrink(1);
 
-                be.drillState = CoreDrillBlockEntity.PUSHING;
-                be.payloadOffset.updateChaseTarget(1.0f);
-                be.poleOffset.updateChaseTarget(20/16f);
+                be.switchState(CoreDrillBlockEntity.PUSHING);
                 be.sendData();
             });
             return InteractionResult.SUCCESS;

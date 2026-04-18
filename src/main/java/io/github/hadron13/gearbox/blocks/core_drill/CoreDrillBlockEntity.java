@@ -37,11 +37,12 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
 
     public int tubes = 0;
     public int drillState = 0;
+    public int switchDelay = 0;
     public LerpedFloat payloadOffset = LerpedFloat.linear();
     public LerpedFloat poleOffset = LerpedFloat.linear();
 
     public static final int IDLE = 0;
-    public static final int PUSHING = 1;
+    public static final int PUSHING = 4;
     public static final int PULLING = 2;
     public static final int STORING = 3;
 
@@ -70,64 +71,101 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
     public void tick() {
         super.tick();
 
-        if(drillState == IDLE){
-            if(enoughTubes() && Mth.abs(getSpeed()) > 0 && !isFull()){
-                payloadOffset.setValueNoUpdate(1.0f);
-
-                payloadOffset.updateChaseTarget(1.0f);
-                poleOffset.updateChaseTarget(20/16f);
-                drillState = PULLING;
-            }
+        if(switchDelay > 0){
+            switchDelay--;
             return;
         }
+
+        if(!level.isClientSide) {
+            switch (drillState) {
+                case IDLE -> {
+                    if (Mth.abs(getSpeed()) > 0 && enoughTubes() && !isFull()) {
+                        payloadOffset.setValue(1.0f);
+
+                        payloadOffset.updateChaseTarget(1.0f);
+                        poleOffset.updateChaseTarget(20 / 16f);
+                        switchState(PULLING);
+                    }
+                }
+                case PUSHING -> {
+                    if (poleOffset.getChaseTarget() == 20 / 16f && poleOffset.settled()) {
+                        poleOffset.updateChaseTarget(0);
+                    }
+
+                    if (poleOffset.settled()) {
+                        tubes++;
+
+                        if (enoughTubes() && level instanceof ServerLevel serverLevel) {
+                            minedBlock = AdlodDepositDetector.getDeposit(serverLevel, getBlockPos()).orElse(null);
+                        }
+
+                        switchState(IDLE);
+                        return;
+                    }
+                }
+                case PULLING -> {
+                    if (poleOffset.getChaseTarget() == 20 / 16f && poleOffset.settled()) {
+                        poleOffset.updateChaseTarget(0);
+                        payloadOffset.updateChaseTarget(0);
+                    }
+
+                    if (poleOffset.settled()) {
+                        payloadOffset.updateChaseTarget(1.0f);
+                        poleOffset.updateChaseTarget(-1 / 16f);
+                        switchState(STORING);
+                    }
+                }
+                case STORING -> {
+                    if (payloadOffset.settled()) {
+                        switchState(IDLE);
+                        if (!level.isClientSide() && minedBlock != null)
+                            outputInv.insertItem(0, new ItemStack(minedBlock.asItem(), 1), false);
+                        sendData();
+                    }
+                }
+            }
+        }
+
+        if (poleOffset.getChaseTarget() == 20 / 16f && poleOffset.settled()) {
+            poleOffset.updateChaseTarget(0);
+        }
+
+
         float chaseSpeed = Mth.log2((int)Mth.abs(getSpeed()))/128f;
         if(drillState == PUSHING)
             chaseSpeed = Mth.abs(getSpeed())/512f;
+
         poleOffset.updateChaseSpeed(chaseSpeed);
         payloadOffset.updateChaseSpeed(chaseSpeed/(20/16f));
 
         poleOffset.tickChaser();
         payloadOffset.tickChaser();
 
-        switch (drillState){
-            case PUSHING -> {
-                if(poleOffset.getChaseTarget() == 20/16f && poleOffset.settled()){
-                    poleOffset.updateChaseTarget(0);
-                }
-
-                if(poleOffset.settled()){
-                    payloadOffset.setValue(0);
-                    drillState = IDLE;
-                    tubes++;
-
-                    if(enoughTubes() && level instanceof ServerLevel serverLevel) {
-                        minedBlock = AdlodDepositDetector.getDeposit(serverLevel, getBlockPos()).orElse(null);
-                        sendData();
-                    }
-                }
-            }
-            case PULLING -> {
-                if(poleOffset.getChaseTarget() == 20/16f && poleOffset.settled()){
-                    poleOffset.updateChaseTarget(0);
-                    payloadOffset.updateChaseTarget(0);
-                }
-
-                if(poleOffset.settled()){
-                    payloadOffset.updateChaseTarget(1.0f);
-                    poleOffset.updateChaseTarget(-1/16f);
-                    drillState = STORING;
-                }
-            }
-            case STORING -> {
-                if(payloadOffset.settled()){
-                    drillState = IDLE;
-                    if(!level.isClientSide())
-                        outputInv.insertItem(0, new ItemStack(minedBlock.asItem(), 1), false);
-                    sendData();
-                }
-            }
+        if(poleOffset.getValue() > 20/16f){
+            poleOffset.setValue(20/16f);
         }
     }
+
+    public void switchState(int state){
+        if(level.isClientSide)
+            return;
+
+        this.drillState = state;
+
+        switch(this.drillState){
+            case IDLE -> {
+                poleOffset.updateChaseTarget(0.0f);
+            }
+            case PUSHING -> {
+                payloadOffset.setValue(0);
+                payloadOffset.updateChaseTarget(1.0f);
+                poleOffset.updateChaseTarget(20/16f);
+            }
+        }
+        switchDelay = 2;
+        sendData();
+    }
+
     public boolean enoughTubes(){
         return tubes >= ((worldPosition.getY() + 64)/1.25f)/Mth.cos(22.5f * Mth.DEG_TO_RAD);
     }
@@ -175,7 +213,7 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         super.addToGoggleTooltip(tooltip, isPlayerSneaking);
 
-        GearboxLang.text("").forGoggles(tooltip);
+        GearboxLang.text("" + payloadOffset.getValue()).forGoggles(tooltip);
         GearboxLang.translate("gui.core_drill.deposit_info").style(ChatFormatting.GOLD).forGoggles(tooltip);
         if(minedBlock == null){
             GearboxLang.translate("gui.core_drill.no_deposit")
@@ -204,8 +242,8 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         super.write(compound, clientPacket);
         compound.putInt("tubes", tubes);
         compound.putInt("state", drillState);
-//        compound.put("pole_offset", poleOffset.writeNBT());
-//        compound.put("payload_offset", payloadOffset.writeNBT());
+        compound.put("pole_offset", poleOffset.writeNBT());
+        compound.put("payload_offset", payloadOffset.writeNBT());
         if(minedBlock != null)
             compound.put("minedBlock", NbtUtils.writeBlockState(minedBlock.defaultBlockState()));
     }
@@ -215,8 +253,11 @@ public class CoreDrillBlockEntity extends KineticBlockEntity {
         super.read(compound, clientPacket);
         tubes = compound.getInt("tubes");
         drillState = compound.getInt("state");
-//        poleOffset.readNBT(compound.getCompound("pole_offset"), clientPacket);
-//        payloadOffset.readNBT(compound.getCompound("payload_offset"), clientPacket);
+
+        //stupid clientPacket parameter will not update value unless false.
+        //I guess it makes sense everywhere else but this is 100% server driven
+        poleOffset.readNBT(compound.getCompound("pole_offset"), false);
+        payloadOffset.readNBT(compound.getCompound("payload_offset"), false);
         if(compound.contains("minedBlock"))
             minedBlock = NbtUtils.readBlockState(blockHolderGetter(), compound.getCompound("minedBlock")).getBlock();
     }

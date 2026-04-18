@@ -52,11 +52,11 @@ public class CentrifugingRecipe extends ProcessingRecipe<RecipeWrapper> {
             if( !fluidIngredient.test(availableFluid) || availableFluid.getAmount() < fluidIngredient.getRequiredAmount())
                 return false;
 
-            Ingredient itemIngredient = recipe.getIngredients().get(0);
-            ItemStack availableItem = availableItems.getStackInSlot(0);
+//            Ingredient itemIngredient = recipe.getIngredients().get(0);
+//            ItemStack availableItem = availableItems.getStackInSlot(0);
 
-            if( !itemIngredient.test(availableItem))
-                return false;
+//            if( !itemIngredient.test(availableItem))
+//                return false;
 
 
 
