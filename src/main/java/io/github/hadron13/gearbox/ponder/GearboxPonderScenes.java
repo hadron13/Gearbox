@@ -20,14 +20,14 @@ public class GearboxPonderScenes {
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         PonderSceneRegistrationHelper<ItemProviderEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 
-        HELPER.forComponents(GearboxBlocks.COMPRESSOR)
-                .addStoryBoard("compressor", CompressorScenes::compressor, KINETIC_APPLIANCES, FLUIDS);
+//        HELPER.forComponents(GearboxBlocks.COMPRESSOR)
+//                .addStoryBoard("compressor", CompressorScenes::compressor, KINETIC_APPLIANCES, FLUIDS);
 
-        HELPER.forComponents(GearboxBlocks.SAPPER)
-                .addStoryBoard("sapper", SapperScenes::sapper, KINETIC_APPLIANCES, FLUIDS);
+//        HELPER.forComponents(GearboxBlocks.SAPPER)
+//                .addStoryBoard("sapper", SapperScenes::sapper, KINETIC_APPLIANCES, FLUIDS);
 
-        HELPER.forComponents(GearboxBlocks.PUMPJACK_WELL, GearboxBlocks.PUMPJACK_CRANK, GearboxBlocks.PUMPJACK_ARM)
-                .addStoryBoard("pumpjack", PumpjackScenes::pumpjack, FLUIDS);
+//        HELPER.forComponents(GearboxBlocks.PUMPJACK_WELL, GearboxBlocks.PUMPJACK_CRANK, GearboxBlocks.PUMPJACK_ARM)
+//                .addStoryBoard("pumpjack", PumpjackScenes::pumpjack, FLUIDS);
 
         HELPER.forComponents(GearboxBlocks.KILN)
                 .addStoryBoard("kiln", KilnScenes::kiln, KINETIC_APPLIANCES);

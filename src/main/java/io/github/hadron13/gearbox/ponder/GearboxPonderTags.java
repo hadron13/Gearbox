@@ -22,27 +22,27 @@ public class GearboxPonderTags {
                 .addToIndex()
                 .item(GearboxBlocks.LASER.get(), true, false)
                 .title("Lasers")
-                .description("Machines that emmit or interact with lasers")
+                .description("Machines that emit or interact with lasers")
                 .register();
 
         HELPER.addToTag(FLUIDS)
-                .add(GearboxBlocks.SAPPER)
-                .add(GearboxBlocks.COMPRESSOR)
-                .add(GearboxBlocks.CENTRIFUGE)
-                .add(GearboxBlocks.ELECTROLYZER)
-                .add(GearboxBlocks.PUMPJACK_WELL)
-                .add(GearboxBlocks.STEEL_FLUID_PIPE)
-                .add(GearboxBlocks.STEEL_FLUID_TANK)
-                .add(GearboxBlocks.DISTILLATION_CONTROLLER)
-                .add(GearboxBlocks.DISTILLATION_OUTPUT);
+//                .add(GearboxBlocks.SAPPER)
+//                .add(GearboxBlocks.COMPRESSOR)
+                .add(GearboxBlocks.CENTRIFUGE);
+//                .add(GearboxBlocks.ELECTROLYZER)
+//                .add(GearboxBlocks.PUMPJACK_WELL)
+//                .add(GearboxBlocks.STEEL_FLUID_PIPE)
+//                .add(GearboxBlocks.STEEL_FLUID_TANK)
+//                .add(GearboxBlocks.DISTILLATION_CONTROLLER)
+//                .add(GearboxBlocks.DISTILLATION_OUTPUT);
 //                .add(GearboxBlocks.DIPPER);
 
         HELPER.addToTag(KINETIC_APPLIANCES)
-                .add(GearboxBlocks.SAPPER)
-                .add(GearboxBlocks.COMPRESSOR)
+//                .add(GearboxBlocks.SAPPER)
+//                .add(GearboxBlocks.COMPRESSOR)
                 .add(GearboxBlocks.CENTRIFUGE)
                 .add(GearboxBlocks.KILN)
-                .add(GearboxBlocks.PUMPJACK_CRANK)
+//                .add(GearboxBlocks.PUMPJACK_CRANK)
                 .add(GearboxBlocks.CORE_DRILL);
 
         HELPER.addToTag(LASER_STUFF)

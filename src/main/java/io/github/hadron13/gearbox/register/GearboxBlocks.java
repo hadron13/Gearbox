@@ -98,26 +98,27 @@ public class GearboxBlocks {
             .transform(customItemModel())
             .register();
 
-    public static final BlockEntry<SapperBlock> SAPPER = REGISTRATE.block("sapper", SapperBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.noOcclusion().mapColor(MapColor.METAL))
-            //.addLayer(() -> RenderType::cutoutMipped)
-            .blockstate(new PartialHorizontalBlockStateGen()::generate)
-            .transform(GearboxStress.setImpact(4.0))
-            .item()
-            .transform(customItemModel())
-            .register();
+    public static final BlockEntry<SapperBlock> SAPPER = null; //REGISTRATE.block("sapper", SapperBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.noOcclusion().mapColor(MapColor.METAL))
+//            //.addLayer(() -> RenderType::cutoutMipped)
+//            .blockstate(new PartialHorizontalBlockStateGen()::generate)
+//            .transform(GearboxStress.setImpact(4.0))
+//            .item()
+//            .transform(customItemModel())
+//            .register();
 
-    public static final BlockEntry<CompressorBlock> COMPRESSOR = REGISTRATE.block("compressor", CompressorBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.noOcclusion().mapColor(MapColor.METAL))
-            .blockstate(new PartialHorizontalBlockStateGen().flipY(180)::generate)
-            .transform(GearboxStress.setImpact(4.0))
-            .item()
-            .transform(customItemModel())
-            .register();
+    public static final BlockEntry<CompressorBlock> COMPRESSOR = null; //REGISTRATE.block("compressor", CompressorBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.noOcclusion().mapColor(MapColor.METAL))
+//            .blockstate(new PartialHorizontalBlockStateGen().flipY(180)::generate)
+//            .transform(GearboxStress.setImpact(4.0))
+//            .item()
+//            .transform(customItemModel())
+//            .register();
+
     public static final BlockEntry<BrassPressBlock> BRASS_PRESS = REGISTRATE.block("brass_press", BrassPressBlock::new)
             .lang("Mechanizing Press")
             .initialProperties(SharedProperties::stone)
@@ -215,14 +216,14 @@ public class GearboxBlocks {
 //            .transform(customItemModel())
 //            .register();
 
-    public static final BlockEntry<ElectrolyzerBlock> ELECTROLYZER = REGISTRATE.block("electrolyzer", ElectrolyzerBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
-            .blockstate(BlockStateGen.horizontalBlockProvider(true))
-            .item(AssemblyOperatorBlockItem::new)
-            .transform(customItemModel())
-            .register();
+    public static final BlockEntry<ElectrolyzerBlock> ELECTROLYZER = null; //REGISTRATE.block("electrolyzer", ElectrolyzerBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.mapColor(MapColor.COLOR_GRAY).noOcclusion())
+//            .blockstate(BlockStateGen.horizontalBlockProvider(true))
+//            .item(AssemblyOperatorBlockItem::new)
+//            .transform(customItemModel())
+//            .register();
 
     public static final BlockEntry<UselessMachineBlock> USELESS_MACHINE = REGISTRATE.block("kinetic_machine", UselessMachineBlock::new)
             .initialProperties(SharedProperties::wooden)
@@ -253,37 +254,38 @@ public class GearboxBlocks {
             .item(LaserDrillItem::new)
             .transform(customItemModel())
             .register();
-    public static final BlockEntry<PumpjackArmBlock> PUMPJACK_ARM = REGISTRATE.block("pumpjack_arm", PumpjackArmBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion())
-            .blockstate(PumpjackGenerator.arm()::generate)
-            .item(PumpjackArmBlockItem::new)
-            .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), Gearbox.asResource("block/pumpjack/arm_item")))
-            .build()
-            .register();
-    public static final BlockEntry<PumpjackCrankBlock> PUMPJACK_CRANK = REGISTRATE.block("pumpjack_crank", PumpjackCrankBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .properties(p -> p.sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion())
-            .transform(pickaxeOnly())
-            .blockstate(PumpjackGenerator.crank()::generate)
-            .transform(GearboxStress.setImpact(32.0))
-            .item()
-            .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), Gearbox.asResource("block/pumpjack/crank_item")))
-            .build()
-            .register();
 
-
-    public static final BlockEntry<PumpjackWellBlock> PUMPJACK_WELL = REGISTRATE.block("pumpjack_well", PumpjackWellBlock::new)
-            .initialProperties(SharedProperties::stone)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
-            .blockstate(PumpjackGenerator.well()::generate)
-            .item()
-            .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), Gearbox.asResource("block/pumpjack/well")))
-            .build()
-            .register();
-
+    public static final BlockEntry<PumpjackArmBlock> PUMPJACK_ARM = null; //REGISTRATE.block("pumpjack_arm", PumpjackArmBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion())
+//            .blockstate(PumpjackGenerator.arm()::generate)
+//            .item(PumpjackArmBlockItem::new)
+//            .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), Gearbox.asResource("block/pumpjack/arm_item")))
+//            .build()
+//            .register();
+    public static final BlockEntry<PumpjackCrankBlock> PUMPJACK_CRANK = null; //REGISTRATE.block("pumpjack_crank", PumpjackCrankBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .properties(p -> p.sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion())
+//            .transform(pickaxeOnly())
+//            .blockstate(PumpjackGenerator.crank()::generate)
+//            .transform(GearboxStress.setImpact(32.0))
+//            .item()
+//            .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), Gearbox.asResource("block/pumpjack/crank_item")))
+//            .build()
+//            .register();
+//
+//
+    public static final BlockEntry<PumpjackWellBlock> PUMPJACK_WELL = null; //REGISTRATE.block("pumpjack_well", PumpjackWellBlock::new)
+//            .initialProperties(SharedProperties::stone)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.mapColor(MapColor.METAL).noOcclusion())
+//            .blockstate(PumpjackGenerator.well()::generate)
+//            .item()
+//            .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), Gearbox.asResource("block/pumpjack/well")))
+//            .build()
+//            .register();
+//
 
 //    public static final BlockEntry<DipperBlock> DIPPER = REGISTRATE.block("dipper", DipperBlock::new)
 //            .initialProperties(SharedProperties::stone)
@@ -343,107 +345,108 @@ public class GearboxBlocks {
 //            .build()
 //            .register();
 
-    public static final BlockEntry<SteelTankBlock> STEEL_FLUID_TANK = REGISTRATE.block("steel_fluid_tank", SteelTankBlock::new)
-                    .initialProperties(SharedProperties::copperMetal)
-                    .properties(p -> p.noOcclusion().sound(SoundType.METAL))
-                    .transform(pickaxeOnly())
-                    .blockstate(new FluidTankGenerator()::generate)
-//                    .transform(mountedFluidStorage(CreateMountedStorageTypes.FLUID_TANK))
-                    .onRegister(movementBehaviour(new FluidTankMovementBehavior()))
-                    .onRegister(CreateRegistrate.blockModel(() -> SteelFluidTankModel::new))
-                    .addLayer(() -> RenderType::cutoutMipped)
-                    .item(SteelTankItem::new)
-                    .model(AssetLookup.customBlockItemModel("_", "block_single_window"))
-                    .build()
-                    .register();
-
-
-    public static final BlockEntry<SteelPipeBlock> STEEL_FLUID_PIPE = REGISTRATE.block("steel_fluid_pipe", SteelPipeBlock::new)
-            .initialProperties(SharedProperties::copperMetal)
-            .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
-            .transform(pickaxeOnly())
-            .blockstate(BlockStateGen.pipe())
-            .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
-            .item()
-            .transform(customItemModel())
-            .register();
-
-
-    public static final BlockEntry<SteelGlassPipeBlock> STEEL_GLASS_FLUID_PIPE =
-            REGISTRATE.block("glass_fluid_pipe", SteelGlassPipeBlock::new)
-                    .initialProperties(SharedProperties::copperMetal)
-                    .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
-                    .addLayer(() -> RenderType::cutoutMipped)
-                    .transform(pickaxeOnly())
-                    .blockstate((c, p) -> {
-                        p.getVariantBuilder(c.getEntry())
-                                .forAllStatesExcept(state -> {
-                                    Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-                                    return ConfiguredModel.builder()
-                                            .modelFile(p.models()
-                                                    .getExistingFile(p.modLoc("block/steel_fluid_pipe/window")))
-                                            .uvLock(false)
-                                            .rotationX(axis == Direction.Axis.Y ? 0 : 90)
-                                            .rotationY(axis == Direction.Axis.X ? 90 : 0)
-                                            .build();
-                                }, BlockStateProperties.WATERLOGGED);
-                    })
-                    .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
-                    .loot((p, b) -> p.dropOther(b, STEEL_FLUID_PIPE.get()))
-                    .register();
-
-
-    public static final BlockEntry<StraightSteelPipeBlock> STRAIGHT_STEEL_FLUID_PIPE = REGISTRATE.block("straight_steel_fluid_pipe", StraightSteelPipeBlock::new)
-            .initialProperties(SharedProperties::copperMetal)
-            .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
-            .transform(pickaxeOnly())
-            .blockstate((c, p) -> {
-                p.getVariantBuilder(c.getEntry())
-                        .forAllStatesExcept(state -> {
-                            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-                            return ConfiguredModel.builder()
-                                    .modelFile(p.models()
-                                            .getExistingFile(p.modLoc("block/steel_fluid_pipe/straight")))
-                                    .uvLock(false)
-                                    .rotationX(axis == Direction.Axis.Y ? 0 : 90)
-                                    .rotationY(axis == Direction.Axis.X ? 90 : 0)
-                                    .build();
-                        }, BlockStateProperties.WATERLOGGED);
-            })
-            .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
-            .loot((p, b) -> p.dropOther(b, STEEL_FLUID_PIPE.get()))
-            .register();
-
-    public static final BlockEntry<DistillationControllerBlock> DISTILLATION_CONTROLLER = REGISTRATE.block("distillation_controller", DistillationControllerBlock::new)
-            .initialProperties(SharedProperties::softMetal)
-            .transform(axeOrPickaxe())
-            .properties(p -> p.mapColor(MapColor.METAL))
-            .blockstate(new DistillationControllerGenerator()::generate)
-            .item()
-            .transform(customItemModel())
-            .register();
-
-    public static final BlockEntry<SteelPumpBlock> STEEL_PUMP = REGISTRATE.block("steel_pump", SteelPumpBlock::new)
-            .initialProperties(SharedProperties::softMetal)
-            .properties(p -> p.mapColor(MapColor.METAL))
-            .transform(pickaxeOnly())
-            .blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(true))
-            .onRegister(CreateRegistrate.blockModel(() -> PipeAttachmentModel::withAO))
-            .transform(GearboxStress.setImpact(3.0))
-            .item()
-            .transform(customItemModel())
-            .register();
-
-
-
-    public static final BlockEntry<DistillationOutputBlock> DISTILLATION_OUTPUT = REGISTRATE.block("distillation_output", DistillationOutputBlock::new)
-            .initialProperties(SharedProperties::softMetal)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.METAL))
-            .blockstate(BlockStateGen.directionalBlockProvider(true))
-            .item()
-            .transform(customItemModel())
-            .register();
+    public static final BlockEntry<SteelTankBlock> STEEL_FLUID_TANK = null; //REGISTRATE.block("steel_fluid_tank", SteelTankBlock::new)
+//                    .initialProperties(SharedProperties::copperMetal)
+//                    .properties(p -> p.noOcclusion().sound(SoundType.METAL))
+//                    .transform(pickaxeOnly())
+//                    .blockstate(new FluidTankGenerator()::generate)
+////                    .transform(mountedFluidStorage(CreateMountedStorageTypes.FLUID_TANK))
+//                    .onRegister(movementBehaviour(new FluidTankMovementBehavior()))
+//                    .onRegister(CreateRegistrate.blockModel(() -> SteelFluidTankModel::new))
+//                    .addLayer(() -> RenderType::cutoutMipped)
+//                    .item(SteelTankItem::new)
+//                    .model(AssetLookup.customBlockItemModel("_", "block_single_window"))
+//                    .build()
+//                    .register();
+//
+//
+    public static final BlockEntry<SteelPipeBlock> STEEL_FLUID_PIPE = null; //REGISTRATE.block("steel_fluid_pipe", SteelPipeBlock::new)
+//            .initialProperties(SharedProperties::copperMetal)
+//            .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
+//            .transform(pickaxeOnly())
+//            .blockstate(BlockStateGen.pipe())
+//            .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+//            .item()
+//            .transform(customItemModel())
+//            .register();
+//
+//
+    public static final BlockEntry<SteelGlassPipeBlock> STEEL_GLASS_FLUID_PIPE = null;
+//            REGISTRATE.block("glass_fluid_pipe", SteelGlassPipeBlock::new)
+//                    .initialProperties(SharedProperties::copperMetal)
+//                    .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
+//                    .addLayer(() -> RenderType::cutoutMipped)
+//                    .transform(pickaxeOnly())
+//                    .blockstate((c, p) -> {
+//                        p.getVariantBuilder(c.getEntry())
+//                                .forAllStatesExcept(state -> {
+//                                    Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+//                                    return ConfiguredModel.builder()
+//                                            .modelFile(p.models()
+//                                                    .getExistingFile(p.modLoc("block/steel_fluid_pipe/window")))
+//                                            .uvLock(false)
+//                                            .rotationX(axis == Direction.Axis.Y ? 0 : 90)
+//                                            .rotationY(axis == Direction.Axis.X ? 90 : 0)
+//                                            .build();
+//                                }, BlockStateProperties.WATERLOGGED);
+//                    })
+//                    .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+//                    .loot((p, b) -> p.dropOther(b, STEEL_FLUID_PIPE.get()))
+//                    .register();
+//
+//
+    public static final BlockEntry<StraightSteelPipeBlock> STRAIGHT_STEEL_FLUID_PIPE = null;// REGISTRATE.block("straight_steel_fluid_pipe", StraightSteelPipeBlock::new)
+//            .initialProperties(SharedProperties::copperMetal)
+//            .properties(p -> p.forceSolidOff().sound(SoundType.METAL))
+//            .transform(pickaxeOnly())
+//            .blockstate((c, p) -> {
+//                p.getVariantBuilder(c.getEntry())
+//                        .forAllStatesExcept(state -> {
+//                            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+//                            return ConfiguredModel.builder()
+//                                    .modelFile(p.models()
+//                                            .getExistingFile(p.modLoc("block/steel_fluid_pipe/straight")))
+//                                    .uvLock(false)
+//                                    .rotationX(axis == Direction.Axis.Y ? 0 : 90)
+//                                    .rotationY(axis == Direction.Axis.X ? 90 : 0)
+//                                    .build();
+//                        }, BlockStateProperties.WATERLOGGED);
+//            })
+//            .onRegister(CreateRegistrate.blockModel(() -> SteelPipeAttachmentModel::withAO))
+//            .loot((p, b) -> p.dropOther(b, STEEL_FLUID_PIPE.get()))
+//            .register();
+//
+    public static final BlockEntry<DistillationControllerBlock> DISTILLATION_CONTROLLER = null; // REGISTRATE.block("distillation_controller", DistillationControllerBlock::new)
+//            .initialProperties(SharedProperties::softMetal)
+//            .transform(axeOrPickaxe())
+//            .properties(p -> p.mapColor(MapColor.METAL))
+//            .blockstate(new DistillationControllerGenerator()::generate)
+//            .item()
+//            .transform(customItemModel())
+//            .register();
+//
+    public static final BlockEntry<SteelPumpBlock> STEEL_PUMP = null; //REGISTRATE.block("steel_pump", SteelPumpBlock::new)
+//            .initialProperties(SharedProperties::softMetal)
+//            .properties(p -> p.mapColor(MapColor.METAL))
+//            .transform(pickaxeOnly())
+//            .blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(true))
+//            .onRegister(CreateRegistrate.blockModel(() -> PipeAttachmentModel::withAO))
+//            .transform(GearboxStress.setImpact(3.0))
+//            .item()
+//            .transform(customItemModel())
+//            .register();
+//
+//
+//
+    public static final BlockEntry<DistillationOutputBlock> DISTILLATION_OUTPUT = null;
+//              REGISTRATE.block("distillation_output", DistillationOutputBlock::new)
+//            .initialProperties(SharedProperties::softMetal)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.mapColor(MapColor.METAL))
+//            .blockstate(BlockStateGen.directionalBlockProvider(true))
+//            .item()
+//            .transform(customItemModel())
+//            .register();
 
 
     public static final BlockEntry<Block> ASPHALT_BLOCK =  REGISTRATE.block("asphalt", Block::new)
@@ -456,15 +459,16 @@ public class GearboxBlocks {
                     .build()
                     .register();
 
-    public static final BlockEntry<FlarestackBlock> FLARESTACK = REGISTRATE.block("flarestack", FlarestackBlock::new)
-            .initialProperties(SharedProperties::softMetal)
-            .transform(pickaxeOnly())
-            .properties(p -> p.mapColor(MapColor.METAL))
-            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
-            .lang("Flarestack")
-            .item()
-            .build()
-            .register();
+    public static final BlockEntry<FlarestackBlock> FLARESTACK = null;
+//              REGISTRATE.block("flarestack", FlarestackBlock::new)
+//            .initialProperties(SharedProperties::softMetal)
+//            .transform(pickaxeOnly())
+//            .properties(p -> p.mapColor(MapColor.METAL))
+//            .blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
+//            .lang("Flarestack")
+//            .item()
+//            .build()
+//            .register();
 
 
 }

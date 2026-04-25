@@ -83,19 +83,19 @@ public class GearboxBlockEntities {
             .renderer(() -> KilnRenderer::new)
             .register();
 
-    public static final BlockEntityEntry<SapperBlockEntity> SAPPER = REGISTRATE
-            .blockEntity("sapper", SapperBlockEntity::new)
-            .visual(() -> SapperVisual::new)
-            .validBlocks(GearboxBlocks.SAPPER)
-            .renderer(() -> SapperRenderer::new)
-            .register();
+    public static final BlockEntityEntry<SapperBlockEntity> SAPPER = null; //REGISTRATE
+//            .blockEntity("sapper", SapperBlockEntity::new)
+//            .visual(() -> SapperVisual::new)
+//            .validBlocks(GearboxBlocks.SAPPER)
+//            .renderer(() -> SapperRenderer::new)
+//            .register();
 
-    public static final BlockEntityEntry<CompressorBlockEntity> COMPRESSOR = REGISTRATE
-            .blockEntity("compressor", CompressorBlockEntity::new)
-            .visual(() -> CompressorVisual::new)
-            .validBlocks(GearboxBlocks.COMPRESSOR)
-            .renderer(() -> CompressorRenderer::new)
-            .register();
+    public static final BlockEntityEntry<CompressorBlockEntity> COMPRESSOR = null; //REGISTRATE
+//            .blockEntity("compressor", CompressorBlockEntity::new)
+//            .visual(() -> CompressorVisual::new)
+//            .validBlocks(GearboxBlocks.COMPRESSOR)
+//            .renderer(() -> CompressorRenderer::new)
+//            .register();
 
     public static final BlockEntityEntry<BrassPressBlockEntity> BRASS_PRESS = REGISTRATE
             .blockEntity("brass_press", BrassPressBlockEntity::new)
@@ -164,12 +164,12 @@ public class GearboxBlockEntities {
 
 
 
-    public static final BlockEntityEntry<ElectrolyzerBlockEntity> ELECTROLYZER = REGISTRATE
-            .blockEntity("electrolyzer", ElectrolyzerBlockEntity::new)
-            .visual(() -> ElectrolyzerVisual::new)
-            .validBlocks(GearboxBlocks.ELECTROLYZER)
-            .renderer(() -> ElectrolyzerRenderer::new)
-            .register();
+    public static final BlockEntityEntry<ElectrolyzerBlockEntity> ELECTROLYZER = null; //REGISTRATE
+//            .blockEntity("electrolyzer", ElectrolyzerBlockEntity::new)
+//            .visual(() -> ElectrolyzerVisual::new)
+//            .validBlocks(GearboxBlocks.ELECTROLYZER)
+//            .renderer(() -> ElectrolyzerRenderer::new)
+//            .register();
 
     public static final BlockEntityEntry<UselessMachineBlockEntity> USELESS_MACHINE = REGISTRATE
             .blockEntity("kinetic_machine", UselessMachineBlockEntity::new)
@@ -193,25 +193,23 @@ public class GearboxBlockEntities {
             .register();
 
 
-    public static final BlockEntityEntry<PumpjackArmBlockEntity> PUMPJACK_ARM = REGISTRATE
-            .blockEntity("pumpjack_arm", PumpjackArmBlockEntity::new)
-            //.instance(() -> ::new)
-            .validBlocks(GearboxBlocks.PUMPJACK_ARM)
-            .renderer(() -> PumpjackArmRenderer::new)
-            // TODO: instance
-            .register();
-    public static final BlockEntityEntry<PumpjackCrankBlockEntity> PUMPJACK_CRANK = REGISTRATE
-            .blockEntity("pumpjack_crank", PumpjackCrankBlockEntity::new)
-            //.instance(() -> ::new)
-            .validBlocks(GearboxBlocks.PUMPJACK_CRANK)
-            .renderer(() -> PumpjackCrankRenderer::new)
-            // TODO: instance
-            .register();
+    public static final BlockEntityEntry<PumpjackArmBlockEntity> PUMPJACK_ARM = null; //REGISTRATE
+//            .blockEntity("pumpjack_arm", PumpjackArmBlockEntity::new)
+//            .instance(() -> ::new)
+//            .validBlocks(GearboxBlocks.PUMPJACK_ARM)
+//            .renderer(() -> PumpjackArmRenderer::new)
+//            .register();
+    public static final BlockEntityEntry<PumpjackCrankBlockEntity> PUMPJACK_CRANK = null; //REGISTRATE
+//            .blockEntity("pumpjack_crank", PumpjackCrankBlockEntity::new)
+//            .instance(() -> ::new)
+//            .validBlocks(GearboxBlocks.PUMPJACK_CRANK)
+//            .renderer(() -> PumpjackCrankRenderer::new)
+//            .register();
 
-    public static final BlockEntityEntry<PumpjackWellBlockEntity> PUMPJACK_WELL = REGISTRATE
-            .blockEntity("pumpjack_well", PumpjackWellBlockEntity::new)
-            .validBlocks(GearboxBlocks.PUMPJACK_WELL)
-            .register();
+    public static final BlockEntityEntry<PumpjackWellBlockEntity> PUMPJACK_WELL = null; //REGISTRATE
+//            .blockEntity("pumpjack_well", PumpjackWellBlockEntity::new)
+//            .validBlocks(GearboxBlocks.PUMPJACK_WELL)
+//            .register();
 
 //    public static final BlockEntityEntry<DipperBlockEntity> DIPPER = REGISTRATE
 //            .blockEntity("dipper", DipperBlockEntity::new)
@@ -241,52 +239,52 @@ public class GearboxBlockEntities {
             .renderer(() -> CoreDrillRenderer::new)
             .register();
 
-    public static final BlockEntityEntry<SteelTankBlockEntity> STEEL_FLUID_TANK = REGISTRATE
-            .blockEntity("steel_fluid_tank", SteelTankBlockEntity::new)
-            .validBlocks(GearboxBlocks.STEEL_FLUID_TANK)
-            .renderer(() -> SteelFluidTankRenderer::new)
-            .register();
+    public static final BlockEntityEntry<SteelTankBlockEntity> STEEL_FLUID_TANK = null;//REGISTRATE
+//            .blockEntity("steel_fluid_tank", SteelTankBlockEntity::new)
+//            .validBlocks(GearboxBlocks.STEEL_FLUID_TANK)
+//            .renderer(() -> SteelFluidTankRenderer::new)
+//            .register();
 
-    public static final BlockEntityEntry<FluidPipeBlockEntity> STEEL_FLUID_PIPE = REGISTRATE
-            .blockEntity("steel_fluid_pipe", FluidPipeBlockEntity::new)
-            .validBlocks(GearboxBlocks.STEEL_FLUID_PIPE)
-            .register();
+    public static final BlockEntityEntry<FluidPipeBlockEntity> STEEL_FLUID_PIPE = null;// REGISTRATE
+//            .blockEntity("steel_fluid_pipe", FluidPipeBlockEntity::new)
+//            .validBlocks(GearboxBlocks.STEEL_FLUID_PIPE)
+//            .register();
 
-    public static final BlockEntityEntry<StraightPipeBlockEntity> STEEL_GLASS_FLUID_PIPE = REGISTRATE
-            .blockEntity("steel_glass_fluid_pipe", StraightPipeBlockEntity::new)
-            .visual(() -> GlassPipeVisual::new, false)
-            .validBlocks(GearboxBlocks.STEEL_GLASS_FLUID_PIPE)
-            .renderer(() -> TransparentStraightPipeRenderer::new)
-            .register();
+    public static final BlockEntityEntry<StraightPipeBlockEntity> STEEL_GLASS_FLUID_PIPE = null;//REGISTRATE
+//            .blockEntity("steel_glass_fluid_pipe", StraightPipeBlockEntity::new)
+//            .visual(() -> GlassPipeVisual::new, false)
+//            .validBlocks(GearboxBlocks.STEEL_GLASS_FLUID_PIPE)
+//            .renderer(() -> TransparentStraightPipeRenderer::new)
+//            .register();
 
-    public static final BlockEntityEntry<StraightPipeBlockEntity> STRAIGHT_STEEL_FLUID_PIPE = REGISTRATE
-            .blockEntity("straight_steel_fluid_pipe", StraightPipeBlockEntity::new)
-            .validBlocks(GearboxBlocks.STRAIGHT_STEEL_FLUID_PIPE)
-            .register();
+    public static final BlockEntityEntry<StraightPipeBlockEntity> STRAIGHT_STEEL_FLUID_PIPE = null;//REGISTRATE
+//            .blockEntity("straight_steel_fluid_pipe", StraightPipeBlockEntity::new)
+//            .validBlocks(GearboxBlocks.STRAIGHT_STEEL_FLUID_PIPE)
+//            .register();
 
-    public static final BlockEntityEntry<PumpBlockEntity> STEEL_FLUID_PUMP = REGISTRATE
-            .blockEntity("steel_fluid_pump", PumpBlockEntity::new)
-            .visual(() -> SingleAxisRotatingVisual.ofZ(GearboxPartialModels.STEEL_PUMP_COG))
-            .validBlocks(GearboxBlocks.STEEL_PUMP)
-            .renderer(() -> PumpRenderer::new)
-            .register();
+    public static final BlockEntityEntry<PumpBlockEntity> STEEL_FLUID_PUMP = null;// REGISTRATE
+//            .blockEntity("steel_fluid_pump", PumpBlockEntity::new)
+//            .visual(() -> SingleAxisRotatingVisual.ofZ(GearboxPartialModels.STEEL_PUMP_COG))
+//            .validBlocks(GearboxBlocks.STEEL_PUMP)
+//            .renderer(() -> PumpRenderer::new)
+//            .register();
 
-    public static final BlockEntityEntry<DistillationControllerBlockEntity> DISTILLATION_CONTROLLER = REGISTRATE
-            .blockEntity("distillation_controller", DistillationControllerBlockEntity::new)
-            .validBlocks(GearboxBlocks.DISTILLATION_CONTROLLER)
-            .renderer(() -> DistillationControllerRenderer::new)
-            .register();
+    public static final BlockEntityEntry<DistillationControllerBlockEntity> DISTILLATION_CONTROLLER =null;// REGISTRATE
+//            .blockEntity("distillation_controller", DistillationControllerBlockEntity::new)
+//            .validBlocks(GearboxBlocks.DISTILLATION_CONTROLLER)
+//            .renderer(() -> DistillationControllerRenderer::new)
+//            .register();
 
-    public static final BlockEntityEntry<DistillationOutputBlockEntity> DISTILLATION_OUTPUT = REGISTRATE
-            .blockEntity("distillation_output", DistillationOutputBlockEntity::new)
-            .validBlocks(GearboxBlocks.DISTILLATION_OUTPUT)
-            .renderer(() -> DistillationOutputRenderer::new)
-            .register();
+    public static final BlockEntityEntry<DistillationOutputBlockEntity> DISTILLATION_OUTPUT = null;// REGISTRATE
+//            .blockEntity("distillation_output", DistillationOutputBlockEntity::new)
+//            .validBlocks(GearboxBlocks.DISTILLATION_OUTPUT)
+//            .renderer(() -> DistillationOutputRenderer::new)
+//            .register();
 
-    public static final BlockEntityEntry<FlarestackBlockEntity> FLARESTACK = REGISTRATE
-            .blockEntity("flarestack", FlarestackBlockEntity::new)
-            .validBlocks(GearboxBlocks.FLARESTACK)
-            .register();
+    public static final BlockEntityEntry<FlarestackBlockEntity> FLARESTACK = null;//REGISTRATE
+//            .blockEntity("flarestack", FlarestackBlockEntity::new)
+//            .validBlocks(GearboxBlocks.FLARESTACK)
+//            .register();
 
 
     public static void register() {}
